@@ -54,6 +54,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
   }, [])
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
+    return null
     return <AppLoading />
   } else {
     return (
