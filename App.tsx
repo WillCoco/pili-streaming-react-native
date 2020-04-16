@@ -3,12 +3,15 @@ import { Platform, StatusBar, View, NativeModules } from 'react-native'
 import { SplashScreen, AppLoading } from 'expo'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
+import * as Font from 'expo-font';
+import { Ionicons } from '@expo/vector-icons'
 
 import { Provider } from 'react-redux'
 import configStore from './src/store'
 import { getStatusBarHeight } from './src/actions/public'
 
 import Root from './src/navigation/BottomTabNavigator'
+import HomeSearch from './src/pages/HomeSearch/HomeSearch'
 
 const { StatusBarManager } = NativeModules
 const store = configStore()
@@ -20,7 +23,14 @@ export default function App(props: { skipLoadingScreen: any; }) {
   useEffect(() => {
     async function loadResourcesAndDataAsync() {
       try {
+
         SplashScreen.preventAutoHide()
+
+        await Font.loadAsync({
+          ...Ionicons.font,
+          'space-mono': require('./src/assets/fonts/SpaceMono-Regular.ttf')
+        })
+
       } catch (e) {
         // We might want to provide this error information to an error reporting service
         console.warn(e)
@@ -55,6 +65,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
           <NavigationContainer>
             <Stack.Navigator>
               <Stack.Screen name='Root' component={Root} />
+              <Stack.Screen name='HomeSearch' component={HomeSearch} />
             </Stack.Navigator>
           </NavigationContainer>
         </View>

@@ -1,6 +1,7 @@
-import * as React from 'react'
-import { StyleSheet, Image } from 'react-native'
+import React from 'react'
+import { StyleSheet, Image, Text, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { Ionicons } from '@expo/vector-icons'
 
 import pxToDp from '../utils/px2dp'
 import { Colors } from '../constants/Theme'
@@ -20,6 +21,7 @@ import cartActiveIcon from '../assets/tab-bar-icon/cartActive.png'
 import mineIcon from '../assets/tab-bar-icon/me.png'
 import mineActiveIcon from '../assets/tab-bar-icon/meActive.png'
 
+import SearchBar from '../components/SearchBar/SearchBar'
 
 const BottomTab = createBottomTabNavigator()
 const INITIAL_ROUTE_NAME = '首页'
@@ -29,7 +31,9 @@ export default function BottomTabNavigator({ navigation, route }: any) {
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
   navigation.setOptions({
-    headerTitle: getHeaderTitle(route),
+    // headerShown: getHeaderTitle(route) === '购物车',
+    // headerTitle: getHeaderTitle(route),
+    headerTitle: (props: any) => getTabItemComponent(getHeaderTitle(route)),
     headerStyle: {
       backgroundColor: Colors.basicColor,
       elevation: 0,  // 去除安卓状态栏底部阴影
@@ -37,6 +41,8 @@ export default function BottomTabNavigator({ navigation, route }: any) {
     headerTitleAlign: 'center',
     headerTintColor: Colors.whiteColor
   })
+
+  console.log(navigation)
 
   return (
     <BottomTab.Navigator
@@ -90,6 +96,10 @@ export default function BottomTabNavigator({ navigation, route }: any) {
   )
 }
 
+/**
+ * 获取页面标题
+ * @param route 路由信息
+ */
 function getHeaderTitle(route:
   {
     state:
@@ -104,9 +114,44 @@ function getHeaderTitle(route:
   return routeName
 }
 
+function getTabItemComponent(routeName: String) {
+  switch (routeName) {
+    case '首页':
+      return <SearchBar />
+      break
+    case '发现':
+      return <Text>发现hhhh</Text>
+      break
+    case '直播':
+      return <Text>直播hhhh</Text>
+      break
+    case '购物车':
+      return <Text>购物车hhhh</Text>
+      break
+    case '我的':
+      return <Text>我的hhhh</Text>
+      break
+    default:
+      break
+  }
+}
+
 const styles = StyleSheet.create({
   tabBarImage: {
     width: pxToDp(50),
     height: pxToDp(50)
+  },
+  homeSearchBar: {
+    width: pxToDp(710),
+    height: pxToDp(56),
+    backgroundColor: Colors.whiteColor,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: pxToDp(28),
+    paddingLeft: pxToDp(26)
+  },
+  searchKey: {
+    color: Colors.lightGrey,
+    marginLeft: pxToDp(20)
   }
 })
