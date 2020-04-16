@@ -8,9 +8,9 @@ import { Colors } from '../constants/Theme'
 
 import HomeScreen from '../pages/Home/Home'
 import FoundScreen from '../pages/Found/Found'
-import LiveNavigator from './LiveNavigator';
 import CartScreen from '../pages/Cart/Cart'
 import MineScreen from '../pages/Mine/Mine'
+import LiveHomeScreen from '../pages/Live/LiveHomeScreen';
 
 import homeIcon from '../assets/tab-bar-icon/home.png'
 import homeActiveIcon from '../assets/tab-bar-icon/homeActive.png'
@@ -68,7 +68,7 @@ export default function BottomTabNavigator({ navigation, route }: any) {
       />
       <BottomTab.Screen
         name="直播"
-        component={LiveNavigator}
+        component={LiveHomeScreen}
         options={{
           title: '直播',
           tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? homeActiveIcon : homeIcon} />,

@@ -12,6 +12,8 @@ import { getStatusBarHeight } from './src/actions/public'
 
 import Root from './src/navigation/BottomTabNavigator'
 import HomeSearch from './src/pages/HomeSearch/HomeSearch'
+import AnchorDetailScreen from './src/pages/Live/AnchorDetailScreen';
+import LivingRoomScreen from './src/pages/Live/LivingRoomScreen';
 
 const { StatusBarManager } = NativeModules
 const store = configStore()
@@ -67,6 +69,8 @@ export default function App(props: { skipLoadingScreen: any; }) {
             <Stack.Navigator>
               <Stack.Screen name='Root' component={Root} />
               <Stack.Screen name='HomeSearch' component={HomeSearch} />
+              <Stack.Screen name='AnchorDetailScreen' component={AnchorDetailScreen} />
+              <Stack.Screen name='LivingRoomScreen' component={LivingRoomScreen} options={{headerShown: false}} />
             </Stack.Navigator>
           </NavigationContainer>
         </View>
