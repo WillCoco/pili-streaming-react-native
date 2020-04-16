@@ -8,9 +8,9 @@ import { Colors } from '../constants/Theme'
 
 import HomeScreen from '../pages/Home/Home'
 import FoundScreen from '../pages/Found/Found'
-import LiveScreen from '../pages/Live/Live'
 import CartScreen from '../pages/Cart/Cart'
 import MineScreen from '../pages/Mine/Mine'
+import LiveHomeScreen from '../pages/Live/LiveHomeScreen';
 
 import homeIcon from '../assets/tab-bar-icon/home.png'
 import homeActiveIcon from '../assets/tab-bar-icon/homeActive.png'
@@ -30,6 +30,7 @@ function BottomTabNavigator({ navigation, route }: any) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
+
   navigation.setOptions({
     headerTitle: () => getTabItemComponent(getHeaderTitle(route), navigation),
     headerStyle: {
@@ -37,7 +38,8 @@ function BottomTabNavigator({ navigation, route }: any) {
       elevation: 0,  // 去除安卓状态栏底部阴影
     },
     headerTitleAlign: 'center',
-    headerTintColor: Colors.whiteColor
+    headerTintColor: Colors.whiteColor,
+    headerShown: !(getHeaderTitle(route) === '直播')
   })
 
   return (
@@ -66,7 +68,7 @@ function BottomTabNavigator({ navigation, route }: any) {
       />
       <BottomTab.Screen
         name="直播"
-        component={LiveScreen}
+        component={LiveHomeScreen}
         options={{
           title: '直播',
           tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? homeActiveIcon : homeIcon} />,

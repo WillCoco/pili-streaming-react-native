@@ -9,10 +9,10 @@ import {
   StyleSheet,
   StyleProp,
 } from 'react-native';
-import LiveMsg, {msgList, onMsgListResponse} from '../LiveMsg';
+import LiveMsg, {msgList} from '../LiveMsg';
 import {Anchor as AnchorLiveToolBar} from '../LiveToolBar';
 import LiveIntro from '../LiveIntro';
-import L from '../../constants/Layout.js';
+import L from '../../constants/Layout';
 
 const {window} = L;
 
@@ -20,7 +20,6 @@ interface LiveWindowProps {
   style?: StyleProp<any>,
   liveData?: any,
   msgList: msgList,
-  onMsgListResponse: onMsgListResponse,
 }
 
 
@@ -31,12 +30,10 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       <LiveIntro
         anchorId={1}
         liveTitle="asdasd"
-        audienveQuantity={123213}
       />
       <LiveMsg
         style={{maxHeight: 200}}
         msgList={props.msgList}
-        onMsgListResponse={props.onMsgListResponse}
       />
       <AnchorLiveToolBar />
     </View>

@@ -1,7 +1,7 @@
 /**
  * vh, vw
 */
-import L from '../constants/Layout.js'
+import L from '../constants/Layout'
 const {window} = L;
 
 const percentMetric = (metric: number, value: number = 0) => {
