@@ -31,9 +31,7 @@ export default function BottomTabNavigator({ navigation, route }: any) {
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
   navigation.setOptions({
-    // headerShown: getHeaderTitle(route) === '购物车',
-    // headerTitle: getHeaderTitle(route),
-    headerTitle: (props: any) => getTabItemComponent(getHeaderTitle(route)),
+    headerTitle: () => getTabItemComponent(getHeaderTitle(route)),
     headerStyle: {
       backgroundColor: Colors.basicColor,
       elevation: 0,  // 去除安卓状态栏底部阴影
@@ -41,8 +39,6 @@ export default function BottomTabNavigator({ navigation, route }: any) {
     headerTitleAlign: 'center',
     headerTintColor: Colors.whiteColor
   })
-
-  console.log(navigation)
 
   return (
     <BottomTab.Navigator
@@ -117,7 +113,7 @@ function getHeaderTitle(route:
 function getTabItemComponent(routeName: String) {
   switch (routeName) {
     case '首页':
-      return <SearchBar />
+      return <SearchBar isPlaceHolder={true} />
       break
     case '发现':
       return <Text>发现hhhh</Text>

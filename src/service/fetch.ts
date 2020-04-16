@@ -1,7 +1,7 @@
 import { storage } from '../storage'
 
 // get请求 拼接参数
-const getParam = data => {
+const getParam = (data: { [s: string]: unknown; } | ArrayLike<unknown>) => {
   return Object.entries(data).map(([key, value]) => {
     return `${key}=${value}`  // TODO 是否得用encodeURI函数
   }).join('&');
@@ -9,10 +9,11 @@ const getParam = data => {
 
 let headers = {
   'Accept': 'application/json',
-  'Content-Type': 'application/json'
+  'Content-Type': 'application/json',
+  'authentication': ''
 }
 
-export const get = (path, data) => {
+export const get = (path: any, data: any) => {
   let token = storage.load('token') || ''
 
   if (token) {
@@ -27,25 +28,19 @@ export const get = (path, data) => {
     fetch(path, {
       headers
     })
-    .then(async (response) => {
+    .then(async (response: { text: () => any; }) => {
       const r1 = await response.text();
       const r2 = r1.trim && r1.trim()
       return r2 && JSON.parse(r2)
     })
-    .then(result => {
+    .then((result: { data: any; }) => {
       resolve(result && result.data)
     })
-    // .then(async (response) => {
-    //   return response.json()
-    // })
-    // .then(result => {
-    //   resolve(result && result.data)
-    // })
-    .catch(error => reject(error))
+    .catch((error: any) => reject(error))
   })
 };
 
-export const post = (path, data) => {
+export const post = (path: RequestInfo, data: any) => {
   let token = storage.load('token') || ''
 
   if (token) {
@@ -58,8 +53,8 @@ export const post = (path, data) => {
       headers,
       body: JSON.stringify(data)
     })
-    .then(response => response.json())
-    .then(result => resolve(result.data))
-    .catch(error => reject(error))
+    .then((response: { json: () => any; }) => response.json())
+    .then((result: { data: unknown; }) => resolve(result.data))
+    .catch((error: any) => reject(error))
   })
 } 

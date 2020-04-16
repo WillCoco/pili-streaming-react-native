@@ -4,7 +4,7 @@ const INITIAL_STATE = {
   statusBarHeight: 0
 }
 
-export default function demo(state = INITIAL_STATE, action: any) {
+export default function publicData(state = INITIAL_STATE, action: any) {
   switch (action.type) {
     case STATUS_BAR_HEIGHT:
       return {

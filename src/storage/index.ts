@@ -5,8 +5,8 @@ import { AsyncStorage } from 'react-native'
 import Storage from 'react-native-storage'
 // import { sync } from './sync'
 
-let storage = undefined
-let defaultExpires = null
+let storage: Storage | undefined = undefined
+let defaultExpires: null = null
 let size = 1000
 
 const createStorage = () => {
@@ -45,9 +45,9 @@ const _storage = {
 
   // 使用key来保存数据。这些数据一般是全局独有的，常常需要调用的。
   // 除非你手动移除，这些数据会被永久保存，而且默认不会过期。
-  save(key, obj) {
+  save(key: any, obj: any) {
     initStorage()
-    storage.save({
+    storage?.save({
       key: key,  // 注意: 请不要在key中使用_下划线符号!
       data: obj,
       // 如果不指定过期时间，则会使用defaultExpires参数
@@ -57,9 +57,9 @@ const _storage = {
   },
 
   // 取数据
-  load(key, callBack) {
+  load(key: any, callBack?: (arg0: any) => any) {
     initStorage()
-    storage.load({
+    storage?.load({
       key: key,
       // autoSync(默认为true)意味着在没有找到数据或数据过期时自动调用相应的sync方法
       autoSync: true,
@@ -98,31 +98,31 @@ const _storage = {
   },
 
   // 获取某个key下的所有id(仅key-id数据)
-  getIdsForKey(id, callback) {
+  getIdsForKey(id: string, callback: (arg0: string[]) => any) {
     initStorage()
-    storage.getIdsForKey(id).then(ids => {
+    storage?.getIdsForKey(id).then(ids => {
       callback && callback(ids)
     })
   },
 
   // 获取某个key下的所有数据(仅key-id数据)
-  getAllDataForKey(key, callback) {
+  getAllDataForKey(key: string, callback: (arg0: any[]) => any) {
     initStorage()
-    storage.getAllDataForKey(key).then(users => {
+    storage?.getAllDataForKey(key).then(users => {
       callback && callback(users)
     })
   },
 
   // !! 清除某个key下的所有数据(仅key-id数据)
-  clearMapForKey(key) {
+  clearMapForKey(key: string) {
     initStorage()
-    storage.clearMapForKey(key)
+    storage?.clearMapForKey(key)
   },
 
   // 删除单个数据
-  remove(key) {
+  remove(key: any) {
     initStorage()
-    storage.remove({
+    storage?.remove({
       key: key
     })
   },
@@ -130,7 +130,7 @@ const _storage = {
   // !! 清空map，移除所有"key-id"数据（但会保留只有key的数据）
   clearMap() {
     initStorage()
-    storage.clearMap()
+    storage?.clearMap()
   }
 }
 
