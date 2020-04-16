@@ -1,0 +1,17 @@
+{
+  "name": "championApp",
+  "displayName": "championApp",
+  "expo": {
+    "name": "championApp",
+    "slug": "championApp",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
