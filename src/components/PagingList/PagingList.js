@@ -18,11 +18,11 @@ import {vw} from '../../utils/metric';
 const PagingList = props => {
   const [isRefreshing, setIsRefreshing] = React.useState(false); // 下拉刷新
   const [isLoading, setIsLoading] = React.useState(false); // 加载中
-  const [listData, setListData] = React.useState([]);
+  const [listData, setListData] = React.useState(props.initListData || []);
   const [empty, setEmpty] = React.useState(false);
   const [noMore, setNoMore] = React.useState();
 
-  // console.log(listData, 'listDatalistDatalistData')
+  console.log(listData, 'listDatalistDatalistData')
 
   /**
    * 分页
@@ -62,7 +62,7 @@ const PagingList = props => {
   const onEndReached = async () => {
     setIsLoading(true);
     page.current++;
-    const {result, code} = await props.onEndReached(page, size);
+    const {result, code} = await props.onEndReached(page, size) || {};
 
     if (!result || result.length === 0) {
       page.current--;
@@ -105,12 +105,17 @@ const PagingList = props => {
    */
   const ListEmptyComponent = () => {
     if (empty) {
-      return '空' || <Empty />;
+      return <Text>空</Text> || <Empty />;
     }
     return null;
   };
 
   // console.log(listData, 'listDatalistData');
+  React.useEffect(() => {
+    if (props.isInitGetData) {
+      onRefresh()
+    }
+  }, [])
 
   return (
     <View style={StyleSheet.flatten([styles.flatList,])}>

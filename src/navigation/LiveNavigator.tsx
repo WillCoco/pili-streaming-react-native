@@ -18,7 +18,6 @@ export default function LiveRouter() {
       <LiveStack.Screen
         name="LiveHome"
         component={LiveHomeScreen}
-        headerMode="none"
         options={{
           title: 'Awesome app1',
           headerShown: false,

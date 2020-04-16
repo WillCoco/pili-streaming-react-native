@@ -8,20 +8,26 @@ import {
   StyleSheet,
   FlatList,
   PanResponder,
+  SafeAreaView,
 } from 'react-native';
 import LiveBanner from './LiveBanner';
 import LiveHomeTabs from './LiveHomeTabs';
 import withPage from '../../../components/HOCs/withPage';
 
-const LiveHomeScreen = () : any =>  {
+const LiveHomeScreen = (props: any) : React.ReactElement =>  {
+  console.log(props.safeTop, 'safeTop')
+  const a = React.useState()
+  
   return (
-    <View
-      style={styles.wrapper}
+    <SafeAreaView
+      style={StyleSheet.flatten([styles.wrapper])}
     >
-      <Text>搜索组件</Text>
-      <LiveBanner/>
-      <LiveHomeTabs/>
-    </View>
+      <View style={{marginTop: props.safeTop}}>
+        <Text>搜索组件</Text>
+      </View>
+      <LiveBanner />
+      <LiveHomeTabs />
+    </SafeAreaView>
   )
 };
 

@@ -6,13 +6,13 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
-  PanResponder,
-  Image,
   StyleProp,
 } from 'react-native';
-import Swiper from 'react-native-swiper';
+import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view';
+// import {useNavigation, useNavigationParam} from 'react-navigation-hooks';
 import PagingList from '../../../components/PagingList';
+import ScrollableTab from '../../../components/ScrollableTab';
+import LiveSummaryBlock from '../../../components/LiveSummaryBlock';
 
 interface LiveBannerProps {
   // bannerList?: any[],
@@ -21,34 +21,70 @@ interface LiveBannerProps {
 }
 
 const LiveBanner = (props: LiveBannerProps) : any =>  {
-  const bannerList = [
-    'https://sponsor-static.segmentfault.com/2778c80a0247bc4d241af08a4f76f12b.jpg',
-    'https://sponsor-static.segmentfault.com/2778c80a0247bc4d241af08a4f76f12b.jpg',
-    'https://sponsor-static.segmentfault.com/2778c80a0247bc4d241af08a4f76f12b.jpg'
-  ];
+  // const {navigate} = useNavigation();
 
-  const renderItem = () => <Text>123</Text>
+  const renderItem = LiveSummaryBlock
 
-  const onRefresh = () => {};
+  const onRefresh = () => Promise.resolve({
+    result: [111,222,1,1,1,1,1]
+  });
 
   const onEndReached = () => {};
+
   return (
     <View
       style={StyleSheet.flatten([styles.wrapper, props.style])}
     >
-      <PagingList
-        size={10}
-        numColumns={2}
-        //item显示的布局
-        renderItem={renderItem}
-        //下拉刷新相关
-        onRefresh={onRefresh}
-        //加载更多
-        onEndReached={onEndReached}
-        // ItemSeparatorComponent={separator}
-        keyExtractor={(item, index) => 'index' + index + item}
-        initialNumToRender={14}
-      />
+      <ScrollableTabView
+        initialPage={1}
+        // tabBarBackgroundColor="red"
+        tabBarTextStyle={{
+        }}
+        tabBarUnderlineStyle={{
+        }}
+
+        renderTabBar={(props) => {
+          console.log(props, 123)
+          return (
+            <ScrollableTab
+              {...props}
+              tabsLength={4} // 分成几份
+              style={{width: '50%'}} // 所有宽度
+            />
+          )
+        }}
+      >
+        <PagingList
+          tabLabel="关注"
+          size={10}
+          numColumns={2}
+          // initListData={['1223', '2222']}
+          //item显示的布局
+          renderItem={renderItem}
+          //下拉刷新相关
+          onRefresh={onRefresh}
+          //加载更多
+          onEndReached={onEndReached}
+          // ItemSeparatorComponent={separator}
+          keyExtractor={(item, index) => 'index' + index + item}
+          initialNumToRender={14}
+        />
+        <PagingList
+          tabLabel="精选"
+          size={10}
+          numColumns={2}
+          // initListData={['1223', '2222']}
+          //item显示的布局
+          renderItem={renderItem}
+          //下拉刷新相关
+          onRefresh={onRefresh}
+          //加载更多
+          onEndReached={onEndReached}
+          // ItemSeparatorComponent={separator}
+          keyExtractor={(item, index) => 'index' + index + item}
+          initialNumToRender={14}
+        />
+      </ScrollableTabView>
     </View>
   )
 };
@@ -58,7 +94,7 @@ LiveBanner.defaultProps = {
 
 const styles = StyleSheet.create({
   wrapper: {
-    height: 200,
+    flex: 1,
   },
   image: {
     width: '100%',

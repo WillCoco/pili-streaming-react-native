@@ -9,6 +9,7 @@ import LiveWindow from '../../../components/LiveWindow';
 
 const LivingRoomScreen = () : any =>  {
 
+
   // 连接im
 
   // 观众

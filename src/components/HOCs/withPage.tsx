@@ -1,13 +1,18 @@
 import React from 'react';
-import withFallback, {optionTypes as fbOpsTypes} from './withFallback';
-import withErrorBound from './withErrorBound';
+import { compose } from 'redux';
+import withErrorBound, {optionTypes as fbOpsTypes} from './withErrorBound';
+import withSafeArea from './withSafeArea';
 
 interface optionTypes extends fbOpsTypes {
 }
 
-const withPage = (pageComponent: (props: any) => any, options?: optionTypes) => {
+const withPage = (pageComponent: (props: any) => React.ReactElement, options?: optionTypes) => {
   const fallbackOptions = options && options.fallbackomponent && {fallbackomponent: options.fallbackomponent}
-  return withErrorBound(pageComponent);
+  // return withSafeArea(pageComponent)
+  return compose(
+    withSafeArea,
+    (c: React.FC) => withErrorBound(c, fallbackOptions)
+  )(pageComponent)
 }
 
 export default withPage;

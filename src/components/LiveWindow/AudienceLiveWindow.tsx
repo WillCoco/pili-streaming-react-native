@@ -13,9 +13,9 @@ import {Audience as AudienceLiveToolBar} from '../LiveToolBar';
 import LiveIntro from '../LiveIntro';
 import LivingBottomBlock from '../LivingBottomBlock';
 import LivePuller from '../LivePuller';
-import L from '../../constants/Layout.js';
+import L from '../../constants/Layout';
 
-const {window} = L
+const {window} = L;
 
 interface LiveWindowProps {
   style?: StyleProp<any>,

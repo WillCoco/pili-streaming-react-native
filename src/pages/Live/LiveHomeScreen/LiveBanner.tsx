@@ -19,7 +19,7 @@ interface LiveBannerProps {
   imageStyle?: StyleProp<any>,
 }
 
-const LiveBanner = (props: LiveBannerProps) : any =>  {
+const LiveBanner = (props: LiveBannerProps) : React.ReactElement =>  {
   const bannerList = [
     'https://sponsor-static.segmentfault.com/2778c80a0247bc4d241af08a4f76f12b.jpg',
     'https://sponsor-static.segmentfault.com/2778c80a0247bc4d241af08a4f76f12b.jpg',
@@ -31,9 +31,10 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
     >
       <Swiper>
         {
-          bannerList.map(banner => {
+          bannerList.map((banner, i) => {
             return (
               <Image
+                key={`banner_${i}`}
                 source={{uri: banner}}
                 resizeMode="cover"
                 resizeMethod="resize"
