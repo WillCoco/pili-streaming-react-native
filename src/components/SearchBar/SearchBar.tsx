@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TextInput } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
 import { connect } from 'react-redux'
 
@@ -8,10 +7,13 @@ import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
 
 function SearchBar(props: any) {
-  const navgation = useNavigation()
   const [searchKey, setSearchKey] = useState('')
 
-  const toHomeSearch = () => navgation.push('HomeSearch', { searchKey: props.searchKey })
+  useEffect(() => {
+    setSearchKey(props.hasSearchKey ? props.searchKey : '请输入要搜索的内容')
+  }, [props.hasSearchKey])
+
+  const toSearchPage = () => props.toSearchPage()
 
   const toSearch = () => {
     const params = {
@@ -32,8 +34,8 @@ function SearchBar(props: any) {
         <Text
           numberOfLines={1}
           style={styles.searchKey}
-          onPress={toHomeSearch}
-        >{props.searchKey}</Text>
+          onPress={toSearchPage}
+        >{searchKey || props.searchKey}</Text>
       </View>
     )
   } else {

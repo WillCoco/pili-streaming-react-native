@@ -1,4 +1,6 @@
-import { storage } from '../storage'
+import configStore from '../store'
+
+const { store } = configStore()
 
 // get请求 拼接参数
 const getParam = (data: { [s: string]: unknown; } | ArrayLike<unknown>) => {
@@ -14,11 +16,7 @@ let headers = {
 }
 
 export const get = (path: any, data: any) => {
-  let token = storage.load('token') || ''
-
-  if (token) {
-    headers['authentication'] = token
-  }
+  console.log(store.getState().publicData)
 
   if (data) {
     path.append(`?${getParam(data)}`)
@@ -41,12 +39,6 @@ export const get = (path: any, data: any) => {
 };
 
 export const post = (path: RequestInfo, data: any) => {
-  let token = storage.load('token') || ''
-
-  if (token) {
-    headers['authentication'] = token
-  }
-
   return new Promise((resolve, reject) => {
     fetch(path, {
       method: 'POST',

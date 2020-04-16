@@ -7,14 +7,16 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons'
 
 import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
 import configStore from './src/store'
 import { getStatusBarHeight } from './src/actions/public'
 
 import Root from './src/navigation/BottomTabNavigator'
 import HomeSearch from './src/pages/HomeSearch/HomeSearch'
+import FoundSearch from './src/pages/FoundSearch/FoundSearch'
 
 const { StatusBarManager } = NativeModules
-const store = configStore()
+const { store, persistor } = configStore()
 const Stack = createStackNavigator()
 
 export default function App(props: { skipLoadingScreen: any; }) {
@@ -58,17 +60,23 @@ export default function App(props: { skipLoadingScreen: any; }) {
   } else {
     return (
       <Provider store={store}>
-        <View style={{ flex: 1 }}>
-          {
-            Platform.OS !== 'ios' && <StatusBar translucent={ true } backgroundColor='transparent' />
-          }
-          <NavigationContainer>
-            <Stack.Navigator>
-              <Stack.Screen name='Root' component={Root} />
-              <Stack.Screen name='HomeSearch' component={HomeSearch} />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </View>
+        <PersistGate
+          loading={null}
+          persistor={persistor}
+        >
+          <View style={{ flex: 1 }}>
+            {
+              Platform.OS !== 'ios' && <StatusBar barStyle='light-content' translucent={ true } backgroundColor='transparent' />
+            }
+            <NavigationContainer>
+              <Stack.Navigator>
+                <Stack.Screen name='Root' component={Root} />
+                <Stack.Screen name='HomeSearch' component={HomeSearch} />
+                <Stack.Screen name='FoundSearch' component={FoundSearch} />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </View>
+        </PersistGate>
       </Provider>
       
     )

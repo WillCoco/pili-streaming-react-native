@@ -1,7 +1,7 @@
 import React from 'react'
-import { StyleSheet, Image, Text, View } from 'react-native'
+import { StyleSheet, Image, Text } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Ionicons } from '@expo/vector-icons'
+import { connect } from 'react-redux'
 
 import pxToDp from '../utils/px2dp'
 import { Colors } from '../constants/Theme'
@@ -26,12 +26,12 @@ import SearchBar from '../components/SearchBar/SearchBar'
 const BottomTab = createBottomTabNavigator()
 const INITIAL_ROUTE_NAME = '首页'
 
-export default function BottomTabNavigator({ navigation, route }: any) {
+function BottomTabNavigator({ navigation, route }: any) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
   navigation.setOptions({
-    headerTitle: () => getTabItemComponent(getHeaderTitle(route)),
+    headerTitle: () => getTabItemComponent(getHeaderTitle(route), navigation),
     headerStyle: {
       backgroundColor: Colors.basicColor,
       elevation: 0,  // 去除安卓状态栏底部阴影
@@ -110,13 +110,21 @@ function getHeaderTitle(route:
   return routeName
 }
 
-function getTabItemComponent(routeName: String) {
+function getTabItemComponent(routeName: String, navigation: string[]) {
   switch (routeName) {
     case '首页':
-      return <SearchBar isPlaceHolder={true} />
+      return <SearchBar
+        hasSearchKey={true}
+        isPlaceHolder={true}
+        toSearchPage={() => navigation.push('HomeSearch')}
+      />
       break
     case '发现':
-      return <Text>发现hhhh</Text>
+      return <SearchBar
+        hasSearchKey={false}
+        isPlaceHolder={true}
+        toSearchPage={() => navigation.push('FoundSearch')}
+      />
       break
     case '直播':
       return <Text>直播hhhh</Text>
@@ -151,3 +159,5 @@ const styles = StyleSheet.create({
     marginLeft: pxToDp(20)
   }
 })
+
+export default BottomTabNavigator

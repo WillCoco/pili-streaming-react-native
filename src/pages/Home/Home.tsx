@@ -1,14 +1,11 @@
 import React, { useEffect } from 'react'
-import { Text, StyleSheet, ScrollView } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { StyleSheet, ScrollView, Text } from 'react-native'
 import { connect } from 'react-redux'
 import { setSearchKey } from '../../actions/home'
 
 import { apiGetIndexData } from '../../service/api'
 
 function Home(props: any) {
-  const navigation: any = useNavigation()
-
   useEffect(() => {
     apiGetIndexData().then((res: any) => {
       console.log(res)
@@ -17,21 +14,16 @@ function Home(props: any) {
     })
   }, [])
 
-  console.log(props, 'home')
-
-  const toHomeSearch = () => navigation.push('HomeSearch')
-
   return (
     <ScrollView style={[styles.container]}>
-      <Text onPress={toHomeSearch}>首页</Text>
+      <Text>sfsfsf</Text>
     </ScrollView>
-    
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-
+    backgroundColor: '#000'
   }
 })
 

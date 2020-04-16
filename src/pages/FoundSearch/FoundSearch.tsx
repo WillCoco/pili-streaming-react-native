@@ -7,12 +7,12 @@ import SearchBar from '../../components/SearchBar/SearchBar'
 
 import { Colors } from '../../constants/Theme'
 
-function HomeSearch(props: { searchKey: React.ReactNode }) {
+function FoundSearch(props: { searchKey: React.ReactNode }) {
   const navgation = useNavigation()
 
   const searchBarProps = {
     isPlaceHolder: false,
-    hasSearchKey: true
+    hasSearchKey: false
   }
 
   navgation.setOptions({
@@ -28,11 +28,9 @@ function HomeSearch(props: { searchKey: React.ReactNode }) {
 
   return (
     <View>
-      <Text>{props.searchKey}</Text>
+      <Text>发现搜索</Text>
     </View>
   )
 }
 
-export default connect(
-  (state: any) => state.homeData
-)(HomeSearch)
+export default connect()(FoundSearch)
