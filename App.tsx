@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Platform, StatusBar, View, NativeModules } from 'react-native'
 import { SplashScreen, AppLoading } from 'expo'
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
 
 import { Provider } from 'react-redux'
 import configStore from './src/store'
 import { getStatusBarHeight } from './src/actions/public'
 
-import Index from './src/pages/Index'
+import Root from './src/navigation/BottomTabNavigator'
 
 const { StatusBarManager } = NativeModules
 const store = configStore()
+const Stack = createStackNavigator()
 
 export default function App(props: { skipLoadingScreen: any; }) {
   const [isLoadingComplete, setLoadingComplete] = useState(false)
@@ -49,7 +52,11 @@ export default function App(props: { skipLoadingScreen: any; }) {
           {
             Platform.OS !== 'ios' && <StatusBar translucent={ true } backgroundColor='transparent' />
           }
-          <Index />
+          <NavigationContainer>
+            <Stack.Navigator>
+              <Stack.Screen name='Root' component={Root} />
+            </Stack.Navigator>
+          </NavigationContainer>
         </View>
       </Provider>
       

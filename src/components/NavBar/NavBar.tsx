@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import pxToDp from '../../utils/px2dp'
 
-function NavBar(props: { statusBarHeight: number }) {
+function NavBar(props: any) {
   return (
     <View style={styles.container}>
       <Text>{props.statusBarHeight}</Text>
@@ -13,9 +13,9 @@ function NavBar(props: { statusBarHeight: number }) {
 
 const styles = StyleSheet.create({
   container: {
-    // position: 'absolute',
-    // top: 0,
-    // left: 0,
+    position: 'absolute',
+    top: 0,
+    left: 0,
     width: '100%',
     backgroundColor: '#f0f',
     height: pxToDp(128)

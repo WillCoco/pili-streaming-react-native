@@ -1,20 +1,18 @@
 import React from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import { Text, StyleSheet, ScrollView } from 'react-native'
 import { connect } from 'react-redux'
 
-import NavBar from '../../components/NavBar/NavBar'
-
-function Home(props: { statusBarHeight: number }) {
+function Home() {
   return (
     <ScrollView style={styles.container}>
-      <NavBar />
+      <Text>首页</Text>
     </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    position: 'relative'
+    
   }
 })
 
