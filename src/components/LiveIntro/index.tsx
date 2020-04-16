@@ -26,7 +26,8 @@ interface LiveMsgProps {
   liveSubTitle: string | number,
   renderItem?: (d: string | object, i: number) => any,
   style?: StyleProp<any>,
-  onPress?: (anchorid: number) => any
+  onPress?: (anchorid: number) => any,
+  ref?: any,
 }
 
 const LiveIntro = (props: LiveMsgProps) : any =>  {
@@ -50,8 +51,8 @@ const LiveIntro = (props: LiveMsgProps) : any =>  {
         style={{marginRight: 4}}
       />
       <View>
-        <Text>{props.liveTitle}</Text>
-        <Text>{props.liveSubTitle}</Text>
+        <Text style={{color: '#fff'}}>{props.liveTitle}</Text>
+        <Text style={{color: '#ccc'}}>{props.liveSubTitle}</Text>
       </View>
     </TouchableOpacity>
   )
@@ -64,12 +65,12 @@ const styles = StyleSheet.create({
     left: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.2)',
-    height: 44,
-    borderRadius: 22,
+    backgroundColor: '#222',
+    height: 46,
+    borderRadius: 23,
     width: vw(50),
     maxWidth: 180,
-    padding: 2
+    padding: 3
   },
   scrollerWrapper: {
   },

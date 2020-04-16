@@ -9,7 +9,7 @@ export const Colors = {
   pinkColor: '#ffcec8',
   lightPink: '#ffeae8',
   yellowColor: '#ffc42b',
-  bgColor: '#f6f6f6'
+  bgColor: '#f6f6f6',
 }
 
 export const TextSize = {

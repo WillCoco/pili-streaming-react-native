@@ -5,7 +5,7 @@ import TabBarIcon from '../components/TabBarIcon';
 
 import HomeScreen from '../pages/Home/HomeScreen';
 import FoundScreen from '../pages/Found/FoundScreen';
-import LiveScreen from '../pages/Live/LiveScreen';
+import LiveNavigator from './LiveNavigator';
 import CartScreen from '../pages/Cart/CartScreen';
 import MineScreen from '../pages/Mine/MineScreen';
 
@@ -54,7 +54,7 @@ export default function BottomTabNavigator({ navigation, route }) {
       />
       <BottomTab.Screen
         name="直播"
-        component={LiveScreen}
+        component={LiveNavigator}
         options={{
           title: '直播',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-compass" />,
