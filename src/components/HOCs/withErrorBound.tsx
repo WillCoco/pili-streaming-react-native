@@ -6,10 +6,10 @@ interface stateType {
 }
 
 export interface optionTypes {
-  fallbackomponent?: any
+  fallbackComponent?: any
 }
 
-export default function withErrorBound(WrappingComponent: any, fallbackOptions: optionTypes) {
+export default function withErrorBound(WrappingComponent: any, fallbackOptions?: optionTypes) {
   return class Wrapped extends Component<any, stateType> {
     constructor(props: any) {
       super(props);
@@ -32,7 +32,7 @@ export default function withErrorBound(WrappingComponent: any, fallbackOptions: 
 
     render() {
       if (this.state.hasError) {
-        const FBUI = fallbackOptions.fallbackomponent || FallbackUI;
+        const FBUI = fallbackOptions?.fallbackComponent || FallbackUI;
         return <FBUI {...this.props} />;
       }
 

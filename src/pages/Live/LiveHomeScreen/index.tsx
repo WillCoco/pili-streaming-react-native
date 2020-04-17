@@ -40,4 +40,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withPage(LiveHomeScreen);
+export default withPage(LiveHomeScreen, {
+  statusBarOptions: {
+    // hidden: true,
+    // barStyle: 'dark-content',
+  }
+});

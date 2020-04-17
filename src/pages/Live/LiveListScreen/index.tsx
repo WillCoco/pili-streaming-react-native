@@ -92,12 +92,6 @@ const LiveScreen = (props: LiveScreenProps) : any =>  {
    */
   const [isMsgListResponsing, setIsMsgListResponsing] = React.useState(false);
 
-  const onMsgListResponse = (isResponsing: boolean) => {
-    if (isResponsing !== isMsgListResponsing) {
-      setIsMsgListResponsing(isResponsing)
-    }
-  }
-  
   /**
    * 正在获取更多
    */

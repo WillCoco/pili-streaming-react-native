@@ -43,7 +43,7 @@ const LiveSummaryBlock = (props: LiveToolBarProps) : any =>  {
       <Image
         source={
           props.liveInfo?.img ? {uri: props.liveInfo?.img} : {
-            uri: 'https://sponsor-static.segmentfault.com/2778c80a0247bc4d241af08a4f76f12b.jpg'
+            uri: 'https://goss.veer.com/creative/vcg/veer/800water/veer-302989341.jpg'
           }
         }
         style={styles.img}

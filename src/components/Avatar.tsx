@@ -9,6 +9,7 @@ import {
   StyleProp,
   View,
 } from "react-native";
+import images from "../assets/images";
 
 interface AvatarProps {
   source?: any,
@@ -26,7 +27,12 @@ const Avatar = (props: AvatarProps) => {
   }
 
   return (
-    <View style={props.style}>
+    <View
+      style={StyleSheet.flatten([
+        styles.style,
+        props.style
+      ])}
+    >
       <Image
         source={props.source || props.defaultSource}
         style={StyleSheet.flatten([
@@ -41,11 +47,14 @@ const Avatar = (props: AvatarProps) => {
 };
 
 Avatar.defaultProps = {
-  // defaultSource: {uri: 'http://www.gravatar.com/avatar/ac5ed5ed4458b4811187bad5b566b1bc?s=72&d=identicon'}
-  defaultSource: {uri: 'https://www.baidu.com/img/bd_logo1.png'}
+  defaultSource: images.userAvatar
 }
 
 const styles = StyleSheet.create({
+  style: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   img: {
     width: 38,
     height: 38,

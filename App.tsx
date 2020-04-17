@@ -76,7 +76,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='Root' component={Root} />
                 <Stack.Screen name='HomeSearch' component={HomeSearch} />
                 <Stack.Screen name='FoundSearch' component={FoundSearch} />
-                <Stack.Screen name='AnchorDetailScreen' component={AnchorDetailScreen} />
+                <Stack.Screen name='AnchorDetailScreen' component={AnchorDetailScreen} options={{headerShown: false}} />
                 <Stack.Screen name='LivingRoomScreen' component={LivingRoomScreen} options={{headerShown: false}} />
               </Stack.Navigator>
             </NavigationContainer>
