@@ -12,7 +12,8 @@ export const Colors = {
   bgColor: '#f6f6f6',
   divider: '#f3f3f3',
   pageGreyBg: '#f2f2f2',
-  opacityDarkBg: 'rgba(0,0,0,0.25)'
+  opacityDarkBg: 'rgba(0,0,0,0.25)',
+  borderColor: '#ddd',
 }
 
 export const TextSize = {

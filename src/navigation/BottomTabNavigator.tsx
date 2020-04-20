@@ -1,7 +1,6 @@
 import React from 'react'
 import { StyleSheet, Image, Text } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { connect } from 'react-redux'
 
 import pxToDp from '../utils/px2dp'
 import { Colors } from '../constants/Theme'
@@ -10,10 +9,12 @@ import HomeScreen from '../pages/Home/Home'
 import FoundScreen from '../pages/Found/Found'
 import CartScreen from '../pages/Cart/Cart'
 import MineScreen from '../pages/Mine/Mine'
-import LiveHomeScreen from '../pages/Live/LiveHomeScreen';
+import LiveHomeScreen from '../pages/Live/LiveHomeScreen'
 
 import homeIcon from '../assets/tab-bar-icon/home.png'
 import homeActiveIcon from '../assets/tab-bar-icon/homeActive.png'
+import liveIcon from '../assets/tab-bar-icon/live.png'
+import liveActiveIcon from '../assets/tab-bar-icon/liveActive.png'
 import foundIcon from '../assets/tab-bar-icon/found.png'
 import foundActiveIcon from '../assets/tab-bar-icon/foundActive.png'
 import cartIcon from '../assets/tab-bar-icon/cart.png'
@@ -59,19 +60,19 @@ function BottomTabNavigator({ navigation, route }: any) {
         }}
       />
       <BottomTab.Screen
+        name="直播"
+        component={LiveHomeScreen}
+        options={{
+          title: '直播',
+          tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? liveActiveIcon : liveIcon} />,
+        }}
+      />
+      <BottomTab.Screen
         name="发现"
         component={FoundScreen}
         options={{
           title: '发现',
           tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? foundActiveIcon : foundIcon} />,
-        }}
-      />
-      <BottomTab.Screen
-        name="直播"
-        component={LiveHomeScreen}
-        options={{
-          title: '直播',
-          tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? homeActiveIcon : homeIcon} />,
         }}
       />
       <BottomTab.Screen
