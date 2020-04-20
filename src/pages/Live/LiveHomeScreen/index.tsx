@@ -13,11 +13,11 @@ import {
 import LiveBanner from './LiveBanner';
 import LiveHomeTabs from './LiveHomeTabs';
 import withPage from '../../../components/HOCs/withPage';
+import { Colors } from '../../../constants/Theme';
 
 const LiveHomeScreen = (props: any) : React.ReactElement =>  {
   console.log(props.safeTop, 'safeTop')
   const a = React.useState()
-  
   return (
     <SafeAreaView
       style={StyleSheet.flatten([styles.wrapper])}
@@ -37,6 +37,7 @@ LiveHomeScreen.defaultProps = {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
+    backgroundColor: Colors.basicColor
   },
 });
 

@@ -12,6 +12,7 @@ import HomeNav from './HomeNav'
 import GoodsCard from '../../components/GoodsCard/GoodsCard'
 import GoodsCardRow from '../../components/GoodsCardRow/GoodsCardRow'
 import CardTitle from '../../components/CardTitle/CardTitle'
+import withPage from '../../components/HOCs/withPage'
 
 import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
@@ -449,4 +450,4 @@ const styles = StyleSheet.create({
 
 export default connect(
   (state: any) => state.homeData
-)(Home)
+)(withPage(Home))

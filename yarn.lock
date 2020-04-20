@@ -2,30 +2,6 @@
 # yarn lockfile v1
 
 
-"@ant-design/icons-react-native@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.npm.taobao.org/@ant-design/icons-react-native/download/@ant-design/icons-react-native-2.0.0.tgz#2574bb5067673151894590c13d2c804f03befa3a"
-  integrity sha1-JXS7UGdnMVGJRZDBPSyATwO++jo=
-
-"@ant-design/react-native@^3.3.0":
-  version "3.3.0"
-  resolved "https://registry.npm.taobao.org/@ant-design/react-native/download/@ant-design/react-native-3.3.0.tgz#ecd1ef6e34f09e21e5969bce60996c5d8eeb01c3"
-  integrity sha1-7NHvbjTwniHllpvOYJlsXY7rAcM=
-  dependencies:
-    "@ant-design/icons-react-native" "^2.0.0"
-    "@bang88/react-native-drawer-layout" "^2.0.3"
-    "@bang88/react-native-ultimate-listview" "^3.3.0"
-    "@react-native-community/viewpager" "^1.1.7"
-    array-tree-filter "~2.1.0"
-    babel-runtime "^6.x"
-    deepmerge "^3.0.0"
-    normalize-css-color "^1.0.2"
-    react-native-collapsible "^1.4.0"
-    react-native-modal-popover "^0.0.12"
-    react-native-safe-area-view "^0.11.0"
-    react-native-swipeout "^2.3.6"
-    utility-types "^2.1.0"
-
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.0.0-beta.44", "@babel/code-frame@^7.8.3":
   version "7.8.3"
   resolved "https://registry.npm.taobao.org/@babel/code-frame/download/@babel/code-frame-7.8.3.tgz#33e25903d7481181534e12ec0a25f16b6fcf419e"
@@ -948,16 +924,6 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@bang88/react-native-drawer-layout@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.npm.taobao.org/@bang88/react-native-drawer-layout/download/@bang88/react-native-drawer-layout-2.0.3.tgz#a93abd5a9c6d1fc4c0924a9f21c2cd7d1deea88d"
-  integrity sha1-qTq9WpxtH8TAkkqfIcLNfR3uqI0=
-
-"@bang88/react-native-ultimate-listview@^3.3.0":
-  version "3.3.0"
-  resolved "https://registry.npm.taobao.org/@bang88/react-native-ultimate-listview/download/@bang88/react-native-ultimate-listview-3.3.0.tgz#b09199105b942aee4ae05729e4bd229353217ab6"
-  integrity sha1-sJGZEFuUKu5K4Fcp5L0ik1MherY=
-
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.npm.taobao.org/@cnakazawa/watch/download/@cnakazawa/watch-1.0.4.tgz#f864ae85004d0fcab6f50be9141c4da368d1656a"
@@ -1342,20 +1308,10 @@
   resolved "https://registry.npm.taobao.org/@react-native-community/masked-view/download/@react-native-community/masked-view-0.1.9.tgz#383aca2fb053e3e14405c99cce2d5805df730821"
   integrity sha1-ODrKL7BT4+FEBcmczi1YBd9zCCE=
 
-"@react-native-community/viewpager@^1.1.7":
-  version "1.1.7"
-  resolved "https://registry.npm.taobao.org/@react-native-community/viewpager/download/@react-native-community/viewpager-1.1.7.tgz#7d3b1631f1ec91145db92a8e25c80d53027e96ba"
-  integrity sha1-fTsWMfHskRRduSqOJcgNUwJ+lro=
-
 "@react-native-community/viewpager@^2.0.1":
   version "2.0.2"
   resolved "https://registry.npm.taobao.org/@react-native-community/viewpager/download/@react-native-community/viewpager-2.0.2.tgz#622b190294b1310c4825c98daeaee1c8443f7124"
   integrity sha1-YisZApSxMQxIJcmNrq7hyEQ/cSQ=
-
-"@react-native-community/viewpager@^3.3.0":
-  version "3.3.0"
-  resolved "https://registry.npm.taobao.org/@react-native-community/viewpager/download/@react-native-community/viewpager-3.3.0.tgz#e613747a43a31a6f3278f817ba96fdaaa7941f23"
-  integrity sha1-5hN0ekOjGm8yePgXupb9qqeUHyM=
 
 "@react-navigation/bottom-tabs@^5.2.6":
   version "5.2.6"
@@ -1510,7 +1466,7 @@
   resolved "https://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.149.tgz#1342d63d948c6062838fbf961012f74d4e638440"
   integrity sha1-E0LWPZSMYGKDj7+WEBL3TU5jhEA=
 
-"@types/prop-types@*", "@types/prop-types@^15.5.5":
+"@types/prop-types@*":
   version "15.7.3"
   resolved "https://registry.npm.taobao.org/@types/prop-types/download/@types/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
   integrity sha1-KrDV2i5YFflLC51LldHl8kOrLKc=
@@ -1872,11 +1828,6 @@ array-slice@^0.2.3:
   resolved "https://registry.npm.taobao.org/array-slice/download/array-slice-0.2.3.tgz#dd3cfb80ed7973a75117cdac69b0b99ec86186f5"
   integrity sha1-3Tz7gO15c6dRF82sabC5nshhhvU=
 
-array-tree-filter@~2.1.0:
-  version "2.1.0"
-  resolved "https://registry.npm.taobao.org/array-tree-filter/download/array-tree-filter-2.1.0.tgz#873ac00fec83749f255ac8dd083814b4f6329190"
-  integrity sha1-hzrAD+yDdJ8lWsjdCDgUtPYykZA=
-
 array-unique@^0.3.2:
   version "0.3.2"
   resolved "https://registry.npm.taobao.org/array-unique/download/array-unique-0.3.2.tgz#a894b75d4bc4f6cd679ef3244a9fd8f46ae2d428"
@@ -2095,7 +2046,7 @@ babel-preset-jest@^24.9.0:
     "@babel/plugin-syntax-object-rest-spread" "^7.0.0"
     babel-plugin-jest-hoist "^24.9.0"
 
-babel-runtime@^6.22.0, babel-runtime@^6.x:
+babel-runtime@^6.22.0:
   version "6.26.0"
   resolved "https://registry.npm.taobao.org/babel-runtime/download/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
   integrity sha1-llxwWGaOgrVde/4E/yM3vItWR/4=
@@ -2642,7 +2593,7 @@ cosmiconfig@^5.0.5, cosmiconfig@^5.1.0:
     js-yaml "^3.13.1"
     parse-json "^4.0.0"
 
-create-react-class@^15.6.0, create-react-class@^15.6.2, create-react-class@^15.6.3:
+create-react-class@^15.6.2, create-react-class@^15.6.3:
   version "15.6.3"
   resolved "https://registry.npm.taobao.org/create-react-class/download/create-react-class-15.6.3.tgz#2d73237fb3f970ae6ebe011a9e66f46dbca80036"
   integrity sha1-LXMjf7P5cK5uvgEanmb0bbyoADY=
@@ -2807,7 +2758,7 @@ deep-is@~0.1.3:
   resolved "https://registry.npm.taobao.org/deep-is/download/deep-is-0.1.3.tgz#b369d6fb5dbc13eecf524f91b070feedc357cf34"
   integrity sha1-s2nW+128E+7PUk+RsHD+7cNXzzQ=
 
-deepmerge@^3.0.0, deepmerge@^3.1.0, deepmerge@^3.2.0:
+deepmerge@^3.1.0, deepmerge@^3.2.0:
   version "3.3.0"
   resolved "https://registry.npm.taobao.org/deepmerge/download/deepmerge-3.3.0.tgz#d3c47fd6f3a93d517b14426b0628a17b0125f5f7"
   integrity sha1-08R/1vOpPVF7FEJrBiihewEl9fc=
@@ -4862,11 +4813,6 @@ lodash-es@^4.2.1:
   resolved "https://registry.npm.taobao.org/lodash-es/download/lodash-es-4.17.15.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Flodash-es%2Fdownload%2Flodash-es-4.17.15.tgz#21bd96839354412f23d7a10340e5eac6ee455d78"
   integrity sha1-Ib2Wg5NUQS8j16EDQOXqxu5FXXg=
 
-lodash.debounce@^4.0.8:
-  version "4.0.8"
-  resolved "https://registry.npm.taobao.org/lodash.debounce/download/lodash.debounce-4.0.8.tgz?cache=0&sync_timestamp=1571657605147&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Flodash.debounce%2Fdownload%2Flodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
-  integrity sha1-gteb/zCmfEAF/9XiUVMArZyk168=
-
 lodash.sortby@^4.7.0:
   version "4.7.0"
   resolved "https://registry.npm.taobao.org/lodash.sortby/download/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
@@ -6030,13 +5976,6 @@ querystringify@^2.1.1:
   resolved "https://registry.npm.taobao.org/querystringify/download/querystringify-2.1.1.tgz#60e5a5fd64a7f8bfa4d2ab2ed6fdf4c85bad154e"
   integrity sha1-YOWl/WSn+L+k0qsu1v30yFutFU4=
 
-raf@^3.1.0:
-  version "3.4.1"
-  resolved "https://registry.npm.taobao.org/raf/download/raf-3.4.1.tgz?cache=0&sync_timestamp=1571657586987&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fraf%2Fdownload%2Fraf-3.4.1.tgz#0742e99a4a6552f445d73e3ee0328af0ff1ede39"
-  integrity sha1-B0LpmkplUvRF1z4+4DKK8P8e3jk=
-  dependencies:
-    performance-now "^2.1.0"
-
 range-parser@~1.2.1:
   version "1.2.1"
   resolved "https://registry.npm.taobao.org/range-parser/download/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
@@ -6064,13 +6003,6 @@ react-is@^16.12.0, react-is@^16.13.0, react-is@^16.7.0, react-is@^16.8.1, react-
   version "16.13.1"
   resolved "https://registry.npm.taobao.org/react-is/download/react-is-16.13.1.tgz?cache=0&sync_timestamp=1586484576689&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact-is%2Fdownload%2Freact-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha1-eJcppNw23imZ3BVt1sHZwYzqVqQ=
-
-react-native-collapsible@^1.4.0:
-  version "1.5.2"
-  resolved "https://registry.npm.taobao.org/react-native-collapsible/download/react-native-collapsible-1.5.2.tgz#544616dc04a71870508dc707049544a805402993"
-  integrity sha1-VEYW3ASnGHBQjccHBJVEqAVAKZM=
-  dependencies:
-    prop-types "^15.6.2"
 
 react-native-elements@^1.2.7:
   version "1.2.7"
@@ -6114,15 +6046,6 @@ react-native-iphone-x-helper@^1.2.1:
   resolved "https://registry.npm.taobao.org/react-native-iphone-x-helper/download/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"
   integrity sha1-ZF4v+7tJ6AhEu0y740oSb9oeZ3I=
 
-react-native-modal-popover@^0.0.12:
-  version "0.0.12"
-  resolved "https://registry.npm.taobao.org/react-native-modal-popover/download/react-native-modal-popover-0.0.12.tgz#5c0b5e9e0323490c3c5867821fc94b6582bfa3dc"
-  integrity sha1-XAtengMjSQw8WGeCH8lLZYK/o9w=
-  dependencies:
-    "@types/prop-types" "^15.5.5"
-    lodash.debounce "^4.0.8"
-    prop-types "^15.6.2"
-
 react-native-nodemediaclient@^0.1.6:
   version "0.1.6"
   resolved "https://registry.npm.taobao.org/react-native-nodemediaclient/download/react-native-nodemediaclient-0.1.6.tgz#fe7be11f4fc0544496d841efdbad534ec92900f2"
@@ -6155,13 +6078,6 @@ react-native-safe-area-context@^0.7.3:
   version "0.7.3"
   resolved "https://registry.npm.taobao.org/react-native-safe-area-context/download/react-native-safe-area-context-0.7.3.tgz#ad6bd4abbabe195332c53810e4ce5851eb21aa2a"
   integrity sha1-rWvUq7q+GVMyxTgQ5M5YUeshqio=
-
-react-native-safe-area-view@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.npm.taobao.org/react-native-safe-area-view/download/react-native-safe-area-view-0.11.0.tgz#4f3dda43c2bace37965e7c6aef5fc83d4f19d174"
-  integrity sha1-Tz3aQ8K6zjeWXnxq71/IPU8Z0XQ=
-  dependencies:
-    hoist-non-react-statics "^2.3.1"
 
 react-native-safe-area-view@^0.14.8:
   version "0.14.9"
@@ -6207,15 +6123,6 @@ react-native-svg@^12.1.0:
   dependencies:
     css-select "^2.1.0"
     css-tree "^1.0.0-alpha.39"
-
-react-native-swipeout@^2.3.6:
-  version "2.3.6"
-  resolved "https://registry.npm.taobao.org/react-native-swipeout/download/react-native-swipeout-2.3.6.tgz#47dac8a835825cf3f2eef9e495574a3d9ab6d3fa"
-  integrity sha1-R9rIqDWCXPPy7vnklVdKPZq20/o=
-  dependencies:
-    create-react-class "^15.6.0"
-    prop-types "^15.5.10"
-    react-tween-state "^0.1.5"
 
 react-native-swiper@^1.6.0:
   version "1.6.0"
@@ -6351,14 +6258,6 @@ react-timer-mixin@^0.13.3, react-timer-mixin@^0.13.4:
   version "0.13.4"
   resolved "https://registry.npm.taobao.org/react-timer-mixin/download/react-timer-mixin-0.13.4.tgz#75a00c3c94c13abe29b43d63b4c65a88fc8264d3"
   integrity sha1-daAMPJTBOr4ptD1jtMZaiPyCZNM=
-
-react-tween-state@^0.1.5:
-  version "0.1.5"
-  resolved "https://registry.npm.taobao.org/react-tween-state/download/react-tween-state-0.1.5.tgz#e98b066551efb93cb92dd1be14995c2e3deae339"
-  integrity sha1-6YsGZVHvuTy5LdG+FJlcLj3q4zk=
-  dependencies:
-    raf "^3.1.0"
-    tween-functions "^1.0.1"
 
 react@~16.9.0:
   version "16.9.0"
@@ -7383,11 +7282,6 @@ tunnel-agent@^0.6.0:
   dependencies:
     safe-buffer "^5.0.1"
 
-tween-functions@^1.0.1:
-  version "1.2.0"
-  resolved "https://registry.npm.taobao.org/tween-functions/download/tween-functions-1.2.0.tgz#1ae3a50e7c60bb3def774eac707acbca73bbc3ff"
-  integrity sha1-GuOlDnxguz3vd06scHrLynO7w/8=
-
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.npm.taobao.org/tweetnacl/download/tweetnacl-0.14.5.tgz?cache=0&sync_timestamp=1581365146868&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ftweetnacl%2Fdownload%2Ftweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
@@ -7600,11 +7494,6 @@ util.promisify@^1.0.0:
     es-abstract "^1.17.2"
     has-symbols "^1.0.1"
     object.getownpropertydescriptors "^2.1.0"
-
-utility-types@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.npm.taobao.org/utility-types/download/utility-types-2.1.0.tgz#0c78fc9f7eb424d14302222b4ddd13fdb17f44ab"
-  integrity sha1-DHj8n360JNFDAiIrTd0T/bF/RKs=
 
 utils-merge@1.0.1:
   version "1.0.1"

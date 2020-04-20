@@ -9,6 +9,7 @@ import {
   StyleSheet,
   FlatList,
   PanResponder,
+  TouchableOpacity
 } from 'react-native';
 import {PrimaryText, SmallText} from 'react-native-normalization-text';
 import Avatar from '../../../components/Avatar';
@@ -16,10 +17,11 @@ import {Colors} from '../../../constants/Theme';
 import {vw} from '../../../utils/metric';
 
 const AnorchDetailAvatar = (props: {
-  isLiving: boolean
+  isLiving: boolean,
+  onPress?: () => void
 }) =>  {
   return (
-    <View style={styles.avatarWrapper}>
+    <TouchableOpacity style={styles.avatarWrapper} onPress={props.onPress}>
       <Avatar
         size={vw(17)}
         style={{
@@ -33,7 +35,7 @@ const AnorchDetailAvatar = (props: {
         }}
       />
       {props.isLiving && <Text style={styles.livingText}>直播中</Text>}
-    </View>
+    </TouchableOpacity>
   )
 };
 

@@ -216,7 +216,7 @@ const LiveScreen = (props: LiveScreenProps) : any =>  {
             return (
               <LiveWindow.Audience
                 key={`${d.id}`}
-                style={{flex: 1, borderWidth: 10}}
+                style={{flex: 1}}
                 liveData={d.data}
               />
             )

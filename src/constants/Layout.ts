@@ -5,6 +5,7 @@ const height: number = Dimensions.get('window').height
 
 export const pad = 10;
 export const radio = 2;
+export const radioLarge = 8;
 
 export default {
   window: {
