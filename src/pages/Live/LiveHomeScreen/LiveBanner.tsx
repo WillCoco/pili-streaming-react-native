@@ -12,6 +12,7 @@ import {
   StyleProp,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
+import images from '../../../assets/images';
 
 interface LiveBannerProps {
   // bannerList?: any[],
@@ -20,11 +21,7 @@ interface LiveBannerProps {
 }
 
 const LiveBanner = (props: LiveBannerProps) : React.ReactElement =>  {
-  const bannerList = [
-    'https://sponsor-static.segmentfault.com/2778c80a0247bc4d241af08a4f76f12b.jpg',
-    'https://sponsor-static.segmentfault.com/2778c80a0247bc4d241af08a4f76f12b.jpg',
-    'https://sponsor-static.segmentfault.com/2778c80a0247bc4d241af08a4f76f12b.jpg'
-  ];
+  const bannerList = [images.liveBanner];
   return (
     <View
       style={StyleSheet.flatten([styles.wrapper, props.style])}
@@ -32,10 +29,11 @@ const LiveBanner = (props: LiveBannerProps) : React.ReactElement =>  {
       <Swiper>
         {
           bannerList.map((banner, i) => {
+            const bannerSource = typeof banner === 'string' ? {uri: banner} : banner;
             return (
               <Image
                 key={`banner_${i}`}
-                source={{uri: banner}}
+                source={bannerSource}
                 resizeMode="cover"
                 resizeMethod="resize"
                 style={StyleSheet.flatten([styles.image, props.imageStyle])}

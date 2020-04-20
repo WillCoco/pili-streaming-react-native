@@ -31,7 +31,10 @@ const AnchorDetail = () =>  {
       <View style={styles.headerBlcokWrapper}>
         <View style={styles.headerBlcokWrapper}>
           <Image style={styles.headerBg} source={{uri: bgUrl}} resizeMode="cover" resizeMethod="resize" />
-          <AnorchDetailAvatar isLiving={isLiving} />
+          <AnorchDetailAvatar
+            isLiving={isLiving}
+            onPress={() => {}}
+          />
         </View>
       </View>
       <ScrollableTabView>
@@ -55,6 +58,7 @@ AnchorDetail.defaultProps = {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
+    backgroundColor: '#fff'
   },
   headerBlcokWrapper: {
     height: vw(75),

@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     borderRadius: 9,
     position: 'absolute',
     bottom: -2,
-    fontSize: 12
+    fontSize: 12,
     // transform: [{translateY: vw(8)}]
   }
 });

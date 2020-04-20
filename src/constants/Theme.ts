@@ -10,7 +10,9 @@ export const Colors = {
   lightPink: '#ffeae8',
   yellowColor: '#ffc42b',
   bgColor: '#f6f6f6',
-  divider: '#f3f3f3'
+  divider: '#f3f3f3',
+  pageGreyBg: '#f2f2f2',
+  opacityDarkBg: 'rgba(0,0,0,0.25)'
 }
 
 export const TextSize = {

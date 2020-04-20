@@ -8,9 +8,11 @@ import {
   Image,
   StyleSheet,
   FlatList,
-  ScrollView
+  ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import {PrimaryText, SmallText, H4} from 'react-native-normalization-text';
+import {useNavigation} from '@react-navigation/native';
 import LiveRecord from './LiveRecord';
 import {Colors} from '../../../constants/Theme';
 import {pad} from '../../../constants/Layout';
@@ -21,16 +23,23 @@ const Row = (props: {
   title: string,
   typeText: string,
   subText: string,
-  showDivider?: boolean
-}) => (
-  <View style={StyleSheet.flatten([styles.rowWrapper, props.showDivider && styles.divider])}>
-    <PrimaryText>{props.title}</PrimaryText>
-    <View style={StyleSheet.flatten([styles.rowLine2])}>
-      <SmallText style={styles.typeText}>{props.typeText}</SmallText>
-      <SmallText style={styles.subText}>{props.subText}</SmallText>
-    </View>
-  </View>
-)
+  showDivider?: boolean,
+  onPress?: (v?: any) => void
+}) => {
+  return (
+    <TouchableOpacity
+      style={StyleSheet.flatten([styles.rowWrapper, props.showDivider && styles.divider])}
+      onPress={props.onPress}
+    >
+      <PrimaryText>{props.title}</PrimaryText>
+      <View style={StyleSheet.flatten([styles.rowLine2])}>
+        <SmallText style={styles.typeText}>{props.typeText}</SmallText>
+        <SmallText style={styles.subText}>{props.subText}</SmallText>
+      </View>
+    </TouchableOpacity>
+  )
+}
+
 
 Row.defaultProps = {
   title: '[标题] 内容',
@@ -44,6 +53,7 @@ const LiveTabPage = (props: {
   liveRecords: any[],
   tabLabel?: string
 }) =>  {
+  const {navigate} = useNavigation();
   return (
     <ScrollView style={styles.style}>
       {props.isLiving && (
@@ -52,16 +62,19 @@ const LiveTabPage = (props: {
           typeText="直播中"
           subText="123人观看"
           showDivider
+          onPress={() => navigate('LivingRoomScreen')}
         />
       )}
       {
         props.trailers?.map((trailer, index) => {
           return (
             <Row
+              key={`_${index}`}
               title={trailer?.title }
               typeText={trailer?.title}
               subText={trailer?.title}
               showDivider={index !== props.trailers.length}
+              onPress={() => navigate('LivingRoomScreen')} // 预告片
             />
           )
         })
@@ -74,7 +87,7 @@ const LiveTabPage = (props: {
               props.liveRecords.map((record, index) => (
                 <LiveRecord
                   key={`record_${index}`}
-
+                  onPress={() => navigate('LivingRoomScreen')} // 预告片
                 />
               ))
             }

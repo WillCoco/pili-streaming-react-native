@@ -116,10 +116,9 @@ const PagingList = props => {
   }, [])
 
   return (
-    <View style={StyleSheet.flatten([styles.flatList,])}>
+    <View style={StyleSheet.flatten([styles.flatList, props.style])}>
       <FlatList
         refreshing
-        numColumns={props.numColumns}
         data={listData}
         initialNumToRender={props.initialNumToRender}
         //item显示的布局
@@ -145,6 +144,10 @@ const PagingList = props => {
             : null
         }
         keyExtractor={(item, index) => 'index' + index + item}
+        numColumns={props.numColumns}
+        columnWrapperStyle={props.columnWrapperStyle}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={props.contentContainerStyle}
       />
     </View>
   );
