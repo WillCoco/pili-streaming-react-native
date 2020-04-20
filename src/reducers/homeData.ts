@@ -3,7 +3,8 @@ import {
   SWIPER_LIST,
   ACTIVITY_LIST,
   SELECTED_GOODS_INFO,
-  RECOMMEND_GOODS_LIST
+  RECOMMEND_GOODS_LIST,
+  SECKILL_LIST
 } from '../constants/Home'
 
 const INITIAL_STATE = {
@@ -11,7 +12,8 @@ const INITIAL_STATE = {
   swiperList: [],
   activityList: [],
   selectedGoodsInfo: {},
-  recommendGoodsList: []
+  recommendGoodsList: [],
+  seckillList: []
 }
 
 export default function homeData(state = INITIAL_STATE, action: any) {
@@ -26,6 +28,8 @@ export default function homeData(state = INITIAL_STATE, action: any) {
       return { ...state, selectedGoodsInfo: action.payload }
     case RECOMMEND_GOODS_LIST:
       return { ...state, recommendGoodsList: action.payload}
+    case SECKILL_LIST:
+      return { ...state, seckillList: action.payload }
     default:
       return state
   }

@@ -3,7 +3,8 @@ import {
   SWIPER_LIST,
   ACTIVITY_LIST,
   SELECTED_GOODS_INFO,
-  RECOMMEND_GOODS_LIST
+  RECOMMEND_GOODS_LIST,
+  SECKILL_LIST
 } from '../constants/Home'
 
 export const setSearchKey = (searchKey: string) => {
@@ -24,4 +25,8 @@ export const setSelectedGoodsInfo = (selectedGoodsInfo: any) => {
 
 export const setRecommendGoodsList = (recommendGoodsList: Array<any>) => {
   return { type: RECOMMEND_GOODS_LIST, payload: recommendGoodsList }
+}
+
+export const setSeckillList = (seckillList: Array<any>) => {
+  return { type: SECKILL_LIST, payload: seckillList }
 }
