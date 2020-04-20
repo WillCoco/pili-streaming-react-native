@@ -20,6 +20,7 @@ import Brand from './src/pages/Brand/Brand'
 import BrandShop from './src/pages/BrandShop/BrandShop'
 import GoodsInfo from './src/pages/GoodsInfo/GoodsInfo'
 import Classify from './src/pages/Classify/Classify'
+import Belt from './src/pages/Belt/Belt'
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -84,6 +85,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='BrandShop' component={BrandShop} />
                 <Stack.Screen name='GoodsInfo' component={GoodsInfo} />
                 <Stack.Screen name='Classify' component={Classify} />
+                <Stack.Screen name='Belt' component={Belt} />
                 <Stack.Screen name='AnchorDetailScreen' component={AnchorDetailScreen} options={{headerShown: false}} />
                 <Stack.Screen name='LivingRoomScreen' component={LivingRoomScreen} options={{headerShown: false}} />
               </Stack.Navigator>

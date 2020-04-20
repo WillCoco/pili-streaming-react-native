@@ -16,10 +16,12 @@ const navList = [
     path: 'Classify'
   }, {
     text: '特卖专区',
-    icon: require('../../../assets/home-image/icon_sale.png')
+    icon: require('../../../assets/home-image/icon_sale.png'),
+    path: 'Belt'
   }, {
     text: '产业带',
-    icon: require('../../../assets/home-image/icon_belt.png')
+    icon: require('../../../assets/home-image/icon_belt.png'),
+    path: 'Belt'
   }
 ]
 
