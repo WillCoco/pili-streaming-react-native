@@ -87,6 +87,7 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
           keyExtractor={(item, index) => 'index' + index + item}
           initialNumToRender={14}
         />
+        
       </ScrollableTabView>
     </View>
   )

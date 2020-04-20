@@ -10,6 +10,7 @@ export const Colors = {
   lightPink: '#ffeae8',
   yellowColor: '#ffc42b',
   bgColor: '#f6f6f6',
+  borderColor: '#ddd'
 }
 
 export const TextSize = {

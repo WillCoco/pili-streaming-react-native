@@ -16,10 +16,8 @@ let headers = {
 }
 
 export const get = (path: any, data: any) => {
-  console.log(store.getState().publicData)
-
   if (data) {
-    path.append(`?${getParam(data)}`)
+    path = `${path}?${getParam(data)}`
   }
 
   return new Promise((resolve, reject) => {
