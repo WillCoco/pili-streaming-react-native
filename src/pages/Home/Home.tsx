@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, Text, RefreshControl, ScrollView, ImageBackground, Image, PixelRatio } from 'react-native'
-import { connect } from 'react-redux'
-import { setSearchKey, setSwiperList, setActivityList, setSelectedGoodsInfo, setRecommendGoodsList } from '../../actions/home'
+import { View, StyleSheet, Text, RefreshControl, ScrollView, ImageBackground, Image, PixelRatio, TouchableWithoutFeedback } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { Ionicons } from '@expo/vector-icons'
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view'
+
+import { connect } from 'react-redux'
+import { setSearchKey, setSwiperList, setActivityList, setSelectedGoodsInfo, setRecommendGoodsList, setSeckillList } from '../../actions/home'
 
 import HomeSwiper from './HomeSwiper'
 import HomeNav from './HomeNav'
@@ -18,11 +21,19 @@ import { apiGetIndexData, apiGetIndexGoodsList } from '../../service/api'
 
 
 function Home(props: any) {
+  const navigation = useNavigation()
+
   const [categoryList, setCategoryList] = useState([{ name: '首页' }])
   const [categoryData, setCategoryData] = useState({})
   const [loading, setLoading] = useState(false)
   const [pageNo, setPageNo] = useState(1)
   const [pageSize] = useState(20)
+  const [timeQuantum, setTimeQuantum] = useState('')
+  const [countDownList, setCountDownList] = useState([
+    { timeQuantum: '10:00', state: '' },
+    { timeQuantum: '14:00', state: '' },
+    { timeQuantum: '20:00', state: '' }
+  ])
 
   useEffect(() => {
     apiGetIndexData().then((res: any) => {
@@ -36,12 +47,14 @@ function Home(props: any) {
       props.dispatch(setSwiperList(res.banner))
       props.dispatch(setActivityList(res.activity))
       props.dispatch(setSelectedGoodsInfo(selectedGoodsInfo))
+      props.dispatch(setSeckillList(res.seckill))
 
       if (categoryList.length === 1) {
         setCategoryList([...categoryList, ...res.category])
       }
 
       getRecommendGoodsList()
+      setCountDown()
     })
   }, [])
 
@@ -70,10 +83,66 @@ function Home(props: any) {
   }
 
   /**
-   * 
+   * 切换 TAB
    */
   const changeTab = (e: any) => {
     setCategoryData(categoryList[e.i])
+  }
+
+  /**
+   * 设置秒杀倒计时
+   */
+  const setCountDown = () => {
+    const curHour = new Date().getHours()
+
+    if ((curHour >= 0 && curHour < 10) || curHour >= 20) {
+      setTimeQuantum('20:00')
+      setCountDownList([
+        { timeQuantum: '10:00', state: curHour >= 20 ? '已结束' : '即将开始' },
+        { timeQuantum: '14:00', state: '已结束' },
+        { timeQuantum: '20:00', state: '正在疯抢' }
+      ])
+    } else if (curHour >= 10 && curHour < 14) {
+      setTimeQuantum('10:00')
+      setCountDownList([
+        { timeQuantum: '10:00', state: '正在疯抢' },
+        { timeQuantum: '14:00', state: '即将开始' },
+        { timeQuantum: '20:00', state: '即将开始' }
+      ])
+    } else {
+      setTimeQuantum('14:00')
+      setCountDownList([
+        { timeQuantum: '10:00', state: '已结束' },
+        { timeQuantum: '14:00', state: '正在疯抢' },
+        { timeQuantum: '20:00', state: '即将开始' }
+      ])
+    }
+
+    let seckillCountdown: number
+
+    if (curHour >= 20) {  // 当天 0 点之前
+      seckillCountdown = new Date().setHours(23, 59, 59, 999) + 1 - new Date().getTime()
+    } else if (curHour >= 0 && curHour < 10) {  // 当天 0 点到 10 点之间
+      seckillCountdown = new Date().setHours(10, 0, 0, 0) - new Date().getTime()
+    } else {
+      seckillCountdown = new Date().setHours(20, 0, 0, 0) - new Date().getTime()
+    }
+
+    console.log(seckillCountdown)
+  }
+
+  /**
+   * 前往品牌店铺
+   */
+  const toBrandShop = (id: number) => {
+    navigation.push('BrandShop', { id })
+  }
+
+  /**
+   * 前往秒杀页
+   */
+  const toSeckillPage = () => {
+    navigation.push('Sale', { type: 'seckill'} )
   }
 
   return (
@@ -109,10 +178,13 @@ function Home(props: any) {
                         {
                           categoryData.list && categoryData.list.map((item: any, index: number) => {
                             return (
-                              <View style={[styles.brandItem, !!((index + 1) % 4) && {marginRight: pxToDp(60)}]} key={`brand-${index}`}>
-                                <Image source={{ uri: item.logo }} style={styles.brandLogo} />
-                                <Text style={styles.brandName}>{item.name}</Text>
-                              </View>
+                              <TouchableWithoutFeedback key={`brand-${index}`} onPress={() => toBrandShop(item.brand_id)}>
+                                <View style={[styles.brandItem, !!((index + 1) % 4) && { marginRight: pxToDp(60) }]}>
+                                  <Image source={{ uri: item.logo }} style={styles.brandLogo} />
+                                  <Text style={styles.brandName}>{item.name}</Text>
+                                </View>
+                              </TouchableWithoutFeedback>
+
                             )
                           })
                         }
@@ -156,9 +228,49 @@ function Home(props: any) {
                       <CardTitle title='精选话题' subTitle={props.selectedGoodsInfo.subTitle} nextAction={toSelectedGoods} />
                       <ScrollView style={styles.selectedGoodsList} horizontal={true}>
                         {
-                          props.selectedGoodsInfo.goodsList && props.selectedGoodsInfo.goodsList.map((item: any, index: any) => <GoodsCard style={{ marginRight: pxToDp(20) }} key={`selected-${index}`} goodsInfo={item} />)
+                          props.selectedGoodsInfo.goodsList && props.selectedGoodsInfo.goodsList.map((item: any, index: any) => <GoodsCard style={{ marginRight: pxToDp(10) }} key={`selected-${index}`} goodsInfo={item} />)
                         }
                       </ScrollView>
+                    </View>
+                    {/* 限时秒杀 */}
+                    <View style={styles.seckill}>
+                      <ImageBackground source={require('../../assets/home-image/seckill_bg.png')} style={styles.seckillHeader}>
+                        <View style={styles.seckillText}>
+                          <Image source={require('../../assets/home-image/seckill_text.png')} style={styles.seckillTextImg} resizeMode='contain' />
+                          <View style={styles.countDown}>
+                            <Text style={styles.time}>11</Text>
+                            <Text style={styles.colon}>:</Text>
+                            <Text style={styles.time}>22</Text>
+                            <Text style={styles.colon}>:</Text>
+                            <Text style={styles.time}>22</Text>
+                          </View>
+                        </View>
+                        <View style={styles.seckillSubTitle}>
+                          <Text style={styles.seckillSubTitleText} onPress={toSeckillPage}>更多</Text>
+                          <Ionicons
+                            size={20}
+                            name='ios-arrow-forward'
+                            color={Colors.whiteColor}
+                          />
+                        </View>
+                      </ImageBackground>
+                      <View style={styles.countDonwList}>
+                        {
+                          countDownList.map((item, index) => {
+                            return (
+                              <View style={styles.countDownItem} key={`time-${index}`}>
+                                <Text style={[styles.countDownTime, timeQuantum === item.timeQuantum && styles.countDownActiveTime]}>{item.timeQuantum}</Text>
+                                <Text style={[styles.countDownState, timeQuantum === item.timeQuantum && styles.countDownActiveState]}>{item.state}</Text>
+                              </View>
+                            )
+                          })
+                        }
+                      </View>
+                      <View style={styles.seckillGoodsList}>
+                        {
+                          props.seckillList && props.seckillList.map((item: any, index: number) => <GoodsCardRow style={index && { marginTop: pxToDp(10) }} key={`goods-${index}`} goodsInfo={item} />)
+                        }
+                      </View>
                     </View>
                     {/* 圈重点 */}
                     <View style={styles.recommendGoodsList}>
@@ -170,9 +282,6 @@ function Home(props: any) {
                         }
                       </View>
                     </View>
-
-                    {/* <GoodsCardRow /> */}
-
                   </>
               }
             </ScrollView>
@@ -263,6 +372,86 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: pxToDp(28),
     color: Colors.darkBlack
+  },
+  seckill: {
+    marginTop: pxToDp(20)
+  },
+  seckillHeader: {
+    height: pxToDp(76),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: pxToDp(20),
+    paddingRight: pxToDp(20)
+  },
+  seckillText: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  seckillTextImg: {
+    width: pxToDp(144),
+    height: pxToDp(36),
+    marginRight: pxToDp(12)
+  },
+  seckillSubTitle: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  seckillSubTitleText: {
+    color: Colors.whiteColor,
+    fontSize: pxToDp(26),
+    marginRight: pxToDp(10)
+  },
+  countDown: {
+    flexDirection: 'row'
+  },
+  time: {
+    height: pxToDp(36),
+    lineHeight: pxToDp(36),
+    backgroundColor: Colors.blackColor,
+    color: Colors.whiteColor,
+    width: pxToDp(40),
+    textAlign: 'center'
+  },
+  colon: {
+    marginLeft: pxToDp(5),
+    marginRight: pxToDp(5)
+  },
+  countDonwList: {
+    height: pxToDp(140),
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: Colors.whiteColor
+  },
+  countDownItem: {
+    alignItems: 'center'
+  },
+  countDownTime: {
+    fontSize: pxToDp(34),
+    color: Colors.darkBlack,
+    fontWeight: '600',
+    marginBottom: pxToDp(10)
+  },
+  countDownActiveTime: {
+    color: Colors.basicColor
+  },
+  countDownState: {
+    height: pxToDp(40),
+    lineHeight: pxToDp(40),
+    textAlign: 'center',
+    fontSize: pxToDp(26),
+    borderRadius: pxToDp(20),
+    overflow: 'hidden',
+    paddingLeft: pxToDp(5),
+    paddingRight: pxToDp(5),
+    color: Colors.lightBlack
+  },
+  countDownActiveState: {
+    backgroundColor: Colors.basicColor,
+    color: Colors.whiteColor
+  },
+  seckillGoodsList: {
+
   }
 })
 

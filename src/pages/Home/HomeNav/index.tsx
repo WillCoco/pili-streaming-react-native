@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableWithoutFeedback } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 
 import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
@@ -7,30 +8,50 @@ import pxToDp from '../../../utils/px2dp'
 const navList = [
   {
     text: '品牌',
-    icon: require('../../../assets/home-image/icon_brand.png')
+    icon: require('../../../assets/home-image/icon_brand.png'),
+    path: 'Brand'
   }, {
     text: '分类',
-    icon: require('../../../assets/home-image/icon_classify.png')
+    icon: require('../../../assets/home-image/icon_classify.png'),
+    path: 'Classify'
   }, {
     text: '特卖专区',
-    icon: require('../../../assets/home-image/icon_sale.png')
+    icon: require('../../../assets/home-image/icon_sale.png'),
+    path: 'Sale'
   }, {
     text: '产业带',
-    icon: require('../../../assets/home-image/icon_belt.png')
+    icon: require('../../../assets/home-image/icon_belt.png'),
+    path: 'Belt'
   }
 ]
 
 export default function HomeNav() {
+  const navigation = useNavigation()
+
+  const nextAction = (path: any) => {
+    if (path === 'Brand') {
+      navigation.push('Brand', { type: 'default' })
+    } else if (path === 'Sale') {
+      navigation.push('Sale', { type: 'sale' })
+    } else {
+      navigation.push(path)
+    }
+  }
 
   return (
     <View style={styles.navContainer}>
       {
         navList.map((item, index) => {
           return (
-            <View key={`nav-${index}`} style={styles.navItem}>
-              <Image source={ item.icon } style={styles.navIcon} />
-              <Text style={styles.navText}>{item.text}</Text>
-            </View>
+            <TouchableWithoutFeedback
+              key={`nav-${index}`}
+              onPress={() => nextAction(item.path)}
+            >
+              <View style={styles.navItem}>
+                <Image source={ item.icon } style={styles.navIcon} />
+                <Text style={styles.navText}>{item.text}</Text>
+              </View>
+            </TouchableWithoutFeedback>
           )
         })
       }

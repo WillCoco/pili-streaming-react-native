@@ -14,9 +14,16 @@ import { getStatusBarHeight } from './src/actions/public'
 import Root from './src/navigation/BottomTabNavigator'
 import HomeSearch from './src/pages/HomeSearch/HomeSearch'
 import FoundSearch from './src/pages/FoundSearch/FoundSearch'
-import AnchorDetailScreen from './src/pages/Live/AnchorDetailScreen';
-import LivingRoomScreen from './src/pages/Live/LivingRoomScreen';
+import Brand from './src/pages/Brand/Brand'
+import BrandShop from './src/pages/BrandShop/BrandShop'
+import GoodsInfo from './src/pages/GoodsInfo/GoodsInfo'
+import Classify from './src/pages/Classify/Classify'
+import Belt from './src/pages/Belt/Belt'
+import Sale from './src/pages/Sale/Sale'
+
 import LiveSearchScreen from './src/pages/Live/LiveSearchScreen';
+import AnchorDetailScreen from './src/pages/Live/AnchorDetailScreen'
+import LivingRoomScreen from './src/pages/Live/LivingRoomScreen'
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -77,6 +84,12 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='Root' component={Root} />
                 <Stack.Screen name='HomeSearch' component={HomeSearch} />
                 <Stack.Screen name='FoundSearch' component={FoundSearch} />
+                <Stack.Screen name='Brand' component={Brand} />
+                <Stack.Screen name='BrandShop' component={BrandShop} />
+                <Stack.Screen name='GoodsInfo' component={GoodsInfo} />
+                <Stack.Screen name='Classify' component={Classify} />
+                <Stack.Screen name='Belt' component={Belt} />
+                <Stack.Screen name='Sale' component={Sale} />
                 <Stack.Screen name='AnchorDetailScreen' component={AnchorDetailScreen} options={{headerShown: false}} />
                 <Stack.Screen name='LivingRoomScreen' component={LivingRoomScreen} options={{headerShown: false}} />
                 <Stack.Screen name='LiveSearchScreen' component={LiveSearchScreen} options={{headerShown: false}} />

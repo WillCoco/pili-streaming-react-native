@@ -1,17 +1,26 @@
 import React from 'react'
-import { View, Text, Image, StyleSheet, PixelRatio, ImageBackground } from 'react-native'
+import { View, Text, Image, StyleSheet, PixelRatio, ImageBackground, TouchableWithoutFeedback } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
 import formatGoodsPrice from '../../utils/formatGoodsPrice'
 
 export default function GoodsCard(props: any) {
   const { goodsInfo } = props
+  const navigation = useNavigation()
+
+  const toGoodsInfo = () => {
+    const { goods_id: id } = goodsInfo
+    navigation.push('GoodsInfo', { id })
+  }
 
   return (
     <View style={[styles.container, props.style]}>
-      <Image source={{ uri: goodsInfo.original_img }} style={styles.goodsImg} />
+      <TouchableWithoutFeedback onPress={toGoodsInfo}>
+        <Image source={{ uri: goodsInfo.original_img }} style={styles.goodsImg} />
+      </TouchableWithoutFeedback>
       <View style={styles.goodsInfo}>
-        <Text style={styles.goodsName} numberOfLines={2}>{goodsInfo.goods_name}</Text>
+        <Text style={styles.goodsName} numberOfLines={2} onPress={toGoodsInfo}>{goodsInfo.goods_name}</Text>
         <View style={styles.goodsShare}>
           {
             true
@@ -103,7 +112,7 @@ const styles = StyleSheet.create({
   },
   goodsPrice: {
     flexDirection: 'row',
-    alignItems: 'flex-end'
+    alignItems: 'baseline'
   },
   rmbIcon: {
     fontSize: pxToDp(24),
