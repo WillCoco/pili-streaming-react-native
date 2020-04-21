@@ -17,7 +17,7 @@ interface optionTypes {
   navBackOptions?: navBackOpsTypes,
 }
 
-const withPage = (pageComponent: React.FC, options?: optionTypes) => {
+const withPage = (pageComponent: React.FC, options?: optionTypes): any => {
   return compose(
     (c: React.FC) => withNavBack(c, options?.navBackOptions),
     withSafeArea,

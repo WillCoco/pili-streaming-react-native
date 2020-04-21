@@ -12,6 +12,8 @@ import {
   TouchableOpacity,
   PanResponder,
 } from 'react-native';
+import MsgRow from './MsgRow'
+import { vw } from '../../utils/metric';
 
 export type msgList = any[] | undefined;
 
@@ -22,7 +24,7 @@ interface LiveMsgProps {
 }
 
 const DEFAULT_HEIGTH = 200; // 默认消息窗高度
-const DEFAULT_WIDTH = 200; // 默认消息窗高度
+const DEFAULT_WIDTH = vw(65); // 默认消息窗高度
 const RECTIFY_OFFSET = 10; // 底部矫正距离
 
 const LiveMsg = (props: LiveMsgProps) : any =>  {
@@ -127,15 +129,13 @@ const LiveMsg = (props: LiveMsgProps) : any =>  {
         {
           props.msgList?.map((d, i) => {
             return (
-              <Text
+              <MsgRow
                 key={`msg_${i}`}
-                onLayout={(e) => {
+                // onLayout={(e) => {
                   // 接近顶部的透明度
                   // console.log(e.nativeEvent.layout, i)
-                }}
-              >
-                {d}
-              </Text>
+                // }}
+              />
             )
           })
         }

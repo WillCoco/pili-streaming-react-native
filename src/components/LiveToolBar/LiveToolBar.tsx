@@ -4,12 +4,17 @@
 import React from 'react';
 import {
   View,
+  Image,
   Text,
   StyleSheet,
   TextInput,
   StyleProp,
 } from 'react-native';
+import {scale, PrimaryText} from 'react-native-normalization-text';
 import {vw} from '../../utils/metric'
+import {Colors} from '../../constants/Theme';
+import {pad} from '../../constants/Layout';
+import images from '../../assets/images';
 
 export type msgList = any[] | undefined;
 export type onMsgListResponse = (v: boolean) => any;
@@ -24,7 +29,6 @@ interface LiveToolBarProps {
 const LiveToolBar = (props: LiveToolBarProps) : any =>  {
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
-      <Text>商品</Text>
       <TextInput
         placeholder={props.inputPlaceholder}
         placeholderTextColor="#fff"
@@ -33,8 +37,21 @@ const LiveToolBar = (props: LiveToolBarProps) : any =>  {
         returnKeyType="send"
         onSubmitEditing={props.onSubmitEditing}
       />
-      <Text>分享</Text>
-      <Text>点赞</Text>
+      <Image
+        source={images.shoppingIcon}
+        style={styles.img}
+        resizeMode="contain"
+      />
+      <Image
+        source={images.forwardIcon}
+        style={styles.img}
+        resizeMode="contain"
+      />
+      <Image
+        source={images.shoppingIcon}
+        style={styles.img}
+        resizeMode="contain"
+      />
     </View>
   )
 }
@@ -45,19 +62,26 @@ LiveToolBar.defaultProps = {
 
 const styles = StyleSheet.create({
   wrapper: {
-    borderWidth: 1,
     height: 50,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'flex-end',
+    paddingRight: 4
   },
   input: {
+    height: scale(35),
     width: vw(50),
-    lineHeight: 1,
     paddingHorizontal: 10,
-    borderRadius: vw(40) / 2,
-    backgroundColor: 'rgba(0,0,0,0.2)',
-    color: '#fff'
+    paddingVertical: 0,
+    borderRadius: scale(35) / 2,
+    backgroundColor: Colors.opacityDarkBg,
+    marginRight: pad,
+    color: '#fff',
+    fontSize: scale(14),
+  },
+  img: {
+    width: scale(35),
+    height: scale(35),
   }
 })
 export default LiveToolBar;

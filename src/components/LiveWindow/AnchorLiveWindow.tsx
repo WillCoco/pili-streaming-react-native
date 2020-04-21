@@ -26,7 +26,6 @@ interface LiveWindowProps {
 const LiveWindow = (props: LiveWindowProps) : any =>  {
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
-
       <LiveIntro
         anchorId={1}
         liveTitle="asdasd"

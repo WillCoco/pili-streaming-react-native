@@ -11,7 +11,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {PrimaryText, SmallText, H4} from 'react-native-normalization-text';
+import {PrimaryText, SmallText, T4} from 'react-native-normalization-text';
 import {useNavigation} from '@react-navigation/native';
 import LiveRecord from './LiveRecord';
 import {Colors} from '../../../constants/Theme';
@@ -82,7 +82,7 @@ const LiveTabPage = (props: {
       {
         props.liveRecords && (
           <View style={styles.liveRecordsWrapper}>
-            <H4>精彩回放</H4>
+            <T4>精彩回放</T4>
             {
               props.liveRecords.map((record, index) => (
                 <LiveRecord
