@@ -18,13 +18,15 @@ import withPage from '../../../components/HOCs/withPage';
 import {Colors} from '../../../constants/Theme';
 import {login} from '../../../actions/im';
 
-const LiveHomeScreen = (props: any) : React.ReactElement =>  {
+const LiveHomeScreen = (props: any): React.ReactElement =>  {
   console.log(props.safeTop, 'safeTop')
   const {navigate} = useNavigation();
   const dispatch = useDispatch();
 
-  // 测试登录
-  dispatch(login({userID: 'test01'}));
+  React.useEffect(() => {
+    // 测试登录
+    dispatch(login({userID: 'test01'}));
+  }, [])
 
   return (
     <SafeAreaView
