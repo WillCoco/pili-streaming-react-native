@@ -24,8 +24,8 @@ export default function Sale(props: { goodsList: any, type: string, timeList: Ar
             {
               timeList && timeList.map((item, index) => {
                 return (
-                  <TouchableWithoutFeedback onPress={() => props.changeTimeQuantum(index)}>
-                    <View style={[styles.timeQuantum, item.ongoing && styles.timeQuantumActive]} key={`time-${index}`}>
+                  <TouchableWithoutFeedback onPress={() => props.changeTimeQuantum(index)} key={`time-${index}`}>
+                    <View style={[styles.timeQuantum, item.ongoing && styles.timeQuantumActive]}>
                       <Text style={[styles.time, item.ongoing && styles.timeActive]}>{item.time}</Text>
                       <Text style={[styles.state, item.ongoing && styles.stateActive]}>{item.state}</Text>
                     </View>
@@ -40,7 +40,7 @@ export default function Sale(props: { goodsList: any, type: string, timeList: Ar
         {
           goodsList && goodsList.map((item: any, index: number) => {
             return (
-              <TouchableWithoutFeedback onPress={() => toGoodsInfo(item.goods_id)}>
+              <TouchableWithoutFeedback onPress={() => toGoodsInfo(item.goods_id)} key={`goods-${index}`}>
                 <View key={`goods-${index}`} style={styles.goodsItem}>
                   <Image source={{ uri: item.original_img }} style={styles.goodsImg} />
                   <View style={styles.goodsInfo}>

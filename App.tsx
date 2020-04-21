@@ -22,6 +22,9 @@ import GoodsInfo from './src/pages/GoodsInfo/GoodsInfo'
 import Classify from './src/pages/Classify/Classify'
 import Belt from './src/pages/Belt/Belt'
 import Sale from './src/pages/Sale/Sale'
+import Login from './src/pages/Login/Login'
+import SelectGoods from './src/pages/SelectGoods/SelectGoods'
+import SelectGoodsInfo from './src/pages/SelectGoodsInfo/SelectGoodsInfo'
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -51,7 +54,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
           StatusBarManager.getHeight((h: any) => {
             store.dispatch(getStatusBarHeight(h.height))
           })
-          
+
         } else {
           store.dispatch(getStatusBarHeight(Number(StatusBar.currentHeight)))
         }
@@ -64,7 +67,6 @@ export default function App(props: { skipLoadingScreen: any; }) {
   }, [])
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return null
     return <AppLoading />
   } else {
     return (
@@ -75,7 +77,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
         >
           <View style={{ flex: 1 }}>
             {
-              Platform.OS !== 'ios' && <StatusBar barStyle='light-content' translucent={ true } backgroundColor='transparent' />
+              Platform.OS !== 'ios' && <StatusBar barStyle='light-content' translucent={true} backgroundColor='transparent' />
             }
             <NavigationContainer>
               <Stack.Navigator>
@@ -88,14 +90,17 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='Classify' component={Classify} />
                 <Stack.Screen name='Belt' component={Belt} />
                 <Stack.Screen name='Sale' component={Sale} />
-                <Stack.Screen name='AnchorDetailScreen' component={AnchorDetailScreen} options={{headerShown: false}} />
-                <Stack.Screen name='LivingRoomScreen' component={LivingRoomScreen} options={{headerShown: false}} />
+                <Stack.Screen name='Login' component={Login} />
+                <Stack.Screen name='SelectGoods' component={SelectGoods} />
+                <Stack.Screen name='SelectGoodsInfo' component={SelectGoodsInfo} />
+                <Stack.Screen name='AnchorDetailScreen' component={AnchorDetailScreen} options={{ headerShown: false }} />
+                <Stack.Screen name='LivingRoomScreen' component={LivingRoomScreen} options={{ headerShown: false }} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>
         </PersistGate>
       </Provider>
-      
+
     )
   }
 }

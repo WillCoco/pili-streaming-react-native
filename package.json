@@ -37,6 +37,7 @@
     "react-native-svg": "^12.1.0",
     "react-native-swiper": "^1.6.0",
     "react-native-tab-navigator": "^0.3.4",
+    "react-native-tiny-toast": "^1.0.7",
     "react-native-unimodules": "~0.9.0",
     "react-native-web": "~0.11.7",
     "react-navigation": "^4.3.7",

@@ -79,7 +79,7 @@ function Home(props: any) {
    * 前往精选话题详情
    */
   const toSelectedGoods = () => {
-    console.log('前往精选话题')
+    navigation.push('SelectGoods')
   }
 
   /**

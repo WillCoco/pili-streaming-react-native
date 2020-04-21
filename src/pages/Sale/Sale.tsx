@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, Image, ScrollView, ImageBackground } from 'react-native'
+import { StyleSheet, ScrollView } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
+import Toast from 'react-native-tiny-toast'
 
 import { apiSaleList, apiSeckillList } from '../../service/api'
 
@@ -16,6 +17,7 @@ export default function Sale() {
   const [pageNo, setPageNo] = useState(1)
   const [headerGoodsList, setHeaderGoodsList] = useState([])
   const [goodsList, setGoodsList] = useState([])
+  const [isReady, setIsReady] = useState(false)
   const [timeList, setTimeList] = useState([
     { time: '10:00', ongoing: false, state: '' },
     { time: '14:00', ongoing: false, state: '' },
@@ -25,6 +27,7 @@ export default function Sale() {
   navigation.setOptions({
     headerTitle: route.params.type === 'sale' ? '特卖专区' : '限时秒杀',
     headerStyle: {
+      backgroundColor: Colors.basicColor,
       elevation: 0,  // 去除安卓状态栏底部阴影
     },
     headerTitleAlign: 'center',
@@ -32,7 +35,6 @@ export default function Sale() {
     headerBackTitleVisible: false,
     headerTransparent: true
   })
-
 
   useEffect(() => {
     getGoodsList()
@@ -53,6 +55,8 @@ export default function Sale() {
       return
     }
 
+    let loading = Toast.showLoading('')
+
     apiSaleList({ pageNo, pageSize }).then(res => {
       console.log(result, '特卖专区')
 
@@ -63,6 +67,8 @@ export default function Sale() {
           setGoodsList(res.list.slice(2))
         }
       }
+
+      Toast.hide(loading)
     })
   }
 
@@ -71,6 +77,7 @@ export default function Sale() {
    */
   const setSeckillQuantum = async () => {
     const curHours = new Date().getHours()
+    let loading = Toast.showLoading('')
 
     let timeQuantum: string
 
@@ -109,6 +116,8 @@ export default function Sale() {
           setGoodsList(res.list.slice(2))
         }
       }
+
+      Toast.hide(loading)
     })
   }
 
@@ -156,6 +165,7 @@ export default function Sale() {
       }
     })
   }
+
 
   return (
     <ScrollView
