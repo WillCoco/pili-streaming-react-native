@@ -64,19 +64,33 @@ const config = {
     },
     H2: {
       style: {
+        fontSize: sizes.xHuge,
+        color: colors.title,
+        // lineHeight: 40
+      }
+    },
+    T1: {
+      style: {
         fontSize: sizes.xxxLarger,
+        color: colors.title,
+        // lineHeight: 40
+      }
+    },
+    T2: {
+      style: {
+        fontSize: sizes.xxLarger,
         color: colors.title,
         // lineHeight: 32
       }
     },
-    H3: {
+    T3: {
       style: {
-        fontSize: sizes.xxLarge,
+        fontSize: sizes.xLarge,
         color: colors.title,
         // lineHeight: 28
       }
     },
-    H4: {
+    T4: {
       style: {
         fontSize: sizes.large,
         color: colors.title,

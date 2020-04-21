@@ -23,3 +23,23 @@ export enum PlayerType {
   teaser, // 预告
   record, // 回放
 }
+
+/**
+ * 用户角色
+ */
+export enum UserRole {
+  anchor, // 主播
+  audience // 观众
+}
+
+/**
+ * 用户等级
+ */
+export enum UserLevel {
+  level1,
+  level2,
+  level3,
+  level4,
+  level5,
+  level6,
+}

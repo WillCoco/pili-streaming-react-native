@@ -6,16 +6,21 @@ import {
   View,
   Text,
   ScrollView,
+  TouchableOpacity,
   StyleSheet,
   StyleProp,
   TouchableWithoutFeedback,
-  TouchableOpacity,
   PanResponder,
   ImageSourcePropType
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {PrimaryText, SmallText} from 'react-native-normalization-text';
 import Avatar from '../Avatar';
+import withSafeArea from '../HOCs/withSafeArea';
+import {pad} from '../../constants/Layout';
 import {vw} from '../../utils/metric';
+import {Colors} from '../../constants/Theme';
+import FollowButton from '../../components/FollowButton';
 
 export type msgList = any[] | undefined;
 export type onMsgListResponse = (v: boolean) => any;
@@ -29,11 +34,16 @@ interface LiveMsgProps {
   style?: StyleProp<any>,
   onPress?: (anchorid: number) => any,
   ref?: any,
+  isFollow: boolean,
+  safeTop: number,
 }
 
-const LiveIntro = (props: LiveMsgProps) : any =>  {
+const LiveIntro = (props: LiveMsgProps) =>  {
   const {navigate} = useNavigation();
   
+  /**
+   * 前往主播详情
+   */
   const onPress = () => {
     if (props.onPress) {
       props.onPress(props.anchorId);
@@ -43,9 +53,16 @@ const LiveIntro = (props: LiveMsgProps) : any =>  {
     navigate('AnchorDetailScreen')
   }
 
+  /**
+   * 取消/关注
+   */
+  const onFollowPress = (isFollow: boolean) => {
+    console.log(isFollow, 'isFollow')
+  }
+
   return (
     <TouchableOpacity
-      style={StyleSheet.flatten([styles.wrapper, props.style])}
+      style={StyleSheet.flatten([styles.wrapper, props.style, {top: props.safeTop + pad}])}
       onPress={onPress}
     >
       <Avatar
@@ -54,9 +71,24 @@ const LiveIntro = (props: LiveMsgProps) : any =>  {
         style={{marginRight: 4}}
       />
       <View>
-        <Text style={{color: '#fff'}}>{props.liveTitle}</Text>
-        <Text style={{color: '#ccc'}}>{props.liveSubTitle}</Text>
+        <SmallText
+          style={styles.title}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >{props.liveTitle}</SmallText>
+        <SmallText
+          numberOfLines={1}
+          ellipsizeMode="tail"
+          style={{color: '#ccc'}}
+        >
+          {props.liveSubTitle}
+        </SmallText>
       </View>
+      <FollowButton 
+        isFollow={!props.isFollow}
+        onPress={onFollowPress}
+        style={{marginLeft: pad}}
+      />
     </TouchableOpacity>
   )
 }
@@ -65,21 +97,41 @@ const styles = StyleSheet.create({
   wrapper: {
     position: 'absolute',
     top: 10,
-    left: 10,
+    left: pad * 1.5,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#222',
     height: 46,
     borderRadius: 23,
-    width: vw(50),
-    maxWidth: 180,
-    padding: 3
+    // width: vw(50),
+    // maxWidth: 180,
+    padding: 3,
   },
   scrollerWrapper: {
   },
   contentWrapper: {
     justifyContent: 'flex-end',
+  },
+  title: {
+    color: '#fff',
+    maxWidth: 100,
+  },
+  followWrapper: {
+    backgroundColor: Colors.basicColor,
+    height: 26,
+    justifyContent: 'center',
+    paddingHorizontal: pad,
+    borderRadius: 13,
+    marginLeft: 10
+  },
+  unFollowWrapper: {
+    backgroundColor: Colors.basicColor,
+    height: 26,
+    justifyContent: 'center',
+    paddingHorizontal: pad,
+    borderRadius: 13,
+    marginLeft: 10
   }
 })
 
-export default LiveIntro;
+export default withSafeArea(LiveIntro);

@@ -14,8 +14,6 @@ import { getStatusBarHeight } from './src/actions/public'
 import Root from './src/navigation/BottomTabNavigator'
 import HomeSearch from './src/pages/HomeSearch/HomeSearch'
 import FoundSearch from './src/pages/FoundSearch/FoundSearch'
-import AnchorDetailScreen from './src/pages/Live/AnchorDetailScreen'
-import LivingRoomScreen from './src/pages/Live/LivingRoomScreen'
 import Brand from './src/pages/Brand/Brand'
 import BrandShop from './src/pages/BrandShop/BrandShop'
 import GoodsInfo from './src/pages/GoodsInfo/GoodsInfo'
@@ -25,6 +23,10 @@ import Sale from './src/pages/Sale/Sale'
 import Login from './src/pages/Login/Login'
 import SelectGoods from './src/pages/SelectGoods/SelectGoods'
 import SelectGoodsInfo from './src/pages/SelectGoodsInfo/SelectGoodsInfo'
+
+import LiveSearchScreen from './src/pages/Live/LiveSearchScreen';
+import AnchorDetailScreen from './src/pages/Live/AnchorDetailScreen'
+import LivingRoomScreen from './src/pages/Live/LivingRoomScreen'
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -95,6 +97,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='SelectGoodsInfo' component={SelectGoodsInfo} />
                 <Stack.Screen name='AnchorDetailScreen' component={AnchorDetailScreen} options={{ headerShown: false }} />
                 <Stack.Screen name='LivingRoomScreen' component={LivingRoomScreen} options={{ headerShown: false }} />
+                <Stack.Screen name='LiveSearchScreen' component={LiveSearchScreen} options={{headerShown: false}} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>

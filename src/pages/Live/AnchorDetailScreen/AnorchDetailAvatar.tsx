@@ -9,7 +9,8 @@ import {
   StyleSheet,
   FlatList,
   PanResponder,
-  TouchableOpacity
+  TouchableOpacity,
+  StyleProp
 } from 'react-native';
 import {PrimaryText, SmallText} from 'react-native-normalization-text';
 import Avatar from '../../../components/Avatar';
@@ -18,10 +19,11 @@ import {vw} from '../../../utils/metric';
 
 const AnorchDetailAvatar = (props: {
   isLiving: boolean,
-  onPress?: () => void
+  onPress?: () => void,
+  style?: StyleProp<any>,
 }) =>  {
   return (
-    <TouchableOpacity style={styles.avatarWrapper} onPress={props.onPress}>
+    <TouchableOpacity style={StyleSheet.flatten([styles.avatarWrapper, props.style])} onPress={props.onPress}>
       <Avatar
         size={vw(17)}
         style={{

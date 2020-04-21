@@ -6,9 +6,11 @@ import {
   StyleSheet,
 } from 'react-native';
 import LiveWindow from '../../../components/LiveWindow';
+import withPage from '../../../components/HOCs/withPage';
+import { pad } from '../../../constants/Layout';
+import { safeTop } from '../../../constants/DeviceInfo';
 
-const LivingRoomScreen = () : any =>  {
-
+const LivingRoomScreen = (props: any) : any =>  {
 
   // 连接im
 
@@ -16,6 +18,7 @@ const LivingRoomScreen = () : any =>  {
   if (true) {
     return (
       <LiveWindow.Audience
+        safeTop={props.safeTop}
       />
     )
   }
@@ -37,4 +40,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LivingRoomScreen;
+export default withPage(LivingRoomScreen, {
+  statusBarOptions: {
+  }
+});

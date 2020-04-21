@@ -6,11 +6,10 @@ import { ViewProps } from 'react-native';
 import { GProps } from 'react-native-svg';
 
 interface Props extends GProps, ViewProps {
-  name: 'closelight' | 'back' | 'backlight';
   size?: number;
   color?: string | string[];
 }
 
-declare const IconFont: FunctionComponent<Props>;
+declare const Iconcloselight: FunctionComponent<Props>;
 
-export default IconFont;
+export default Iconcloselight;
