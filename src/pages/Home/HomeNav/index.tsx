@@ -17,7 +17,7 @@ const navList = [
   }, {
     text: '特卖专区',
     icon: require('../../../assets/home-image/icon_sale.png'),
-    path: 'Belt'
+    path: 'Sale'
   }, {
     text: '产业带',
     icon: require('../../../assets/home-image/icon_belt.png'),
@@ -31,10 +31,11 @@ export default function HomeNav() {
   const nextAction = (path: any) => {
     if (path === 'Brand') {
       navigation.push('Brand', { type: 'default' })
-      return
+    } else if (path === 'Sale') {
+      navigation.push('Sale', { type: 'sale' })
+    } else {
+      navigation.push(path)
     }
-    
-    navigation.push(path)
   }
 
   return (

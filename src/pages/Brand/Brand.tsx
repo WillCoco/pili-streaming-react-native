@@ -15,7 +15,6 @@ export default function Brand(props: any) {
   const pageSize = 20
   const pageType = route?.params?.type
 
-
   const [pageNo, setPageNo] = useState(1)
   const [brandList, setBrandList] = useState([])
 

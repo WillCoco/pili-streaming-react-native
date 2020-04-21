@@ -138,6 +138,13 @@ function Home(props: any) {
     navigation.push('BrandShop', { id })
   }
 
+  /**
+   * 前往秒杀页
+   */
+  const toSeckillPage = () => {
+    navigation.push('Sale', { type: 'seckill'} )
+  }
+
   return (
     <ScrollableTabView
       initialPage={0}
@@ -239,7 +246,7 @@ function Home(props: any) {
                           </View>
                         </View>
                         <View style={styles.seckillSubTitle}>
-                          <Text style={styles.seckillSubTitleText}>更多</Text>
+                          <Text style={styles.seckillSubTitleText} onPress={toSeckillPage}>更多</Text>
                           <Ionicons
                             size={20}
                             name='ios-arrow-forward'
