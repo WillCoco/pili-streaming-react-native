@@ -15,6 +15,7 @@ import {vw, vh} from '../../utils/metric';
 interface LiveWindowProps {
   inputUrl: string,
   style?: StyleProp<any>,
+  onStatus?: (status: number | undefined) => any,
 }
 
 const LiveWindow = React.forwardRef((props: LiveWindowProps, ref: any) : any =>  {
@@ -24,6 +25,7 @@ const LiveWindow = React.forwardRef((props: LiveWindowProps, ref: any) : any => 
   const [status, setStatus]: [number | undefined, any] = React.useState()
   const onStatus = (status: number) => {
     setStatus(status);
+    props.onStatus && props.onStatus(status);
   }
 
   /**

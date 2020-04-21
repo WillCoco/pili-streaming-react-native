@@ -14,7 +14,8 @@ import LiveHomeTabs from './LiveHomeTabs';
 import withPage from '../../../components/HOCs/withPage';
 import { Colors } from '../../../constants/Theme';
 import LiveSummaryBlock from '../../../components/LiveSummaryBlock';
-import { pad } from '../../../constants/Layout';
+import {pad} from '../../../constants/Layout';
+import '../../../actions/im';
 
 const LiveHomeScreen = (props: any) : React.ReactElement =>  {
   console.log(props.safeTop, 'safeTop')
