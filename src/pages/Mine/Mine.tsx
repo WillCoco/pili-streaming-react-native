@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <View>
       <Text>我的</Text>
-      <Text onPress={() => navigate('Anorch')}>我的直播</Text>
+      <Text onPress={() => navigate('AnchorTabs')}>我的直播</Text>
     </View>
   )
 }
