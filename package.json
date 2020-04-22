@@ -7,7 +7,8 @@
     "start": "react-native start",
     "test": "jest",
     "textManager": "node node_modules/react-native-normalization-text/scripts/makeConfig.js",
-    "genIcons": "npx iconfont-rn"
+    "genIcons": "npx iconfont-rn",
+    "postinstall": "yarn textManager --update"
   },
   "dependencies": {
     "@ant-design/react-native": "^3.3.0",

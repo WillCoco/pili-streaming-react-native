@@ -19,8 +19,8 @@ import { Colors } from '../../constants/Theme'
 
 import { apiGetIndexData, apiGetIndexGoodsList } from '../../service/api'
 
-
 function Home(props: any) {
+
   const navigation = useNavigation()
 
   const [categoryList, setCategoryList] = useState([{ name: '首页' }])

@@ -42,14 +42,14 @@ function BottomTabNavigator({ navigation, route }: any) {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="publish"
+      initialRouteName="anorchPublish"
       tabBarOptions={{
         activeTintColor: Colors.basicColor,
         inactiveTintColor: Colors.lightGrey
       }}
     >
       <BottomTab.Screen
-        name="publish"
+        name="anorchPublish"
         component={PublishScreen}
         options={{
           title: '首页',

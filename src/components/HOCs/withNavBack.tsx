@@ -4,8 +4,8 @@ import NavBack, {NavBarProps} from '../NavBar/NavBack';
 
 export interface optionTypes {
   navBackTheme?: 'light' | 'dark',
-  navBackIcon: 'arrow' | 'close',
-  navBackPosition: 'left' | 'right'
+  navBackIcon?: 'arrow' | 'close',
+  navBackPosition?: 'left' | 'right'
 }
 
 const withNavBack = (Component: React.FC, options?: optionTypes) => {

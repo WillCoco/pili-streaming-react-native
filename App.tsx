@@ -74,17 +74,11 @@ export default function App(props: { skipLoadingScreen: any; }) {
 
   const navHeadOption = (title?: string) => ({
     header: (p: any) => <NavBar {...p} title={title} />,
-    // headerStyle: {
-    //   height: 60,
-    //   backgroundColor: '#fff',
-    //   // color: '#000',
-    // },
-    // headerTitleAlign: 'center',
-    // headerLeft: () => <Text>123</Text>
   })
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return <AppLoading />
+    return null
+    // return <AppLoading /> // tofix: 在android上报错
   } else {
     return (
       <Provider store={store}>
@@ -92,13 +86,13 @@ export default function App(props: { skipLoadingScreen: any; }) {
           loading={null}
           persistor={persistor}
         >
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             {
               Platform.OS !== 'ios' && <StatusBar barStyle='light-content' translucent={true} backgroundColor='transparent' />
             }
             <NavigationContainer>
               <Stack.Navigator>
-                {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
+                <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
                 <Stack.Screen name='Root' component={Root} />
                 <Stack.Screen name='HomeSearch' component={HomeSearch} />
                 <Stack.Screen name='FoundSearch' component={FoundSearch} />
@@ -114,7 +108,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='AnchorDetailScreen' component={AnchorDetailScreen} options={{ headerShown: false }} />
                 <Stack.Screen name='LivingRoomScreen' component={LivingRoomScreen} options={{ headerShown: false }} />
                 <Stack.Screen name='LiveSearchScreen' component={LiveSearchScreen} options={{headerShown: false}} />
-                <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
+                {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
                 <Stack.Screen name='CreateLiveScreen' component={CreateLiveScreen} options={{headerShown: false}} />
                 <Stack.Screen name='CreateTeaserScreen' component={CreateTeaserScreen} options={navHeadOption('发布预告')} />
               </Stack.Navigator>

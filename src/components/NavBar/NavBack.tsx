@@ -15,11 +15,11 @@ import withSafeArea from '../HOCs/withSafeArea';
 import {pad} from '../../constants/Layout';
 
 export interface NavBarProps {
-  theme: 'light' | 'dark',
-  icon: 'arrow' | 'close',
+  theme?: 'light' | 'dark',
+  icon?: 'arrow' | 'close',
   style?: StyleProp<any>,
   safeTop?: number,
-  position: 'left' | 'right',
+  position?: 'left' | 'right',
 }
 
 const NavBack = (props: NavBarProps) => {
@@ -44,7 +44,7 @@ const NavBack = (props: NavBarProps) => {
    */
   const positionStyle: StyleProp<any> = {};
   positionStyle.top = (props?.safeTop || 0) + 10;
-  positionStyle[props.position] = 0;
+  props.position && (positionStyle[props.position] = 0);
 
   return (
     <TouchableOpacity style={StyleSheet.flatten([styles.style, positionStyle, props.style])} onPress={() => goBack()}>
