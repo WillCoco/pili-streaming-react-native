@@ -1,17 +1,29 @@
 import React from 'react'
 import { View, Text, Image, StyleSheet, PixelRatio, ImageBackground, TouchableWithoutFeedback } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { connect } from 'react-redux'
+import { toggleLoginState } from '../../actions/user'
+
 import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
 import formatGoodsPrice from '../../utils/formatGoodsPrice'
 
-export default function GoodsCard(props: any) {
+function GoodsCard(props: any) {
   const { goodsInfo } = props
   const navigation = useNavigation()
 
   const toGoodsInfo = () => {
     const { goods_id: id } = goodsInfo
     navigation.push('GoodsInfo', { id })
+  }
+
+  const toShare = () => {
+    if (props.isLogin) {
+      console.log('share action')
+      return
+    }
+
+    navigation.push('Login')
   }
 
   return (
@@ -29,10 +41,12 @@ export default function GoodsCard(props: any) {
               </ImageBackground>
               : <Text />
           }
-          <View style={styles.shareCard}>
-            <Text style={styles.shareText}>分享</Text>
-            <Text style={styles.sharePrice}>¥{formatGoodsPrice(goodsInfo.MyDiscounts)}</Text>
-          </View>
+          <TouchableWithoutFeedback onPress={toShare}>
+            <View style={styles.shareCard}>
+              <Text style={styles.shareText}>分享</Text>
+              <Text style={styles.sharePrice}>¥{formatGoodsPrice(goodsInfo.MyDiscounts)}</Text>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
         <View style={styles.goodsPrice}>
           <Text style={styles.rmbIcon}>¥</Text>
@@ -43,6 +57,10 @@ export default function GoodsCard(props: any) {
     </View>
   )
 }
+
+export default connect(
+  (state: any) => state.userData
+)(GoodsCard)
 
 const styles = StyleSheet.create({
   container: {

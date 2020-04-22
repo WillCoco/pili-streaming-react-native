@@ -1,21 +1,21 @@
-import { STATUS_BAR_HEIGHT, IS_LOGIN } from '../constants/Public'
+import { IS_LOGIN, TOKEN } from '../constants/User'
 
 const INITIAL_STATE = {
-  statusBarHeight: 0,
-  isLogin: false
+  isLogin: false,
+  token: ''
 }
 
 export default function publicData(state = INITIAL_STATE, action: any) {
   switch (action.type) {
-    case STATUS_BAR_HEIGHT:
-      return {
-        ...state,
-        statusBarHeight: action.payload
-      }
     case IS_LOGIN:
       return {
         ...state,
         isLogin: action.payload
+      }
+    case TOKEN:
+      return {
+        ...state,
+        token: action.payload
       }
     default:
       return state

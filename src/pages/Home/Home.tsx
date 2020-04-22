@@ -145,6 +145,20 @@ function Home(props: any) {
     navigation.push('Sale', { type: 'seckill'} )
   }
 
+  /**
+   * 前往商品详情
+   */
+  const toGoodsInfo = (id: number) => {
+    navigation.push('GoodsInfo', { id })
+  }
+
+  /**
+   * 前往活动页面
+   */
+  const toActivityWebView = (url: string) => {
+    navigation.push('ActivityWebView', { url })
+  }
+
   return (
     <ScrollableTabView
       initialPage={0}
@@ -159,6 +173,7 @@ function Home(props: any) {
         categoryList.map((item, index) => {
           return (
             <ScrollView
+              showsVerticalScrollIndicator={false}
               key={`tab-${index}`}
               tabLabel={item.name}
               refreshControl={
@@ -211,6 +226,7 @@ function Home(props: any) {
                       <HomeSwiper
                         swiperList={props.swiperList}
                         swiperStyle={styles.swiper}
+                        tapSwiper={(id: number) => toGoodsInfo(id)}
                       />
                     </ImageBackground>
                     {/* 导航栏 */}
@@ -221,12 +237,17 @@ function Home(props: any) {
                         showDots={false}
                         swiperList={props.activityList}
                         swiperStyle={styles.activity}
+                        tapSwiper={(url: string) => toActivityWebView(url)}
                       />
                     </View>
                     {/* 精选话题 */}
                     <View style={styles.selectedGoods}>
                       <CardTitle title='精选话题' subTitle={props.selectedGoodsInfo.subTitle} nextAction={toSelectedGoods} />
-                      <ScrollView style={styles.selectedGoodsList} horizontal={true}>
+                      <ScrollView
+                        horizontal={true}
+                        style={styles.selectedGoodsList}
+                        showsHorizontalScrollIndicator={false}
+                      >
                         {
                           props.selectedGoodsInfo.goodsList && props.selectedGoodsInfo.goodsList.map((item: any, index: any) => <GoodsCard style={{ marginRight: pxToDp(10) }} key={`selected-${index}`} goodsInfo={item} />)
                         }

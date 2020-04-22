@@ -9,6 +9,7 @@ interface Props {
   swiperList?: Array<any>  // 传入的轮播图列表
   swiperStyle?: any  // 轮播图样式
   showDots?: any
+  tapSwiper?: any
 }
 
 function HomeSwiper(props: Props) {
@@ -19,8 +20,12 @@ function HomeSwiper(props: Props) {
 
   }
 
-  const toLogin = () => {
-    navigation.push('Login')
+  const tapSwiper = (item: any) => {
+    if (item.goods_id) {
+      props.tapSwiper(item.goods_id)
+    } else {
+      props.tapSwiper(item.activity_url)
+    }
   }
 
   return (
@@ -36,7 +41,7 @@ function HomeSwiper(props: Props) {
       {
         swiperList && swiperList.map((item: { original_img: any }, index: any) => {
           return (
-            <TouchableWithoutFeedback onPress={toLogin} key={`swiper-${index}`}>
+            <TouchableWithoutFeedback onPress={() => tapSwiper(item)} key={`swiper-${index}`}>
               <Image
                 source={{ uri: item.original_img }}
                 resizeMode='cover'

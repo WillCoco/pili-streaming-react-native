@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import { View, Text, Image, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, Image, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { connect } from 'react-redux'
+import { toggleLoginState, setToke } from '../../actions/user'
 import Toast from 'react-native-tiny-toast'
 
 import Form from './Form/Form'
@@ -8,18 +10,19 @@ import Form from './Form/Form'
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
 
-import { apiSendVerCode } from '../../service/api'
+import { apiSendVerCode, apiLogin } from '../../service/api'
 
 const phonePattern = /^1[3456789]\d{9}$/
 
 let timer: any
 
-export default function Logion() {
+function Logion(props: any) {
   const navigation = useNavigation()
   const [telNum, setTelNum] = useState('')
   const [verCode, setVerCode] = useState('')
   const [invCode, setInvCode] = useState('')
   const [disabled, setDisabled] = useState(false)
+  const [hasRegister, setHasRegister] = useState(true)
   let [countDown, setCountDown] = useState(16)
 
   navigation.setOptions({
@@ -68,22 +71,24 @@ export default function Logion() {
     const loading = Toast.showLoading('')
 
     apiSendVerCode({ userTel: telNum }).then(res => {
-      if (res === '请求成功') {
-        Toast.hide(loading)
+      console.log('发送验证码', res)
 
-        Toast.showSuccess('验证码已发送')
+      setHasRegister(res)
 
-        setDisabled(true)
+      Toast.hide(loading)
 
-        timer = setInterval(() => {
-          setCountDown(countDown--)
-          if (countDown <= 0) {
-            clearInterval(timer)
-            setDisabled(false)
-            setCountDown(16)
-          }
-        }, 1000)
-      }
+      Toast.showSuccess('验证码已发送')
+
+      setDisabled(true)
+
+      timer = setInterval(() => {
+        setCountDown(countDown--)
+        if (countDown <= 0) {
+          clearInterval(timer)
+          setDisabled(false)
+          setCountDown(16)
+        }
+      }, 1000)
     })
   }
 
@@ -100,7 +105,27 @@ export default function Logion() {
       Toast.show('请输入正确的验证码')
       return
     }
-    console.log('logion')
+
+    const params = {
+      userTel: telNum,
+      code: verCode,
+      inviteCode: invCode
+    }
+
+    apiLogin(params).then(res => {
+      console.log('注册&登录', res)
+
+      if (res) {
+        props.dispatch(toggleLoginState(true))
+        props.dispatch(setToke(res))
+
+        Toast.showSuccess('登录成功')
+
+        setTimeout(() => {
+          navigation.goBack()
+        }, 1500)
+      }
+    })
   }
 
   return (
@@ -119,6 +144,7 @@ export default function Logion() {
         invCode={invCode}
         disabledSendBtn={disabled}
         countDown={countDown}
+        hasRegister={hasRegister}
         changeTelNum={(value: string) => changeTelNum(value)}
         changeVerCode={(value: string) => changeVerCode(value)}
         changeInvCode={(value: string) => changeInvCode(value)}
@@ -132,6 +158,8 @@ export default function Logion() {
     </ImageBackground>
   )
 }
+
+export default connect()(Logion)
 
 const styles = StyleSheet.create({
   container: {
@@ -161,3 +189,4 @@ const styles = StyleSheet.create({
     color: Colors.whiteColor
   }
 })
+
