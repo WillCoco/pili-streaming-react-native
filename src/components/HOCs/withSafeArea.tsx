@@ -1,15 +1,16 @@
 /** 
  * 提供机型上下安全区域
+ * todo: 参数泛型
  */
 import React from 'react';
 import { safeBottom, safeTop } from '../../constants/DeviceInfo';
 
-interface componentProps {
+export interface componentProps {
   [key: string]: any
 }
 
-const withSafeArea = (Component: (props: componentProps) => React.ReactElement): React.FC => {
-  return (props: componentProps): React.ReactElement => {
+const withSafeArea = (Component: any): React.FC => {
+  return (props: any): React.ReactElement => {
     return (
       <Component
         {...props}

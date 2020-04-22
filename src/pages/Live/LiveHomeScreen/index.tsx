@@ -10,20 +10,28 @@ import {
   PanResponder,
   SafeAreaView,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native'
+import {useDispatch} from 'react-redux'
 import LiveBanner from './LiveBanner';
 import LiveHomeTabs from './LiveHomeTabs';
 import withPage from '../../../components/HOCs/withPage';
-import { Colors } from '../../../constants/Theme';
+import {Colors} from '../../../constants/Theme';
+import {login} from '../../../actions/im';
 
 const LiveHomeScreen = (props: any) : React.ReactElement =>  {
   console.log(props.safeTop, 'safeTop')
-  const a = React.useState()
+  const {navigate} = useNavigation();
+  const dispatch = useDispatch();
+
+  // 测试登录
+  dispatch(login({userID: 'test01'}));
+
   return (
     <SafeAreaView
       style={StyleSheet.flatten([styles.wrapper])}
     >
       <View style={{marginTop: props.safeTop}}>
-        <Text>搜索组件</Text>
+        <Text onPress={() => navigate('LiveSearchScreen')}>搜索组件</Text>
       </View>
       <LiveBanner />
       <LiveHomeTabs />
@@ -43,7 +51,6 @@ const styles = StyleSheet.create({
 
 export default withPage(LiveHomeScreen, {
   statusBarOptions: {
-    // hidden: true,
     // barStyle: 'dark-content',
   }
 });

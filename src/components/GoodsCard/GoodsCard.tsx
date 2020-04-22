@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   },
   goodsPrice: {
     flexDirection: 'row',
-    alignItems: 'flex-end'
+    alignItems: 'baseline'
   },
   rmbIcon: {
     fontSize: pxToDp(24),

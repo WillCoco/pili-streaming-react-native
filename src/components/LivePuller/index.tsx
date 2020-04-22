@@ -4,16 +4,18 @@
 import React from 'react';
 import {
   View,
-  Text,
   ScrollView,
   StyleSheet,
   StyleProp,
 } from 'react-native';
+import {PrimaryText} from 'react-native-normalization-text'
 import {NodePlayerView} from 'react-native-nodemediaclient';
+import {vw, vh} from '../../utils/metric';
 
 interface LiveWindowProps {
   inputUrl: string,
   style?: StyleProp<any>,
+  onStatus?: (status: number | undefined) => any,
 }
 
 const LiveWindow = React.forwardRef((props: LiveWindowProps, ref: any) : any =>  {
@@ -23,6 +25,7 @@ const LiveWindow = React.forwardRef((props: LiveWindowProps, ref: any) : any => 
   const [status, setStatus]: [number | undefined, any] = React.useState()
   const onStatus = (status: number) => {
     setStatus(status);
+    props.onStatus && props.onStatus(status);
   }
 
   /**
@@ -30,10 +33,12 @@ const LiveWindow = React.forwardRef((props: LiveWindowProps, ref: any) : any => 
    */
   const player = React.useRef();
 
+  console.log(status, 'statusstatusstatus')
+
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
       <NodePlayerView
-        style={{ height: '100%', width: '100%', backgroundColor: '#333'}}
+        style={{height: '100%', width: '100%', backgroundColor: '#333'}}
         ref={ref}
         inputUrl={props.inputUrl}
         scaleMode="ScaleAspectFit" // 'ScaleToFill', 'ScaleAspectFit', 'ScaleAspectFill'
@@ -43,7 +48,7 @@ const LiveWindow = React.forwardRef((props: LiveWindowProps, ref: any) : any => 
         renderType="SURFACEVIEW" //'SURFACEVIEW', 'TEXTUREVIEW'
         onStatus={onStatus}
       />
-      {status === 1000 && <Text>Loading</Text>}
+      {status === 1000 && <PrimaryText color="white" style={styles.loading}>连接中</PrimaryText>}
     </View>
   )
 })
@@ -56,6 +61,11 @@ const styles = StyleSheet.create({
   },
   contentWrapper: {
     justifyContent: 'flex-end',
+  },
+  loading: {
+    position: 'absolute',
+    top: vh(50) - 20,
+    left: vw(50) - 20,
   }
 })
 

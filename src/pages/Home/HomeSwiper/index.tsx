@@ -1,5 +1,6 @@
 import React from 'react'
-import { Image, StyleSheet } from 'react-native'
+import { Image, StyleSheet, TouchableWithoutFeedback } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import { Carousel } from '@ant-design/react-native'
 
 import { Colors } from '../../../constants/Theme'
@@ -12,15 +13,20 @@ interface Props {
 
 function HomeSwiper(props: Props) {
   const { swiperList } = props
+  const navigation = useNavigation()
 
   const changSwiper = () => {
 
   }
 
+  const toLogin = () => {
+    navigation.push('Login')
+  }
+
   return (
     <Carousel
-      autoplay={true}
       infinite={true}
+      autoplayInterval={3000}
       dots={props.showDots}
       style={[swiperStyle.swiper, props.swiperStyle]}
       dotStyle={{ backgroundColor: Colors.lightGrey }}
@@ -30,12 +36,13 @@ function HomeSwiper(props: Props) {
       {
         swiperList && swiperList.map((item: { original_img: any }, index: any) => {
           return (
-            <Image
-              source={{ uri: item.original_img }}
-              resizeMode='cover'
-              style={swiperStyle.swiperImage}
-              key={`swiper-${index}`}
-            />
+            <TouchableWithoutFeedback onPress={toLogin} key={`swiper-${index}`}>
+              <Image
+                source={{ uri: item.original_img }}
+                resizeMode='cover'
+                style={swiperStyle.swiperImage}
+              />
+            </TouchableWithoutFeedback>
           )
         })
       }

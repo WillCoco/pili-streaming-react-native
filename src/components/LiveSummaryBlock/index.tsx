@@ -23,15 +23,12 @@ import {PlayerType} from '../../liveTypes';
 export type msgList = any[] | undefined;
 export type onMsgListResponse = (v: boolean) => any;
 
-interface LiveToolBarProps {
+interface LiveSummaryBlockProps {
   style?: StyleProp<any>,
-  inputPlaceholder?: string,
-  inputStyle?: StyleProp<any>,
-  onSubmitEditing: () => any,
   liveInfo?: any,
 }
 
-const LiveSummaryBlock = (props: LiveToolBarProps) : any =>  {
+const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
 
   const {navigate} = useNavigation()
 
@@ -124,7 +121,7 @@ const LiveSummaryBlock = (props: LiveToolBarProps) : any =>  {
             ellipsizeMode="tail"
             style={{width: scale(50)}}
           >
-              {props.liveInfo?.name || '主播昵称'}
+            {props.liveInfo?.name || '主播昵称'}
           </SmallText>
         </View>
         <View style={styles.hotWrapper}>
@@ -169,7 +166,7 @@ const styles = StyleSheet.create({
     paddingLeft: 34,
     height: 20,
     alignItems: 'center',
-    borderRadius: radioLarge,
+    borderRadius: 10,
     backgroundColor: Colors.opacityDarkBg,
     overflow: 'hidden',
   },

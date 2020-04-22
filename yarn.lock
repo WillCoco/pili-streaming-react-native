@@ -5969,7 +5969,7 @@ prompts@^2.0.1, prompts@^2.2.1:
     kleur "^3.0.3"
     sisteransi "^1.0.4"
 
-prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@latest:
   version "15.7.2"
   resolved "https://registry.npm.taobao.org/prop-types/download/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha1-UsQedbjIfnK52TYOAga5ncv/psU=
@@ -6104,7 +6104,7 @@ react-native-iconfont-cli@^2.0.0:
     mkdirp "^0.5.1"
     tslib "^1.10.0"
 
-react-native-iphone-x-helper@^1.2.1:
+react-native-iphone-x-helper@1.2.1, react-native-iphone-x-helper@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npm.taobao.org/react-native-iphone-x-helper/download/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"
   integrity sha1-ZF4v+7tJ6AhEu0y740oSb9oeZ3I=
@@ -6145,6 +6145,14 @@ react-native-reanimated@^1.7.0:
   integrity sha1-C1cZsgwf7Zqviv2aEuIcm9Ru5Cg=
   dependencies:
     fbjs "^1.0.0"
+
+react-native-root-siblings@3.2.3:
+  version "3.2.3"
+  resolved "https://registry.npm.taobao.org/react-native-root-siblings/download/react-native-root-siblings-3.2.3.tgz?cache=0&sync_timestamp=1576147516913&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact-native-root-siblings%2Fdownload%2Freact-native-root-siblings-3.2.3.tgz#df5a1cff3a3a1f433f57320e1cae719f1b15a3f2"
+  integrity sha1-31oc/zo6H0M/VzIOHK5xnxsVo/I=
+  dependencies:
+    prop-types "^15.6.2"
+    static-container "^1.0.0"
 
 react-native-safe-area-context@^0.7.3:
   version "0.7.3"
@@ -6226,6 +6234,15 @@ react-native-tab-navigator@^0.3.4:
   dependencies:
     immutable "^3.8.1"
     prop-types "^15.5.10"
+
+react-native-tiny-toast@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.npm.taobao.org/react-native-tiny-toast/download/react-native-tiny-toast-1.0.7.tgz#a9b438263fc989c76917ba49c9d1b1e07076e624"
+  integrity sha1-qbQ4Jj/JicdpF7pJydGx4HB25iQ=
+  dependencies:
+    prop-types latest
+    react-native-iphone-x-helper "1.2.1"
+    react-native-root-siblings "3.2.3"
 
 react-native-unimodules@~0.9.0:
   version "0.9.0"
@@ -7047,6 +7064,11 @@ stacktrace-parser@^0.1.3:
   dependencies:
     type-fest "^0.7.1"
 
+static-container@^1.0.0:
+  version "1.5.1"
+  resolved "https://registry.npm.taobao.org/static-container/download/static-container-1.5.1.tgz#9d7a94e04dea864539a7b6a1304843ada740dc19"
+  integrity sha1-nXqU4E3qhkU5p7ahMEhDradA3Bk=
+
 static-extend@^0.1.1:
   version "0.1.2"
   resolved "https://registry.npm.taobao.org/static-extend/download/static-extend-0.1.2.tgz#60809c39cbff55337226fd5e0b520f341f1fb5c6"
@@ -7286,6 +7308,11 @@ through@^2.3.6:
   version "2.3.8"
   resolved "https://registry.npm.taobao.org/through/download/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=
+
+tim-js-sdk@^2.6.2:
+  version "2.6.2"
+  resolved "https://registry.npm.taobao.org/tim-js-sdk/download/tim-js-sdk-2.6.2.tgz#550615b8eb7505162d3871b73acbba1480aae3d7"
+  integrity sha1-VQYVuOt1BRYtOHG3Osu6FICq49c=
 
 time-stamp@^1.0.0:
   version "1.1.0"
