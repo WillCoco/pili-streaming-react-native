@@ -56,6 +56,14 @@ const images : {
   get userLv6() {
     return require('./userLv4.png')
   },
+  // 发布直播
+  get publishLive() {
+    return require('./publishLive.png')
+  },
+  // 发布预告
+  get publishTeaser() {
+    return require('./publishTeaser.png')
+  },
 }
 
 export default images;

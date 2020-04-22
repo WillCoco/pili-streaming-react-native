@@ -1,9 +1,10 @@
 /**
  * 设备相关信息
 */
-
-import {Platform, Dimensions, StatusBar} from 'react-native';
+import {Platform, StatusBar, NativeModules} from 'react-native';
 import Layout from './Layout';
+const {StatusBarManager} = NativeModules;
+
 
 const {width: DEVICE_WIDTH, height: DEVICE_HEIGHT} = Layout.window
 
@@ -32,9 +33,18 @@ export const isNotchScreen = () => {
 /**
  * 上下安全区域
  */
-export const safeTop = isAndroid ? StatusBar.currentHeight : (
-  isNotchScreen() ? 44 : 20
-)
+let iosStatusBarHeight;
+if (isIOS()) {
+  StatusBarManager.getHeight((h: number) => {
+    iosStatusBarHeight = h
+  })
+}
+
+export const safeTop = isAndroid ? StatusBar.currentHeight : iosStatusBarHeight;
+
+// export const safeTop = isAndroid ? StatusBar.currentHeight : (
+//   isNotchScreen() ? 44 : 20
+// )
 
 export const safeBottom = isNotchScreen() ? 20 : 0;
 

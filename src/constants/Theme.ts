@@ -11,6 +11,7 @@ export const Colors = {
   yellowColor: '#ffc42b',
   bgColor: '#f6f6f6',
   divider: '#f3f3f3',
+  navDivider: '#e6e6e6',
   pageGreyBg: '#f2f2f2',
   opacityDarkBg: 'rgba(0,0,0,0.25)',
   borderColor: '#ddd',

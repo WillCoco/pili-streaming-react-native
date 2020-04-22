@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Platform, StatusBar, View, NativeModules } from 'react-native'
+import { Platform, StatusBar, View, NativeModules, Text } from 'react-native';
 import { SplashScreen, AppLoading } from 'expo'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -21,9 +21,13 @@ import Classify from './src/pages/Classify/Classify'
 import Belt from './src/pages/Belt/Belt'
 import Sale from './src/pages/Sale/Sale'
 
+import NavBar from './src/components/NavBar';
+import AnchorTabs from './src/navigation/AnchorTabs';
 import LiveSearchScreen from './src/pages/Live/LiveSearchScreen';
 import AnchorDetailScreen from './src/pages/Live/AnchorDetailScreen'
 import LivingRoomScreen from './src/pages/Live/LivingRoomScreen'
+import CreateLiveScreen from './src/pages/Mine/AnorchTabs/PublishScreen/CreateLiveScreen'
+import CreateTeaserScreen from './src/pages/Mine/AnorchTabs/PublishScreen/CreateTeaserScreen'
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -65,6 +69,17 @@ export default function App(props: { skipLoadingScreen: any; }) {
     loadResourcesAndDataAsync()
   }, [])
 
+  const navHeadOption = (title?: string) => ({
+    header: (p: any) => <NavBar {...p} title={title} />,
+    // headerStyle: {
+    //   height: 60,
+    //   backgroundColor: '#fff',
+    //   // color: '#000',
+    // },
+    // headerTitleAlign: 'center',
+    // headerLeft: () => <Text>123</Text>
+  })
+
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return null
     return <AppLoading />
@@ -81,6 +96,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
             }
             <NavigationContainer>
               <Stack.Navigator>
+                {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
                 <Stack.Screen name='Root' component={Root} />
                 <Stack.Screen name='HomeSearch' component={HomeSearch} />
                 <Stack.Screen name='FoundSearch' component={FoundSearch} />
@@ -93,6 +109,8 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='AnchorDetailScreen' component={AnchorDetailScreen} options={{headerShown: false}} />
                 <Stack.Screen name='LivingRoomScreen' component={LivingRoomScreen} options={{headerShown: false}} />
                 <Stack.Screen name='LiveSearchScreen' component={LiveSearchScreen} options={{headerShown: false}} />
+                <Stack.Screen name='CreateLiveScreen' component={CreateLiveScreen} options={{headerShown: false}} />
+                <Stack.Screen name='CreateTeaserScreen' component={CreateTeaserScreen} options={(navHeadOption('发布预告'))} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>
