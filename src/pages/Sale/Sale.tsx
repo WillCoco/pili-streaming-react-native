@@ -46,8 +46,6 @@ export default function Sale() {
   const getGoodsList = async () => {
     const { type } = route.params
 
-    console.log(type)
-
     let result: any
 
     if (type === 'seckill') {
