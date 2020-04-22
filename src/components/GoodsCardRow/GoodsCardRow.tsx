@@ -1,14 +1,28 @@
 import React from 'react'
-import { View, Text, Image, StyleSheet, PixelRatio, ImageBackground } from 'react-native'
+import { View, Text, Image, StyleSheet, PixelRatio, ImageBackground, TouchableWithoutFeedback } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+
 import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
+import formatGoodsPrice from '../../utils/formatGoodsPrice'
 
-export default function GoodsCardRow() {
+export default function GoodsCardRow(props: any) {
+  const { goodsInfo } = props
+  const navigation = useNavigation()
+
+  const toGoodsInfo = () => {
+    const { goods_id: id } = goodsInfo
+    navigation.push('GoodsInfo', { id })
+  }
+
   return (
-    <View style={styles.container}>
-      <Image source={{ uri: 'http://129.211.138.215/public/upload/goods/2020/03-31/091693a9e3fa4973c43fb21bb2685656.jpeg' }} style={styles.goodsImg} />
+    <View style={[styles.container, props.style]}>
+      <TouchableWithoutFeedback onPress={toGoodsInfo}>
+        <Image source={{ uri: goodsInfo.original_img }} style={styles.goodsImg} />
+      </TouchableWithoutFeedback>
+      
       <View style={styles.goodsInfo}>
-        <Text style={styles.goodsName} numberOfLines={2}>太平鸟白色衬衫连衣裙春装2020新款韩版仙女裙</Text>
+        <Text style={styles.goodsName} numberOfLines={2} onPress={toGoodsInfo}>{goodsInfo.goods_name}</Text>
         <View style={styles.goodsShare}>
           {
             true
@@ -19,13 +33,13 @@ export default function GoodsCardRow() {
           }
           <View style={styles.shareCard}>
             <Text style={styles.shareText}>分享</Text>
-            <Text style={styles.sharePrice}>¥22.22</Text>
+            <Text style={styles.sharePrice}>¥{formatGoodsPrice(goodsInfo.MyDiscounts)}</Text>
           </View>
         </View>
         <View style={styles.goodsPrice}>
           <Text style={styles.rmbIcon}>¥</Text>
-          <Text style={styles.salePrice}>22.11</Text>
-          <Text style={styles.originalPrice}>¥22.11</Text>
+          <Text style={styles.salePrice}>{formatGoodsPrice(goodsInfo.shop_price)}</Text>
+          <Text style={styles.originalPrice}>¥{formatGoodsPrice(goodsInfo.market_price)}</Text>
         </View>
       </View>
     </View>

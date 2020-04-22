@@ -4,7 +4,7 @@
 
 "@ant-design/icons-react-native@^2.0.0":
   version "2.0.0"
-  resolved "https://registry.npm.taobao.org/@ant-design/icons-react-native/download/@ant-design/icons-react-native-2.0.0.tgz#2574bb5067673151894590c13d2c804f03befa3a"
+  resolved "https://registry.npm.taobao.org/@ant-design/icons-react-native/download/@ant-design/icons-react-native-2.0.0.tgz?cache=0&sync_timestamp=1583133360379&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40ant-design%2Ficons-react-native%2Fdownload%2F%40ant-design%2Ficons-react-native-2.0.0.tgz#2574bb5067673151894590c13d2c804f03befa3a"
   integrity sha1-JXS7UGdnMVGJRZDBPSyATwO++jo=
 
 "@ant-design/react-native@^3.3.0":
@@ -1342,12 +1342,7 @@
   resolved "https://registry.npm.taobao.org/@react-native-community/masked-view/download/@react-native-community/masked-view-0.1.9.tgz#383aca2fb053e3e14405c99cce2d5805df730821"
   integrity sha1-ODrKL7BT4+FEBcmczi1YBd9zCCE=
 
-"@react-native-community/viewpager@^1.1.7":
-  version "1.1.7"
-  resolved "https://registry.npm.taobao.org/@react-native-community/viewpager/download/@react-native-community/viewpager-1.1.7.tgz#7d3b1631f1ec91145db92a8e25c80d53027e96ba"
-  integrity sha1-fTsWMfHskRRduSqOJcgNUwJ+lro=
-
-"@react-native-community/viewpager@^2.0.1":
+"@react-native-community/viewpager@^1.1.7", "@react-native-community/viewpager@^2.0.1":
   version "2.0.2"
   resolved "https://registry.npm.taobao.org/@react-native-community/viewpager/download/@react-native-community/viewpager-2.0.2.tgz#622b190294b1310c4825c98daeaee1c8443f7124"
   integrity sha1-YisZApSxMQxIJcmNrq7hyEQ/cSQ=
@@ -4864,7 +4859,7 @@ lodash-es@^4.2.1:
 
 lodash.debounce@^4.0.8:
   version "4.0.8"
-  resolved "https://registry.npm.taobao.org/lodash.debounce/download/lodash.debounce-4.0.8.tgz?cache=0&sync_timestamp=1571657605147&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Flodash.debounce%2Fdownload%2Flodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
+  resolved "https://registry.npm.taobao.org/lodash.debounce/download/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
   integrity sha1-gteb/zCmfEAF/9XiUVMArZyk168=
 
 lodash.sortby@^4.7.0:
@@ -6032,7 +6027,7 @@ querystringify@^2.1.1:
 
 raf@^3.1.0:
   version "3.4.1"
-  resolved "https://registry.npm.taobao.org/raf/download/raf-3.4.1.tgz?cache=0&sync_timestamp=1571657586987&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fraf%2Fdownload%2Fraf-3.4.1.tgz#0742e99a4a6552f445d73e3ee0328af0ff1ede39"
+  resolved "https://registry.npm.taobao.org/raf/download/raf-3.4.1.tgz#0742e99a4a6552f445d73e3ee0328af0ff1ede39"
   integrity sha1-B0LpmkplUvRF1z4+4DKK8P8e3jk=
   dependencies:
     performance-now "^2.1.0"
@@ -6158,7 +6153,7 @@ react-native-safe-area-context@^0.7.3:
 
 react-native-safe-area-view@^0.11.0:
   version "0.11.0"
-  resolved "https://registry.npm.taobao.org/react-native-safe-area-view/download/react-native-safe-area-view-0.11.0.tgz#4f3dda43c2bace37965e7c6aef5fc83d4f19d174"
+  resolved "https://registry.npm.taobao.org/react-native-safe-area-view/download/react-native-safe-area-view-0.11.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact-native-safe-area-view%2Fdownload%2Freact-native-safe-area-view-0.11.0.tgz#4f3dda43c2bace37965e7c6aef5fc83d4f19d174"
   integrity sha1-Tz3aQ8K6zjeWXnxq71/IPU8Z0XQ=
   dependencies:
     hoist-non-react-statics "^2.3.1"

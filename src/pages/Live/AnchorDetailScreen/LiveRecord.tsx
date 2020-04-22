@@ -9,7 +9,7 @@ import {
   StyleSheet,
   FlatList,
   ScrollView,
-  
+  TouchableOpacity,
 } from 'react-native';
 import {PrimaryText, SmallText, H2, scale} from 'react-native-normalization-text';
 import images from '../../../assets/images';
@@ -22,16 +22,21 @@ const LiveRecord = (props: {
   time: string,
   viewTimes: number,
   goodsQuantity: number,
-}) => (
-  <View style={styles.style}>
-    <Image source={props.img} style={styles.img} />
-    <View style={styles.contentWrapper}>
-      <PrimaryText style={styles.title} numberOfLines={2} ellipsizeMode="tail">{props.title}</PrimaryText>
-      <SmallText style={styles.timeText}>{props.time}</SmallText>
-      <SmallText style={styles.line3Text}>{props.viewTimes}次观看 | {props.goodsQuantity}件宝贝</SmallText>
+  onPress: (roomInfo: any) => void
+}) => {
+  return (
+    <View style={styles.style}>
+      <TouchableOpacity onPress={props.onPress}>
+        <Image source={props.img} style={styles.img} />
+      </TouchableOpacity>
+      <View style={styles.contentWrapper}>
+        <PrimaryText style={styles.title} numberOfLines={2} ellipsizeMode="tail">{props.title}</PrimaryText>
+        <SmallText style={styles.timeText}>{props.time}</SmallText>
+        <SmallText style={styles.line3Text}>{props.viewTimes}次观看 | {props.goodsQuantity}件宝贝</SmallText>
+      </View>
     </View>
-  </View>
-)
+  )
+}
 
 LiveRecord.defaultProps = {
   img: images.liveCover,

@@ -25,15 +25,15 @@ function SearchBar(props: any) {
 
   if (props.isPlaceHolder) {
     return (
-      <View style={styles.placeholderSearchBar}>
+      <View style={[styles.placeholderSearchBar, props.searchBarStyle]}>
         <Ionicons
           size={20}
           name='ios-search'
-          color={Colors.lightGrey}
+          color={props.iconColor || Colors.lightGrey}
         />
         <Text
           numberOfLines={1}
-          style={styles.searchKey}
+          style={[styles.searchKey, props.searchKeyStyle]}
           onPress={toSearchPage}
         >{searchKey || props.searchKey}</Text>
       </View>

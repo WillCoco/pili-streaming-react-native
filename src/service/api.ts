@@ -13,7 +13,7 @@ export const UPLOAD_URL = `${HOST_JAVA}/find/uploadFile`
 // 获取首页数据
 export const apiGetIndexData = () => get(`${HOST_PHP}/mobile/index/index`)
 // 首页圈重点商品列表
-export const apiGetIndexGoodsList = (data) => get(`${HOST_PHP}/mobile/index/ajaxGetMore`, data)
+export const apiGetIndexGoodsList = (data: { pageNo: number; pageSize: number }) => get(`${HOST_PHP}/mobile/index/ajaxGetMore`, data)
 // 产业带
 export const apiGetBeltList = (data) => get(`${HOST_PHP}/mobile/index/getBeltGoods`, data)
 // 商品分类标签
