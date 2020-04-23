@@ -1,11 +1,11 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image, ImageBackground, PixelRatio } from 'react-native'
+import { View, Text, StyleSheet, Image, ImageBackground, PixelRatio, TouchableWithoutFeedback } from 'react-native'
 import pxToDp from '../../../utils/px2dp'
 import { Ionicons } from '@expo/vector-icons'
 import { Colors } from '../../../constants/Theme'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
-export default function GoodsCard(props: { goodsInfo: any }) {
+export default function GoodsCard(props: { showCouponActionSheet?: any; goodsInfo?: any }) {
   const { goodsInfo } = props
 
   return (
@@ -22,8 +22,8 @@ export default function GoodsCard(props: { goodsInfo: any }) {
                   flexDirection: 'row',
                   alignItems: 'center'
                 }}>
-                <Text style={styles.saleTotalPriceText}>最高可赚：</Text>
-                <Text style={[styles.saleTotalPriceText, { color: Colors.basicColor }]}>¥{formatSinglePrice(goodsInfo.MaxDiscounts)}</Text>
+                  <Text style={styles.saleTotalPriceText}>最高可赚：</Text>
+                  <Text style={[styles.saleTotalPriceText, { color: Colors.basicColor }]}>¥{formatSinglePrice(goodsInfo.MaxDiscounts)}</Text>
                 </View>
                 <View style={{
                   flexDirection: 'row',
@@ -38,18 +38,20 @@ export default function GoodsCard(props: { goodsInfo: any }) {
                 </View>
               </View>
             </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{
-                color: Colors.basicColor,
-                fontSize: pxToDp(22),
-                marginRight: pxToDp(5)
-              }}>领券</Text>
-              <Ionicons
-                size={18}
-                name='ios-arrow-forward'
-                color={Colors.basicColor}
-              />
-            </View>
+            <TouchableWithoutFeedback onPress={props.showCouponActionSheet}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={{
+                  color: Colors.basicColor,
+                  fontSize: pxToDp(22),
+                  marginRight: pxToDp(5)
+                }}>领券</Text>
+                <Ionicons
+                  size={18}
+                  name='ios-arrow-forward'
+                  color={Colors.basicColor}
+                />
+              </View>
+            </TouchableWithoutFeedback>
           </View>
           : <View>
             <View style={styles.goodsPrice}>
@@ -59,6 +61,20 @@ export default function GoodsCard(props: { goodsInfo: any }) {
                 <Text style={styles.salePrice}>{formatSinglePrice(goodsInfo.shop_price)}</Text>
                 <Text style={styles.originalPrice}>¥{formatSinglePrice(goodsInfo.market_price)}</Text>
               </View>
+              <TouchableWithoutFeedback onPress={props.showCouponActionSheet}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={{
+                    color: Colors.basicColor,
+                    fontSize: pxToDp(22),
+                    marginRight: pxToDp(5)
+                  }}>领券</Text>
+                  <Ionicons
+                    size={18}
+                    name='ios-arrow-forward'
+                    color={Colors.basicColor}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
             </View>
             <View style={styles.shareBar}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -134,6 +150,8 @@ const styles = StyleSheet.create({
   goodsPrice: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingRight: pxToDp(20),
     marginBottom: pxToDp(15)
   },
   price: {

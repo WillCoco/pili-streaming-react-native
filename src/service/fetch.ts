@@ -16,6 +16,12 @@ let headers = {
 }
 
 export const get = (path: any, data: any) => {
+  const { userData } = store.getState()
+
+  if (userData.token) {
+    headers['authentication'] = userData.token
+  }
+
   if (data) {
     path = `${path}?${getParam(data)}`
   }
@@ -37,6 +43,12 @@ export const get = (path: any, data: any) => {
 };
 
 export const post = (path: RequestInfo, data: any) => {
+  const { userData } = store.getState()
+
+  if (userData.token) {
+    headers['authentication'] = userData.token
+  }
+
   return new Promise((resolve, reject) => {
     fetch(path, {
       method: 'POST',
