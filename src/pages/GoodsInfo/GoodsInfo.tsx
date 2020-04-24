@@ -216,6 +216,8 @@ export default function GoodsInfo() {
     }
 
     apiAddCart(params).then(res => {
+      console.log('加入购物车', res)
+
       if (res === '添加成功') {
         Toast.showSuccess('已加入购物车')
       }

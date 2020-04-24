@@ -7,7 +7,9 @@ import { Colors } from '../../constants/Theme'
 
 function CartHeaderButton(props: any) {
   const toggleAction = () => {
-    props.dispatch(toggleAction())
+    let type: string = props.cartActionType === '管理' ? '完成' : '管理'
+    
+    props.dispatch(toggleCartAction(type))
   }
 
   return (

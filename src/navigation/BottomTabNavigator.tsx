@@ -58,7 +58,7 @@ function BottomTabNavigator({ navigation, route }: any) {
         component={HomeScreen}
         options={{
           title: '首页',
-          tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? homeActiveIcon : homeIcon} />,
+          tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? homeActiveIcon : homeIcon} />
         }}
       />
       <BottomTab.Screen
