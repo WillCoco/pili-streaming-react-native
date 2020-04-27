@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { View, Modal, Animated, StyleSheet, Dimensions } from 'react-native'
-import { Colors } from '../../../constants/Theme'
-import pxToDp from '../../../utils/px2dp'
+import { Colors } from '../../constants/Theme'
+import pxToDp from '../../utils/px2dp'
 
 export default function ActionSheet(props: any) {
   const sheetAnim = new Animated.Value(300)

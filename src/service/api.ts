@@ -147,7 +147,7 @@ export const apiGetUserWorks = (data: any) => post(`${HOST_JAVA}/user/getUserWor
 // 管理我的作品
 export const apiWorksManage = (data: any) => post(`${HOST_JAVA}/user/userWorksManage`, data)
 // 查询商品的优惠相关信息
-export const apiGetGoodsOtherInfo = (data: any) => post(`${HOST_JAVA}/order/getOrderDiscountDetail`, data)
+export const apiGetOrderDiscountDetail = (data: any) => post(`${HOST_JAVA}/order/getOrderDiscountDetail`, data)
 // 提交售后申请
 export const apiCreateReturnOrder = (data: any) => post(`${HOST_JAVA}/order/createReturnGoods`, data)
 // 售后订单详情

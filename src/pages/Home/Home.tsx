@@ -159,6 +159,13 @@ function Home(props: any) {
     navigation.push('ActivityWebView', { url })
   }
 
+  /**
+   * 前往精选好物详情
+   */
+  const toSelectedGoodsInfo = (id: number) => {
+    navigation.push('SelectGoodsInfo', { id })
+  }
+
   return (
     <ScrollableTabView
       initialPage={0}
@@ -211,7 +218,7 @@ function Home(props: any) {
                       <View style={styles.recommendGoodsListContainer}>
                         {
                           categoryData.shopGoods && categoryData.shopGoods.map((item: any, index: any) => <GoodsCard key={`recommend-${index}`}
-                            style={{ marginBottom: pxToDp(20) }} goodsInfo={item} />)
+                            style={{ marginBottom: pxToDp(20) }} goodsInfo={item} tapGoodsCard={(id: number) => toGoodsInfo(id)} />)
                         }
                       </View>
                     </View>
@@ -249,7 +256,7 @@ function Home(props: any) {
                         showsHorizontalScrollIndicator={false}
                       >
                         {
-                          props.selectedGoodsInfo.goodsList && props.selectedGoodsInfo.goodsList.map((item: any, index: any) => <GoodsCard style={{ marginRight: pxToDp(10) }} key={`selected-${index}`} goodsInfo={item} />)
+                          props.selectedGoodsInfo.goodsList && props.selectedGoodsInfo.goodsList.map((item: any, index: any) => <GoodsCard style={{ marginRight: pxToDp(10) }} key={`selected-${index}`} goodsInfo={item} tapGoodsCard={(id: number) => toSelectedGoodsInfo(id)} />)
                         }
                       </ScrollView>
                     </View>
@@ -299,7 +306,7 @@ function Home(props: any) {
                       <View style={styles.recommendGoodsListContainer}>
                         {
                           props.recommendGoodsList.map((item: any, index: any) => <GoodsCard key={`recommend-${index}`}
-                            style={{ marginBottom: pxToDp(20) }} goodsInfo={item} />)
+                            style={{ marginBottom: pxToDp(20) }} goodsInfo={item} tapGoodsCard={(id: number) => toGoodsInfo(id)} />)
                         }
                       </View>
                     </View>

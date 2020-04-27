@@ -38,9 +38,9 @@ function CartFooterAction(props: Props) {
             <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
               <Text style={{ fontSize: pxToDp(28), color: Colors.darkBlack }}>会员价：</Text>
               <Text style={{ fontSize: pxToDp(24), color: Colors.basicColor }}>¥</Text>
-              <Text style={{ fontSize: pxToDp(34), color: Colors.basicColor, fontWeight: '500' }}>{formatSinglePrice(allCartGoodsInfo.totalSalePrice)}</Text>
+              <Text style={{ fontSize: pxToDp(34), color: Colors.basicColor, fontWeight: '500' }}>{allCartGoodsInfo.totalSalePrice && formatSinglePrice(allCartGoodsInfo.totalSalePrice)}</Text>
             </View>
-            <Text style={{ fontSize: pxToDp(28), color: Colors.darkGrey }}>原价：¥{formatSinglePrice(allCartGoodsInfo.totalOriginalPrice)}</Text>
+            <Text style={{ fontSize: pxToDp(28), color: Colors.darkGrey }}>原价：¥{allCartGoodsInfo.totalOriginalPrice && formatSinglePrice(allCartGoodsInfo.totalOriginalPrice)}</Text>
           </View>
         }
         {

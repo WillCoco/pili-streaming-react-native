@@ -68,8 +68,8 @@ function Cart(props: any) {
       item.list.forEach(_item => {
         if (_item.selected) {
           totalCount += 1
-          totalSalePrice += _item.shop_price
-          totalOriginalPrice += _item.market_price
+          totalSalePrice += (_item.shop_price * _item.goods_num)
+          totalOriginalPrice += (_item.market_price * _item.goods_num)
         }
       })
     })
@@ -111,6 +111,7 @@ function Cart(props: any) {
       }
     })
 
+    calcAllGoodsInfo(cartList)
     props.dispatch(setCartList(Object.assign({}, cartList)))
   }
 
@@ -130,6 +131,7 @@ function Cart(props: any) {
       }
     })
 
+    calcAllGoodsInfo(cartList)
     props.dispatch(setCartList(Object.assign({}, cartList)))
   }
 
@@ -200,8 +202,11 @@ function Cart(props: any) {
   const checkCartGoodsSelectedState = (cartList: any) => {
     cartList.totalSelectedCount = 0
 
-    cartList.shop.forEach((item: { selectedCount: number; list: any[]; shop_info: { is_selected: number } }) => {
-
+    cartList.shop.forEach((item: {
+      list: any[]
+      selectedCount: number
+      shop_info: { is_selected: number }
+    }) => {
       item.selectedCount = 0
 
       item.list.forEach(_item => {
