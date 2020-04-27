@@ -24,13 +24,21 @@ import Login from './src/pages/Login/Login'
 import SelectGoods from './src/pages/SelectGoods/SelectGoods'
 import SelectGoodsInfo from './src/pages/SelectGoodsInfo/SelectGoodsInfo'
 
-import NavBar from './src/components/NavBar';
-import AnchorTabs from './src/navigation/AnchorTabs';
-import LiveSearchScreen from './src/pages/Live/LiveSearchScreen';
-import AnchorDetailScreen from './src/pages/Live/AnchorDetailScreen'
-import LivingRoomScreen from './src/pages/Live/LivingRoomScreen'
-import CreateLiveScreen from './src/pages/Mine/AnorchTabs/PublishScreen/CreateLiveScreen'
-import CreateTeaserScreen from './src/pages/Mine/AnorchTabs/PublishScreen/CreateTeaserScreen'
+import NavBar from './src/components/NavBar'
+import AnchorTabs from './src/navigation/AnchorTabs'
+import LiveSearch from './src/pages/Live/LiveSearchScreen'
+import AnchorDetail from './src/pages/Live/AnchorDetailScreen'
+import LivingRoom from './src/pages/Live/LivingRoomScreen'
+import CreateLive from './src/pages/AnchorTabs/PublishScreen/CreateLiveScreen'
+import CreateTeaser from './src/pages/AnchorTabs/PublishScreen/CreateTeaserScreen'
+import LiveGoodsPicker from './src/pages/AnchorTabs/PublishScreen/LiveGoodsPickerScreen'
+import LiveGoodsManage from './src/pages/AnchorTabs/PublishScreen/LiveGoodsManageScreen'
+import AnorchLivingRoom from './src/pages/AnchorTabs/PublishScreen/AnorchLivingScreen'
+import AnchorTrailers from './src/pages/AnchorTabs/AnorchMeScreen/AnchorTrailers'
+import AnchorRecords from './src/pages/AnchorTabs/AnorchMeScreen/AnchorRecords'
+import LivesAnalyze from './src/pages/AnchorTabs/AnorchMeScreen/LivesAnalyze'
+import AnchorPickGoods from './src/pages/AnchorTabs/AnorchMeScreen/AnchorPickGoods'
+import AnchorLiveGoodsManage from './src/pages/AnchorTabs/AnorchMeScreen/AnchorLiveGoodsManage'
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -92,7 +100,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
             }
             <NavigationContainer>
               <Stack.Navigator>
-                <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
+                {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
                 <Stack.Screen name='Root' component={Root} />
                 <Stack.Screen name='HomeSearch' component={HomeSearch} />
                 <Stack.Screen name='FoundSearch' component={FoundSearch} />
@@ -105,12 +113,20 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='Login' component={Login} />
                 <Stack.Screen name='SelectGoods' component={SelectGoods} />
                 <Stack.Screen name='SelectGoodsInfo' component={SelectGoodsInfo} />
-                <Stack.Screen name='AnchorDetailScreen' component={AnchorDetailScreen} options={{ headerShown: false }} />
-                <Stack.Screen name='LivingRoomScreen' component={LivingRoomScreen} options={{ headerShown: false }} />
-                <Stack.Screen name='LiveSearchScreen' component={LiveSearchScreen} options={{headerShown: false}} />
-                {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
-                <Stack.Screen name='CreateLiveScreen' component={CreateLiveScreen} options={{headerShown: false}} />
-                <Stack.Screen name='CreateTeaserScreen' component={CreateTeaserScreen} options={navHeadOption('发布预告')} />
+                <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
+                <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false }} />
+                <Stack.Screen name='LiveSearchScreen' component={LiveSearch} options={{headerShown: false}} />
+                <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
+                <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{headerShown: false}} />
+                <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} options={navHeadOption('发布预告')} />
+                <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{headerShown: false}} />
+                <Stack.Screen name='LiveGoodsManageScreen' component={LiveGoodsManage} options={navHeadOption('直播商品管理')} />
+                <Stack.Screen name='AnorchLivingRoomScreen' component={AnorchLivingRoom} options={{headerShown: false}} />
+                <Stack.Screen name='AnchorTrailers' component={AnchorTrailers} options={navHeadOption('我的预告片')} />
+                <Stack.Screen name='AnchorRecords' component={AnchorRecords} options={navHeadOption('我的直播')} />
+                <Stack.Screen name='LivesAnalyze' component={LivesAnalyze} options={{headerShown: false}} />
+                <Stack.Screen name='AnchorPickGoods' component={AnchorPickGoods} options={{headerShown: false}} />
+                <Stack.Screen name='AnchorLiveGoodsManage' component={AnchorLiveGoodsManage} options={{headerShown: false}} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>

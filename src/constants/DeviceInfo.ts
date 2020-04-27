@@ -40,7 +40,7 @@ if (isIOS()) {
   })
 }
 
-export const safeTop = isAndroid ? StatusBar.currentHeight : iosStatusBarHeight;
+export const safeTop = isAndroid() ? StatusBar.currentHeight : iosStatusBarHeight;
 
 // export const safeTop = isAndroid ? StatusBar.currentHeight : (
 //   isNotchScreen() ? 44 : 20

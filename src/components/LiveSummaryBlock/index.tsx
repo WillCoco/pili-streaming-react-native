@@ -113,7 +113,7 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
         </PrimaryText>
       </View>
       
-      <TouchableOpacity style={styles.bottomBar} onPress={() => navigate('AnchorDetailScreen')}>
+      <TouchableOpacity style={styles.bottomBar} onPress={() => navigate('AnchorDetail')}>
         <View style={styles.anorchInfoWrapper}>
           <Avatar size={scale(20)} style={{marginRight: pad / 2}} />
           <SmallText

@@ -45,7 +45,7 @@ function BottomTabNavigator({ navigation, route }: any) {
 
   return (
     <BottomTab.Navigator
-      initialRouteName={INITIAL_ROUTE_NAME}
+      initialRouteName={route?.params?.initialRoute || INITIAL_ROUTE_NAME}
       tabBarOptions={{
         activeTintColor: Colors.basicColor,
         inactiveTintColor: Colors.lightGrey

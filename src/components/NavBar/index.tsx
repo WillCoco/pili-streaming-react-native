@@ -11,36 +11,51 @@ import {useNavigation} from '@react-navigation/native';
 import withPage from '../HOCs/withPage';
 import Iconback from '../Iconfont/Iconback';
 import { Colors } from '../../constants/Theme';
+import Iconbacklight from '../Iconfont/Iconbacklight';
 
 interface NavBarProps {
   safeTop: number,
   title: string,
   left: (props: any) => any,
-  right: (props: any) => any,
-  leftWrapperStyle: StyleProp<any>,
-  titleWrapperStyle: StyleProp<any>,
-  rightWrapperStyle: StyleProp<any>,
-  titleStyle: StyleProp<any>,
+  right?: (props: any) => any,
+  style?: StyleProp<any>,
+  leftWrapperStyle?: StyleProp<any>,
+  titleWrapperStyle?: StyleProp<any>,
+  rightWrapperStyle?: StyleProp<any>,
+  titleStyle?: StyleProp<any>,
+  leftTheme?: 'light' | 'dark',
+  onLeftPress?: () => void,
 }
 
 const NavBar = (props: NavBarProps) =>  {
-  console.log(props, 'props8888888')
   const {goBack} = useNavigation();
 
   const LeftComponent = props.left;
   const RightComponent = props.right;
+
+ /**
+   * 左侧事件
+   */
+  const onLeftPress = () => {
+    props.onLeftPress ? props.onLeftPress() : goBack()
+  }
+
+  /**
+   * 左侧
+   */
+  const defaultLeftComponent = (
+    <TouchableOpacity onPress={onLeftPress} style={styles.leftWrapper}>
+      {props.leftTheme === 'light' ? <Iconbacklight/> : <Iconback />}
+    </TouchableOpacity>
+  );
+
   return (
-    <View style={StyleSheet.flatten([styles.style, {marginTop: props.safeTop}])}>
+    <View style={StyleSheet.flatten([styles.style, {marginTop: props.safeTop}, props.style])}>
       <View style={StyleSheet.flatten([styles.leftWrapper, props.leftWrapperStyle])}>
         {
-          LeftComponent ? <LeftComponent {...props} /> : (
-            <TouchableOpacity onPress={() => goBack()} style={styles.leftWrapper}>
-              <Iconback />
-            </TouchableOpacity>
-          )
+          LeftComponent ? <LeftComponent {...props} /> : defaultLeftComponent
         }
       </View>
-      
       <View style={StyleSheet.flatten([styles.titleWrapper, props.titleWrapperStyle])}>
         <Text style={StyleSheet.flatten([styles.title, props.titleStyle])}>{props.title}</Text>
       </View>
@@ -54,6 +69,7 @@ const NavBar = (props: NavBarProps) =>  {
 };
 
 NavBar.defaultProps = {
+  leftTheme: 'dark'
 };
 
 const styles = StyleSheet.create({
@@ -66,7 +82,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   leftWrapper: {
-    width: 44,
+    width: 34,
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -84,7 +100,7 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   rightWrapper: {
-    width: 44,
+    width: 34,
     justifyContent: 'center',
     alignItems: 'center',
   }

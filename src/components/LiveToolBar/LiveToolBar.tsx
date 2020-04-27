@@ -27,6 +27,7 @@ interface LiveToolBarProps {
 }
 
 const LiveToolBar = (props: LiveToolBarProps) : any =>  {
+
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
       <TextInput

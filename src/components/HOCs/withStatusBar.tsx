@@ -24,7 +24,6 @@ const withStatusBar = (Component: React.FC, options?: optionTypes) => {
 
     const isFocused = useIsFocused();
 
-    console.log(isFocused, 'isFocused')
     React.useEffect(() => {
       if (isFocused) {
         if (statusBarProps.current.barStyle) {

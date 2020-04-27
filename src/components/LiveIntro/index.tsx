@@ -18,8 +18,8 @@ import {PrimaryText, SmallText} from 'react-native-normalization-text';
 import Avatar from '../Avatar';
 import withSafeArea from '../HOCs/withSafeArea';
 import {pad} from '../../constants/Layout';
-import {vw} from '../../utils/metric';
-import {Colors} from '../../constants/Theme';
+// import {vw} from '../../utils/metric';
+// import {Colors} from '../../constants/Theme';
 import FollowButton from '../../components/FollowButton';
 
 export type msgList = any[] | undefined;
@@ -36,6 +36,7 @@ interface LiveMsgProps {
   ref?: any,
   isFollow: boolean,
   safeTop: number,
+  showFollowButton?: boolean,
 }
 
 const LiveIntro = (props: LiveMsgProps) =>  {
@@ -50,7 +51,7 @@ const LiveIntro = (props: LiveMsgProps) =>  {
       return;
     }
     // 默认跳转主播详情
-    navigate('AnchorDetailScreen')
+    navigate('AnchorDetail')
   }
 
   /**
@@ -70,7 +71,7 @@ const LiveIntro = (props: LiveMsgProps) =>  {
         size={40}
         style={{marginRight: 4}}
       />
-      <View>
+      <View style={{marginRight: pad}}>
         <SmallText
           style={styles.title}
           numberOfLines={1}
@@ -84,11 +85,16 @@ const LiveIntro = (props: LiveMsgProps) =>  {
           {props.liveSubTitle}
         </SmallText>
       </View>
-      <FollowButton 
-        isFollow={!props.isFollow}
-        onPress={onFollowPress}
-        style={{marginLeft: pad}}
-      />
+      {
+        props.showFollowButton && (
+          <FollowButton 
+            isFollow={!props.isFollow}
+            onPress={onFollowPress}
+            // style={{marginLeft: pad}}
+          />
+        )
+      }
+      
     </TouchableOpacity>
   )
 }
@@ -116,22 +122,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     maxWidth: 100,
   },
-  followWrapper: {
-    backgroundColor: Colors.basicColor,
-    height: 26,
-    justifyContent: 'center',
-    paddingHorizontal: pad,
-    borderRadius: 13,
-    marginLeft: 10
-  },
-  unFollowWrapper: {
-    backgroundColor: Colors.basicColor,
-    height: 26,
-    justifyContent: 'center',
-    paddingHorizontal: pad,
-    borderRadius: 13,
-    marginLeft: 10
-  }
 })
 
 export default withSafeArea(LiveIntro);

@@ -2,7 +2,8 @@
  * 直播消息工具栏
  */
 import React from 'react';
-import LiveToolBar from './LiveToolBar'
+import LiveToolBar from './LiveToolBar';
+import AnchorLiveToolBar from './AnchorLiveToolBar';
 
 export enum Role {
   anchor,
@@ -10,6 +11,8 @@ export enum Role {
 };
 
 export default (role: Role) => () => {
-  const options = role === Role.anchor ? {} : {};
-  return <LiveToolBar {...options} />
+  if (role === Role.anchor) {
+    return <AnchorLiveToolBar />
+  }
+  return <LiveToolBar />
 };

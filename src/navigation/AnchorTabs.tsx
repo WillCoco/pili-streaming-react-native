@@ -5,9 +5,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import pxToDp from '../utils/px2dp'
 import { Colors } from '../constants/Theme'
 
-import PublishScreen from '../pages/Mine/AnorchTabs/PublishScreen'
-import AnorchMeScreen from '../pages/Mine/AnorchTabs/AnorchMeScreen'
-import MyShopScreen from '../pages/Mine/AnorchTabs/MyShopScreen'
+import PublishScreen from '../pages/AnchorTabs/PublishScreen'
+import AnorchMeScreen from '../pages/AnchorTabs/AnorchMeScreen'
+import MyShopScreen from '../pages/AnchorTabs/MyShopScreen'
 
 import homeIcon from '../assets/tab-bar-icon/home.png'
 import homeActiveIcon from '../assets/tab-bar-icon/homeActive.png'
@@ -29,6 +29,10 @@ function BottomTabNavigator({ navigation, route }: any) {
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
 
+  const navHeadOption = (title?: string) => ({
+    header: (p: any) => <NavBar {...p} title={title} />,
+  })
+
   navigation.setOptions({
     // headerTitle: () => getTabItemComponent(getHeaderTitle(route), navigation),
     headerStyle: {
@@ -42,14 +46,14 @@ function BottomTabNavigator({ navigation, route }: any) {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="anorchPublish"
+      initialRouteName="AnorchPublish"
       tabBarOptions={{
         activeTintColor: Colors.basicColor,
         inactiveTintColor: Colors.lightGrey
       }}
     >
       <BottomTab.Screen
-        name="anorchPublish"
+        name="AnorchPublish"
         component={PublishScreen}
         options={{
           title: '首页',
@@ -57,16 +61,16 @@ function BottomTabNavigator({ navigation, route }: any) {
         }}
       />
       <BottomTab.Screen
-        name="anorchShop"
-        component={AnorchMeScreen}
+        name="AnorchShop"
+        component={MyShopScreen}
         options={{
           title: '店铺',
           tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? liveActiveIcon : liveIcon} />,
         }}
       />
       <BottomTab.Screen
-        name="anorchMe"
-        component={MyShopScreen}
+        name="AnorchMe"
+        component={AnorchMeScreen}
         options={{
           title: '我的',
           tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? foundActiveIcon : foundIcon} />,
@@ -89,7 +93,7 @@ function getHeaderTitle(route:
       index: React.ReactText
     }
   }) {
-  const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME
+  const routeName = route.state?.routes[route.state.index]?.name;
 
   return routeName
 }
