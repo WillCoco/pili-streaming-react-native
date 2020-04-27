@@ -4,17 +4,24 @@ import { connect } from 'react-redux'
 import { Ionicons } from '@expo/vector-icons'
 import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
+import formatSinglePrice from '../../utils/formatGoodsPrice'
 
-function CartFooterAction(props: any) {
-  const { cartList } = props
+interface Props {
+  dispatch?: any
+  allSelect?: any
+  cartActionType?: any
+  cartList?: any
+  allCartGoodsInfo?: any
+  delCartGoods?: any
+  createOrder?: any
+}
 
-  const allSelect = () => {
-    console.log('全选')
-  }
+function CartFooterAction(props: Props) {
+  const { cartList, allCartGoodsInfo } = props
 
   return (
     <View style={styles.container}>
-      <TouchableWithoutFeedback onPress={allSelect}>
+      <TouchableWithoutFeedback onPress={props.allSelect}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {
             cartList.is_all_selected
@@ -26,23 +33,30 @@ function CartFooterAction(props: any) {
       </TouchableWithoutFeedback>
 
       <View style={styles.actionRight}>
-        <View style={styles.goodsPrice}>
-          <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-            <Text style={{ fontSize: pxToDp(28), color: Colors.darkBlack }}>会员价：</Text>
-            <Text style={{ fontSize: pxToDp(24), color: Colors.basicColor }}>¥</Text>
-            <Text style={{ fontSize: pxToDp(34), color: Colors.basicColor, fontWeight: '500'}}>777.22</Text>
+        {
+          props.cartActionType === '管理' && <View style={styles.goodsPrice}>
+            <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+              <Text style={{ fontSize: pxToDp(28), color: Colors.darkBlack }}>会员价：</Text>
+              <Text style={{ fontSize: pxToDp(24), color: Colors.basicColor }}>¥</Text>
+              <Text style={{ fontSize: pxToDp(34), color: Colors.basicColor, fontWeight: '500' }}>{formatSinglePrice(allCartGoodsInfo.totalSalePrice)}</Text>
+            </View>
+            <Text style={{ fontSize: pxToDp(28), color: Colors.darkGrey }}>原价：¥{formatSinglePrice(allCartGoodsInfo.totalOriginalPrice)}</Text>
           </View>
-          <Text style={{ fontSize: pxToDp(28), color: Colors.darkGrey }}>原价：¥111.11</Text>
-        </View>
-
-        <TouchableOpacity>
-          <View style={styles.actionBtn}>
-            <Text style={styles.btnText}>结算(1)</Text>
-          </View>
-        </TouchableOpacity>
-
+        }
+        {
+          props.cartActionType === '管理'
+            ? <TouchableOpacity onPress={props.createOrder}>
+              <View style={styles.actionBtn}>
+                <Text style={styles.btnText}>结算({allCartGoodsInfo.totalCount})</Text>
+              </View>
+            </TouchableOpacity>
+            : <TouchableOpacity onPress={props.delCartGoods}>
+              <View style={styles.actionBtn}>
+                <Text style={styles.btnText}>删除</Text>
+              </View>
+            </TouchableOpacity>
+        }
       </View>
-
     </View>
   )
 }

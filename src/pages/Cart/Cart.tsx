@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import { ScrollView, SafeAreaView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
 
-import { setCartList } from '../../actions/cart'
-import { apiCartList } from '../../service/api'
+import { setCartList, toggleCartAction } from '../../actions/cart'
+import { apiCartList, apiChangeCart, apiDelCartItem } from '../../service/api'
+
+import Toast from 'react-native-tiny-toast'
 
 import DefaultContent from './DefaultContent/DefaultContent'
 import CartItem from '../../components/CartItem/CartItem'
@@ -14,16 +16,27 @@ import pxToDp from '../../utils/px2dp'
 function Cart(props: any) {
   const navigation = useNavigation()
   const [isEmpty, setIsEmpty] = useState(false)
+  const [allCartGoodsInfo, setAllCartGoodsInfo] = useState({})
 
   const { userData, cartData } = props
 
-  // useEffect(() => {
-  //   if (props.userData.isLogin) {
-  //     navigation.addListener('focus', () => {
-  //       getCartList()
-  //     })
-  //   }
-  // }, [navigation])
+  useEffect(() => {
+    if (props.userData.isLogin) {
+      navigation.addListener('focus', () => {
+        getCartList()
+      })
+
+      navigation.addListener('blur', () => {
+        props.dispatch(toggleCartAction('管理'))
+      })
+    }
+  }, [navigation])
+
+  useEffect(() => {
+    if (props.userData.isLogin) {
+      updateCartList(props.cartData.cartList)
+    }
+  }, [props.cartData.cartList])
 
   /**
    * 获取购物车列表
@@ -34,10 +47,37 @@ function Cart(props: any) {
       if (res.count) {
         setIsEmpty(false)
         props.dispatch(setCartList(res))
+        calcAllGoodsInfo(res)
       } else {
         // 购物车为空
         setIsEmpty(true)
       }
+    })
+  }
+
+  /**
+   * 计算商品总价和数量
+   */
+  const calcAllGoodsInfo = (cartList: { shop: any }) => {
+    const { shop } = cartList
+    let totalCount = 0
+    let totalSalePrice = 0
+    let totalOriginalPrice = 0
+
+    shop.forEach((item: { list: any[] }) => {
+      item.list.forEach(_item => {
+        if (_item.selected) {
+          totalCount += 1
+          totalSalePrice += _item.shop_price
+          totalOriginalPrice += _item.market_price
+        }
+      })
+    })
+
+    setAllCartGoodsInfo({
+      totalCount,
+      totalSalePrice,
+      totalOriginalPrice
     })
   }
 
@@ -71,7 +111,7 @@ function Cart(props: any) {
       }
     })
 
-    props.dispatch(setCartList(cartList))
+    props.dispatch(setCartList(Object.assign({}, cartList)))
   }
 
   /**
@@ -90,7 +130,169 @@ function Cart(props: any) {
       }
     })
 
-    props.dispatch(setCartList(cartList))
+    props.dispatch(setCartList(Object.assign({}, cartList)))
+  }
+
+  /**
+   * 全选 or 取消全选
+   */
+  const toggleAllSelect = () => {
+    const { cartList } = props.cartData
+
+    cartList.is_all_selected = cartList.is_all_selected ? 0 : 1
+
+    cartList.shop.forEach((item: { shop_info: { is_selected: any }; list: any[] }) => {
+      item.shop_info.is_selected = cartList.is_all_selected
+      item.list.forEach(_item => {
+        _item.selected = cartList.is_all_selected
+      })
+    })
+
+    calcAllGoodsInfo(cartList)
+    props.dispatch(setCartList(Object.assign({}, cartList)))
+  }
+
+  /**
+   * 购物车店铺 全选 or 取消全选
+   */
+  const toggleCartItemAllSelect = (shopId: number) => {
+    const { cartList } = props.cartData
+    cartList.shop.forEach((
+      item: {
+        shop_info: { shop_id: number; is_selected: number };
+        list: any[]
+      }
+    ) => {
+      if (item.shop_info.shop_id === shopId) {
+        item.shop_info.is_selected = item.shop_info.is_selected ? 0 : 1
+
+        item.list.forEach(_item => {
+          _item.selected = item.shop_info.is_selected
+        })
+      }
+    })
+
+    checkCartGoodsSelectedState(cartList)
+  }
+
+  /**
+   * 购物车商品 选择 or 取消选择
+   */
+  const toggleGoodsSelect = (shopId: number, cartId: number) => {
+    const { cartList } = cartData
+
+    cartList.shop.forEach((item: { shop_info: { shop_id: number }; list: any[] }) => {
+      if (item.shop_info.shop_id === shopId) {
+        item.list.forEach(_item => {
+          if (_item.cart_id === cartId) {
+            _item.selected = _item.selected ? 0: 1
+          }
+        })
+      }
+    })
+
+    checkCartGoodsSelectedState(cartList)
+  }
+
+  /**
+   * 判断整个购物车的选中状态
+   */
+  const checkCartGoodsSelectedState = (cartList: any) => {
+    cartList.totalSelectedCount = 0
+
+    cartList.shop.forEach((item: { selectedCount: number; list: any[]; shop_info: { is_selected: number } }) => {
+
+      item.selectedCount = 0
+
+      item.list.forEach(_item => {
+        if (_item.selected) {
+          item.selectedCount += 1
+        }
+
+        item.shop_info.is_selected = item.selectedCount === item.list.length ? 1 : 0
+      })
+
+      if (item.shop_info.is_selected) {
+        cartList.totalSelectedCount += 1
+      }
+
+      cartList.is_all_selected = cartList.totalSelectedCount === cartList.shop.length ? 1 : 0
+    })
+
+    calcAllGoodsInfo(cartList)
+    props.dispatch(setCartList(Object.assign({}, cartList)))
+  }
+
+  /**
+   * 删除购物车商品
+   */
+  const delCartGoods = () => {
+    const { cartList } = cartData
+
+    let selectedCartIds: any[] = []
+
+    cartList.shop.forEach((item: { list: any[] }) => {
+      item.list.forEach(_item => {
+        if (_item.selected) {
+          selectedCartIds.push(_item.cart_id)
+        }
+      })
+    })
+
+    const params = {
+      cart_ids: selectedCartIds.toString()
+    }
+
+    apiDelCartItem(params).then(res => {
+      console.log('删除购物车商品', res)
+
+      if (res === '操作成功') {
+        getCartList()
+      }
+    })
+  }
+
+  /**
+   * 预生成订单
+   */
+  const createOrder = () => {
+    const { cartList } = cartData
+    const { totalCount } = allCartGoodsInfo
+
+    if (!totalCount) {
+      Toast.show('请选择要结算的商品')
+      return
+    }
+
+    cartList.shop.forEach((item: { selectedGoods: any; list: any[] }) => {
+      item.selectedGoods = item.list.filter(_item => _item.selected)
+    })
+
+    let tempOrderList = cartList.shop.filter((item: { selectedGoods: string | any[] }) => item.selectedGoods.length)
+
+    navigation.push('CreateOrder', { tempOrderList })
+  }
+
+  /**
+   * 更新购物车状态
+   */
+  const updateCartList = (cartList: { shop: { list: any }[] }) => {
+    let cartItems: any[] = []
+    let params: { cart_id: any; selected: any; goods_num: any }[] = []
+
+    cartList.shop.forEach((item: { list: any }) => {
+      cartItems = [...cartItems, ...item.list]
+    })
+
+    cartItems.forEach(item => {
+      params.push({
+        cart_id: item.cart_id,
+        selected: item.selected,
+        goods_num: item.goods_num
+      })
+    })
+
+    apiChangeCart({ cartList: params }).then(res => console.log('购物车状态修改', res))
   }
 
   if (!userData.isLogin) {
@@ -106,7 +308,7 @@ function Cart(props: any) {
   }
 
   return (
-    <View>
+    <SafeAreaView style={{ height: '100%' }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{ marginBottom: pxToDp(125) }}
@@ -119,22 +321,23 @@ function Cart(props: any) {
                 cartInfo={item}
                 minusGoodsNum={(shopId: number, cartId: number) => minusGoodsNum(shopId, cartId)}
                 addGoodsNum={(shopId: number, cartId: number) => addGoodsNum(shopId, cartId)}
+                cartItemAllSelect={(shopId: number) => toggleCartItemAllSelect(shopId)}
+                goodsSelect={(shopId: number, cartId: number) => toggleGoodsSelect(shopId, cartId)}
               />
             )
           })
         }
       </ScrollView>
-      <CartFooterAction />
-    </View>
+      <CartFooterAction
+        allCartGoodsInfo={allCartGoodsInfo}
+        allSelect={toggleAllSelect}
+        createOrder={createOrder}
+        delCartGoods={delCartGoods}
+      />
+    </SafeAreaView>
   )
 }
 
 export default connect(
   (state: any) => state
 )(Cart)
-
-const styles = StyleSheet.create({
-  container: {
-
-  }
-})

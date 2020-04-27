@@ -18,6 +18,7 @@
     "@react-navigation/native": "^5.1.5",
     "@react-navigation/stack": "^5.2.10",
     "@types/react-native-scrollable-tab-view": "^0.10.1",
+    "beeshell": "^2.0.11",
     "expo": "~37.0.3",
     "expo-font": "^8.1.1",
     "expo-updates": "~0.1.0",

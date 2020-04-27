@@ -25,6 +25,8 @@ import SelectGoods from './src/pages/SelectGoods/SelectGoods'
 import SelectGoodsInfo from './src/pages/SelectGoodsInfo/SelectGoodsInfo'
 import ActivityWebView from './src/pages/ActivityWebView/ActivityWebView'
 import CreateOrder from './src/pages/CreateOrder/CreateOrder'
+import CreateOrEditAddr from './src/pages/CreateOrEditAddr/CreateOrEditAddr'
+import AddressList from './src/pages/AddressList/AddressList'
 
 import LiveSearchScreen from './src/pages/Live/LiveSearchScreen';
 import AnchorDetailScreen from './src/pages/Live/AnchorDetailScreen'
@@ -99,6 +101,8 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='SelectGoodsInfo' component={SelectGoodsInfo} />
                 <Stack.Screen name='ActivityWebView' component={ActivityWebView} />
                 <Stack.Screen name='CreateOrder' component={CreateOrder} />
+                <Stack.Screen name='CreateOrEditAddr' component={CreateOrEditAddr} />
+                <Stack.Screen name='AddressList' component={AddressList} />
                 <Stack.Screen name='AnchorDetailScreen' component={AnchorDetailScreen} options={{ headerShown: false }} />
                 <Stack.Screen name='LivingRoomScreen' component={LivingRoomScreen} options={{ headerShown: false }} />
                 <Stack.Screen name='LiveSearchScreen' component={LiveSearchScreen} options={{headerShown: false}} />

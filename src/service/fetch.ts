@@ -55,7 +55,7 @@ export const post = (path: RequestInfo, data: any) => {
       headers,
       body: JSON.stringify(data)
     })
-    .then((response: { json: () => any; }) => response.json())
+    .then((response: { json: () => any }) => response.json())
     .then((result: { data: unknown; }) => resolve(result.data))
     .catch((error: any) => reject(error))
   })

@@ -2140,6 +2140,13 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
+beeshell@^2.0.11:
+  version "2.0.11"
+  resolved "https://registry.npm.taobao.org/beeshell/download/beeshell-2.0.11.tgz#90ed9356312676973db819ef9b8035bc7ea9cbdd"
+  integrity sha1-kO2TVjEmdpc9uBnvm4A1vH6py90=
+  dependencies:
+    moment "^2.24.0"
+
 big-integer@^1.6.44:
   version "1.6.48"
   resolved "https://registry.npm.taobao.org/big-integer/download/big-integer-1.6.48.tgz?cache=0&sync_timestamp=1573453901790&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fbig-integer%2Fdownload%2Fbig-integer-1.6.48.tgz#8fd88bd1632cba4a1c8c3e3d7159f08bb95b4b9e"

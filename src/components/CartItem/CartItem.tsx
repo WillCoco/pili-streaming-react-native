@@ -2,12 +2,19 @@ import React from 'react'
 import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, PixelRatio } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-import { connect } from 'react-redux'
 import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
 import formatSinglePrice from '../../utils/formatGoodsPrice'
 
-function CartItem(props: { minusGoodsNum?: any; addGoodsNum?: any; cartInfo?: any }) {
+interface Props { 
+  cartItemAllSelect?: any
+  goodsSelect?: any
+  minusGoodsNum?: any
+  addGoodsNum?: any
+  cartInfo?: any
+}
+
+export default function CartItem(props: Props) {
   const navigation = useNavigation()
   const { cartInfo } = props
 
@@ -23,11 +30,14 @@ function CartItem(props: { minusGoodsNum?: any; addGoodsNum?: any; cartInfo?: an
     <View style={styles.container}>
       {/* 店铺信息 */}
       <View style={styles.cartHeader}>
-        {
-          cartInfo.shop_info.is_selected
-            ? <Ionicons name='ios-checkmark-circle' color={Colors.basicColor} size={20} />
-            : <Ionicons name='ios-radio-button-off' color={Colors.darkGrey} size={20} />
-        }
+        <TouchableWithoutFeedback onPress={() => props.cartItemAllSelect(cartInfo.shop_info.shop_id)}>
+          {
+            cartInfo.shop_info.is_selected
+              ? <Ionicons name='ios-checkmark-circle' color={Colors.basicColor} size={20} />
+              : <Ionicons name='ios-radio-button-off' color={Colors.darkGrey} size={20} />
+          }
+        </TouchableWithoutFeedback>
+
         <TouchableWithoutFeedback onPress={() => toBrandShop(cartInfo.shop_info.brand_id)}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Image source={{ uri: cartInfo.shop_info.shop_logo }} style={styles.shopLogo} />
@@ -42,11 +52,13 @@ function CartItem(props: { minusGoodsNum?: any; addGoodsNum?: any; cartInfo?: an
         cartInfo.list && cartInfo.list.map((item: any, index: number) => {
           return (
             <View key={`goods-${index}`} style={styles.goodsContainer}>
-              {
-                item.selected
-                  ? <Ionicons style={{ alignSelf: 'center' }} name='ios-checkmark-circle' color={Colors.basicColor} size={20} />
-                  : <Ionicons style={{ alignSelf: 'center' }} name='ios-radio-button-off' color={Colors.darkGrey} size={20} />
-              }
+              <TouchableWithoutFeedback onPress={() => props.goodsSelect(cartInfo.shop_info.shop_id, item.cart_id)}>
+                {
+                  item.selected
+                    ? <Ionicons style={{ alignSelf: 'center' }} name='ios-checkmark-circle' color={Colors.basicColor} size={20} />
+                    : <Ionicons style={{ alignSelf: 'center' }} name='ios-radio-button-off' color={Colors.darkGrey} size={20} />
+                }
+              </TouchableWithoutFeedback>
 
               <TouchableWithoutFeedback onPress={() => toGoodsInfo(item.goods_id)}>
                 <Image source={{ uri: item.original_img }} style={styles.goodsImg} />
@@ -118,10 +130,6 @@ function CartItem(props: { minusGoodsNum?: any; addGoodsNum?: any; cartInfo?: an
     </View>
   )
 }
-
-export default connect(
-  (state: any) => state.cartData
-)(CartItem)
 
 const styles = StyleSheet.create({
   container: {
