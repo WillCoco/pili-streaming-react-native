@@ -29,6 +29,10 @@ import CreateOrEditAddr from './src/pages/CreateOrEditAddr/CreateOrEditAddr'
 import AddressList from './src/pages/AddressList/AddressList'
 import OrderList from './src/pages/OrderList/OrderList'
 import AccountInfo from './src/pages/AccountInfo/AccountInfo'
+import CollectGoods from './src/pages/CollectGoods/CollectGoods'
+import LikeContent from './src/pages/LikeContent/LikeContent'
+import Coupon from './src/pages/Coupon/Coupon'
+import PublishedWork from './src/pages/PublishedWork/PublishedWork'
 
 import NavBar from './src/components/NavBar'
 import AnchorTabs from './src/navigation/AnchorTabs'
@@ -110,7 +114,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
             }
             <NavigationContainer>
               <Stack.Navigator>
-                <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
+                {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
                 <Stack.Screen name='Root' component={Root} />
                 <Stack.Screen name='HomeSearch' component={HomeSearch} />
                 <Stack.Screen name='FoundSearch' component={FoundSearch} />
@@ -125,10 +129,11 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='SelectGoodsInfo' component={SelectGoodsInfo} />
                 <Stack.Screen name='OrderList' component={OrderList} />
                 <Stack.Screen name='AccountInfo' component={AccountInfo} />
+                <Stack.Screen name='CollectGoods' component={CollectGoods} />
                 <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
                 <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false }} />
                 <Stack.Screen name='LiveSearchScreen' component={LiveSearch} options={{headerShown: false}} />
-                {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
+                <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
                 <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{headerShown: false}} />
                 <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} options={navHeadOption('发布预告')} />
                 <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{headerShown: false}} />
@@ -149,6 +154,8 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='CreateOrEditAddr' component={CreateOrEditAddr} />
                 <Stack.Screen name='AddressList' component={AddressList} />
                 <Stack.Screen name='AnchorDetailScreen' component={AnchorDetail} options={{headerShown: false}} />
+                <Stack.Screen name='LikeContent'component={LikeContent} />
+                <Stack.Screen name='Coupon' component={Coupon} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>

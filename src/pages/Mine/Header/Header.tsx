@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image, ImageBackground, PixelRatio, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Image, ImageBackground, PixelRatio, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { Ionicons } from '@expo/vector-icons'
@@ -10,6 +10,42 @@ function Header(props) {
   const navigation = useNavigation()
   const { userInfo, isLogin } = props.userData
   const { statusBarHeight } = props.publicData
+
+  const toLogin = () => {
+    navigation.push('Login')
+  }
+
+  const toCollectGoods = () => {
+    if (isLogin) {
+      navigation.push('CollectGoods')
+    } else {
+      toLogin()
+    }
+  }
+
+  const toMyFocusBrand = () => {
+    if (isLogin) {
+      navigation.push('Brand', { type: 'focus' })
+    } else {
+      toLogin
+    }
+  }
+
+  const toLikeContent = () => {
+    if (isLogin) {
+      navigation.push('LikeContent', { type: 'focus' })
+    } else {
+      toLogin
+    }
+  }
+
+  const toCoupon = () => {
+    if (isLogin) {
+      navigation.push('Coupon')
+    } else {
+      toLogin
+    }
+  }
 
   return (
     <ImageBackground
@@ -49,22 +85,35 @@ function Header(props) {
 
       {/* 关注、收藏 相关信息 */}
       <View style={styles.otherInfo}>
-        <View style={styles.otherInfoItem}>
-          <Text style={styles.count}>{userInfo.collectionCount}</Text>
-          <Text style={styles.text}>商品收藏</Text>
-        </View>
-        <View style={styles.otherInfoItem}>
-          <Text style={styles.count}>{userInfo.storeFollow}</Text>
-          <Text style={styles.text}>店铺关注</Text>
-        </View>
-        <View style={styles.otherInfoItem}>
-          <Text style={styles.count}>{userInfo.likeContent}</Text>
-          <Text style={styles.text}>喜欢的内容</Text>
-        </View>
-        <View style={styles.otherInfoItem}>
-          <Text style={styles.count}>{userInfo.card}</Text>
-          <Text style={styles.text}>优惠券</Text>
-        </View>
+
+        <TouchableWithoutFeedback onPress={toCollectGoods}>
+          <View style={styles.otherInfoItem}>
+            <Text style={styles.count}>{userInfo.collectionCount}</Text>
+            <Text style={styles.text}>商品收藏</Text>
+          </View>
+        </TouchableWithoutFeedback>
+
+        <TouchableWithoutFeedback onPress={toMyFocusBrand}>
+          <View style={styles.otherInfoItem}>
+            <Text style={styles.count}>{userInfo.storeFollow}</Text>
+            <Text style={styles.text}>店铺关注</Text>
+          </View>
+        </TouchableWithoutFeedback>
+
+        <TouchableWithoutFeedback onPress={toLikeContent}>
+          <View style={styles.otherInfoItem}>
+            <Text style={styles.count}>{userInfo.likeContent}</Text>
+            <Text style={styles.text}>喜欢的内容</Text>
+          </View>
+        </TouchableWithoutFeedback>
+
+        <TouchableWithoutFeedback onPress={toCoupon}>
+          <View style={styles.otherInfoItem}>
+            <Text style={styles.count}>{userInfo.card}</Text>
+            <Text style={styles.text}>优惠券</Text>
+          </View>
+        </TouchableWithoutFeedback>
+
       </View>
 
       {/* 会员信息 */}
@@ -72,7 +121,7 @@ function Header(props) {
         source={require('../../../assets/mine-image/vip-card-bgi.png')}
         style={styles.vipCard}
       >
-        
+
       </ImageBackground>
     </ImageBackground>
   )
