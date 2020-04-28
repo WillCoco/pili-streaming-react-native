@@ -39,6 +39,11 @@ import AnchorRecords from './src/pages/AnchorTabs/AnorchMeScreen/AnchorRecords'
 import LivesAnalyze from './src/pages/AnchorTabs/AnorchMeScreen/LivesAnalyze'
 import AnchorPickGoods from './src/pages/AnchorTabs/AnorchMeScreen/AnchorPickGoods'
 import AnchorLiveGoodsManage from './src/pages/AnchorTabs/AnorchMeScreen/AnchorLiveGoodsManage'
+import AssetManage from './src/pages/AnchorTabs/MyShopScreen/AssetManage'
+import GoodsManage from './src/pages/AnchorTabs/MyShopScreen/GoodsManage'
+import ShopAddressManage from './src/pages/AnchorTabs/MyShopScreen/ShopAddressManage'
+import ShopAgreement from './src/pages/AnchorTabs/MyShopScreen/ShopAgreement'
+import AnchroBill from './src/pages/AnchorTabs/MyShopScreen/AnchroBill'
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -127,6 +132,11 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='LivesAnalyze' component={LivesAnalyze} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorPickGoods' component={AnchorPickGoods} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorLiveGoodsManage' component={AnchorLiveGoodsManage} options={{headerShown: false}} />
+                <Stack.Screen name='ShopAgreement' component={ShopAgreement} options={navHeadOption('商家入驻')} />
+                <Stack.Screen name='ShopAddressManage' component={ShopAddressManage} options={navHeadOption('寄回地址管理')} />
+                <Stack.Screen name='GoodsManage' component={GoodsManage} options={navHeadOption('直播商品')} />
+                <Stack.Screen name='AssetManage' component={AssetManage} options={{headerShown: false}} />
+                <Stack.Screen name='AnchroBill' component={AnchroBill} options={navHeadOption('账单')} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>
