@@ -1,9 +1,7 @@
 import imActionType from '../constants/im';
 import timModlue from '../helpers/tim'; //LibGenerateTestUserSig
 import {
-  Action,
   Dispatch,
-  Store
 } from 'redux';
 const {tim, TIM, userSig} = timModlue;
 

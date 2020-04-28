@@ -6,10 +6,11 @@ import {
   StyleSheet, View,
 } from 'react-native';
 import LiveMsg from '../LiveMsg';
-import {Anchor as AnchorLiveToolBar, Audience as AudienceLiveToolBar} from '../LiveToolBar';
+import {Anchor as AnchorLiveToolBar} from '../LiveToolBar';
 import {vh} from '../../utils/metric';
+import { pad } from '../../constants/Layout';
 
-const LivingRoomScreen = (props) : any =>  {
+const LivingRoomScreen = (props: any) : any =>  {
   /**
    * 测试聊天
    */
@@ -39,7 +40,10 @@ const LivingRoomScreen = (props) : any =>  {
         msgList={data}
         style={{maxHeight: 200, width: 200}}
       />
-      <AudienceLiveToolBar />
+      <AnchorLiveToolBar
+        style={{marginTop: 28}}
+        onShopBagPress={props.onShopBagPress}
+      />
     </View>
     
   )
@@ -54,6 +58,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: '100%',
     justifyContent: 'flex-end',
+    paddingHorizontal: pad,
+    paddingBottom: pad
   },
 });
 

@@ -6,7 +6,7 @@ import {
   StyleSheet, View,
 } from 'react-native';
 import LiveMsg from '../LiveMsg';
-import {Anchor as AnchorLiveToolBar, Audience as AudienceLiveToolBar} from '../LiveToolBar';
+import {Audience as AudienceLiveToolBar} from '../LiveToolBar';
 import {pad} from '../../constants/Layout';
 import {vh} from '../../utils/metric';
 
@@ -42,7 +42,6 @@ const LivingRoomScreen = (props) : any =>  {
       />
       <AudienceLiveToolBar />
     </View>
-    
   )
 };
 

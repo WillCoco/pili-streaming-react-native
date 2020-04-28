@@ -1,11 +1,15 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image, ImageBackground, PixelRatio } from 'react-native'
+import { View, Text, StyleSheet, Image, ImageBackground, PixelRatio, TouchableOpacity } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
 import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
 
 export default function Header(props) {
+  const navigation = useNavigation()
   const { statusBarHeight, userInfo } = props
+
+
 
   return (
     <ImageBackground
@@ -15,9 +19,11 @@ export default function Header(props) {
     >
       {/* 顶部右侧操作区域 */}
       <View style={styles.rightOption}>
-        <ImageBackground source={require('../../../assets/mine-image/live-btn.png')} style={styles.liveBgi}>
-          <Text style={styles.liveText}>去直播</Text><Ionicons name='ios-play' color={Colors.whiteColor} size={20} />
-        </ImageBackground>
+        <TouchableOpacity onPress={() => navigation.push('AnchorTabs')}>
+          <ImageBackground source={require('../../../assets/mine-image/live-btn.png')} style={styles.liveBgi}>
+            <Text style={styles.liveText}>去直播</Text><Ionicons name='ios-play' color={Colors.whiteColor} size={20} />
+          </ImageBackground>
+        </TouchableOpacity>
         <Image source={require('../../../assets/mine-image/icon_setting.png')} style={styles.setIcon} />
       </View>
 
