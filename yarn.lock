@@ -3234,7 +3234,7 @@ expo-keep-awake@~8.1.0:
   resolved "https://registry.npm.taobao.org/expo-keep-awake/download/expo-keep-awake-8.1.0.tgz#3a1d8aa5a8395d40c7d79e1c93020ae5f848e664"
   integrity sha1-Oh2Kpag5XUDH154ckwIK5fhI5mQ=
 
-expo-linear-gradient@~8.1.0:
+expo-linear-gradient@^8.1.0, expo-linear-gradient@~8.1.0:
   version "8.1.0"
   resolved "https://registry.npm.taobao.org/expo-linear-gradient/download/expo-linear-gradient-8.1.0.tgz#6933765cf1e76ef2928fd8495e779929699ac4c6"
   integrity sha1-aTN2XPHnbvKSj9hJXneZKWmaxMY=

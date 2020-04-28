@@ -58,7 +58,7 @@ const AnorchMeScreen = () =>  {
   }
 
   return (
-    <ScrollView style={styles.style}>
+    <View style={styles.style}>
       <NavBar leftTheme="light" title="" style={styles.navWrapper} onLeftPress={onBackPress} />
       <View style={styles.headerWrapper}>
         <Image style={styles.imgBg} source={images.anchorMeBg} resizeMode='stretch' />
@@ -97,7 +97,7 @@ const AnorchMeScreen = () =>  {
           })
         }
       </View>
-    </ScrollView>
+    </View>
   )
 };
 
