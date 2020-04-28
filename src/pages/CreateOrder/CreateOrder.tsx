@@ -88,8 +88,7 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
 
     apiGetOrderDiscountDetail(req).then((res: any) => {
       console.log('获取订单优惠信息', res)
-      let orderTotalPrice = 0  // 订单商品总价
-      let orderTotalCount = 0  // 订单商品总数
+      
 
       tempOrderList.forEach(item => {
         item.shop_info.totalPrice = 0
@@ -98,13 +97,8 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
         item.selectedGoods.forEach(_item => {
           item.shop_info.totalPrice += (_item.shop_price * _item.goods_num)
           item.shop_info.totalCount += _item.goods_num
+          item.shop_info.curTotalPrice = item.shop_info.totalPrice  // 实际价格，不可改变，用于计算使用优惠券的价格
         })
-
-        orderTotalPrice += item.shop_info.totalPrice
-        orderTotalCount += item.selectedGoods.length
-
-        setOrderTotalPrice(orderTotalPrice)
-        setOrderTotalCount(orderTotalCount)
 
         const emptyCoupon = [{
           id: -1,
@@ -120,13 +114,12 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
             item.shop_info.discountDesc = _item.discountDesc  // 优惠描述
             item.shop_info.saleDiscount = _item.saleDiscount  // 优惠金额
             item.shop_info.carriage = _item.carriage  // 邮费
-            item.shop_info.totalPrice = item.shop_info.totalPrice + _item.carriage  // 优惠后的商品总价
             item.shop_info.choosedCoupon = _item.availableCoupons.filter(item => item.isChoosed)[0]
           }
         })
       })
 
-      setTempOrderList(tempOrderList)
+      calcUsedCouponPrice(tempOrderList)
     })
   }
 
@@ -170,7 +163,6 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
   const showCouponActionSheet = (id: number) => {
     setCurShopId(id)
     setShowCoupon(true)
-    console.log(id)
   }
 
   /**
@@ -184,9 +176,9 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
    * 选择优惠券
    */
   const chooseCoupon = (shopId: number, couponId: number) => {
-    tempOrderList.forEach(item => {
+    tempOrderList.forEach((item: any) => {
       if (item.shop_info.shop_id === shopId) {
-        item.shop_info.couponList.forEach(_item => {
+        item.shop_info.couponList.forEach((_item: any)=> {
           _item.isChoosed = false
           if (_item.id === couponId) {
             _item.isChoosed = true
@@ -194,6 +186,30 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
           }
         })
       }
+    })
+
+    calcUsedCouponPrice(tempOrderList)
+  }
+
+  /**
+   * 计算优惠后价格
+   */
+  const calcUsedCouponPrice = (tempOrderList: any[]) => {
+    let orderTotalPrice = 0  // 订单商品总价
+    let orderTotalCount = 0  // 订单商品总数
+
+    tempOrderList.forEach(item => {
+      if (item.shop_info.choosedCoupon) {
+        item.shop_info.totalPrice = item.shop_info.curTotalPrice + item.shop_info.carriage - item.shop_info.choosedCoupon.discountAmount  // 优惠后的商品总价
+      } else {
+        item.shop_info.totalPrice = item.shop_info.curTotalPrice + item.shop_info.carriage  // 优惠后的商品总价
+      }
+
+      orderTotalPrice += item.shop_info.totalPrice
+      orderTotalCount += item.selectedGoods.length
+
+      setOrderTotalPrice(orderTotalPrice)
+      setOrderTotalCount(orderTotalCount)
     })
 
     setTempOrderList(JSON.parse(JSON.stringify(tempOrderList)))

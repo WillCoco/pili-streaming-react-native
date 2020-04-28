@@ -6,7 +6,16 @@ import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
-export default function ShopCard(props) {
+interface Props {
+  shopInfo: {
+    shop_info: any
+    selectedGoods: any
+  }
+  showCoupon: (arg0: any) => void
+  inputMemo: (arg0: string, arg1: any) => void
+}
+
+export default function ShopCard(props: Props) {
   const navigation = useNavigation()
   const { shop_info, selectedGoods } = props.shopInfo
 
@@ -83,15 +92,20 @@ export default function ShopCard(props) {
         <View style={styles.orderInfoItem}>
           <Text style={styles.label}>店铺优惠</Text>
           {
-            shop_info.couponList
+            shop_info.couponList.length !== 1
               ? <TouchableWithoutFeedback onPress={() => props.showCoupon(shop_info.shop_id)}>
-                <View style={styles.value}>
-                  <Text style={styles.valueText}>{`满${formatSinglePrice(shop_info.choosedCoupon.fullAmount)}减${formatSinglePrice(shop_info.choosedCoupon.discountAmount)}`}</Text>
-                  <View style={styles.memo}>
-                    <Text style={[styles.memoText, { color: Colors.basicColor }]}>-¥{formatSinglePrice(shop_info.choosedCoupon.discountAmount)}</Text>
-                    <Ionicons size={20} name='ios-arrow-forward' color={Colors.darkGrey} />
-                  </View>
-                </View>
+                {
+                  shop_info.choosedCoupon && shop_info.choosedCoupon.id === -1
+                    ? <Text>不使用优惠券</Text>
+                    : <View style={styles.value}>
+                      <Text style={styles.valueText}>{`满${formatSinglePrice(shop_info.choosedCoupon.fullAmount)}减${formatSinglePrice(shop_info.choosedCoupon.discountAmount)}`}</Text>
+                      <View style={styles.memo}>
+                        <Text style={[styles.memoText, { color: Colors.basicColor }]}>-¥{formatSinglePrice(shop_info.choosedCoupon.discountAmount)}</Text>
+                        <Ionicons size={20} name='ios-arrow-forward' color={Colors.darkGrey} />
+                      </View>
+                    </View>
+                }
+
               </TouchableWithoutFeedback>
               : <Text>暂无可用优惠券</Text>
           }
