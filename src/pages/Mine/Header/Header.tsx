@@ -1,15 +1,14 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image, ImageBackground, PixelRatio, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { connect } from 'react-redux'
 import { Ionicons } from '@expo/vector-icons'
 import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
 
-export default function Header(props) {
+function Header(props) {
   const navigation = useNavigation()
-  const { statusBarHeight, userInfo } = props
-
-
+  const { statusBarHeight, userInfo, isLogin } = props
 
   return (
     <ImageBackground
@@ -29,9 +28,14 @@ export default function Header(props) {
 
       {/* 个人信息 */}
       <View style={styles.userInfo}>
-        <Image source={{ uri: userInfo.userAvatar }} style={styles.avatar} />
+        {
+          isLogin
+            ? <Image source={{ uri: userInfo.userAvatar }} style={styles.avatar} />
+            : <Image source={require('../../../assets/mine-image/default_avatar.png')} style={styles.avatar} />
+        }
+      
         <View>
-          <Text style={styles.userName}>{userInfo.nickName}</Text>
+          <Text style={styles.userName}>{isLogin ? userInfo.nickName : '立即登录'}</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text style={[styles.userLevel, styles.userLevelBgc]}>{userInfo.userLevel}</Text>
             <Text style={styles.userLevel}>缺失</Text>
@@ -68,11 +72,15 @@ export default function Header(props) {
         source={require('../../../assets/mine-image/vip-card-bgi.png')}
         style={styles.vipCard}
       >
-
+        
       </ImageBackground>
     </ImageBackground>
   )
 }
+
+export default connect(
+  (state: any) => state.userData
+)(Header)
 
 const styles = StyleSheet.create({
   container: {
