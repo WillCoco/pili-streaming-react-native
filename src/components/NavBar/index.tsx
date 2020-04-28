@@ -12,6 +12,7 @@ import withPage from '../HOCs/withPage';
 import Iconback from '../Iconfont/Iconback';
 import { Colors } from '../../constants/Theme';
 import Iconbacklight from '../Iconfont/Iconbacklight';
+import { pad } from '../../constants/Layout';
 
 interface NavBarProps {
   safeTop: number,
@@ -99,9 +100,9 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   rightWrapper: {
-    width: 34,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: pad,
   }
 });
 

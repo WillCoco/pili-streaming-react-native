@@ -6,10 +6,14 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
+import NavBar from '../../../components/NavBar';
+import withPage from '../../../components/HOCs/withPage';
 
 const AddressManage = () =>  {
   return (
     <View style={styles.style}>
+      <NavBar title="寄回地址管理" />
+
     </View>
   )
 };
@@ -23,4 +27,8 @@ const styles = StyleSheet.create({
   }
 });
 
-export default AddressManage;
+export default withPage(AddressManage, {
+  statusBarOptions: {
+    barStyle: 'dark-content'
+  }
+});

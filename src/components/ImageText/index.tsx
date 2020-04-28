@@ -16,7 +16,7 @@ import Badge, {BadgeProps} from '../Badge';
 interface ImageTextProps extends BadgeProps {
   text: string,
   img: any,
-  onPress: () => void,
+  onPress?: () => void,
   style?: StyleProp<any>,
   imgStyle?: StyleProp<any>,
   textStyle?: StyleProp<any>,
@@ -28,7 +28,7 @@ interface ImageTextProps extends BadgeProps {
 
 const ImageText = (props: ImageTextProps): React.ReactElement => {
   return (
-    <TouchableOpacity disabled={props.disabled} onPress={props.onPress} style={StyleSheet.flatten([styles.style, props.style])}>
+    <TouchableOpacity disabled={!props.onPress || props.disabled} onPress={props.onPress} style={StyleSheet.flatten([styles.style, props.style])}>
       {
         props.showBadge ? (
           <Badge
