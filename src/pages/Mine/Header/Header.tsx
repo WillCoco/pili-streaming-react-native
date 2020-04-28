@@ -8,7 +8,8 @@ import pxToDp from '../../../utils/px2dp'
 
 function Header(props) {
   const navigation = useNavigation()
-  const { statusBarHeight, userInfo, isLogin } = props
+  const { userInfo, isLogin } = props.userData
+  const { statusBarHeight } = props.publicData
 
   return (
     <ImageBackground
@@ -33,7 +34,6 @@ function Header(props) {
             ? <Image source={{ uri: userInfo.userAvatar }} style={styles.avatar} />
             : <Image source={require('../../../assets/mine-image/default_avatar.png')} style={styles.avatar} />
         }
-      
         <View>
           <Text style={styles.userName}>{isLogin ? userInfo.nickName : '立即登录'}</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -79,7 +79,7 @@ function Header(props) {
 }
 
 export default connect(
-  (state: any) => state.userData
+  (state: any) => state
 )(Header)
 
 const styles = StyleSheet.create({

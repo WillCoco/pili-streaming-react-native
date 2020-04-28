@@ -1,13 +1,14 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, PixelRatio } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
 
 import CardTitle from '../../../components/CardTitle/CardTitle'
 
-export default function OrdersContent() {
+export default function OrdersContent(props) {
   const navigation = useNavigation()
+  const { orderCount } = props
 
   const toOrderList = () => {
     navigation.push('OrderList')
@@ -21,6 +22,9 @@ export default function OrdersContent() {
           <View style={styles.orderItem}>
             <Image source={require('../../../assets/mine-image/icon_daifukuan.png')} style={styles.orderIcon} />
             <Text style={styles.orderText}>待付款</Text>
+            {
+              !!orderCount.notPayingCount && <Text style={styles.badge}>{orderCount.notPayingCount}</Text>
+            }
           </View>
         </TouchableWithoutFeedback>
 
@@ -28,6 +32,9 @@ export default function OrdersContent() {
           <View style={styles.orderItem}>
             <Image source={require('../../../assets/mine-image/icon_daifahuo.png')} style={styles.orderIcon} />
             <Text style={styles.orderText}>待发货</Text>
+            {
+              !!orderCount.notDeliverCount && <Text style={styles.badge}>{orderCount.notDeliverCount}</Text>
+            }
           </View>
         </TouchableWithoutFeedback>
 
@@ -35,6 +42,9 @@ export default function OrdersContent() {
           <View style={styles.orderItem}>
             <Image source={require('../../../assets/mine-image/icon_daishouhuo.png')} style={styles.orderIcon} />
             <Text style={styles.orderText}>待收货</Text>
+            {
+              !!orderCount.notReceivingCount && <Text style={styles.badge}>{orderCount.notReceivingCount}</Text>
+            }
           </View>
         </TouchableWithoutFeedback>
 
@@ -42,6 +52,9 @@ export default function OrdersContent() {
           <View style={styles.orderItem}>
             <Image source={require('../../../assets/mine-image/icon_wancheng.png')} style={styles.orderIcon} />
             <Text style={styles.orderText}>已完成</Text>
+            {
+              !!orderCount.receivedCount && <Text style={styles.badge}>{orderCount.receivedCount}</Text>
+            }
           </View>
         </TouchableWithoutFeedback>
 
@@ -49,6 +62,9 @@ export default function OrdersContent() {
           <View style={styles.orderItem}>
             <Image source={require('../../../assets/mine-image/icon_tuikuan.png')} style={styles.orderIcon} />
             <Text style={styles.orderText}>退款/售后</Text>
+            {
+              !!orderCount.afterSalesCount && <Text style={styles.badge}>{orderCount.afterSalesCount}</Text>
+            }
           </View>
         </TouchableWithoutFeedback>
       </View>
@@ -85,5 +101,21 @@ const styles = StyleSheet.create({
     lineHeight: pxToDp(37),
     color: Colors.darkBlack,
     marginTop: pxToDp(4)
+  },
+  badge: {
+    position: 'absolute',
+    top: pxToDp(10),
+    right: pxToDp(30),
+    height: pxToDp(28),
+    minWidth: pxToDp(28),
+    borderWidth: 1 / PixelRatio.get(),
+    borderColor: Colors.basicColor,
+    borderRadius: pxToDp(14),
+    textAlign: 'center',
+    lineHeight: pxToDp(28),
+    backgroundColor: Colors.whiteColor,
+    color: Colors.basicColor,
+    paddingLeft: pxToDp(5),
+    paddingRight: pxToDp(5)
   }
 })

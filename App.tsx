@@ -28,6 +28,7 @@ import CreateOrder from './src/pages/CreateOrder/CreateOrder'
 import CreateOrEditAddr from './src/pages/CreateOrEditAddr/CreateOrEditAddr'
 import AddressList from './src/pages/AddressList/AddressList'
 import OrderList from './src/pages/OrderList/OrderList'
+import AccountInfo from './src/pages/AccountInfo/AccountInfo'
 
 import NavBar from './src/components/NavBar'
 import AnchorTabs from './src/navigation/AnchorTabs'
@@ -78,7 +79,6 @@ export default function App(props: { skipLoadingScreen: any; }) {
           StatusBarManager.getHeight((h: any) => {
             store.dispatch(getStatusBarHeight(h.height))
           })
-
         } else {
           store.dispatch(getStatusBarHeight(Number(StatusBar.currentHeight)))
         }
@@ -124,6 +124,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='SelectGoods' component={SelectGoods} />
                 <Stack.Screen name='SelectGoodsInfo' component={SelectGoodsInfo} />
                 <Stack.Screen name='OrderList' component={OrderList} />
+                <Stack.Screen name='AccountInfo' component={AccountInfo} />
                 <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
                 <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false }} />
                 <Stack.Screen name='LiveSearchScreen' component={LiveSearch} options={{headerShown: false}} />
