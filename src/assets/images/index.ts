@@ -186,6 +186,16 @@ const images : {
   get toolShopEnter() {
     return require('./toolShopEnter.png')
   },
+  // 资金图标
+  get incomeLive() {
+    return require('./incomeLive.png')
+  },
+  get incomeShop() {
+    return require('./incomeShop.png')
+  },
+  get incomeInvite() {
+    return require('./incomeInvite.png')
+  },
 }
 
 export default images;

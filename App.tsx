@@ -110,7 +110,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
             }
             <NavigationContainer>
               <Stack.Navigator>
-                {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
+                <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
                 <Stack.Screen name='Root' component={Root} />
                 <Stack.Screen name='HomeSearch' component={HomeSearch} />
                 <Stack.Screen name='FoundSearch' component={FoundSearch} />
@@ -128,7 +128,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
                 <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false }} />
                 <Stack.Screen name='LiveSearchScreen' component={LiveSearch} options={{headerShown: false}} />
-                <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
+                {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
                 <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{headerShown: false}} />
                 <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} options={navHeadOption('发布预告')} />
                 <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{headerShown: false}} />
@@ -139,16 +139,16 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='LivesAnalyze' component={LivesAnalyze} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorPickGoods' component={AnchorPickGoods} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorLiveGoodsManage' component={AnchorLiveGoodsManage} options={{headerShown: false}} />
-                <Stack.Screen name='ShopAgreement' component={ShopAgreement} options={navHeadOption('商家入驻')} />
-                <Stack.Screen name='ShopAddressManage' component={ShopAddressManage} options={navHeadOption('寄回地址管理')} />
+                <Stack.Screen name='ShopAgreement' component={ShopAgreement} options={{headerShown: false}} />
+                <Stack.Screen name='ShopAddressManage' component={ShopAddressManage} options={{headerShown: false}} />
                 <Stack.Screen name='GoodsManage' component={GoodsManage} options={navHeadOption('直播商品')} />
                 <Stack.Screen name='AssetManage' component={AssetManage} options={{headerShown: false}} />
-                <Stack.Screen name='AnchroBill' component={AnchroBill} options={navHeadOption('账单')} />
+                <Stack.Screen name='AnchroBill' component={AnchroBill} options={{headerShown: false}} />
                 <Stack.Screen name='ActivityWebView' component={ActivityWebView} />
                 <Stack.Screen name='CreateOrder' component={CreateOrder} />
                 <Stack.Screen name='CreateOrEditAddr' component={CreateOrEditAddr} />
                 <Stack.Screen name='AddressList' component={AddressList} />
-                <Stack.Screen name='AnchorDetailScreen' component={AnchorDetail} options={{ headerShown: false }} />
+                <Stack.Screen name='AnchorDetailScreen' component={AnchorDetail} options={{headerShown: false}} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>

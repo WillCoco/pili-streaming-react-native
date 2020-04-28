@@ -6,10 +6,12 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
+import NavBar from '../../../components/NavBar';
 
 const ShopAgreement = () =>  {
   return (
     <View style={styles.style}>
+      <NavBar title="商家入驻" />
     </View>
   )
 };

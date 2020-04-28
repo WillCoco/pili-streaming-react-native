@@ -67,11 +67,11 @@ const MyShopScreen = (props) =>  {
    * 我的工具
    */
   const toolsList = [
-    {img: images.toolGoodsManage, text: '商品管理', onPress: () => navigate('AnchorPickGoods')},
-    {img: images.toolassetsManage, text: '资金管理', onPress: () => navigate('AnchorLiveGoodsManage')},
-    {img: images.toolAddressManage, text: '寄回地址', onPress: () => navigate('AnchorDetail')},
+    {img: images.toolGoodsManage, text: '商品管理', onPress: () => navigate('GoodsManage')},
+    {img: images.toolassetsManage, text: '资金管理', onPress: () => navigate('AssetManage')},
+    {img: images.toolAddressManage, text: '寄回地址', onPress: () => navigate('ShopAddressManage')},
     {img: images.toolAnchorManage, text: '签约主播', onPress: () => navigate('AnchorDetail')},
-    {img: images.toolShopEnter, text: '店铺入驻规范', onPress: () => navigate('AnchorDetail')},
+    {img: images.toolShopEnter, text: '店铺入驻规范', onPress: () => navigate('ShopAgreement')},
   ];
 
   /**
@@ -97,7 +97,7 @@ const MyShopScreen = (props) =>  {
   }
 
   return (
-    <ScrollView
+    <View
      style={styles.style}
      refreshControl={
       <RefreshControl
@@ -136,54 +136,63 @@ const MyShopScreen = (props) =>  {
           }
         </View>
       </View>
+      <ScrollView
+      style={styles.style}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[Colors.basicColor]}
+          />
+         }
+      >
+        <View style={StyleSheet.flatten([styles.blockWrapper])}>
+          <T4 style={styles.title}>订单统计</T4>
+          <View style={StyleSheet.flatten([styles.row, styles.contentWrapper])}>
+            <View style={styles.orderCellWrapper}>
+              <T3>3</T3>
+              <SmallText color="grey">今日新增订单</SmallText>
+            </View>
+            <View style={styles.orderCellWrapper}>
+              <T3>2</T3>
+              <SmallText color="grey">本月新增订单</SmallText>
+            </View>
+            <View style={styles.orderCellWrapper}>
+              <T3>1</T3>
+              <SmallText color="grey">历史总订单</SmallText>
+            </View>
+          </View>
+        </View>
 
-      <View style={StyleSheet.flatten([styles.blockWrapper])}>
-        <T4 style={styles.title}>订单统计</T4>
-        <View style={StyleSheet.flatten([styles.row, styles.contentWrapper])}>
-          <View style={styles.orderCellWrapper}>
-            <T3>3</T3>
-            <SmallText color="grey">今日新增订单</SmallText>
+        <View style={StyleSheet.flatten([styles.blockWrapper])}>
+          <View style={styles.orderTitleWrapper}>
+            <T4 style={styles.title}>我的订单</T4>
+            <TouchableOpacity style={styles.orderTitleWrapper} onPress={() => navigate('全部订单')}>
+              <SmallText >查看全部</SmallText>
+              <Iconarrowright/>
+            </TouchableOpacity>
+            
           </View>
-          <View style={styles.orderCellWrapper}>
-            <T3>2</T3>
-            <SmallText color="grey">本月新增订单</SmallText>
-          </View>
-          <View style={styles.orderCellWrapper}>
-            <T3>1</T3>
-            <SmallText color="grey">历史总订单</SmallText>
+          <View style={StyleSheet.flatten([styles.row, {justifyContent: 'space-around', marginTop: pad * 1.5}])}>
+            {
+              orderTypes.map((row, index) => {
+                return (
+                  <ImageText
+                    key={`orderTypes_${index}`}
+                    showBadge
+                    quantity={100}
+                    text={row.text}
+                    img={row.img}
+                    onPress={row.onPress}
+                    style={{flex: 1}}
+                    imgStyle={{height: 40, width: 40}}
+                  />
+                )
+              })
+            }
           </View>
         </View>
-      </View>
-
-      <View style={StyleSheet.flatten([styles.blockWrapper])}>
-        <View style={styles.orderTitleWrapper}>
-          <T4 style={styles.title}>我的订单</T4>
-          <TouchableOpacity style={styles.orderTitleWrapper} onPress={() => navigate('全部订单')}>
-            <SmallText >查看全部</SmallText>
-            <Iconarrowright/>
-          </TouchableOpacity>
-          
-        </View>
-        <View style={StyleSheet.flatten([styles.row, {justifyContent: 'space-around', marginTop: pad * 1.5}])}>
-          {
-            orderTypes.map((row, index) => {
-              return (
-                <ImageText
-                  key={`orderTypes_${index}`}
-                  showBadge
-                  quantity={100}
-                  text={row.text}
-                  img={row.img}
-                  onPress={row.onPress}
-                  style={{flex: 1}}
-                  imgStyle={{height: 40, width: 40}}
-                />
-              )
-            })
-          }
-        </View>
-      </View>
-      <View style={StyleSheet.flatten([styles.blockWrapper])}>
+        <View style={StyleSheet.flatten([styles.blockWrapper])}>
         <T4 style={styles.title}>我的工具</T4>
         <View style={StyleSheet.flatten([styles.row, styles.toolsWrapper])}>
           {
@@ -200,7 +209,8 @@ const MyShopScreen = (props) =>  {
           }
         </View>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   )
 };
 
