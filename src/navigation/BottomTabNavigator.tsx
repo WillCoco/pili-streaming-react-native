@@ -33,7 +33,13 @@ function BottomTabNavigator({ navigation, route }: any) {
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
 
+  const showHeader = () => {
+    if (getHeaderTitle(route) === '直播' || getHeaderTitle(route) === '我的') return false
+    return true
+  }
+
   navigation.setOptions({
+    headerShown: showHeader(),
     headerTitle: () => getTabItemComponent(getHeaderTitle(route), navigation),
     headerStyle: {
       backgroundColor: Colors.basicColor,
@@ -41,7 +47,6 @@ function BottomTabNavigator({ navigation, route }: any) {
     },
     headerTitleAlign: 'center',
     headerTintColor: Colors.whiteColor,
-    headerShown: !(getHeaderTitle(route) === '直播'),
     headerRight: () => getHeaderTitle(route) === '购物车' && <CartHeaderButton />
   })
 
@@ -123,23 +128,14 @@ function getTabItemComponent(routeName: String, navigation: string[]) {
         isPlaceHolder={true}
         toSearchPage={() => navigation.push('HomeSearch')}
       />
-      break
     case '发现':
       return <SearchBar
         hasSearchKey={false}
         isPlaceHolder={true}
         toSearchPage={() => navigation.push('FoundSearch')}
       />
-      break
-    case '直播':
-      return <Text>直播hhhh</Text>
-      break
     case '购物车':
       return <Text style={styles.navBarTitleText}>购物车</Text>
-      break
-    case '我的':
-      return <Text style={styles.navBarTitleText}>我的</Text>
-      break
     default:
       break
   }
