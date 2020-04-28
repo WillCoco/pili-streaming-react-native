@@ -35,16 +35,39 @@ export const isNotchScreen = () => {
  */
 let iosStatusBarHeight;
 if (isIOS()) {
-  StatusBarManager.getHeight((h: number) => {
-    iosStatusBarHeight = h
+  StatusBarManager.getHeight((h: any) => {
+    iosStatusBarHeight = h.height;
   })
 }
 
-export const safeTop = isAndroid() ? StatusBar.currentHeight : iosStatusBarHeight;
+export const getSafeTop = () => {
+  if (isAndroid()) {
+    return Promise.resolve(StatusBar.currentHeight)
+  }
+
+  return new Promise((resolve, reject) => {
+    StatusBarManager.getHeight((h: any) => {
+      iosStatusBarHeight = h.height;
+      resolve(h.height);
+    })
+  })
+}
+
+// isAndroid() ? 
+//   (callback: (h?: number) => any) => {
+//     callback(StatusBar.currentHeight)
+//   } :
+//   (callback: (h?: number) => any) => {
+//     StatusBarManager.getHeight((h: any) => {
+//       iosStatusBarHeight = h.height;
+//       callback(h.height)
+//     })
+//   }
+//   iosStatusBarHeight;
 
 // export const safeTop = isAndroid ? StatusBar.currentHeight : (
 //   isNotchScreen() ? 44 : 20
 // )
 
-export const safeBottom = isNotchScreen() ? 20 : 0;
+export const safeBottom = isNotchScreen() ? 20 : 0
 

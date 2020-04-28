@@ -23,6 +23,10 @@ import Sale from './src/pages/Sale/Sale'
 import Login from './src/pages/Login/Login'
 import SelectGoods from './src/pages/SelectGoods/SelectGoods'
 import SelectGoodsInfo from './src/pages/SelectGoodsInfo/SelectGoodsInfo'
+import ActivityWebView from './src/pages/ActivityWebView/ActivityWebView'
+import CreateOrder from './src/pages/CreateOrder/CreateOrder'
+import CreateOrEditAddr from './src/pages/CreateOrEditAddr/CreateOrEditAddr'
+import AddressList from './src/pages/AddressList/AddressList'
 
 import NavBar from './src/components/NavBar'
 import AnchorTabs from './src/navigation/AnchorTabs'
@@ -128,7 +132,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='LiveGoodsManageScreen' component={LiveGoodsManage} options={navHeadOption('直播商品管理')} />
                 <Stack.Screen name='AnorchLivingRoomScreen' component={AnorchLivingRoom} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorTrailers' component={AnchorTrailers} options={navHeadOption('我的预告片')} />
-                <Stack.Screen name='AnchorRecords' component={AnchorRecords} options={navHeadOption('我的直播')} />
+                <Stack.Screen name='AnchorRecords' component={AnchorRecords} options={{headerShown: false}} />
                 <Stack.Screen name='LivesAnalyze' component={LivesAnalyze} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorPickGoods' component={AnchorPickGoods} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorLiveGoodsManage' component={AnchorLiveGoodsManage} options={{headerShown: false}} />
@@ -137,6 +141,11 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='GoodsManage' component={GoodsManage} options={navHeadOption('直播商品')} />
                 <Stack.Screen name='AssetManage' component={AssetManage} options={{headerShown: false}} />
                 <Stack.Screen name='AnchroBill' component={AnchroBill} options={navHeadOption('账单')} />
+                <Stack.Screen name='ActivityWebView' component={ActivityWebView} />
+                <Stack.Screen name='CreateOrder' component={CreateOrder} />
+                <Stack.Screen name='CreateOrEditAddr' component={CreateOrEditAddr} />
+                <Stack.Screen name='AddressList' component={AddressList} />
+                <Stack.Screen name='AnchorDetailScreen' component={AnchorDetail} options={{ headerShown: false }} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>

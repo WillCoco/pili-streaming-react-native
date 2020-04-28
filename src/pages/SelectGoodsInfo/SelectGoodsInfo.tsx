@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableWithoutFeedback } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
 import { Ionicons } from '@expo/vector-icons'
@@ -46,6 +46,11 @@ export default function SelectGoodsInfo() {
     })
   }
 
+  const toGoodsInfo = () => {
+    const id = goodsInfo.goods_id
+    navigation.push('GoodsInfo', { id })
+  }
+
   return (
     <View>
       <ScrollView style={styles.container}>
@@ -79,9 +84,12 @@ export default function SelectGoodsInfo() {
           />
           <Text style={styles.likesCount}>{goodsInfo.people_like}人喜欢</Text>
         </View>
-        <View style={styles.footerRight}>
-          <Text style={styles.goodsPrice}>¥{formatSinglePrice(goodsInfo.shop_price)}去看看</Text>
-        </View>
+        <TouchableWithoutFeedback onPress={toGoodsInfo}>
+          <View style={styles.footerRight}>
+            <Text style={styles.goodsPrice}>¥{formatSinglePrice(goodsInfo.shop_price)}去看看</Text>
+          </View>
+        </TouchableWithoutFeedback>
+
       </View>
     </View>
 

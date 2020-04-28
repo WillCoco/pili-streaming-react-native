@@ -56,7 +56,7 @@ export default function Sale() {
     let loading = Toast.showLoading('')
 
     apiSaleList({ pageNo, pageSize }).then(res => {
-      console.log(result, '特卖专区')
+      console.log(res, '特卖专区')
 
       if (res.list.length) {
         setHeaderGoodsList(res.list.slice(0, 2))

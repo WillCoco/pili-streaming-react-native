@@ -61,7 +61,7 @@ const AnorchMeScreen = () =>  {
     <ScrollView style={styles.style}>
       <NavBar leftTheme="light" title="" style={styles.navWrapper} onLeftPress={onBackPress} />
       <View style={styles.headerWrapper}>
-        <Image style={styles.imgBg} source={images.anchorMeBg} resizeMode='cover' />
+        <Image style={styles.imgBg} source={images.anchorMeBg} resizeMode='stretch' />
         <Avatar size={60} style={styles.avatar}  />
         <SmallText color="white" style={styles.idText}>直播ID: {213}</SmallText>
       </View>

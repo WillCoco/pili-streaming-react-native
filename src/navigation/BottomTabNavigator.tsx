@@ -23,6 +23,7 @@ import mineIcon from '../assets/tab-bar-icon/me.png'
 import mineActiveIcon from '../assets/tab-bar-icon/meActive.png'
 
 import SearchBar from '../components/SearchBar/SearchBar'
+import CartHeaderButton from '../components/CartHeaderButton/CartHeaderButton'
 
 const BottomTab = createBottomTabNavigator()
 const INITIAL_ROUTE_NAME = '首页'
@@ -40,7 +41,8 @@ function BottomTabNavigator({ navigation, route }: any) {
     },
     headerTitleAlign: 'center',
     headerTintColor: Colors.whiteColor,
-    headerShown: !(getHeaderTitle(route) === '直播')
+    headerShown: !(getHeaderTitle(route) === '直播'),
+    headerRight: () => getHeaderTitle(route) === '购物车' && <CartHeaderButton />
   })
 
   return (
@@ -56,7 +58,7 @@ function BottomTabNavigator({ navigation, route }: any) {
         component={HomeScreen}
         options={{
           title: '首页',
-          tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? homeActiveIcon : homeIcon} />,
+          tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? homeActiveIcon : homeIcon} />
         }}
       />
       <BottomTab.Screen
@@ -133,10 +135,10 @@ function getTabItemComponent(routeName: String, navigation: string[]) {
       return <Text>直播hhhh</Text>
       break
     case '购物车':
-      return <Text>购物车hhhh</Text>
+      return <Text style={styles.navBarTitleText}>购物车</Text>
       break
     case '我的':
-      return <Text>我的hhhh</Text>
+      return <Text style={styles.navBarTitleText}>我的</Text>
       break
     default:
       break
@@ -160,6 +162,11 @@ const styles = StyleSheet.create({
   searchKey: {
     color: Colors.lightGrey,
     marginLeft: pxToDp(20)
+  },
+  navBarTitleText: {
+    fontSize: pxToDp(30),
+    color: Colors.whiteColor,
+    fontWeight: '500'
   }
 })
 

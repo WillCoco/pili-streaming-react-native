@@ -50,7 +50,7 @@ const NavBar = (props: NavBarProps) =>  {
   );
 
   return (
-    <View style={StyleSheet.flatten([styles.style, {marginTop: props.safeTop}, props.style])}>
+    <View style={StyleSheet.flatten([styles.style, {paddingTop: props.safeTop, height: 44 + props.safeTop}, props.style])}>
       <View style={StyleSheet.flatten([styles.leftWrapper, props.leftWrapperStyle])}>
         {
           LeftComponent ? <LeftComponent {...props} /> : defaultLeftComponent
@@ -74,12 +74,11 @@ NavBar.defaultProps = {
 
 const styles = StyleSheet.create({
   style: {
-    height: 44,
     flexDirection: 'row',
     justifyContent: 'center',
     borderBottomWidth: StyleSheet.hairlineWidth * 2,
     borderColor: Colors.navDivider,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   leftWrapper: {
     width: 34,
