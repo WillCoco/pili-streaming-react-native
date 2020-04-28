@@ -1,18 +1,28 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
 
 function FansContent(props) {
+  const navigation = useNavigation()
   const { userInfo } = props
+
+  const toPublishedWork = () => {
+    navigation.push('PublishedWork')
+  }
 
   return (
     <View style={styles.container}>
-      <View style={styles.item}>
-        <Text style={styles.count}>{userInfo.publishCount}</Text>
-        <Text style={styles.text}>发布</Text>
-      </View>
+
+      <TouchableWithoutFeedback onPress={toPublishedWork}>
+        <View style={styles.item}>
+          <Text style={styles.count}>{userInfo.publishCount}</Text>
+          <Text style={styles.text}>发布</Text>
+        </View>
+      </TouchableWithoutFeedback>
+
       <View style={styles.item}>
         <Text style={styles.count}>{userInfo.fansCount}</Text>
         <Text style={styles.text}>粉丝</Text>

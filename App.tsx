@@ -156,6 +156,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='AnchorDetailScreen' component={AnchorDetail} options={{headerShown: false}} />
                 <Stack.Screen name='LikeContent'component={LikeContent} />
                 <Stack.Screen name='Coupon' component={Coupon} />
+                <Stack.Screen name='PublishedWork' component={PublishedWork} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>
