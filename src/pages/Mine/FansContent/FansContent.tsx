@@ -7,10 +7,14 @@ import pxToDp from '../../../utils/px2dp'
 
 function FansContent(props) {
   const navigation = useNavigation()
-  const { userInfo } = props
+  const { userInfo, isLogin } = props
 
   const toPublishedWork = () => {
-    navigation.push('PublishedWork')
+    isLogin ? navigation.push('PublishedWork') : navigation.push('Login')
+  }
+
+  const toFocusedAnchor = () => {
+    isLogin ? navigation.push('FocusedAnchor') : navigation.push('Login')
   }
 
   return (
@@ -31,10 +35,14 @@ function FansContent(props) {
         <Text style={styles.count}>{userInfo.lookCount}</Text>
         <Text style={styles.text}>浏览</Text>
       </View>
-      <View style={styles.item}>
-        <Text style={styles.count}>{userInfo.anchorCount}</Text>
-        <Text style={styles.text}>关注主播</Text>
-      </View>
+
+      <TouchableWithoutFeedback onPress={toFocusedAnchor}>
+        <View style={styles.item}>
+          <Text style={styles.count}>{userInfo.anchorCount}</Text>
+          <Text style={styles.text}>关注主播</Text>
+        </View>
+      </TouchableWithoutFeedback>
+
     </View>
   )
 }

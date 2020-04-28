@@ -33,6 +33,7 @@ import CollectGoods from './src/pages/CollectGoods/CollectGoods'
 import LikeContent from './src/pages/LikeContent/LikeContent'
 import Coupon from './src/pages/Coupon/Coupon'
 import PublishedWork from './src/pages/PublishedWork/PublishedWork'
+import FocusedAnchor from './src/pages/FocusedAnchor/FocusedAnchor'
 
 import NavBar from './src/components/NavBar'
 import AnchorTabs from './src/navigation/AnchorTabs'
@@ -157,6 +158,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='LikeContent'component={LikeContent} />
                 <Stack.Screen name='Coupon' component={Coupon} />
                 <Stack.Screen name='PublishedWork' component={PublishedWork} />
+                <Stack.Screen name='FocusedAnchor' component={FocusedAnchor} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>
