@@ -7,6 +7,8 @@ import { apiGetUserData } from '../../service/api'
 import { Colors } from '../../constants/Theme'
 
 import Header from './Header/Header'
+import OrdersContent from './OrdersContent/OrdersContent'
+import FansContent from './FansContent/FansContent'
 
 function Mine(props) {
   const navigation = useNavigation()
@@ -45,7 +47,12 @@ function Mine(props) {
 
   return (
     <View style={styles.container}>
-      <Header statusBarHeight={statusBarHeight} userInfo={props.userInfo} />
+      {/* 头部区域 */}
+      <Header statusBarHeight={statusBarHeight} />
+      {/* 订单 */}
+      <OrdersContent />
+      {/* 粉丝数量 相关 */}
+      <FansContent />
     </View>
   )
 }
