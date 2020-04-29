@@ -10,15 +10,15 @@ export default function OrdersContent(props) {
   const navigation = useNavigation()
   const { orderCount } = props
 
-  const toOrderList = () => {
-    navigation.push('OrderList')
+  const toOrderList = (index: number) => {
+    navigation.push('OrderList', { index })
   }
 
   return (
     <View style={styles.container}>
-      <CardTitle title='我的订单' subTitle='查看全部' nextAction={toOrderList} />
+      <CardTitle title='我的订单' subTitle='查看全部' nextAction={() => toOrderList(0)} />
       <View style={styles.orderList}>
-        <TouchableWithoutFeedback onPress={toOrderList}>
+        <TouchableWithoutFeedback onPress={() => toOrderList(1)}>
           <View style={styles.orderItem}>
             <Image source={require('../../../assets/mine-image/icon_daifukuan.png')} style={styles.orderIcon} />
             <Text style={styles.orderText}>待付款</Text>
@@ -28,7 +28,7 @@ export default function OrdersContent(props) {
           </View>
         </TouchableWithoutFeedback>
 
-        <TouchableWithoutFeedback onPress={toOrderList}>
+        <TouchableWithoutFeedback onPress={() => toOrderList(2)}>
           <View style={styles.orderItem}>
             <Image source={require('../../../assets/mine-image/icon_daifahuo.png')} style={styles.orderIcon} />
             <Text style={styles.orderText}>待发货</Text>
@@ -38,7 +38,7 @@ export default function OrdersContent(props) {
           </View>
         </TouchableWithoutFeedback>
 
-        <TouchableWithoutFeedback onPress={toOrderList}>
+        <TouchableWithoutFeedback onPress={() => toOrderList(3)}>
           <View style={styles.orderItem}>
             <Image source={require('../../../assets/mine-image/icon_daishouhuo.png')} style={styles.orderIcon} />
             <Text style={styles.orderText}>待收货</Text>
@@ -48,7 +48,7 @@ export default function OrdersContent(props) {
           </View>
         </TouchableWithoutFeedback>
 
-        <TouchableWithoutFeedback onPress={toOrderList}>
+        <TouchableWithoutFeedback onPress={() => toOrderList(4)}>
           <View style={styles.orderItem}>
             <Image source={require('../../../assets/mine-image/icon_wancheng.png')} style={styles.orderIcon} />
             <Text style={styles.orderText}>已完成</Text>
@@ -58,7 +58,7 @@ export default function OrdersContent(props) {
           </View>
         </TouchableWithoutFeedback>
 
-        <TouchableWithoutFeedback onPress={toOrderList}>
+        <TouchableWithoutFeedback onPress={() => toOrderList(5)}>
           <View style={styles.orderItem}>
             <Image source={require('../../../assets/mine-image/icon_tuikuan.png')} style={styles.orderIcon} />
             <Text style={styles.orderText}>退款/售后</Text>

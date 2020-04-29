@@ -34,6 +34,10 @@ import LikeContent from './src/pages/LikeContent/LikeContent'
 import Coupon from './src/pages/Coupon/Coupon'
 import PublishedWork from './src/pages/PublishedWork/PublishedWork'
 import FocusedAnchor from './src/pages/FocusedAnchor/FocusedAnchor'
+import OrderDetail from './src/pages/OrderDetail/OrderDetail'
+import ExpressInfo from './src/pages/ExpressInfo/ExpressInfo'
+import ApplyForAfterSales from './src/pages/ApplyForAfterSales/ApplyForAfterSales'
+import AfterSaleDetail from './src/pages/AfterSaleDetail/AfterSaleDetail'
 
 import NavBar from './src/components/NavBar'
 import AnchorTabs from './src/navigation/AnchorTabs'
@@ -159,6 +163,10 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='Coupon' component={Coupon} />
                 <Stack.Screen name='PublishedWork' component={PublishedWork} />
                 <Stack.Screen name='FocusedAnchor' component={FocusedAnchor} />
+                <Stack.Screen name='OrderDetail' component={OrderDetail} />
+                <Stack.Screen name='ExpressInfo' component={ExpressInfo} />
+                <Stack.Screen name='ApplyForAfterSales'component={ApplyForAfterSales} />
+                <Stack.Screen name='AfterSaleDetail' component={AfterSaleDetail} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>
