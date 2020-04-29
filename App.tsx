@@ -47,8 +47,10 @@ import AnchorLiveGoodsManage from './src/pages/AnchorTabs/AnorchMeScreen/AnchorL
 import AssetManage from './src/pages/AnchorTabs/MyShopScreen/AssetManage'
 import GoodsManage from './src/pages/AnchorTabs/MyShopScreen/GoodsManage'
 import ShopAddressManage from './src/pages/AnchorTabs/MyShopScreen/ShopAddressManage'
+import AddNewAddress from './src/pages/AnchorTabs/MyShopScreen/AddNewAddress'
 import ShopAgreement from './src/pages/AnchorTabs/MyShopScreen/ShopAgreement'
 import AnchroBill from './src/pages/AnchorTabs/MyShopScreen/AnchroBill'
+import GoodEdit from './src/pages/AnchorTabs/MyShopScreen/GoodEdit'
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -141,6 +143,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='ShopAgreement' component={ShopAgreement} options={{headerShown: false}} />
                 <Stack.Screen name='ShopAddressManage' component={ShopAddressManage} options={{headerShown: false}} />
                 <Stack.Screen name='GoodsManage' component={GoodsManage} options={navHeadOption('直播商品')} />
+                <Stack.Screen name='GoodEdit' component={GoodEdit} options={navHeadOption('直播商品')} />
                 <Stack.Screen name='AssetManage' component={AssetManage} options={{headerShown: false}} />
                 <Stack.Screen name='AnchroBill' component={AnchroBill} options={{headerShown: false}} />
                 <Stack.Screen name='ActivityWebView' component={ActivityWebView} />
@@ -148,6 +151,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='CreateOrEditAddr' component={CreateOrEditAddr} />
                 <Stack.Screen name='AddressList' component={AddressList} />
                 <Stack.Screen name='AnchorDetailScreen' component={AnchorDetail} options={{headerShown: false}} />
+                <Stack.Screen name='AddNewAddress' component={AddNewAddress} options={{headerShown: false}} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>

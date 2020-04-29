@@ -8,6 +8,7 @@ import addressData from './addressData'
 
 import im from './im'
 import live from './live'
+import shop from './shop'
 
 export default combineReducers({
   publicData,
@@ -18,4 +19,5 @@ export default combineReducers({
 
   im,
   live,
+  shop,
 })

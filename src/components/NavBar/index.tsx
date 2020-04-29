@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   rightWrapper: {
+    width: 34,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: pad,

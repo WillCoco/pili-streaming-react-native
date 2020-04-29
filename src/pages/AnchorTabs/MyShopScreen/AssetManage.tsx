@@ -62,7 +62,7 @@ const AssetManage = (props: any) =>  {
     <View style={styles.style}>
       <NavBar
         title="资金管理"
-        titleStyle={{color: '#fff'}}
+        titleStyle={{color: '#fff', marginLeft: 6}}
         leftTheme="light"
         right={() => (
           <TouchableOpacity onPress={() => navigate('AnchroBill')} style={{padding: pad}}>

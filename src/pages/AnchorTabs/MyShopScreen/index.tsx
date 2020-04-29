@@ -99,13 +99,6 @@ const MyShopScreen = (props) =>  {
   return (
     <View
      style={styles.style}
-     refreshControl={
-      <RefreshControl
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-        colors={[Colors.basicColor]}
-      />
-     }
     >
       <NavBar leftTheme="light" title="个人店铺" style={styles.navWrapper} titleStyle={styles.navText} onLeftPress={onBackPress} />
       <View style={StyleSheet.flatten([styles.headerWrapper])}>
