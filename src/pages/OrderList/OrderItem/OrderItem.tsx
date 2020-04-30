@@ -22,6 +22,11 @@ export default function OrderItem(props:any) {
    */
   const toOrderDetail = () => {
     if (orderInfo.refundType) {
+      if (orderInfo.processType === 9) {
+        navigation.push('GoodsInfo', { id: orderInfo.goodsId })
+        return
+      }
+      navigation.push('AfterSaleDetail', { id: orderInfo.id })
       return
     }
     navigation.push('OrderDetail', { id: orderInfo.id })    
