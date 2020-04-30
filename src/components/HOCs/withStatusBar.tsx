@@ -12,31 +12,33 @@ const withStatusBar = (Component: React.FC, options?: optionTypes) => {
     const defaultStatusBarProps = {
       translucent: true,
       hidden: false,
-      barStyle: 'light-content',
-      backgroundColor: 'transparent',
+      // barStyle: 'light-content',
+      // backgroundColor: 'transparent',
     };
   
-    const statusBarProps = {
+    const statusBarProps = React.useRef({
       ...defaultStatusBarProps,
       ...options,
-    };
+    });
+
 
     const isFocused = useIsFocused();
+
     React.useEffect(() => {
       if (isFocused) {
-        if (statusBarProps.barStyle) {
-          StatusBar.setBarStyle(statusBarProps.barStyle);
+        if (statusBarProps.current.barStyle) {
+          StatusBar.setBarStyle(statusBarProps.current.barStyle);
         }
 
-        if (isAndroid() && statusBarProps.backgroundColor) {
-          StatusBar.setBackgroundColor(statusBarProps.backgroundColor);
+        if (isAndroid() && statusBarProps.current.backgroundColor) {
+          StatusBar.setBackgroundColor(statusBarProps.current.backgroundColor);
         }
       }
     }, [isFocused, statusBarProps]);
 
     return (
       <>
-        <StatusBar {...statusBarProps} />
+        {<StatusBar {...statusBarProps} />}
         <Component
           {...props}
         />

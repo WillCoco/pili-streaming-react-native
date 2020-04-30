@@ -103,7 +103,9 @@ LiveTabPage.defaultProps = {
 
 const styles = StyleSheet.create({
   style: {
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    borderTopWidth: 4,
+    borderColor: Colors.pageGreyBg
   },
   rowWrapper: {
     paddingVertical: 9,

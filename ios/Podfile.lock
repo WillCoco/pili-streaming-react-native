@@ -16,6 +16,10 @@ PODS:
     - React-Core
     - UMCore
     - UMImageLoaderInterface
+  - EXImagePicker (8.1.0):
+    - UMCore
+    - UMFileSystemInterface
+    - UMPermissionsInterface
   - EXKeepAwake (8.1.0):
     - UMCore
   - EXLinearGradient (8.1.0):
@@ -53,6 +57,13 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
+  - NodeMediaClient (2.7.3)
+  - pili-react-native (0.0.1):
+    - PLMediaStreamingKit
+    - React
+  - PLMediaStreamingKit (2.3.5):
+    - PLMediaStreamingKit/iphoneos (= 2.3.5)
+  - PLMediaStreamingKit/iphoneos (2.3.5)
   - RCTRequired (0.61.5)
   - RCTTypeSafety (0.61.5):
     - FBLazyVector (= 0.61.5)
@@ -216,6 +227,24 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
   - React-jsinspector (0.61.5)
+  - react-native-nodemediaclient (0.1.9):
+    - NodeMediaClient (= 2.7.3)
+    - React
+    - react-native-nodemediaclient/RCTNodeMediaClient (= 0.1.9)
+  - react-native-nodemediaclient/RCTNodeMediaClient (0.1.9):
+    - NodeMediaClient (= 2.7.3)
+    - React
+  - react-native-safe-area-context (0.7.3):
+    - React
+  - react-native-video (4.4.5):
+    - React
+    - react-native-video/Video (= 4.4.5)
+  - react-native-video/Video (4.4.5):
+    - React
+  - react-native-viewpager (3.3.0):
+    - React
+  - react-native-webview (9.2.2):
+    - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
   - React-RCTAnimation (0.61.5):
@@ -251,11 +280,17 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
+  - RNCMaskedView (0.1.9):
+    - React
+  - RNDateTimePicker (2.3.2):
+    - React
   - RNGestureHandler (1.6.1):
     - React
-  - RNReanimated (1.7.1):
+  - RNReanimated (1.8.0):
     - React
-  - RNScreens (2.2.0):
+  - RNScreens (2.4.0):
+    - React
+  - RNSVG (12.1.0):
     - React
   - UMAppLoader (1.0.1)
   - UMBarCodeScannerInterface (5.1.0)
@@ -283,6 +318,7 @@ DEPENDENCIES:
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
   - EXFont (from `../node_modules/expo-font/ios`)
   - EXImageLoader (from `../node_modules/expo-image-loader/ios`)
+  - EXImagePicker (from `../node_modules/expo-image-picker/ios`)
   - EXKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - EXLinearGradient (from `../node_modules/expo-linear-gradient/ios`)
   - EXLocation (from `../node_modules/expo-location/ios`)
@@ -294,6 +330,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - pili-react-native (from `../node_modules/pili-streaming-react-native/ios/pili-react-native`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -305,6 +342,11 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - react-native-nodemediaclient (from `../node_modules/react-native-nodemediaclient`)
+  - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-video (from `../node_modules/react-native-video`)
+  - "react-native-viewpager (from `../node_modules/@react-native-community/viewpager`)"
+  - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -316,9 +358,12 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
+  - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - UMAppLoader (from `../node_modules/unimodules-app-loader/ios`)
   - UMBarCodeScannerInterface (from `../node_modules/unimodules-barcode-scanner-interface/ios`)
   - UMCameraInterface (from `../node_modules/unimodules-camera-interface/ios`)
@@ -337,6 +382,8 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - boost-for-react-native
+    - NodeMediaClient
+    - PLMediaStreamingKit
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -351,6 +398,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-font/ios"
   EXImageLoader:
     :path: "../node_modules/expo-image-loader/ios"
+  EXImagePicker:
+    :path: "../node_modules/expo-image-picker/ios"
   EXKeepAwake:
     :path: "../node_modules/expo-keep-awake/ios"
   EXLinearGradient:
@@ -373,6 +422,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  pili-react-native:
+    :path: "../node_modules/pili-streaming-react-native/ios/pili-react-native"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -391,6 +442,16 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-nodemediaclient:
+    :path: "../node_modules/react-native-nodemediaclient"
+  react-native-safe-area-context:
+    :path: "../node_modules/react-native-safe-area-context"
+  react-native-video:
+    :path: "../node_modules/react-native-video"
+  react-native-viewpager:
+    :path: "../node_modules/@react-native-community/viewpager"
+  react-native-webview:
+    :path: "../node_modules/react-native-webview"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -411,12 +472,18 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCMaskedView:
+    :path: "../node_modules/@react-native-community/masked-view"
+  RNDateTimePicker:
+    :path: "../node_modules/@react-native-community/datetimepicker"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   UMAppLoader:
     :path: "../node_modules/unimodules-app-loader/ios"
   UMBarCodeScannerInterface:
@@ -454,6 +521,7 @@ SPEC CHECKSUMS:
   EXFileSystem: cf4232ba7c62dc49b78c2d36005f97b6fddf0b01
   EXFont: b60f7a8900e3a12e7be3b2a40e19b22c7b5f89ba
   EXImageLoader: 5ad6896fa1ef2ee814b551873cbf7a7baccc694a
+  EXImagePicker: 4126814cba56cc3dc5e7fc47abce0b263da84609
   EXKeepAwake: d045bc2cf1ad5a04f0323cc7c894b95b414042e0
   EXLinearGradient: 97d8095d1e4ad96f7893e010e564796ed8aeea42
   EXLocation: bbd487fd96a18a3ad9725389bbb94c4a5f78edf3
@@ -465,6 +533,9 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+  NodeMediaClient: fe192cb732c78496c986886b8467f3d744db9db3
+  pili-react-native: bda3f3d751b6b88e0d83f31eb01934f2fbb9d903
+  PLMediaStreamingKit: f457a9a15bf1c31eccb894f0fe7e18fd301b055e
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
   React: b6a59ef847b2b40bb6e0180a97d0ca716969ac78
@@ -474,6 +545,11 @@ SPEC CHECKSUMS:
   React-jsi: cb2cd74d7ccf4cffb071a46833613edc79cdf8f7
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
+  react-native-nodemediaclient: 70fed835f717ac7cb3d59e26b9eccc55353f88a1
+  react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
+  react-native-video: eee541262ada11bc7ffe8ec5508e6a877937c462
+  react-native-viewpager: a7b438ca32c57b2614ece2a123e7fe116f743131
+  react-native-webview: 881baa70f381b838964574f48153a2d453402922
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -484,9 +560,12 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
+  RNCMaskedView: 71fc32d971f03b7f03d6ab6b86b730c4ee64f5b6
+  RNDateTimePicker: 4bd49e09f91ca73d69119a9e1173b0d43b82f5e5
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
-  RNReanimated: 4e102df74a9674fa943e05f97f3362b6e44d0b48
-  RNScreens: 812b79d384e2bea7eebc4ec981469160d4948fd5
+  RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
+  RNScreens: b5c0e1b2b04512919e78bd3898e144a157ce2363
+  RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   UMAppLoader: 90273a65f9b1d789214e0c913dfcabc7a1b1590e
   UMBarCodeScannerInterface: 9dc692b87e5f20fe277fa57aa47f45d418c3cc6c
   UMCameraInterface: 625878bbf2ba188a8548675e1d1d2e438a653e6d

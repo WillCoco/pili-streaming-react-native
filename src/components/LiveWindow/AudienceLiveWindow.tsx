@@ -95,11 +95,12 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
         onStatus={onPlayerStatus}
       />
       <LiveIntro
+        showFollowButton
         anchorId={1}
         liveTitle="湖南卫视直播间"
         liveSubTitle={`123214`}
       />
-      <LivingBottomBlock.Audience />
+      <LivingBottomBlock.Anchor />
       <TouchableOpacity onPress={closeLive} style={StyleSheet.flatten([styles.close, {top: props.safeTop + (pad * 2)}])}>
         <Iconcloselight size={24} />
       </TouchableOpacity>

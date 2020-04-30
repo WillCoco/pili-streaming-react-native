@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     borderTopWidth: 4,
-     borderColor: Colors.pageGreyBg
+    borderColor: Colors.pageGreyBg
   },
   image: {
     width: '100%',

@@ -6,7 +6,7 @@ import {Colors} from './src/constants/Theme'
 const sizes = {
   huge: 36,
   xHuge: 32,
-  xxxLarger: 24,
+  xxxLarge: 24,
   xxLarge: 20,
   xLarge: 18,
   large: 16,
@@ -71,14 +71,14 @@ const config = {
     },
     T1: {
       style: {
-        fontSize: sizes.xxxLarger,
+        fontSize: sizes.xxxLarge,
         color: colors.title,
         // lineHeight: 40
       }
     },
     T2: {
       style: {
-        fontSize: sizes.xxLarger,
+        fontSize: sizes.xxLarge,
         color: colors.title,
         // lineHeight: 32
       }

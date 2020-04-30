@@ -6,7 +6,7 @@ import { ViewProps } from 'react-native';
 import { GProps } from 'react-native-svg';
 
 interface Props extends GProps, ViewProps {
-  name: 'closelight' | 'back' | 'backlight';
+  name: 'video' | 'add' | 'cartlight' | 'arrowright' | 'checked' | 'changecamera' | 'closelight' | 'back' | 'backlight';
   size?: number;
   color?: string | string[];
 }

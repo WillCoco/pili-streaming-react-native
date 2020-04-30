@@ -19,8 +19,8 @@ import { Colors } from '../../constants/Theme'
 
 import { apiGetIndexData, apiGetIndexGoodsList } from '../../service/api'
 
-
 function Home(props: any) {
+
   const navigation = useNavigation()
 
   const [categoryList, setCategoryList] = useState([{ name: '首页' }])
@@ -145,6 +145,27 @@ function Home(props: any) {
     navigation.push('Sale', { type: 'seckill'} )
   }
 
+  /**
+   * 前往商品详情
+   */
+  const toGoodsInfo = (id: number) => {
+    navigation.push('GoodsInfo', { id })
+  }
+
+  /**
+   * 前往活动页面
+   */
+  const toActivityWebView = (url: string) => {
+    navigation.push('ActivityWebView', { url })
+  }
+
+  /**
+   * 前往精选好物详情
+   */
+  const toSelectedGoodsInfo = (id: number) => {
+    navigation.push('SelectGoodsInfo', { id })
+  }
+
   return (
     <ScrollableTabView
       initialPage={0}
@@ -159,6 +180,7 @@ function Home(props: any) {
         categoryList.map((item, index) => {
           return (
             <ScrollView
+              showsVerticalScrollIndicator={false}
               key={`tab-${index}`}
               tabLabel={item.name}
               refreshControl={
@@ -196,7 +218,7 @@ function Home(props: any) {
                       <View style={styles.recommendGoodsListContainer}>
                         {
                           categoryData.shopGoods && categoryData.shopGoods.map((item: any, index: any) => <GoodsCard key={`recommend-${index}`}
-                            style={{ marginBottom: pxToDp(20) }} goodsInfo={item} />)
+                            style={{ marginBottom: pxToDp(20) }} goodsInfo={item} tapGoodsCard={(id: number) => toGoodsInfo(id)} />)
                         }
                       </View>
                     </View>
@@ -211,6 +233,7 @@ function Home(props: any) {
                       <HomeSwiper
                         swiperList={props.swiperList}
                         swiperStyle={styles.swiper}
+                        tapSwiper={(id: number) => toGoodsInfo(id)}
                       />
                     </ImageBackground>
                     {/* 导航栏 */}
@@ -221,14 +244,19 @@ function Home(props: any) {
                         showDots={false}
                         swiperList={props.activityList}
                         swiperStyle={styles.activity}
+                        tapSwiper={(url: string) => toActivityWebView(url)}
                       />
                     </View>
                     {/* 精选话题 */}
                     <View style={styles.selectedGoods}>
                       <CardTitle title='精选话题' subTitle={props.selectedGoodsInfo.subTitle} nextAction={toSelectedGoods} />
-                      <ScrollView style={styles.selectedGoodsList} horizontal={true}>
+                      <ScrollView
+                        horizontal={true}
+                        style={styles.selectedGoodsList}
+                        showsHorizontalScrollIndicator={false}
+                      >
                         {
-                          props.selectedGoodsInfo.goodsList && props.selectedGoodsInfo.goodsList.map((item: any, index: any) => <GoodsCard style={{ marginRight: pxToDp(10) }} key={`selected-${index}`} goodsInfo={item} />)
+                          props.selectedGoodsInfo.goodsList && props.selectedGoodsInfo.goodsList.map((item: any, index: any) => <GoodsCard style={{ marginRight: pxToDp(10) }} key={`selected-${index}`} goodsInfo={item} tapGoodsCard={(id: number) => toSelectedGoodsInfo(id)} />)
                         }
                       </ScrollView>
                     </View>
@@ -278,7 +306,7 @@ function Home(props: any) {
                       <View style={styles.recommendGoodsListContainer}>
                         {
                           props.recommendGoodsList.map((item: any, index: any) => <GoodsCard key={`recommend-${index}`}
-                            style={{ marginBottom: pxToDp(20) }} goodsInfo={item} />)
+                            style={{ marginBottom: pxToDp(20) }} goodsInfo={item} tapGoodsCard={(id: number) => toGoodsInfo(id)} />)
                         }
                       </View>
                     </View>

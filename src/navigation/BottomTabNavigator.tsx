@@ -23,6 +23,7 @@ import mineIcon from '../assets/tab-bar-icon/me.png'
 import mineActiveIcon from '../assets/tab-bar-icon/meActive.png'
 
 import SearchBar from '../components/SearchBar/SearchBar'
+import CartHeaderButton from '../components/CartHeaderButton/CartHeaderButton'
 
 const BottomTab = createBottomTabNavigator()
 const INITIAL_ROUTE_NAME = '首页'
@@ -32,7 +33,13 @@ function BottomTabNavigator({ navigation, route }: any) {
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
 
+  const showHeader = () => {
+    if (getHeaderTitle(route) === '直播' || getHeaderTitle(route) === '我的') return false
+    return true
+  }
+
   navigation.setOptions({
+    headerShown: showHeader(),
     headerTitle: () => getTabItemComponent(getHeaderTitle(route), navigation),
     headerStyle: {
       backgroundColor: Colors.basicColor,
@@ -40,12 +47,12 @@ function BottomTabNavigator({ navigation, route }: any) {
     },
     headerTitleAlign: 'center',
     headerTintColor: Colors.whiteColor,
-    headerShown: !(getHeaderTitle(route) === '直播')
+    headerRight: () => getHeaderTitle(route) === '购物车' && <CartHeaderButton />
   })
 
   return (
     <BottomTab.Navigator
-      initialRouteName={INITIAL_ROUTE_NAME}
+      initialRouteName={route?.params?.initialRoute || INITIAL_ROUTE_NAME}
       tabBarOptions={{
         activeTintColor: Colors.basicColor,
         inactiveTintColor: Colors.lightGrey
@@ -56,7 +63,7 @@ function BottomTabNavigator({ navigation, route }: any) {
         component={HomeScreen}
         options={{
           title: '首页',
-          tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? homeActiveIcon : homeIcon} />,
+          tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? homeActiveIcon : homeIcon} />
         }}
       />
       <BottomTab.Screen
@@ -121,23 +128,14 @@ function getTabItemComponent(routeName: String, navigation: string[]) {
         isPlaceHolder={true}
         toSearchPage={() => navigation.push('HomeSearch')}
       />
-      break
     case '发现':
       return <SearchBar
         hasSearchKey={false}
         isPlaceHolder={true}
         toSearchPage={() => navigation.push('FoundSearch')}
       />
-      break
-    case '直播':
-      return <Text>直播hhhh</Text>
-      break
     case '购物车':
-      return <Text>购物车hhhh</Text>
-      break
-    case '我的':
-      return <Text>我的hhhh</Text>
-      break
+      return <Text style={styles.navBarTitleText}>购物车</Text>
     default:
       break
   }
@@ -160,6 +158,11 @@ const styles = StyleSheet.create({
   searchKey: {
     color: Colors.lightGrey,
     marginLeft: pxToDp(20)
+  },
+  navBarTitleText: {
+    fontSize: pxToDp(30),
+    color: Colors.whiteColor,
+    fontWeight: '500'
   }
 })
 

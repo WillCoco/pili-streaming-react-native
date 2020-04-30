@@ -1,9 +1,10 @@
 /**
  * 设备相关信息
 */
-
-import {Platform, Dimensions, StatusBar} from 'react-native';
+import {Platform, StatusBar, NativeModules} from 'react-native';
 import Layout from './Layout';
+const {StatusBarManager} = NativeModules;
+
 
 const {width: DEVICE_WIDTH, height: DEVICE_HEIGHT} = Layout.window
 
@@ -32,9 +33,41 @@ export const isNotchScreen = () => {
 /**
  * 上下安全区域
  */
-export const safeTop = isAndroid ? StatusBar.currentHeight : (
-  isNotchScreen() ? 44 : 20
-)
+let iosStatusBarHeight;
+if (isIOS()) {
+  StatusBarManager.getHeight((h: any) => {
+    iosStatusBarHeight = h.height;
+  })
+}
 
-export const safeBottom = isNotchScreen() ? 20 : 0;
+export const getSafeTop = () => {
+  if (isAndroid()) {
+    return Promise.resolve(StatusBar.currentHeight)
+  }
+
+  return new Promise((resolve, reject) => {
+    StatusBarManager.getHeight((h: any) => {
+      iosStatusBarHeight = h.height;
+      resolve(h.height);
+    })
+  })
+}
+
+// isAndroid() ? 
+//   (callback: (h?: number) => any) => {
+//     callback(StatusBar.currentHeight)
+//   } :
+//   (callback: (h?: number) => any) => {
+//     StatusBarManager.getHeight((h: any) => {
+//       iosStatusBarHeight = h.height;
+//       callback(h.height)
+//     })
+//   }
+//   iosStatusBarHeight;
+
+// export const safeTop = isAndroid ? StatusBar.currentHeight : (
+//   isNotchScreen() ? 44 : 20
+// )
+
+export const safeBottom = isNotchScreen() ? 20 : 0
 

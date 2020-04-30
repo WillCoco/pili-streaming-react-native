@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Platform, StatusBar, View, NativeModules } from 'react-native'
+import { Platform, StatusBar, View, NativeModules, Text } from 'react-native';
 import { SplashScreen, AppLoading } from 'expo'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -23,10 +23,42 @@ import Sale from './src/pages/Sale/Sale'
 import Login from './src/pages/Login/Login'
 import SelectGoods from './src/pages/SelectGoods/SelectGoods'
 import SelectGoodsInfo from './src/pages/SelectGoodsInfo/SelectGoodsInfo'
+import ActivityWebView from './src/pages/ActivityWebView/ActivityWebView'
+import CreateOrder from './src/pages/CreateOrder/CreateOrder'
+import CreateOrEditAddr from './src/pages/CreateOrEditAddr/CreateOrEditAddr'
+import AddressList from './src/pages/AddressList/AddressList'
+import OrderList from './src/pages/OrderList/OrderList'
+import AccountInfo from './src/pages/AccountInfo/AccountInfo'
+import CollectGoods from './src/pages/CollectGoods/CollectGoods'
+import LikeContent from './src/pages/LikeContent/LikeContent'
+import Coupon from './src/pages/Coupon/Coupon'
+import PublishedWork from './src/pages/PublishedWork/PublishedWork'
+import FocusedAnchor from './src/pages/FocusedAnchor/FocusedAnchor'
+import OrderDetail from './src/pages/OrderDetail/OrderDetail'
+import ExpressInfo from './src/pages/ExpressInfo/ExpressInfo'
+import ApplyForAfterSales from './src/pages/ApplyForAfterSales/ApplyForAfterSales'
+import AfterSaleDetail from './src/pages/AfterSaleDetail/AfterSaleDetail'
 
-import LiveSearchScreen from './src/pages/Live/LiveSearchScreen';
-import AnchorDetailScreen from './src/pages/Live/AnchorDetailScreen'
-import LivingRoomScreen from './src/pages/Live/LivingRoomScreen'
+import NavBar from './src/components/NavBar'
+import AnchorTabs from './src/navigation/AnchorTabs'
+import LiveSearch from './src/pages/Live/LiveSearchScreen'
+import AnchorDetail from './src/pages/Live/AnchorDetailScreen'
+import LivingRoom from './src/pages/Live/LivingRoomScreen'
+import CreateLive from './src/pages/AnchorTabs/PublishScreen/CreateLiveScreen'
+import CreateTeaser from './src/pages/AnchorTabs/PublishScreen/CreateTeaserScreen'
+import LiveGoodsPicker from './src/pages/AnchorTabs/PublishScreen/LiveGoodsPickerScreen'
+import LiveGoodsManage from './src/pages/AnchorTabs/PublishScreen/LiveGoodsManageScreen'
+import AnorchLivingRoom from './src/pages/AnchorTabs/PublishScreen/AnorchLivingScreen'
+import AnchorTrailers from './src/pages/AnchorTabs/AnorchMeScreen/AnchorTrailers'
+import AnchorRecords from './src/pages/AnchorTabs/AnorchMeScreen/AnchorRecords'
+import LivesAnalyze from './src/pages/AnchorTabs/AnorchMeScreen/LivesAnalyze'
+import AnchorPickGoods from './src/pages/AnchorTabs/AnorchMeScreen/AnchorPickGoods'
+import AnchorLiveGoodsManage from './src/pages/AnchorTabs/AnorchMeScreen/AnchorLiveGoodsManage'
+import AssetManage from './src/pages/AnchorTabs/MyShopScreen/AssetManage'
+import GoodsManage from './src/pages/AnchorTabs/MyShopScreen/GoodsManage'
+import ShopAddressManage from './src/pages/AnchorTabs/MyShopScreen/ShopAddressManage'
+import ShopAgreement from './src/pages/AnchorTabs/MyShopScreen/ShopAgreement'
+import AnchroBill from './src/pages/AnchorTabs/MyShopScreen/AnchroBill'
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -56,7 +88,6 @@ export default function App(props: { skipLoadingScreen: any; }) {
           StatusBarManager.getHeight((h: any) => {
             store.dispatch(getStatusBarHeight(h.height))
           })
-
         } else {
           store.dispatch(getStatusBarHeight(Number(StatusBar.currentHeight)))
         }
@@ -68,8 +99,13 @@ export default function App(props: { skipLoadingScreen: any; }) {
     loadResourcesAndDataAsync()
   }, [])
 
+  const navHeadOption = (title?: string) => ({
+    header: (p: any) => <NavBar {...p} title={title} />,
+  })
+
   if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return <AppLoading />
+    return null
+    // return <AppLoading /> // tofix: 在android上报错
   } else {
     return (
       <Provider store={store}>
@@ -77,12 +113,13 @@ export default function App(props: { skipLoadingScreen: any; }) {
           loading={null}
           persistor={persistor}
         >
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             {
               Platform.OS !== 'ios' && <StatusBar barStyle='light-content' translucent={true} backgroundColor='transparent' />
             }
             <NavigationContainer>
               <Stack.Navigator>
+                {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
                 <Stack.Screen name='Root' component={Root} />
                 <Stack.Screen name='HomeSearch' component={HomeSearch} />
                 <Stack.Screen name='FoundSearch' component={FoundSearch} />
@@ -95,9 +132,41 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='Login' component={Login} />
                 <Stack.Screen name='SelectGoods' component={SelectGoods} />
                 <Stack.Screen name='SelectGoodsInfo' component={SelectGoodsInfo} />
-                <Stack.Screen name='AnchorDetailScreen' component={AnchorDetailScreen} options={{ headerShown: false }} />
-                <Stack.Screen name='LivingRoomScreen' component={LivingRoomScreen} options={{ headerShown: false }} />
-                <Stack.Screen name='LiveSearchScreen' component={LiveSearchScreen} options={{headerShown: false}} />
+                <Stack.Screen name='OrderList' component={OrderList} />
+                <Stack.Screen name='AccountInfo' component={AccountInfo} />
+                <Stack.Screen name='CollectGoods' component={CollectGoods} />
+                <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
+                <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false }} />
+                <Stack.Screen name='LiveSearchScreen' component={LiveSearch} options={{headerShown: false}} />
+                <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
+                <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{headerShown: false}} />
+                <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} options={navHeadOption('发布预告')} />
+                <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{headerShown: false}} />
+                <Stack.Screen name='LiveGoodsManageScreen' component={LiveGoodsManage} options={navHeadOption('直播商品管理')} />
+                <Stack.Screen name='AnorchLivingRoomScreen' component={AnorchLivingRoom} options={{headerShown: false}} />
+                <Stack.Screen name='AnchorTrailers' component={AnchorTrailers} options={navHeadOption('我的预告片')} />
+                <Stack.Screen name='AnchorRecords' component={AnchorRecords} options={{headerShown: false}} />
+                <Stack.Screen name='LivesAnalyze' component={LivesAnalyze} options={{headerShown: false}} />
+                <Stack.Screen name='AnchorPickGoods' component={AnchorPickGoods} options={{headerShown: false}} />
+                <Stack.Screen name='AnchorLiveGoodsManage' component={AnchorLiveGoodsManage} options={{headerShown: false}} />
+                <Stack.Screen name='ShopAgreement' component={ShopAgreement} options={{headerShown: false}} />
+                <Stack.Screen name='ShopAddressManage' component={ShopAddressManage} options={{headerShown: false}} />
+                <Stack.Screen name='GoodsManage' component={GoodsManage} options={navHeadOption('直播商品')} />
+                <Stack.Screen name='AssetManage' component={AssetManage} options={{headerShown: false}} />
+                <Stack.Screen name='AnchroBill' component={AnchroBill} options={{headerShown: false}} />
+                <Stack.Screen name='ActivityWebView' component={ActivityWebView} />
+                <Stack.Screen name='CreateOrder' component={CreateOrder} />
+                <Stack.Screen name='CreateOrEditAddr' component={CreateOrEditAddr} />
+                <Stack.Screen name='AddressList' component={AddressList} />
+                <Stack.Screen name='AnchorDetailScreen' component={AnchorDetail} options={{headerShown: false}} />
+                <Stack.Screen name='LikeContent'component={LikeContent} />
+                <Stack.Screen name='Coupon' component={Coupon} />
+                <Stack.Screen name='PublishedWork' component={PublishedWork} />
+                <Stack.Screen name='FocusedAnchor' component={FocusedAnchor} />
+                <Stack.Screen name='OrderDetail' component={OrderDetail} />
+                <Stack.Screen name='ExpressInfo' component={ExpressInfo} />
+                <Stack.Screen name='ApplyForAfterSales'component={ApplyForAfterSales} />
+                <Stack.Screen name='AfterSaleDetail' component={AfterSaleDetail} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>

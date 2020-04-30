@@ -27,7 +27,7 @@ export default function GoodsList(props: { goodsList: any, type: string }) {
                 <Text style={styles.goodsName} numberOfLines={2} onPress={() => toGoodsInfo(item.goods_id)}>{item.goods_name}</Text>
                 <View style={styles.shareCard}>
                   <Text style={styles.shareText}>分享</Text>
-                  <Text style={styles.sharePrice}>¥{formatGoodsPrice(item.MyDiscounts) || '缺失'}</Text>
+                  <Text style={styles.sharePrice}>¥{formatGoodsPrice(item.MyDiscounts)}</Text>
                 </View>
                 <View style={styles.goodsPrice}>
                   <Text style={styles.rmbIcon}>¥</Text>
