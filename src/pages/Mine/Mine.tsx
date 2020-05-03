@@ -1,38 +1,44 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, NativeModules, StatusBar, Platform  } from 'react-native'
+import { View, StyleSheet, ScrollView  } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { setUserInfo } from '../../actions/user'
-import { apiGetUserData } from '../../service/api'
+import { apiGetUserData, apiGetOrderCount, apiGetIndexGoodsList } from '../../service/api'
 import { Colors } from '../../constants/Theme'
 
 import Header from './Header/Header'
 import OrdersContent from './OrdersContent/OrdersContent'
 import FansContent from './FansContent/FansContent'
+import Account from './Account/Account'
+import Banner from './Banner/Banner'
+import GoodsList from './GoodsList/GoodsList'
 
 function Mine(props) {
   const navigation = useNavigation()
-  const [statusBarHeight, setStatusBarHeight] = useState(0)
+  const pageSize = 20
+  const [orderCount, setOrderCount] = useState({})
+  const [pageNo, setPageNo] = useState(1)
+  const [goodsList, setGoodsList] = useState([])
 
   useEffect(() => {
-    calcStatusBarHeight()
-    if (props.isLogin) {
-      getUserInfo()
-    }
+    getGoodsList()
+
+    navigation.addListener('focus', () => {
+      if (props.isLogin) {
+        getUserInfo()
+        getOrderCount()
+      }
+    })
   }, [])
 
   /**
-   * 获取状态栏高度
+   * 加载推荐商品
    */
-  const calcStatusBarHeight = () => {
-    if (Platform.OS === 'ios') {
-      const { StatusBarManager } = NativeModules
-      StatusBarManager.getHeight((statusBar: any) => {
-        setStatusBarHeight(statusBar.height)
-      })
-    } else {
-      setStatusBarHeight(StatusBar.currentHeight)
-    }
+  const getGoodsList = () => {
+    apiGetIndexGoodsList({ pageNo, pageSize }).then(res => {
+      console.log('推荐商品', res)
+      setGoodsList(res.list)
+    })
   }
 
   /**
@@ -45,15 +51,31 @@ function Mine(props) {
     })
   }
 
+  /**
+   * 获取订单数量
+   */
+  const getOrderCount = () => {
+    apiGetOrderCount().then(res => {
+      console.log('订单数量', res)
+      setOrderCount(res)
+    })
+  }
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {/* 头部区域 */}
-      <Header statusBarHeight={statusBarHeight} />
+      <Header />
       {/* 订单 */}
-      <OrdersContent />
+      <OrdersContent orderCount={orderCount} />
       {/* 粉丝数量 相关 */}
       <FansContent />
-    </View>
+      {/* 账户 */}
+      <Account />
+      {/* 邀新横幅 */}
+      <Banner />
+      {/* 推荐商品 */}
+      <GoodsList list={goodsList} />
+    </ScrollView>
   )
 }
 
@@ -63,6 +85,6 @@ export default connect(
 
 const styles = StyleSheet.create({
   container: {
-
+    flex: 1
   }
 })
