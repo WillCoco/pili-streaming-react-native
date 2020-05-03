@@ -42,8 +42,8 @@ const AnorchMeScreen = () =>  {
   ];
 
   const toolsList = [
-    {img: images.anchorPieceGoods, text: '预组货', onPress: () => navigate('AnchorPickGoods')},
-    {img: images.anchorGoodsManage, text: '店铺商品管理', onPress: () => navigate('AnchorLiveGoodsManage')},
+    {img: images.anchorPieceGoods, text: '预组货', onPress: () => navigate('LivingGoodsWareHouse')},
+    {img: images.anchorGoodsManage, text: '店铺商品管理', onPress: () => navigate('AnchorShowcaseManage')},
     {img: images.anchorShop, text: '我的店铺', onPress: () => navigate('AnchorDetail')},
   ];
 
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    zIndex: 1000,
+    zIndex: 100,
     backgroundColor: 'transparent',
     borderBottomColor: 'transparent'
   },

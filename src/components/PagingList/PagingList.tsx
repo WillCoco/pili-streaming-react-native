@@ -7,20 +7,30 @@ import {
   ActivityIndicator,
   Text
 } from 'react-native';
-import {Icon, Divider} from 'react-native-elements';
-// import {PrimaryText} from 'react-native-normalization-text';
+import {Divider} from 'react-native-elements';
+import {PrimaryText, SmallText} from 'react-native-normalization-text';
 import _get from 'lodash/get';
 // import i18n from '../../helpers/i18n';
 import {Colors as colors} from '../../constants/Theme';
 import {vw} from '../../utils/metric';
-// import Empty from '../../components/Empty';
+import Empty from '../../components/Empty';
 
-const PagingList = props => {
+interface PageListProps {
+  ListFooterComponent?: any,
+}
+
+const PagingList = (props: PageListProps) => {
   const [isRefreshing, setIsRefreshing] = React.useState(false); // 下拉刷新
   const [isLoading, setIsLoading] = React.useState(false); // 加载中
   const [listData, setListData] = React.useState(props.initListData || []);
   const [empty, setEmpty] = React.useState(false);
   const [noMore, setNoMore] = React.useState();
+
+
+  /**
+   * 容器高度(空居中)
+   */
+  const [contentHeight,  setContentHeight] = React.useState(0);
 
   /**
    * 分页
@@ -81,7 +91,7 @@ const PagingList = props => {
     if (noMore) {
       return (
         <View style={styles.listFooterWrapper}>
-          <Text>没有更多啦~</Text>
+          <SmallText>没有更多啦~</SmallText>
         </View>
       );
     }
@@ -101,9 +111,9 @@ const PagingList = props => {
   /**
    * 列表空列表
    */
-  const ListEmptyComponent = () => {
+  const DefaultListEmptyComponent = () => {
     if (empty) {
-      return <Text>空</Text> || <Empty />;
+      return <Empty style={{height: contentHeight}} />;
     }
     return null;
   };
@@ -115,6 +125,7 @@ const PagingList = props => {
     }
   }, [])
 
+
   return (
     <View style={StyleSheet.flatten([styles.flatList, props.style])}>
       <FlatList
@@ -124,7 +135,7 @@ const PagingList = props => {
         //item显示的布局
         renderItem={props.renderItem}
         // 空布局
-        ListEmptyComponent={ListEmptyComponent}
+        ListEmptyComponent={props.empty || DefaultListEmptyComponent}
         //下拉刷新相关
         refreshControl={
           <RefreshControl
@@ -134,7 +145,7 @@ const PagingList = props => {
             onRefresh={() => onRefresh({withRefreshAnimation: true})}
           />
         }
-        ListFooterComponent={ListFooterComponent}
+        ListFooterComponent={props.ListFooterComponent || ListFooterComponent}
         //加载更多
         onEndReached={onEndReached}
         onEndReachedThreshold={0.01}
@@ -145,9 +156,16 @@ const PagingList = props => {
         }
         keyExtractor={(item, index) => 'index' + index + item}
         numColumns={props.numColumns}
-        columnWrapperStyle={props.columnWrapperStyle}
+        getItemLayout={props.getItemLayout}
+        columnWrapperStyle={props.numColumns >=2 && props.columnWrapperStyle}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={props.contentContainerStyle}
+        onLayout={e => {
+          let height = e.nativeEvent.layout.height;
+          if (contentHeight < height) {
+            setContentHeight(height)
+          }
+        }}
       />
     </View>
   );

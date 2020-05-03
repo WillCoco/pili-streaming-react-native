@@ -49,7 +49,7 @@ const AddressManage = () =>  {
 
   return (
     <View style={styles.style}>
-      <NavBar title="寄回地址管理" leftTheme="light" titleStyle={{color: '#fff'}} style={styles.nav} />
+      <NavBar title="寄回地址管理" leftTheme="light" titleStyle={{color: '#fff'}} style={styles.navWrapper} />
       <SafeAreaView style={{flex: 1}}>
           {
             !showEmpty ? <Empty /> : (
@@ -96,8 +96,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.bgColor
   },
-  nav: {
-    backgroundColor: Colors.basicColor
+  navWrapper: {
+    backgroundColor: Colors.basicColor,
   },
   button: {
     width: vw(80),

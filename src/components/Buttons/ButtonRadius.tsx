@@ -18,6 +18,7 @@ interface ButtonOutLineProps {
   textStyle?: StyleProp<any>,
   children?: any,
   onPress?: () => void,
+  disabled?: boolean,
 }
 
 const ButtonOutLine = (props: ButtonOutLineProps) =>  {
@@ -25,6 +26,7 @@ const ButtonOutLine = (props: ButtonOutLineProps) =>  {
   const radio = props.size ? props.size / 2 : 0
   return (
     <TouchableOpacity
+      disabled={props.disabled}
       style={StyleSheet.flatten([
         styles.style,
         {
@@ -44,6 +46,7 @@ const ButtonOutLine = (props: ButtonOutLineProps) =>  {
 
 ButtonOutLine.defaultProps = {
   size: 40,
+  disabled: false
 };
 
 const styles = StyleSheet.create({
@@ -55,7 +58,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.basicColor
   },
   text: {
-    color: '#fff'
+    color: '#fff',
   }
 });
 

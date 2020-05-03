@@ -18,6 +18,7 @@ export const Colors = {
   opacityBasicColor: 'rgba(255,50,27,0.1)',
   borderColor: '#ddd',
   darkBg: '#282324',
+  pink: '#ffd6d1'
 }
 
 export const TextSize = {

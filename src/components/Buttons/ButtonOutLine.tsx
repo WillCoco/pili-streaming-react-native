@@ -9,12 +9,15 @@ import {
   StyleProp,
 } from 'react-native';
 import {PrimaryText} from 'react-native-normalization-text'
+import { Colors } from '../../constants/Theme';
 
 interface ButtonOutLineProps {
   text: string,
   size?: number, // 高度
   style?: StyleProp<any>,
   textStyle?: StyleProp<any>,
+  onPress?: () => void,
+  disabled?: boolean,
 }
 
 const ButtonOutLine = (props: ButtonOutLineProps) =>  {
@@ -22,6 +25,8 @@ const ButtonOutLine = (props: ButtonOutLineProps) =>  {
   const radio = props.size ? props.size / 2 : 0
   return (
     <TouchableOpacity
+      disabled={props.disabled}
+      onPress={props.onPress}
       style={StyleSheet.flatten([
         styles.style,
         {
@@ -47,10 +52,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     borderWidth: 1,
-    borderColor: '#fff',
+    borderColor: Colors.lightGrey
   },
   text: {
-    color: '#fff'
+    // color: Colors.basicColor,
   }
 });
 

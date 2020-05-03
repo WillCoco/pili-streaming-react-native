@@ -42,8 +42,9 @@ import AnorchLivingRoom from './src/pages/AnchorTabs/PublishScreen/AnorchLivingS
 import AnchorTrailers from './src/pages/AnchorTabs/AnorchMeScreen/AnchorTrailers'
 import AnchorRecords from './src/pages/AnchorTabs/AnorchMeScreen/AnchorRecords'
 import LivesAnalyze from './src/pages/AnchorTabs/AnorchMeScreen/LivesAnalyze'
-import AnchorPickGoods from './src/pages/AnchorTabs/AnorchMeScreen/AnchorPickGoods'
-import AnchorLiveGoodsManage from './src/pages/AnchorTabs/AnorchMeScreen/AnchorLiveGoodsManage'
+import GoodsSupply from './src/pages/AnchorTabs/AnorchMeScreen/GoodsSupply'
+import LivingGoodsWareHouse from './src/pages/AnchorTabs/AnorchMeScreen/LivingGoodsWareHouse'
+import AnchorShowcaseManage from './src/pages/AnchorTabs/AnorchMeScreen/AnchorShowcaseManage'
 import AssetManage from './src/pages/AnchorTabs/MyShopScreen/AssetManage'
 import GoodsManage from './src/pages/AnchorTabs/MyShopScreen/GoodsManage'
 import ShopAddressManage from './src/pages/AnchorTabs/MyShopScreen/ShopAddressManage'
@@ -51,6 +52,11 @@ import AddNewAddress from './src/pages/AnchorTabs/MyShopScreen/AddNewAddress'
 import ShopAgreement from './src/pages/AnchorTabs/MyShopScreen/ShopAgreement'
 import AnchroBill from './src/pages/AnchorTabs/MyShopScreen/AnchroBill'
 import GoodEdit from './src/pages/AnchorTabs/MyShopScreen/GoodEdit'
+import BrandGoods from './src/pages/AnchorTabs/BrandGoods'
+import AnchorAgreement from './src/pages/AnchorTabs/AnchorAgreement'
+import BankCardBag from './src/pages/AnchorTabs/CardBag'
+import AddBankCard from './src/pages/AnchorTabs/AddBankCard'
+import Withdraw from './src/pages/AnchorTabs/Withdraw'
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -138,12 +144,12 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='AnchorTrailers' component={AnchorTrailers} options={navHeadOption('我的预告片')} />
                 <Stack.Screen name='AnchorRecords' component={AnchorRecords} options={{headerShown: false}} />
                 <Stack.Screen name='LivesAnalyze' component={LivesAnalyze} options={{headerShown: false}} />
-                <Stack.Screen name='AnchorPickGoods' component={AnchorPickGoods} options={{headerShown: false}} />
-                <Stack.Screen name='AnchorLiveGoodsManage' component={AnchorLiveGoodsManage} options={{headerShown: false}} />
+                <Stack.Screen name='LivingGoodsWareHouse' component={LivingGoodsWareHouse} options={{headerShown: false}} />
+                <Stack.Screen name='AnchorShowcaseManage' component={AnchorShowcaseManage} options={{headerShown: false}} />
                 <Stack.Screen name='ShopAgreement' component={ShopAgreement} options={{headerShown: false}} />
                 <Stack.Screen name='ShopAddressManage' component={ShopAddressManage} options={{headerShown: false}} />
-                <Stack.Screen name='GoodsManage' component={GoodsManage} options={navHeadOption('直播商品')} />
-                <Stack.Screen name='GoodEdit' component={GoodEdit} options={navHeadOption('直播商品')} />
+                <Stack.Screen name='GoodsManage' component={GoodsManage} options={{headerShown: false}} />
+                <Stack.Screen name='GoodEdit' component={GoodEdit} options={{headerShown: false}} />
                 <Stack.Screen name='AssetManage' component={AssetManage} options={{headerShown: false}} />
                 <Stack.Screen name='AnchroBill' component={AnchroBill} options={{headerShown: false}} />
                 <Stack.Screen name='ActivityWebView' component={ActivityWebView} />
@@ -152,6 +158,12 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='AddressList' component={AddressList} />
                 <Stack.Screen name='AnchorDetailScreen' component={AnchorDetail} options={{headerShown: false}} />
                 <Stack.Screen name='AddNewAddress' component={AddNewAddress} options={{headerShown: false}} />
+                <Stack.Screen name='GoodsSupply' component={GoodsSupply} options={{headerShown: false}} />
+                <Stack.Screen name='BrandGoods' component={BrandGoods} options={{headerShown: false}} />
+                <Stack.Screen name='AnchorAgreement' component={AnchorAgreement} options={{headerShown: false}} />
+                <Stack.Screen name='BankCardBag' component={BankCardBag} options={{headerShown: false}} />
+                <Stack.Screen name='AddBankCard' component={AddBankCard} options={{headerShown: false}} />
+                <Stack.Screen name='Withdraw' component={Withdraw} options={{headerShown: false}} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>

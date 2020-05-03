@@ -8,7 +8,7 @@ import pxToDp from '../../../utils/px2dp'
 
 function Header(props) {
   const navigation = useNavigation()
-  const { statusBarHeight, userInfo, isLogin } = props
+  const { statusBarHeight, userInfo = {}, isLogin } = props
 
   return (
     <ImageBackground
