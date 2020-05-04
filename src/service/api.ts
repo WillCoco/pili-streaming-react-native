@@ -1,8 +1,14 @@
 
 import { get, post } from './fetch'
 
-const HOST_PHP = __DEV__ ? 'https://php.quanpinrtmp.com' : ''
-const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''
+// const HOST_PHP = __DEV__ ? 'https://php.quanpinrtmp.com' : ''
+// const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''
+
+
+const HOST_PHP = __DEV__ ? 'http://129.211.138.215/' : ''
+const HOST_JAVA = __DEV__ ? 'http://129.211.138.215:7000' : ''
+
+// http://129.211.138.215/
 
 // 文件上传路径 ==================================================================
 export const UPLOAD_URL = `${HOST_JAVA}/find/uploadFile`
