@@ -23,7 +23,6 @@ import ToolRow from '../../../components/ToolRow';
 import Badge from '../../../components/Badge';
 import {pad} from '../../../constants/Layout';
 import {Colors} from '../../../constants/Theme';
-import { safeTop } from '../../../constants/DeviceInfo';
 
 const ToolCell = (props: {
   text: string,
@@ -99,13 +98,6 @@ const MyShopScreen = (props) =>  {
   return (
     <View
      style={styles.style}
-     refreshControl={
-      <RefreshControl
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-        colors={[Colors.basicColor]}
-      />
-     }
     >
       <NavBar leftTheme="light" title="个人店铺" style={styles.navWrapper} titleStyle={styles.navText} onLeftPress={onBackPress} />
       <View style={StyleSheet.flatten([styles.headerWrapper])}>
@@ -240,7 +232,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    zIndex: 1000,
+    zIndex: 1,
     backgroundColor: 'transparent',
     borderBottomColor: 'transparent'
   },

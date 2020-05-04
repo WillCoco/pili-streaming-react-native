@@ -38,10 +38,10 @@ const LiveWindow = React.forwardRef((props: LiveWindowProps, ref: any) : any => 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
       <NodePlayerView
-        style={{height: '100%', width: '100%', backgroundColor: '#333'}}
+        style={{flex: 1, height: '100%', width: '100%', backgroundColor: '#333'}}
         ref={ref}
         inputUrl={props.inputUrl}
-        scaleMode="ScaleAspectFit" // 'ScaleToFill', 'ScaleAspectFit', 'ScaleAspectFill'
+        scaleMode="ScaleAspectFill" // 'ScaleToFill', 'ScaleAspectFit', 'ScaleAspectFill'
         bufferTime={300}
         maxBufferTime={1000}
         autoplay={true}

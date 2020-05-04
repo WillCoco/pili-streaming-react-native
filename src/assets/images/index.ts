@@ -196,6 +196,25 @@ const images : {
   get incomeInvite() {
     return require('./incomeInvite.png')
   },
+  // 主播tabs
+  get tabShop() {
+    return require('./tabShop.png')
+  },
+  get tabShopActive() {
+    return require('./tabShopActive.png')
+  },
+  get tabLiveActive() {
+    return require('./tabLiveActive.png')
+  },
+  get tabLive() {
+    return require('./tabLive.png')
+  },
+  get tabMeActive() {
+    return require('./tabMeActive.png')
+  },
+  get tabMe() {
+    return require('./tabMe.png')
+  },
 }
 
 export default images;

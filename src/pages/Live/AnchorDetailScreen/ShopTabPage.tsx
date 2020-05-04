@@ -50,24 +50,24 @@ const AnorchDetailAvatar = (props: {
   return (
     <View style={styles.style}>
       <PagingList
-          size={14}
-          // initListData={['1223', '2222']}
-          //item显示的布局
-          renderItem={({item}) => {
-            console.log(item,1112322)
-            return <GoodsCard goodsInfo={item} /> 
-          }}
-          //下拉刷新相关
-          onRefresh={onRefresh}
-          //加载更多
-          onEndReached={onEndReached}
-          // ItemSeparatorComponent={separator}
-          keyExtractor={(item, index) => 'index' + index + item}
-          initialNumToRender={14}
-          numColumns={2}
-          columnWrapperStyle={{justifyContent: 'space-between'}}
-          // style={{borderTopWidth: 4, borderColor: Colors.pageGreyBg}}
-          contentContainerStyle={{paddingHorizontal: pad}}
+        size={14}
+        // initListData={['1223', '2222']}
+        //item显示的布局
+        renderItem={({item}) => {
+          console.log(item,1112322)
+          return <GoodsCard goodsInfo={item} /> 
+        }}
+        //下拉刷新相关
+        onRefresh={onRefresh}
+        //加载更多
+        onEndReached={onEndReached}
+        // ItemSeparatorComponent={separator}
+        keyExtractor={(item, index) => 'index' + index + item}
+        initialNumToRender={14}
+        numColumns={2}
+        columnWrapperStyle={{justifyContent: 'space-between'}}
+        // style={{borderTopWidth: 4, borderColor: Colors.pageGreyBg}}
+        contentContainerStyle={{paddingHorizontal: pad}}
       />
     </View>
   )

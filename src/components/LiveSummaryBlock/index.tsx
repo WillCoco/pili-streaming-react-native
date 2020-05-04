@@ -18,7 +18,7 @@ import {pad, radio, radioLarge} from '../../constants/Layout';
 import {Colors} from '../../constants/Theme';
 import Avatar from '../Avatar';
 import images from '../../assets/images';
-import {PlayerType} from '../../liveTypes';
+import {MediaType} from '../../liveTypes';
 
 export type msgList = any[] | undefined;
 export type onMsgListResponse = (v: boolean) => any;
@@ -36,11 +36,11 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
    * 根据类型去定义LiveWindow的播放类型(直播、回放、预告)
    */
   // const type: PlayerType = PlayerType.living;
-  const type: PlayerType = PlayerType.record;
+  const type: MediaType = MediaType.record;
   // const type: playerType = props.liveInfo?.type;
   let liveTypeEle;
   switch (+type) {
-    case PlayerType.living:
+    case MediaType.living:
       liveTypeEle = (
         <Image
           source={images.livingTypeIcon}
@@ -49,7 +49,7 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
         />
       );
       break;
-    case PlayerType.record:
+    case MediaType.record:
       liveTypeEle = (
         <>
           <Image
@@ -61,7 +61,7 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
         </>
       );
       break;
-    case PlayerType.teaser:
+    case MediaType.teaser:
       liveTypeEle = (
         <>
           <Image

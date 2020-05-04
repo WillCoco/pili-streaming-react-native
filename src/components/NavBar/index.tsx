@@ -50,6 +50,8 @@ const NavBar = (props: NavBarProps) =>  {
     </TouchableOpacity>
   );
 
+  // console.log(props.style, 'navstyle')
+
   return (
     <View style={StyleSheet.flatten([styles.style, {paddingTop: props.safeTop, height: 44 + props.safeTop}, props.style])}>
       <View style={StyleSheet.flatten([styles.leftWrapper, props.leftWrapperStyle])}>
@@ -86,6 +88,9 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
   },
   leftText: {
 
@@ -100,9 +105,14 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   rightWrapper: {
+    // width: 34,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: pad,
+    flex: -1,
+    position: 'absolute',
+    right: 0,
+    bottom: 0
   }
 });
 

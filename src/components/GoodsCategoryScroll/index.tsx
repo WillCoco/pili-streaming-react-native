@@ -30,7 +30,7 @@ const GoodsCategoryScroll = (props: GoodsCategoryScrollProps) => {
 
   return (
     <View style={StyleSheet.flatten([styles.style, props.style])}>
-      <SmallText style={styles.title}>{props.title}</SmallText>
+      {props.title && <SmallText style={styles.title}>{props.title}</SmallText>}
       <ScrollView
         style={{}}
         showsVerticalScrollIndicator={false}
@@ -59,7 +59,6 @@ const GoodsCategoryScroll = (props: GoodsCategoryScrollProps) => {
 };
 
 GoodsCategoryScroll.defaultProps = {
-  title: '选择分类'
 };
 
 const styles = StyleSheet.create({

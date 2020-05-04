@@ -46,7 +46,6 @@ export default function AddressBar(props) {
                 ? <Address />
                 : <Text style={styles.addrTipText}>选择收货地址</Text>
           }
-
         </View>
         <Ionicons
           size={20}

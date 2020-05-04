@@ -6,7 +6,6 @@ import {Dispatch} from 'redux';
 interface liveConfigType {
   title?: string,
   cover?: string,
-  
 }
 
 /**
@@ -21,6 +20,7 @@ export const updateLiveConfig = (liveConfig: liveConfigType) => {
  * 开始、停止推流
  */
 export const updateStarted = (started: boolean) => {
+
   return async function(dispatch: Dispatch, getState: any) {
     const pusherConfig = getState()?.live?.pusherConfig;
     if (started === pusherConfig.started) {
