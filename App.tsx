@@ -38,6 +38,13 @@ import OrderDetail from './src/pages/OrderDetail/OrderDetail'
 import ExpressInfo from './src/pages/ExpressInfo/ExpressInfo'
 import ApplyForAfterSales from './src/pages/ApplyForAfterSales/ApplyForAfterSales'
 import AfterSaleDetail from './src/pages/AfterSaleDetail/AfterSaleDetail'
+import Setting from './src/pages/Setting/Setting'
+import AboutUs from './src/pages/AboutUs/AboutUs'
+import Tenants from './src/pages/Tenants/Tenants'
+import ServiceAgreement from './src/pages/ServiceAgreement/ServiceAgreement'
+import FoundInfo from './src/pages/FoundInfo/FoundInfo'
+import PublishWork from './src/pages/PublishWork/PublishWork'
+import WorksGoodsList from './src/pages/WorksGoodsList/WorksGoodsList'
 
 import NavBar from './src/components/NavBar'
 import AnchorTabs from './src/navigation/AnchorTabs'
@@ -167,6 +174,13 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='ExpressInfo' component={ExpressInfo} />
                 <Stack.Screen name='ApplyForAfterSales'component={ApplyForAfterSales} />
                 <Stack.Screen name='AfterSaleDetail' component={AfterSaleDetail} />
+                <Stack.Screen name='Setting' component={Setting} />
+                <Stack.Screen name='AboutUs' component={AboutUs} />
+                <Stack.Screen name='Tenants' component={Tenants} />
+                <Stack.Screen name='ServiceAgreement' component={ServiceAgreement} />
+                <Stack.Screen name='FoundInfo' component={FoundInfo} />
+                <Stack.Screen name='PublishWork' component={PublishWork} />
+                <Stack.Screen name='WorksGoodsList' component={WorksGoodsList} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>

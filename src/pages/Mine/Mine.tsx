@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { setUserInfo } from '../../actions/user'
 import { apiGetUserData, apiGetOrderCount, apiGetIndexGoodsList } from '../../service/api'
-import { Colors } from '../../constants/Theme'
 
 import Header from './Header/Header'
 import OrdersContent from './OrdersContent/OrdersContent'

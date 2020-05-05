@@ -1,15 +1,16 @@
 import React from 'react'
 import { View, Text } from 'react-native'
-import { useRoute, useNavigation } from '@react-navigation/native'
-import { WebView } from 'react-native-webview'
+import { useNavigation } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
 
-export default function ActivityWebView() {
-  const route = useRoute()
+import Header from './Header/Header'
+import Form from './Form/Form'
+
+export default function AboutUs() {
   const navigation = useNavigation()
 
   navigation.setOptions({
-    headerTitle: '活动页面',
+    headerTitle: '关于圈品',
     headerStyle: {
       backgroundColor: Colors.basicColor,
       elevation: 0,  // 去除安卓状态栏底部阴影
@@ -17,11 +18,13 @@ export default function ActivityWebView() {
     headerTitleAlign: 'center',
     headerTintColor: Colors.whiteColor,
     headerBackTitleVisible: false,
-    // headerTransparent: true
+    headerTransparent: true
   })
 
   return (
-    // <WebView source={{ uri: route.params.url }} />
-    <WebView source={{ uri: 'https://cschat-ccs.aliyun.com/index.htm?tntInstId=_1r0MG9g&scene=SCE00006973' }} />
+    <View>
+      <Header />
+      <Form />
+    </View>
   )
 }

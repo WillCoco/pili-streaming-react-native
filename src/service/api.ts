@@ -1,8 +1,11 @@
 
 import { get, post } from './fetch'
 
-const HOST_PHP = __DEV__ ? 'https://php.quanpinrtmp.com' : ''
-const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''
+// const HOST_PHP = __DEV__ ? 'https://php.quanpinrtmp.com' : ''
+// const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''
+
+const HOST_PHP = __DEV__ ? 'http://129.211.138.215' : ''
+const HOST_JAVA = __DEV__ ? 'http://129.211.138.215:7000' : ''
 
 // 文件上传路径 ==================================================================
 export const UPLOAD_URL = `${HOST_JAVA}/find/uploadFile`
@@ -164,3 +167,5 @@ export const apiGetShippingList = () => get(`${HOST_JAVA}/order/getShippingList`
 export const apiDecryptData = (data: any) => post(`${HOST_JAVA}/miniApp/decryptData`, data)
 // 注册
 export const apiRegister = (data: any) => post(`${HOST_JAVA}/user/register`, data)
+// 退出
+export const apiLogout = () => get(`${HOST_JAVA}/user/logout`)

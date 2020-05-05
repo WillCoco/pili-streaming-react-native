@@ -5,7 +5,7 @@ import { Colors } from '../../../constants/Theme'
 import * as ImagePicker from 'expo-image-picker'
 import { Ionicons } from '@expo/vector-icons'
 
-export default function Reason(props) {
+export default function ImgPicker() {
   const [imageList, setImageList] = useState([
     { uri: require('../../../assets/order-image/add.png') }
   ])
@@ -36,12 +36,6 @@ export default function Reason(props) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>申请原因</Text>
-      <TextInput
-        multiline={true}
-        placeholder='请输入您的申请原因，如有必要，请上传图片'
-        onChangeText={(text) => props.inputReason(text)}
-      />
       <View style={styles.imagePicker}>
         {
           imageList.map((item: any, index: number) => {
@@ -78,13 +72,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.whiteColor,
     paddingBottom: 0
   },
-  title: {
-    fontSize: pxToDp(28),
-    color: Colors.darkBlack,
-    marginBottom: pxToDp(14)
-  },
   imagePicker: {
-    marginTop: pxToDp(30),
     flexDirection: 'row',
     flexWrap: 'wrap'
   },

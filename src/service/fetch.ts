@@ -31,7 +31,7 @@ export const get = (path: any, data: any) => {
       headers
     })
     .then(async (response: { text: () => any; }) => {
-      const r1 = await response.text();
+      const r1 = await response.text()
       const r2 = r1.trim && r1.trim()
       return r2 && JSON.parse(r2)
     })
@@ -55,8 +55,12 @@ export const post = (path: RequestInfo, data: any) => {
       headers,
       body: JSON.stringify(data)
     })
-    .then((response: { json: () => any }) => response.json())
-    .then((result: { data: unknown; }) => resolve(result.data))
+    .then((response: { json: () => any }) => {
+      return response.json()
+    })
+    .then((result: { data: unknown; }) => {
+      resolve(result.data)
+    })
     .catch((error: any) => reject(error))
   })
 } 
