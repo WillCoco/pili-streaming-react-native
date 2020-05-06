@@ -67,6 +67,8 @@ import AnchorAgreement from './src/pages/AnchorTabs/AnchorAgreement'
 import BankCardBag from './src/pages/AnchorTabs/CardBag'
 import AddBankCard from './src/pages/AnchorTabs/AddBankCard'
 import Withdraw from './src/pages/AnchorTabs/Withdraw'
+import Message from './src/pages/AnchorTabs/Message'
+import MessageDetail from './src/pages/AnchorTabs/Message/MessageDetail'
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -184,6 +186,8 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='BankCardBag' component={BankCardBag} options={{headerShown: false}} />
                 <Stack.Screen name='AddBankCard' component={AddBankCard} options={{headerShown: false}} />
                 <Stack.Screen name='Withdraw' component={Withdraw} options={{headerShown: false}} />
+                <Stack.Screen name='Message' component={Message} options={{headerShown: false}} />
+                <Stack.Screen name='MessageDetail' component={MessageDetail} options={{headerShown: false}} />
 
               </Stack.Navigator>
             </NavigationContainer>

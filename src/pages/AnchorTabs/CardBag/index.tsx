@@ -4,6 +4,8 @@
 import * as React from 'react';
 import {
   View,
+  Image,
+  ImageBackground,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
@@ -70,7 +72,7 @@ const CardBag = () =>  {
       />
       {
         isEmpty ? <Empty /> : (
-          <ScrollView>
+          <ScrollView style={{paddingTop: pad}}>
             {
               bankCards.map((card: any, index: number) => {
                 return (
@@ -85,7 +87,10 @@ const CardBag = () =>  {
         )
       }
       <TouchableOpacity onPress={() => navigate('AddBankCard')} style={styles.footer}>
-        <PrimaryText>添加银行卡</PrimaryText>
+        <ImageBackground source={images.addBankButton} style={styles.addButton}>
+          <Image source={images.addBankCardIcon} style={styles.addIcon} />
+          <PrimaryText >添加银行卡</PrimaryText>
+        </ImageBackground>
       </TouchableOpacity>
     </View>
   )
@@ -96,7 +101,7 @@ CardBag.defaultProps = {
 
 const styles = StyleSheet.create({
   style: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: Colors.bgColor
   },
   nav: {
@@ -114,8 +119,20 @@ const styles = StyleSheet.create({
       android: {
         elevation: 1
       }
-    }) 
-  }
+    }),
+  },
+  addIcon: {
+    width: 18,
+    height: 18,
+    marginRight: pad,
+  },
+  addButton: {
+    height: 64,
+    marginHorizontal: pad,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default CardBag;

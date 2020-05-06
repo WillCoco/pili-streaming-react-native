@@ -104,6 +104,14 @@ const images : {
   get anchorShareIcon() {
     return require('./anchorShare.png')
   },
+  // 主播-消息
+  get liveMessageIcon() {
+    return require('./message.png')
+  },
+  // 主播消息-默认头像
+  get messageDefaultAvatar() {
+    return require('./messageDefaultAvatar.png')
+  },
   // 购物包
   get anchorShoppingIcon() {
     return require('./anchorShopIcon.png')
@@ -195,6 +203,30 @@ const images : {
   },
   get incomeInvite() {
     return require('./incomeInvite.png')
+  },
+  // 银行卡背景图
+  get bankBgBlue() {
+    return require('../bank-card-image/bgBlue.png')
+  },
+  get bankBgOrange() {
+    return require('../bank-card-image/bgOrange.png')
+  },
+  get bankBgRed() {
+    return require('../bank-card-image/bgRed.png')
+  },
+  get bankBgGreen() {
+    return require('../bank-card-image/bgGreen.png')
+  },
+  // 添加银行卡icon
+  get addBankCardIcon() {
+    return require('../bank-card-image/add.png')
+  },
+  get addBankButton() {
+    return require('../bank-card-image/bgButton.png')
+  },
+  // 银行卡icon
+  get BOCIcon() {
+    return require('../bank-card-image/BOC.png')
   },
   // 主播tabs
   get tabShop() {
