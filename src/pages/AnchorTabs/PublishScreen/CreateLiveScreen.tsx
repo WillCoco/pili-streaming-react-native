@@ -83,7 +83,7 @@ const CreateLiveScreen = (props: any) =>  {
         开播默认已阅读
         <SmallText
           style={{color: Colors.yellowColor}}
-          onPress={() => navigate('aa')}
+          onPress={() => navigate('AnchorAgreement')}
         >
           《圈品主播入驻协议》
         </SmallText>

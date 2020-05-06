@@ -10,7 +10,8 @@ interface InitStateTypes {
     title: string, // 标题
   },
   // 推流配置
-  pusherConfig: any
+  pusherConfig: any,
+  returnAddresses: Array<any>, // 寄回地址
 }
 
 const DEFAULT_OPTIONS: any = {
@@ -28,6 +29,7 @@ const INITIAL_STATE: InitStateTypes = {
     title: '',
   },
   pusherConfig: DEFAULT_OPTIONS,
+  returnAddresses: [],
 }
 
 export default function live(state = INITIAL_STATE, action: any) {

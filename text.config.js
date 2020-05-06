@@ -18,6 +18,7 @@ const sizes = {
 const colors = {
   theme: Colors.basicColor,
   title: "#000",
+  emphasis: "#222",
   primary: "#333",
   secondary: "#666",
   white: "rgb(255,255,255)",

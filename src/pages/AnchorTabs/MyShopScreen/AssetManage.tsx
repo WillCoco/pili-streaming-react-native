@@ -21,7 +21,7 @@ import { pad } from '../../../constants/Layout';
 import images from '../../../assets/images/index';
 
 const AssetManage = (props: any) =>  {
-  const {navigate} = useNavigation();
+  const {navigate, replace} = useNavigation();
 
   /**
    * 店铺资金
@@ -62,10 +62,10 @@ const AssetManage = (props: any) =>  {
     <View style={styles.style}>
       <NavBar
         title="资金管理"
-        titleStyle={{color: '#fff'}}
+        titleStyle={{color: '#fff', marginLeft: 6}}
         leftTheme="light"
         right={() => (
-          <TouchableOpacity onPress={() => navigate('AnchroBill')} style={{padding: pad}}>
+          <TouchableOpacity onPress={() => navigate('AnchroBill')} style={{/* width: 80, borderWidth: 1, */ padding: pad}}>
             <PrimaryText color="white">账单</PrimaryText>
           </TouchableOpacity>
         )}
@@ -94,7 +94,9 @@ const AssetManage = (props: any) =>  {
         </View>
         <ButtonOutLine
           text="提现"
+          textStyle={{color: '#fff'}}
           style={styles.buttonStyle}
+          onPress={() => navigate('BankCardBag', {onPicked: (params: any) => replace('Withdraw', params)})}
         />
       </View>
       <View style={styles.contentWrapper}>
@@ -130,7 +132,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    zIndex: 1000,
+    zIndex: 101,
     backgroundColor: 'transparent',
     borderBottomColor: 'transparent'
   },
@@ -139,6 +141,7 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     marginBottom: pad,
+    borderColor: '#fff'
   },
   assetContentWrapper: {
     flex: 1,

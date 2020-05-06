@@ -10,7 +10,8 @@ import {
   StyleProp,
   KeyboardAvoidingView,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import Video from 'react-native-video';
 import {useDispatch} from 'react-redux'
 import LiveIntro from '../LiveIntro';
 import LivingBottomBlock from '../LivingBottomBlock';
@@ -20,6 +21,7 @@ import Iconcloselight from '../../components/Iconfont/Iconcloselight';
 import {pad} from '../../constants/Layout';
 import images from '../../assets/images';
 import {joinGroup, quitGroup} from '../../actions/im';
+import {MediaType} from '../../liveTypes';
 
 const {window} = L;
 
@@ -32,6 +34,40 @@ interface LiveWindowProps {
 const LiveWindow = (props: LiveWindowProps) : any =>  {
   const {goBack} = useNavigation();
   const dispatch = useDispatch();
+  const route = useRoute() || {};
+
+
+  /**
+   * 播放类型
+   */
+  const {mediaType, } = route;
+
+  const playerComponent = React.useMemo(() => {
+    // 预告片
+    if (mediaType === MediaType.teaser) {
+      return (
+        <Video source={{uri: 'http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4'}}   // Can be a URL or a local file.
+          repeat
+          fullscreen
+          resizeMode="cover"
+          // paused
+          // ref={ref}                                        // Store reference
+          // onBuffer={this.onBuffer}                // Callback when remote video is buffering
+          // onError={this.videoError}               // Callback when video cannot be loaded
+          style={styles.video}
+        />
+      )
+    }
+
+    // 直播和回放都是拉流
+    return (
+      <LivePuller
+        ref={player}
+        inputUrl="rtmp://58.200.131.2:1935/livetv/hunantv"
+        onStatus={onPlayerStatus}
+      />
+    )
+  }, [mediaType])
 
 
   /**
@@ -89,18 +125,29 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
         source={images.livingbg}
         resizeMode="cover"
       />
-      <LivePuller
+      {/* <LivePuller
         ref={player}
         inputUrl="rtmp://58.200.131.2:1935/livetv/hunantv"
         onStatus={onPlayerStatus}
       />
+      <Video source={{uri: 'http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4'}}   // Can be a URL or a local file.
+        repeat
+        fullscreen
+        resizeMode="cover"
+        // paused
+        // ref={ref}                                        // Store reference
+        // onBuffer={this.onBuffer}                // Callback when remote video is buffering
+        // onError={this.videoError}               // Callback when video cannot be loaded
+        style={styles.video}
+      /> */}
+      {playerComponent}
       <LiveIntro
         showFollowButton
         anchorId={1}
         liveTitle="湖南卫视直播间"
         liveSubTitle={`123214`}
       />
-      <LivingBottomBlock.Anchor />
+      <LivingBottomBlock.Audience />
       <TouchableOpacity onPress={closeLive} style={StyleSheet.flatten([styles.close, {top: props.safeTop + (pad * 2)}])}>
         <Iconcloselight size={24} />
       </TouchableOpacity>
@@ -127,6 +174,9 @@ const styles = StyleSheet.create({
     left: 0,
     width: '100%',
     height: '100%',
+  },
+  video: {
+    flex: 1,
   }
 })
 

@@ -3234,7 +3234,7 @@ expo-keep-awake@~8.1.0:
   resolved "https://registry.npm.taobao.org/expo-keep-awake/download/expo-keep-awake-8.1.0.tgz#3a1d8aa5a8395d40c7d79e1c93020ae5f848e664"
   integrity sha1-Oh2Kpag5XUDH154ckwIK5fhI5mQ=
 
-expo-linear-gradient@~8.1.0:
+expo-linear-gradient@^8.1.0, expo-linear-gradient@~8.1.0:
   version "8.1.0"
   resolved "https://registry.npm.taobao.org/expo-linear-gradient/download/expo-linear-gradient-8.1.0.tgz#6933765cf1e76ef2928fd8495e779929699ac4c6"
   integrity sha1-aTN2XPHnbvKSj9hJXneZKWmaxMY=
@@ -6163,6 +6163,11 @@ react-native-collapsible@^1.4.0:
   dependencies:
     prop-types "^15.6.2"
 
+react-native-draggable-flatlist@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.npm.taobao.org/react-native-draggable-flatlist/download/react-native-draggable-flatlist-2.3.2.tgz#4d84b2f7298d2426a4e5a95290c3b10861d81bf2"
+  integrity sha1-TYSy9ymNJCak5alSkMOxCGHYG/I=
+
 react-native-elements@^1.2.7:
   version "1.2.7"
   resolved "https://registry.npm.taobao.org/react-native-elements/download/react-native-elements-1.2.7.tgz#1eca2db715c41722aeb67aea62bd2a4621adb134"
@@ -6309,10 +6314,10 @@ react-native-storage@^1.0.1:
     opencollective "^1.0.3"
     opencollective-postinstall "^2.0.2"
 
-react-native-svg@^12.1.0:
-  version "12.1.0"
-  resolved "https://registry.npm.taobao.org/react-native-svg/download/react-native-svg-12.1.0.tgz#acfe48c35cd5fca3d5fd767abae0560c36cfc03d"
-  integrity sha1-rP5Iw1zV/KPV/XZ6uuBWDDbPwD0=
+react-native-svg@11.0.1:
+  version "11.0.1"
+  resolved "https://registry.npm.taobao.org/react-native-svg/download/react-native-svg-11.0.1.tgz#e92e7e9f9cb2604333fd5014fd4edcf62fea6496"
+  integrity sha1-6S5+n5yyYEMz/VAU/U7c9i/qZJY=
   dependencies:
     css-select "^2.1.0"
     css-tree "^1.0.0-alpha.39"

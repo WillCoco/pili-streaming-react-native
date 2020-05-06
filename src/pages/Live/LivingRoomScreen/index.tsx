@@ -11,22 +11,9 @@ import { pad } from '../../../constants/Layout';
 import { safeTop } from '../../../constants/DeviceInfo';
 
 const LivingRoomScreen = (props: any) : any =>  {
-
-  // 连接im
-
-  // 观众
-  if (true) {
-    return (
-      <LiveWindow.Audience
-        safeTop={props.safeTop}
-      />
-    )
-  }
-
-  // 主播
   return (
-    <LiveWindow.Anchor
-      msgList={data}
+    <LiveWindow.Audience
+      safeTop={props.safeTop}
     />
   )
 };

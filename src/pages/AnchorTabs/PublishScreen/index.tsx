@@ -13,6 +13,7 @@ import Avatar from '../../../components/Avatar';
 import images from '../../../assets/images/index';
 import {vw, vh} from '../../../utils/metric';
 import {pad} from '../../../constants/Layout';
+import {LinearGradient} from 'expo-linear-gradient';
 
 const PublishScreen = (props: any) =>  {
   const {navigate, reset} = useNavigation();
@@ -26,8 +27,19 @@ const PublishScreen = (props: any) =>  {
       routes: [{ name: 'Root', params: {initialRoute: '我的'}}],
     });
   }
+
   return (
     <View style={styles.style}>
+      <LinearGradient
+          colors={['#FF321B', '#FF604E', '#fff']}
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+          }}
+        />
       <NavBar leftTheme="light" title="" style={styles.navWrapper} onLeftPress={onBackPress} />
       <Avatar size={65} style={{marginTop: props.safeTop + vh(8)}} />
       <T1 style={styles.nameText}>主播昵称</T1>
@@ -93,7 +105,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    zIndex: 1000,
+    zIndex: 103,
     backgroundColor: 'transparent',
     borderBottomColor: 'transparent'
   },

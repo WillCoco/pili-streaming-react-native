@@ -196,6 +196,46 @@ const images : {
   get incomeInvite() {
     return require('./incomeInvite.png')
   },
+  // 主播tabs
+  get tabShop() {
+    return require('./tabShop.png')
+  },
+  get tabShopActive() {
+    return require('./tabShopActive.png')
+  },
+  get tabLiveActive() {
+    return require('./tabLiveActive.png')
+  },
+  get tabLive() {
+    return require('./tabLive.png')
+  },
+  get tabMeActive() {
+    return require('./tabMeActive.png')
+  },
+  get tabMe() {
+    return require('./tabMe.png')
+  },
+  get iconPlay() {
+    return require('./iconPlay.png')
+  },
+  get iconShare() {
+    return require('./iconShare.png')
+  },
+  get iconDownload() {
+    return require('./iconDownload.png')
+  },
+  get watchLiveCover() {
+    return require('./watchLiveCover.png')
+  },
+  get recordsBgImg() {
+    return require('./recordsBgImg.png')
+  },
+  get iconRemind() {
+    return require('./iconRemind.png')
+  },
+  get iconHasReminded() {
+    return require('./iconHasReminded.png')
+  }
 }
 
 export default images;

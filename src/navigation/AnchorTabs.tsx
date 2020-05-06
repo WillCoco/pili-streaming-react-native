@@ -9,18 +9,7 @@ import PublishScreen from '../pages/AnchorTabs/PublishScreen'
 import AnorchMeScreen from '../pages/AnchorTabs/AnorchMeScreen'
 import MyShopScreen from '../pages/AnchorTabs/MyShopScreen'
 
-import homeIcon from '../assets/tab-bar-icon/home.png'
-import homeActiveIcon from '../assets/tab-bar-icon/homeActive.png'
-import liveIcon from '../assets/tab-bar-icon/live.png'
-import liveActiveIcon from '../assets/tab-bar-icon/liveActive.png'
-import foundIcon from '../assets/tab-bar-icon/found.png'
-import foundActiveIcon from '../assets/tab-bar-icon/foundActive.png'
-import cartIcon from '../assets/tab-bar-icon/cart.png'
-import cartActiveIcon from '../assets/tab-bar-icon/cartActive.png'
-import mineIcon from '../assets/tab-bar-icon/me.png'
-import mineActiveIcon from '../assets/tab-bar-icon/meActive.png'
-
-import SearchBar from '../components/SearchBar/SearchBar'
+import images from '../assets/images/index';
 
 const BottomTab = createBottomTabNavigator()
 
@@ -57,7 +46,7 @@ function BottomTabNavigator({ navigation, route }: any) {
         component={PublishScreen}
         options={{
           title: '首页',
-          tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? homeActiveIcon : homeIcon} />,
+          tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? images.tabLiveActive : images.tabLive} resizeMode="contain" />,
         }}
       />
       <BottomTab.Screen
@@ -65,7 +54,7 @@ function BottomTabNavigator({ navigation, route }: any) {
         component={MyShopScreen}
         options={{
           title: '店铺',
-          tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? liveActiveIcon : liveIcon} />,
+          tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? images.tabShopActive : images.tabShop} resizeMode="contain" />,
         }}
       />
       <BottomTab.Screen
@@ -73,7 +62,7 @@ function BottomTabNavigator({ navigation, route }: any) {
         component={AnorchMeScreen}
         options={{
           title: '我的',
-          tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? foundActiveIcon : foundIcon} />,
+          tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? images.tabMeActive : images.tabMe} resizeMode="contain" />,
         }}
       />
     </BottomTab.Navigator>

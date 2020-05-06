@@ -9,6 +9,8 @@ import worksData from './worksData'
 
 import im from './im'
 import live from './live'
+import shop from './shop'
+import asset from './asset'
 
 export default combineReducers({
   publicData,
@@ -19,4 +21,6 @@ export default combineReducers({
   worksData,
   im,
   live,
+  shop,
+  asset,
 })

@@ -29,7 +29,6 @@ const pick = async (options: ImagePicker.ImagePickerOptions = {
   }
   
   try {
-    console.log(ImagePicker.launchImageLibraryAsync, '333')
     let result = await ImagePicker.launchImageLibraryAsync(ops);
     if (!result?.cancelled) {
       return result.uri

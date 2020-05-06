@@ -1,77 +1,98 @@
 /**
- * 预组货
+ * 添加商品页
+ * 商品货源(平台、个人)
  */
 import * as React from 'react';
 import {
   View,
+  Image,
   FlatList,
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {PrimaryText, SmallText, T4} from 'react-native-normalization-text';
+import Toast from 'react-native-tiny-toast';
 import {useNavigation} from '@react-navigation/native';
 import withPage from '../../../components/HOCs/withPage';
 import {vw} from '../../../utils/metric';
 import {Colors} from '../../../constants/Theme';
-import {pad} from '../../../constants/Layout';
+import { pad, radio } from '../../../constants/Layout';
 import NavBar from '../../../components/NavBar';
 import GoodsCategoryScroll from '../../../components/GoodsCategoryScroll';
 import Empty from '../../../components/Empty';
 import GoodCheckBlock from '../../../components/GoodCheckBlock';
 import Iconcartlight from '../../../components/Iconfont/Iconcartlight';
+import {getPlatformBrands} from '../../../actions/shop';
+import images from '../../../assets/images/index';
 
 
-const CreateLiveScreen = (props: any) =>  {
+const GoodsSupply = (props: any) =>  {
   const {navigate, goBack} = useNavigation();
   const dispatch = useDispatch();
 
-  const onNextPress = () => {
+  React.useEffect(() => {
+    let loading: any;
+    const getData = async () => {
+      loading = Toast.showLoading('');
+      await dispatch(getPlatformBrands());
+      Toast.hide(loading);
+    };
+    getData();
 
+    return () => {
+      Toast.hide(loading);
+    }
+  }, [])
+
+  const onPressBrand = () => {
     // 跳转
+    navigate('BrandGoods', {brandId: '1'})
   }
 
-  const liveConfig = useSelector(state => state?.live?.liveConfig);
-
-  console.log(liveConfig, 'liveConfig')
+  // 平台品牌
+  const platformBrands = useSelector(state => state?.shop?.platformBrands) || [];
 
   /**
    * 选择的种类
    */
-  const [checkedCategory, setCheckedCategory]: Array<any> = React.useState();
-
+  const [checkedCategory, setCheckedCategory]: Array<any> = React.useState(0);
 
   /**
-   * 提交更改
+   * 种类下的品牌
    */
-  const onSubmit = () => {
-    // 提交更改
+  const brandsList = React.useMemo(() => {
+    console.log(platformBrands, checkedCategory, 'brans')
+    return platformBrands[checkedCategory]?.brans || [1,2,3];
+  }, [checkedCategory])
 
-    // 跳转
-    navigate('LiveGoodsManageScreen')
-  }
-
-  const data = [1,2,3,4,5,6,7,8,9,4,5,6,7,8,9,10];
-  const goods = [1,2,3,4,5,6,7,8,9,4,5,6,7,8,9,10];
-
+  console.log(platformBrands, 'platformBrands')
   return (
     <View style={styles.style}>
-      <NavBar title="直播组货" />
+      <NavBar leftTheme="light" title="添加商品" titleStyle={styles.navTitle} style={styles.nav} />
         {
-          data && data.length > 0 ? (
+          platformBrands && platformBrands.length > 0 ? (
             <View style={styles.contentWrapper}>
               <GoodsCategoryScroll
-                data={data}
+                data={platformBrands}
                 onChecked={setCheckedCategory}
                 style={{width: vw(28), marginRight: pad}}
               />
-              <View style={{flex: 1}}>
-                <PrimaryText style={styles.goodBlockTitle}>合作商品</PrimaryText>
+              <View style={{flex: 1, marginTop: pad}}>
                 <FlatList
-                  data={goods}
+                  data={[brandsList]}
                   renderItem={({item}) => {
                     return (
-                      <GoodCheckBlock />
+                      <TouchableOpacity style={styles.brandStyle} onPress={onPressBrand}>
+                        <View style={styles.imgWrapper}>
+                          <Image
+                            style={styles.img}
+                            source={props.good?.img || images.goodCover}
+                            resizeMode="cover"
+                          />
+                        </View>
+                        <SmallText>{}品牌名称</SmallText>
+                      </TouchableOpacity>
                     )
                   }}
                   keyExtractor={(item: any, index: number) => 'index' + index + item}
@@ -80,31 +101,30 @@ const CreateLiveScreen = (props: any) =>  {
                   style={{paddingRight: pad}}
                 />
               </View>
-            </View>) : (
+            </View>
+            ) : (
               <Empty />
             )
         }
-      <View style={styles.bottomWrapper}>
-        <View style={styles.pickedQuantity}>
-          <View style={styles.pickedQuantityBall}>
-            <Iconcartlight  />
-          </View>
-        </View>
-        <TouchableOpacity style={styles.btnWrapper} onPress={onSubmit}>
-          <PrimaryText color="white">完成修改直播商品列表</PrimaryText>
-        </TouchableOpacity>
-      </View>
     </View>
   )
 };
 
-CreateLiveScreen.defaultProps = {
+GoodsSupply.defaultProps = {
 };
+
+const cellWidth = (vw(100 - 28) - 3 * pad) / 3 ;
 
 const styles = StyleSheet.create({
   style: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  nav: {
+    backgroundColor: Colors.basicColor,
+  },
+  navTitle: {
+    color: '#fff',
   },
   bottomWrapper: {
     flexDirection: 'row',
@@ -142,17 +162,27 @@ const styles = StyleSheet.create({
   goodBlockTitle: {
     marginTop: pad * 2,
     marginBottom: pad
-  }
+  },
+  brandStyle: {
+    width: cellWidth,
+    backgroundColor: '#fff',
+    marginBottom: pad,
+    alignItems: 'center',
+  },
+  imgWrapper: {
+    width: cellWidth,
+    height: cellWidth,
+  },
+  img: {
+    width: '100%',
+    height: '100%',
+    borderRadius: radio,
+  },
 });
 
-export default withPage(CreateLiveScreen, {
-  navBackOptions: {
-    navBackIcon: 'close',
-    navBackTheme: 'light',
-    navBackPosition: 'right',
-  },
+export default withPage(GoodsSupply, {
   statusBarOptions: {
-    barStyle: 'dark-content',
-    backgroundColor: '#fff',
+    barStyle: 'light-content',
+    backgroundColor: 'transparent',
   }
 });

@@ -49,7 +49,6 @@ const LiveReadyCard = (props) =>  {
 
   const pickImage = async () => {
     try {
-      console.log(ImagePicker.launchImageLibraryAsync, '333')
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         // allowsEditing: true, // 这引起了cancelled
