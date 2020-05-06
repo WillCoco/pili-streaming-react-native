@@ -163,7 +163,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{headerShown: false}} />
                 <Stack.Screen name='LiveGoodsManageScreen' component={LiveGoodsManage} options={navHeadOption('直播商品管理')} />
                 <Stack.Screen name='AnorchLivingRoomScreen' component={AnorchLivingRoom} options={{headerShown: false}} />
-                <Stack.Screen name='AnchorTrailers' component={AnchorTrailers} options={navHeadOption('我的预告片')} />
+                <Stack.Screen name='AnchorTrailers' component={AnchorTrailers} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorRecords' component={AnchorRecords} options={{headerShown: false}} />
                 <Stack.Screen name='LivesAnalyze' component={LivesAnalyze} options={{headerShown: false}} />
                 <Stack.Screen name='LivingGoodsWareHouse' component={LivingGoodsWareHouse} options={{headerShown: false}} />

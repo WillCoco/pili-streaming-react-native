@@ -12,95 +12,80 @@ import {
   TouchableOpacity,
   PixelRatio
 } from 'react-native';
-import {PrimaryText, SmallText, T1 } from 'react-native-normalization-text';
-import {useNavigation} from '@react-navigation/native';
+import { PrimaryText, SmallText, T1 } from 'react-native-normalization-text';
+import { useNavigation } from '@react-navigation/native';
 import withPage from '../../../components/HOCs/withPage';
 import NavBar from '../../../components/NavBar';
 import images from '../../../assets/images';
-import {pad} from '../../../constants/Layout';
-import {Colors} from '../../../constants/Theme';
+import { pad } from '../../../constants/Layout';
+import { Colors } from '../../../constants/Theme';
 import pxToDp from '../../../utils/px2dp';
 
 
 const RecordsCard = (props: {
   cover: any,
   title: string,
-  proportion: String,
   watch: number,
   goodsNum: number,
   soldNum: number,
   addfans: number,
+  liveTime: string,
   onPress: () => void,
   onSharePress: () => void,
   onDownloadPress: () => void
 }) => {
   return (
-    <View style={styles.liveCardView}>
+    <View style={{ width: pxToDp(690), borderRadius: pxToDp(24), backgroundColor: '#fff', marginLeft: pxToDp(pad * 3), marginTop: pxToDp(pad * 4), flexDirection: 'row', overflow: 'hidden' }}>
       <TouchableOpacity onPress={props.onPress} style={styles.liveDetail}>
-        <View style={styles.coverView}>
-          <Image source={props.cover} style={styles.coverImg}/>
-          <Image source={images.iconPlay} style={styles.livePlayIcon}/>
-        </View>
-        <View style={{flexDirection: 'row', marginTop: pxToDp(pad * 3), width: pxToDp(629), justifyContent: 'space-between', alignItems: 'center'}}>
-          <PrimaryText color="emphasis" style={styles.liveTitle}>{props.title}</PrimaryText>
-          <Text style={styles.proportion}>{props.proportion}</Text>
-        </View>
-        <View style={{flexDirection: 'row', width: pxToDp(629), marginTop: pxToDp(pad * 2), alignItems: 'center'}}>
-          <SmallText style={styles.status}>回放</SmallText>
-          <View style={{flexDirection: 'row', width: pxToDp(480), alignItems: 'center'}}>
-            <SmallText color="grey" style={styles.listItem}>{props.watch}次观看</SmallText>
-            <View style={styles.interval}></View>
-            <SmallText color="grey" style={styles.listItem}>{props.goodsNum}件商品</SmallText>
-            <View style={styles.interval}></View>
-            <SmallText color="grey" style={styles.listItem}>卖出{props.soldNum}件</SmallText>
-            <View style={styles.interval}></View>
-            <SmallText color="grey" style={styles.listItem}>增粉{props.addfans}</SmallText>
-          </View>
-        </View>
+        <Image source={props.cover} style={styles.coverImg} />
+        <Image source={images.iconPlay} style={styles.livePlayIcon} />
       </TouchableOpacity>
-      <View style={{flexDirection: 'row', width: pxToDp(300), marginTop: pxToDp(pad * 3), justifyContent: 'space-between', alignItems: 'center'}}>
-        <TouchableOpacity onPress={props.onSharePress} style={{flexDirection: 'row', width: pxToDp(115), alignItems: 'center'}}>
-          <Image source={images.iconShare} style={styles.shareImg} />
-          <T1 style={styles.operationButton} color="grey">分享</T1>
+      <View style={styles.recordsDetail}>
+        <TouchableOpacity onPress={props.onPress} style={styles.detail}>
+          <PrimaryText color="emphasis" style={styles.liveTitle} numberOfLines={2}>{props.title}</PrimaryText>
+          <View style={{ flexDirection: 'row', width: pxToDp(360), marginTop: pxToDp(pad * 2), alignItems: 'center' }} >
+            <SmallText color="grey" style={styles.listItem} numberOfLines={2}>{props.watch}次观看 丨 {props.goodsNum}件商品 | 卖出{props.soldNum}件 | 增粉{props.addfans}</SmallText>
+          </View>
+          <SmallText color="grey" style={styles.liveTime}>{props.liveTime}</SmallText>
         </TouchableOpacity>
-        <TouchableOpacity onPress={props.onDownloadPress} style={{flexDirection: 'row', width: pxToDp(115), alignItems: 'center'}}>
-          <Image source={images.iconDownload} style={styles.downloadImg} />
-          <T1 color="grey" style={styles.operationButton}>下载</T1>
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', width: pxToDp(360), marginTop: pxToDp(pad * 3), justifyContent: 'space-between', alignItems: 'center' }}>
+          <TouchableOpacity onPress={props.onSharePress} style={{ flexDirection: 'row', width: pxToDp(115), alignItems: 'center' }}>
+            <Image source={images.iconShare} style={styles.shareImg} />
+            <T1 style={styles.operationButton} color="grey">分享</T1>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={props.onDownloadPress} style={{ flexDirection: 'row', width: pxToDp(115), alignItems: 'center' }}>
+            <Image source={images.iconDownload} style={styles.downloadImg} />
+            <T1 color="grey" style={styles.operationButton}>下载</T1>
+          </TouchableOpacity>
+          <SmallText style={styles.status}>回放</SmallText>
+        </View>
       </View>
     </View>
   )
 }
-const AnchorRecords = () =>  {
+const AnchorRecords = () => {
   const liveList = [
     {
       cover: images.watchLiveCover,
       title: '我就知道你想看杨迪和薇娅互黑薇娅',
-      proportion: '1/12',
       watch: 123,
       goodsNum: 123,
       soldNum: 123,
-      addfans: 123
+      addfans: 123,
+      liveTime: '2020.04.25'
     },
     {
       cover: images.watchLiveCover,
       title: '我就知道你想看杨迪和薇娅互黑薇娅',
-      proportion: '1/12',
       watch: 345,
       goodsNum: 345,
       soldNum: 345,
-      addfans: 345
+      addfans: 345,
+      liveTime: '2020.04.25'
     }
   ];
 
-  const {navigate} = useNavigation();
-
-  /**
-   * 点击前往直播页面
-   */
-  const onPress = () => {
-    alert('前往直播页面')
-  };
+  const { navigate } = useNavigation();
 
   /**
    * 点击分享按钮
@@ -126,12 +111,12 @@ const AnchorRecords = () =>  {
                 key={`_${index}`}
                 cover={item.cover}
                 title={item.title}
-                proportion={item.proportion}
                 watch={item.watch}
                 goodsNum={item.goodsNum}
                 soldNum={item.soldNum}
                 addfans={item.addfans}
-                onPress={onPress}
+                liveTime={item.liveTime}
+                onPress={() => navigate('LivingRoomScreen')}
                 onSharePress={onSharePress}
                 onDownloadPress={onDownloadPress}
               />
@@ -153,57 +138,38 @@ const styles = StyleSheet.create({
   },
   myLivePage: {
   },
-  liveCardView: {
-    width: pxToDp(690),
-    borderRadius: pxToDp(24),
-    padding: pxToDp(pad * 3),
-    backgroundColor: '#fff',
-    marginLeft: pxToDp(pad * 3),
-    marginTop: pxToDp(pad * 4)
-  },
   liveDetail: {
-
-  },
-  coverView: {
-    width: pxToDp(629),
-    height: pxToDp(254),
-    borderRadius: pxToDp(20),
+    width: pxToDp(300),
+    height: pxToDp(300),
     position: 'relative',
-    overflow: 'hidden'
+    marginRight: pxToDp(pad * 2)
   },
   coverImg: {
-    width: pxToDp(629),
-    height: pxToDp(254)
+    width: pxToDp(300),
+    height: pxToDp(300)
   },
   livePlayIcon: {
     width: pxToDp(70),
     height: pxToDp(70),
     position: 'absolute',
-    top: pxToDp(93),
-    left: pxToDp(280)
+    top: pxToDp(115),
+    left: pxToDp(115)
+  },
+  recordsDetail: {
+    flex: 1,
+    paddingRight: pxToDp(pad),
+    paddingTop: pxToDp(pad * 3),
+    paddingBottom: pxToDp(pad * 3)
+  },
+  detail: {
+    width: pxToDp(360)
   },
   liveTitle: {
     fontWeight: 'bold'
   },
-  proportion: {
-    fontSize: pxToDp(24),
-    color: Colors.darkGrey
-  },
-  status: {
-    color: '#FF321B',
-    overflow: 'hidden',
-    paddingTop: pxToDp(pad),
-    paddingBottom: pxToDp(pad),
-    paddingLeft: pxToDp(pad * 2),
-    paddingRight: pxToDp(pad * 2),
-    marginRight: pxToDp(pad),
-    borderRadius: pxToDp(pad * 2),
-    backgroundColor: 'rgba(255,50,27,0.1)'
-    // borderWidth: 1 / PixelRatio.get(),
-    // borderColor: Colors.basicColor,
-  },
   listItem: {
-    width: pxToDp(125),
+    width: pxToDp(360),
+    lineHeight: pxToDp(40),
     marginRight: pxToDp(pad),
     marginLeft: pxToDp(pad)
   },
@@ -211,6 +177,9 @@ const styles = StyleSheet.create({
     width: pxToDp(2),
     height: pxToDp(18),
     backgroundColor: Colors.lightGrey
+  },
+  liveTime: {
+    marginTop: pxToDp(pad * 2)
   },
   operationButton: {
     fontSize: pxToDp(24)
@@ -224,6 +193,17 @@ const styles = StyleSheet.create({
     width: pxToDp(34),
     height: pxToDp(34),
     marginRight: pxToDp(pad)
+  },
+  status: {
+    color: Colors.basicColor,
+    overflow: 'hidden',
+    paddingTop: pxToDp(pad),
+    paddingBottom: pxToDp(pad),
+    paddingLeft: pxToDp(pad * 2),
+    paddingRight: pxToDp(pad * 2),
+    borderRadius: pxToDp(pad * 2),
+    backgroundColor: 'rgba(255,50,27,0.1)'
+    // borderWidth: 1 / PixelRatio.get()
   }
 });
 

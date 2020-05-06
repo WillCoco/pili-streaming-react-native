@@ -229,6 +229,12 @@ const images : {
   },
   get recordsBgImg() {
     return require('./recordsBgImg.png')
+  },
+  get iconRemind() {
+    return require('./iconRemind.png')
+  },
+  get iconHasReminded() {
+    return require('./iconHasReminded.png')
   }
 }
 
