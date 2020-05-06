@@ -43,12 +43,12 @@ const RecordsCard = (props: {
       <View style={styles.recordsDetail}>
         <TouchableOpacity onPress={props.onPress} style={styles.detail}>
           <PrimaryText color="emphasis" style={styles.liveTitle} numberOfLines={2}>{props.title}</PrimaryText>
-          <View style={{ flexDirection: 'row', width: pxToDp(360), marginTop: pxToDp(pad * 2), alignItems: 'center' }} >
+          <View style={{ flexDirection: 'row', width: pxToDp(360), marginTop: pxToDp(pad), alignItems: 'center' }} >
             <SmallText color="grey" style={styles.listItem} numberOfLines={2}>{props.watch}次观看 丨 {props.goodsNum}件商品 | 卖出{props.soldNum}件 | 增粉{props.addfans}</SmallText>
           </View>
           <SmallText color="grey" style={styles.liveTime}>{props.liveTime}</SmallText>
         </TouchableOpacity>
-        <View style={{ flexDirection: 'row', width: pxToDp(360), marginTop: pxToDp(pad * 3), justifyContent: 'space-between', alignItems: 'center' }}>
+        <View style={{ flexDirection: 'row', width: pxToDp(360), marginTop: pxToDp(pad * 2), justifyContent: 'space-between', alignItems: 'center' }}>
           <TouchableOpacity onPress={props.onSharePress} style={{ flexDirection: 'row', width: pxToDp(115), alignItems: 'center' }}>
             <Image source={images.iconShare} style={styles.shareImg} />
             <T1 style={styles.operationButton} color="grey">分享</T1>
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     width: pxToDp(360),
-    lineHeight: pxToDp(40),
+    // lineHeight: pxToDp(40),
     marginRight: pxToDp(pad),
     marginLeft: pxToDp(pad)
   },
