@@ -16,4 +16,6 @@ const generator = new genSig(1400313779, 'cdaae4b78b240035a2e909b3c0450a77cba67e
 
 let userSig = generator.genTestUserSig('test01');// 测试
 
-export default {tim, TIM, userSig};
+let getUserSig = (userID: string) => generator.genTestUserSig(userID);
+
+export default {tim, TIM, userSig, getUserSig};

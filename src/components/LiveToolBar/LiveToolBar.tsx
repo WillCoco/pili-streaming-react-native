@@ -23,20 +23,30 @@ interface LiveToolBarProps {
   style?: StyleProp<any>,
   inputPlaceholder?: string,
   inputStyle?: StyleProp<any>,
-  onSubmitEditing: () => any
+  onSubmitEditing: (v: string) => any
 }
 
 const LiveToolBar = (props: LiveToolBarProps) : any =>  {
+  const [value, setValue] = React.useState('');
+
+  const onSubmitEditing = () => {
+    if (value) {
+      props.onSubmitEditing(value);
+      setValue('');
+    }
+  }
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
       <TextInput
+        value={value}
+        onChangeText={setValue}
         placeholder={props.inputPlaceholder}
         placeholderTextColor="#fff"
         style={StyleSheet.flatten([styles.input, props.inputStyle])}
         returnKeyLabel="发送"
         returnKeyType="send"
-        onSubmitEditing={props.onSubmitEditing}
+        onSubmitEditing={onSubmitEditing}
       />
       <Image
         source={images.shoppingIcon}

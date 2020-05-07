@@ -6,10 +6,12 @@ import { createStackNavigator } from '@react-navigation/stack'
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons'
 
+import { Provider as AntdProvider } from '@ant-design/react-native'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import configStore from './src/store'
 import { getStatusBarHeight } from './src/actions/public'
+import { login } from './src/actions/im'
 
 import Root from './src/navigation/BottomTabNavigator'
 import HomeSearch from './src/pages/HomeSearch/HomeSearch'
@@ -104,7 +106,10 @@ export default function App(props: { skipLoadingScreen: any; }) {
       }
     }
 
-    loadResourcesAndDataAsync()
+    loadResourcesAndDataAsync();
+
+    // 登录im
+    store.dispatch(login());
   }, [])
 
   const navHeadOption = (title?: string) => ({
@@ -116,6 +121,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
     // return <AppLoading /> // tofix: 在android上报错
   } else {
     return (
+      <AntdProvider>
       <Provider store={store}>
         <PersistGate
           loading={null}
@@ -190,7 +196,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
           </View>
         </PersistGate>
       </Provider>
-
+      </AntdProvider>
     )
   }
 }

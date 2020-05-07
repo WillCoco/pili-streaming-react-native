@@ -25,7 +25,7 @@ const LiveHomeScreen = (props: any): React.ReactElement =>  {
 
   React.useEffect(() => {
     // 测试登录
-    dispatch(login({userID: 'test01'}));
+    // dispatch(login({userID: 'test01'}));
   }, [])
 
   return (

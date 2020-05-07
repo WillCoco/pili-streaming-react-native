@@ -8,7 +8,6 @@ import {
 import LiveWindow from '../../../components/LiveWindow';
 import withPage from '../../../components/HOCs/withPage';
 import { pad } from '../../../constants/Layout';
-import { safeTop } from '../../../constants/DeviceInfo';
 
 const LivingRoomScreen = (props: any) : any =>  {
   return (

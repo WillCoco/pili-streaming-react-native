@@ -10,16 +10,18 @@ import {
   StyleProp,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import LiveIntro from '../LiveIntro';
 import LivingBottomBlock from '../LivingBottomBlock';
 import LivePusher from '../LivePusher';
 import L from '../../constants/Layout';
 import Iconcloselight from '../../components/Iconfont/Iconcloselight';
 import Iconchangecamera from '../../components/Iconfont/Iconchangecamera';
+import NoticeBubble from '../../components/NoticeBubble';
 import {pad} from '../../constants/Layout';
 import images from '../../assets/images';
-import {joinGroup, quitGroup} from '../../actions/im';
+import { joinGroup, quitGroup, createGroup, dismissGroup, updateGroupProfile } from '../../actions/im';
+import { Modal } from '@ant-design/react-native';
 
 const {window} = L;
 
@@ -43,7 +45,13 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
    */
   const switchCamera = () => {
     camera.current.switchCamera()
+    console.log(camera)
   }
+
+  /**
+   * 所在房间信息
+   */
+  const room = useSelector(state => state?.im?.room);
 
   /**
    * im加群状态
@@ -61,7 +69,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
    * 
    */
   React.useEffect(() => {
-    dispatch(joinGroup({groupID: '1'}))
+    dispatch(createGroup({roomName: '上级传递'}))
       .then((success?: boolean) => {
         setIsIMJoinSecceed(!!success)
       })
@@ -72,9 +80,22 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       });
     
     return () => {
-      dispatch(quitGroup('1')); // 退im群
+      dispatch(dismissGroup()); // 退im群
+      camera.current.stopPreview();
     }
   }, [])
+
+  /**
+   * 公告气泡
+   */
+  const noticeBubbleText = room?.notification;
+  
+  const onPressBubble = () => {
+    if (room?.groupID) {
+      // 显示输入框
+      dispatch(updateGroupProfile({notification: '抽奖抽奖, 随机踢走一名幸运观众'}));
+    }
+  }
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
@@ -89,8 +110,19 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
         liveTitle="湖南卫视直播间"
         liveSubTitle={`123214`}
       />
+      {
+        !!noticeBubbleText ?
+          <NoticeBubble
+            text={noticeBubbleText}
+            style={styles.noticeBubble}
+          /> : null
+      }
       <LivingBottomBlock.Anchor
         onShopBagPress={() =>alert('余组货')}
+        onPressBubble={onPressBubble}
+        onPressShare={() =>alert('余组货')}
+        onPressFaceBeauty={() => Modal.prompt('1', '123')}
+        onPressFilter={() =>alert('美颜')}
       />
       <TouchableOpacity onPress={switchCamera} style={StyleSheet.flatten([styles.camera, {top: props.safeTop + (pad * 2)}])}>
         <Iconchangecamera size={24} />

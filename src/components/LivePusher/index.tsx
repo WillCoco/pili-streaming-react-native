@@ -42,7 +42,7 @@ const LivePusher = React.forwardRef((props: LivePusherProps, ref: any) : any => 
     // 打开
     return () => {
       // 关闭
-      Toast.show('close')
+      // Toast.show('close')
       // return dispatch(updateStarted(false))
     }
   }, [])

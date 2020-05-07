@@ -6163,6 +6163,11 @@ react-native-collapsible@^1.4.0:
   dependencies:
     prop-types "^15.6.2"
 
+react-native-device-info@^5.5.6:
+  version "5.5.6"
+  resolved "https://registry.npm.taobao.org/react-native-device-info/download/react-native-device-info-5.5.6.tgz#139466e6e995e512bb03d5bdeef59bd4cfe21dcf"
+  integrity sha1-E5Rm5umV5RK7A9W97vWb1M/iHc8=
+
 react-native-draggable-flatlist@^2.3.2:
   version "2.3.2"
   resolved "https://registry.npm.taobao.org/react-native-draggable-flatlist/download/react-native-draggable-flatlist-2.3.2.tgz#4d84b2f7298d2426a4e5a95290c3b10861d81bf2"
