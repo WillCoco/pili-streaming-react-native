@@ -1,0 +1,67 @@
+import React from 'react'
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { connect } from 'react-redux'
+import { useNavigation } from '@react-navigation/native'
+import pxToDp from '../../../utils/px2dp'
+import { Colors } from '../../../constants/Theme'
+import GoodsCard from '../../../components/WorksGoodsCard/WorksGoodsCard'
+
+function GoodsList(props: any) {
+  const navigation = useNavigation()
+  const { addedGoodsList } = props
+
+  return (
+    <View style={styles.container}>
+      <ScrollView style={styles.goodsList}>
+        {
+          addedGoodsList && addedGoodsList.map((item: any, index: number) => {
+            return (
+              <GoodsCard
+                key={`goods-${index}`}
+                goodsInfo={item}
+                type='del'
+              />
+            )
+          })
+        }
+      </ScrollView>
+      <View style={styles.btnGroup}>
+        <TouchableOpacity style={[styles.btn, styles.pinkBtn]} onPress={() => navigation.push('WorksGoodsList')}>
+          <Text style={{ fontSize: pxToDp(30), color: Colors.basicColor }}>添加商品</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn}>
+          <Text style={{ fontSize: pxToDp(30), color: Colors.whiteColor }}>确认发布</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  )
+}
+
+export default connect(
+  (state: any) => state.worksData
+)(GoodsList)
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  btnGroup: {
+    padding: pxToDp(30)
+  },
+  btn: {
+    alignSelf: 'center',
+    width: pxToDp(670),
+    height: pxToDp(80),
+    backgroundColor: Colors.basicColor,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: pxToDp(40)
+  },
+  pinkBtn: {
+    backgroundColor: Colors.pinkColor,
+    marginBottom: pxToDp(30)
+  },
+  goodsList: {
+    flex: 1
+  }
+})

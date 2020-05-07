@@ -38,6 +38,13 @@ import OrderDetail from './src/pages/OrderDetail/OrderDetail'
 import ExpressInfo from './src/pages/ExpressInfo/ExpressInfo'
 import ApplyForAfterSales from './src/pages/ApplyForAfterSales/ApplyForAfterSales'
 import AfterSaleDetail from './src/pages/AfterSaleDetail/AfterSaleDetail'
+import Setting from './src/pages/Setting/Setting'
+import AboutUs from './src/pages/AboutUs/AboutUs'
+import Tenants from './src/pages/Tenants/Tenants'
+import ServiceAgreement from './src/pages/ServiceAgreement/ServiceAgreement'
+import FoundInfo from './src/pages/FoundInfo/FoundInfo'
+import PublishWork from './src/pages/PublishWork/PublishWork'
+import WorksGoodsList from './src/pages/WorksGoodsList/WorksGoodsList'
 
 import NavBar from './src/components/NavBar'
 import AnchorTabs from './src/navigation/AnchorTabs'
@@ -166,7 +173,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{headerShown: false}} />
                 <Stack.Screen name='LiveGoodsManageScreen' component={LiveGoodsManage} options={navHeadOption('直播商品管理')} />
                 <Stack.Screen name='AnorchLivingRoomScreen' component={AnorchLivingRoom} options={{headerShown: false}} />
-                <Stack.Screen name='AnchorTrailers' component={AnchorTrailers} options={navHeadOption('我的预告片')} />
+                <Stack.Screen name='AnchorTrailers' component={AnchorTrailers} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorRecords' component={AnchorRecords} options={{headerShown: false}} />
                 <Stack.Screen name='LivesAnalyze' component={LivesAnalyze} options={{headerShown: false}} />
                 <Stack.Screen name='LivingGoodsWareHouse' component={LivingGoodsWareHouse} options={{headerShown: false}} />
@@ -180,6 +187,13 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='ActivityWebView' component={ActivityWebView} />
                 <Stack.Screen name='AddressList' component={AddressList} />
                 <Stack.Screen name='AnchorDetailScreen' component={AnchorDetail} options={{headerShown: false}} />
+                <Stack.Screen name='Setting' component={Setting} />
+                <Stack.Screen name='AboutUs' component={AboutUs} />
+                <Stack.Screen name='Tenants' component={Tenants} />
+                <Stack.Screen name='ServiceAgreement' component={ServiceAgreement} />
+                <Stack.Screen name='FoundInfo' component={FoundInfo} />
+                <Stack.Screen name='PublishWork' component={PublishWork} />
+                <Stack.Screen name='WorksGoodsList' component={WorksGoodsList} />
                 <Stack.Screen name='AddNewAddress' component={AddNewAddress} options={{headerShown: false}} />
                 <Stack.Screen name='GoodsSupply' component={GoodsSupply} options={{headerShown: false}} />
                 <Stack.Screen name='BrandGoods' component={BrandGoods} options={{headerShown: false}} />

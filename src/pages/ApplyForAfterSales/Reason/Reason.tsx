@@ -64,7 +64,6 @@ export default function Reason(props) {
                   </TouchableOpacity>
                 }
               </View>
-
             )
           })
         }

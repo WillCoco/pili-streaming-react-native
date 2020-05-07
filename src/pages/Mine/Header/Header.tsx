@@ -47,6 +47,10 @@ function Header(props) {
     }
   }
 
+  const toSetting = () => {
+    navigation.push('Setting')
+  }
+
   return (
     <ImageBackground
       resizeMode='stretch'
@@ -60,7 +64,9 @@ function Header(props) {
             <Text style={styles.liveText}>去直播</Text><Ionicons name='ios-play' color={Colors.whiteColor} size={20} />
           </ImageBackground>
         </TouchableOpacity>
-        <Image source={require('../../../assets/mine-image/icon_setting.png')} style={styles.setIcon} />
+        <TouchableOpacity onPress={toSetting}>
+          <Image source={require('../../../assets/mine-image/icon_setting.png')} style={styles.setIcon} />
+        </TouchableOpacity>
       </View>
 
       {/* 个人信息 */}

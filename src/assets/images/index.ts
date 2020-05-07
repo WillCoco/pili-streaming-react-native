@@ -247,6 +247,27 @@ const images : {
   get tabMe() {
     return require('./tabMe.png')
   },
+  get iconPlay() {
+    return require('./iconPlay.png')
+  },
+  get iconShare() {
+    return require('./iconShare.png')
+  },
+  get iconDownload() {
+    return require('./iconDownload.png')
+  },
+  get watchLiveCover() {
+    return require('./watchLiveCover.png')
+  },
+  get recordsBgImg() {
+    return require('./recordsBgImg.png')
+  },
+  get iconRemind() {
+    return require('./iconRemind.png')
+  },
+  get iconHasReminded() {
+    return require('./iconHasReminded.png')
+  }
 }
 
 export default images;
