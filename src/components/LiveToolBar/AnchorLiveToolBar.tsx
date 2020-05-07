@@ -23,13 +23,17 @@ interface LiveToolBarProps {
   style?: StyleProp<any>,
   inputPlaceholder?: string,
   inputStyle?: StyleProp<any>,
-  onShopBagPress: () => any
+  onPressShopBag: () => any,
+  onPressBubble: () => any,
+  onPressShare: () => any,
+  onPressFaceBeauty: () => any,
+  onPressFilter: () => any,
 }
 
 const LiveToolBar = (props: LiveToolBarProps) : any =>  {
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
-      <TouchableOpacity onPress={props.onShopBagPress}>
+      <TouchableOpacity onPress={props.onPressShopBag}>
         <Image
           source={images.anchorShoppingIcon}
           style={styles.shopBagImg}
@@ -37,38 +41,38 @@ const LiveToolBar = (props: LiveToolBarProps) : any =>  {
         />
       </TouchableOpacity>
       <View style={styles.cellsWrapper}>
-        <View style={styles.cell}>
+        <TouchableOpacity style={styles.cell} onPress={props.onPressFaceBeauty}>
           <Image
             source={images.faceBeautyIcon}
             style={styles.img}
             resizeMode="contain"
           />
           <SmallText color="white">美颜</SmallText>
-        </View>
-        <View style={styles.cell}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.cell} onPress={props.onPressFilter}>
           <Image
             source={images.filterIcon}
             style={styles.img}
             resizeMode="contain"
           />
           <SmallText color="white">滤镜</SmallText>
-        </View>
-        <View style={styles.cell}>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={props.onPressBubble} style={styles.cell}>
           <Image
             source={images.editBubbleIcon}
             style={styles.img}
             resizeMode="contain"
           />
           <SmallText color="white">气泡</SmallText>
-        </View>
-        <View style={styles.cell}>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={props.onPressShare} style={styles.cell}>
           <Image
             source={images.anchorShareIcon}
             style={styles.img}
             resizeMode="contain"
           />
           <SmallText color="white">分享</SmallText>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   )

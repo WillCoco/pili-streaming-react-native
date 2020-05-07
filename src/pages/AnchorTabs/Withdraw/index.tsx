@@ -24,6 +24,7 @@ import {pad} from '../../../constants/Layout';
 import {addBankCard} from '../../../actions/asset';
 import { sleep } from '../../../utils/tools';
 import FormRow from '../../../components/FormRow';
+import CountDown from '../../../components/CountDown';
 
 const Withdraw = () =>  {
   const {navigate, goBack, replace} = useNavigation();
@@ -105,6 +106,10 @@ const Withdraw = () =>  {
           }
           maxLength={6}
           // inputStyle={{borderWidth: 2, borderColor: 'red'}}
+        />
+        <CountDown
+          deadline={Date.now() + 6000}
+          onStop={() => {alert('结束')}}
         />
         <TinyText style={{padding: pad}}>每次提现将会收取1.00元手续费，建议减少提现次数，避免造成资金损失</TinyText>
       </View>

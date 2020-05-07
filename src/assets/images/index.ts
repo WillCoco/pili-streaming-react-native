@@ -264,6 +264,13 @@ const images : {
   get tabMe() {
     return require('./tabMe.png')
   },
+  // 房间消息是否关注
+  get roomMessageUnFollowed() {
+    return require('./roomMessageUnFollowed.png')
+  },
+  get roomMessageFollowed() {
+    return require('./roomMessageFollowed.png')
+  },
   get iconPlay() {
     return require('./iconPlay.png')
   },
