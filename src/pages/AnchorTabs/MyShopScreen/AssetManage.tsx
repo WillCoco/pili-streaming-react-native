@@ -96,7 +96,7 @@ const AssetManage = (props: any) =>  {
           text="提现"
           textStyle={{color: '#fff'}}
           style={styles.buttonStyle}
-          onPress={() => navigate('BankCardBag', {onPicked: (params: any) => replace('Withdraw', params)})}
+          onPress={() => navigate('BankCardBag')}
         />
       </View>
       <View style={styles.contentWrapper}>

@@ -25,7 +25,7 @@ export default function ActionSheet(props: any) {
     <Modal
       visible={props.isShow}
       transparent={true}
-      animationType='none'
+      animationType='fade'
       onRequestClose={props.close}
     >
       <View style={styles.container}>

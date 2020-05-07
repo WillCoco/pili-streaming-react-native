@@ -4,12 +4,16 @@
 import * as React from 'react';
 import {
   View,
+  Text,
   StyleSheet,
   TouchableOpacity,
   Platform,
+  ImageBackground,
+  Image,
 } from 'react-native';
+import {ListItem} from 'react-native-elements';
 import {useSelector, useDispatch} from 'react-redux';
-import {PrimaryText} from 'react-native-normalization-text';
+import {PrimaryText, TinyText, T4} from 'react-native-normalization-text';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Toast from 'react-native-tiny-toast';
 import NavBar from '../../../components/NavBar';
@@ -19,14 +23,37 @@ import {vw} from '../../../utils/metric';
 import {pad} from '../../../constants/Layout';
 import {addBankCard} from '../../../actions/asset';
 import { sleep } from '../../../utils/tools';
-
+import FormRow from '../../../components/FormRow';
 
 const Withdraw = () =>  {
-  const {navigate, goBack} = useNavigation();
+  const {navigate, goBack, replace} = useNavigation();
   const route = useRoute();
   const dispatch = useDispatch();
+  const [withdrawNum, setWithdrawNum] = React.useState('');
+  const [verifyCode, setVerifyCode] =  React.useState('');
+  const [countDownNum, setCountDownNum] = React.useState(0); // 倒计时
 
   console.log(route.params?.card, '提现的银行卡')
+
+  React.useEffect(() => {
+    // setCurCard()
+    console.log(route.params)
+  }, [])
+
+  /**
+   * 当前银行卡
+   */
+  const {
+    card,
+  } = route.params || {}
+  
+
+  /**
+   * 获取验证码
+   */
+  const getCode = () => {
+    
+  }
 
   /**
    * 提交提现
@@ -49,9 +76,37 @@ const Withdraw = () =>  {
         style={styles.nav}
       />
       <View style={styles.contentWrapper}>
-        <PrimaryText>什么银行</PrimaryText>
-        <PrimaryText>提现金额</PrimaryText>
-        <PrimaryText>验证码</PrimaryText>
+        <ListItem
+          title={
+            <T4 style={{marginBottom: pad}}>{card.name}</T4>
+          }
+          subtitle={
+            <TinyText>尾号{card.cardNum.slice(-4)}储蓄卡</TinyText>
+          }
+          leftAvatar={{ source: card.icon}}
+          chevron
+          style={{marginBottom: pad}}
+          onPress={() => replace('BankCardBag')}
+        />
+        <FormRow 
+          title={'提现金额'}
+          placeholder={'可提现金额¥999.00'}
+          value={withdrawNum}
+          onChangeText={setWithdrawNum}
+        />
+        <FormRow 
+          title={'验证码'}
+          value={verifyCode}
+          onChangeText={setVerifyCode}
+          rightTitle={
+            countDownNum > 0 
+              && <PrimaryText>{'' + countDownNum}s后重发</PrimaryText>
+              || <PrimaryText style={{color: Colors.blueColor}} onPress={getCode}>获取验证码</PrimaryText>
+          }
+          maxLength={6}
+          // inputStyle={{borderWidth: 2, borderColor: 'red'}}
+        />
+        <TinyText style={{padding: pad}}>每次提现将会收取1.00元手续费，建议减少提现次数，避免造成资金损失</TinyText>
       </View>
      
       <ButtonRadius

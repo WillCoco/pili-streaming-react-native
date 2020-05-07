@@ -16,10 +16,12 @@ export default function ActivityWebView() {
     },
     headerTitleAlign: 'center',
     headerTintColor: Colors.whiteColor,
-    headerBackTitleVisible: false
+    headerBackTitleVisible: false,
+    // headerTransparent: true
   })
 
   return (
-    <WebView source={{ uri: route.params.url }} />
+    // <WebView source={{ uri: route.params.url }} />
+    <WebView source={{ uri: 'https://cschat-ccs.aliyun.com/index.htm?tntInstId=_1r0MG9g&scene=SCE00006973' }} />
   )
 }

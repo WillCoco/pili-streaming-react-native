@@ -40,6 +40,13 @@ import OrderDetail from './src/pages/OrderDetail/OrderDetail'
 import ExpressInfo from './src/pages/ExpressInfo/ExpressInfo'
 import ApplyForAfterSales from './src/pages/ApplyForAfterSales/ApplyForAfterSales'
 import AfterSaleDetail from './src/pages/AfterSaleDetail/AfterSaleDetail'
+import Setting from './src/pages/Setting/Setting'
+import AboutUs from './src/pages/AboutUs/AboutUs'
+import Tenants from './src/pages/Tenants/Tenants'
+import ServiceAgreement from './src/pages/ServiceAgreement/ServiceAgreement'
+import FoundInfo from './src/pages/FoundInfo/FoundInfo'
+import PublishWork from './src/pages/PublishWork/PublishWork'
+import WorksGoodsList from './src/pages/WorksGoodsList/WorksGoodsList'
 
 import NavBar from './src/components/NavBar'
 import AnchorTabs from './src/navigation/AnchorTabs'
@@ -66,9 +73,12 @@ import AnchroBill from './src/pages/AnchorTabs/MyShopScreen/AnchroBill'
 import GoodEdit from './src/pages/AnchorTabs/MyShopScreen/GoodEdit'
 import BrandGoods from './src/pages/AnchorTabs/BrandGoods'
 import AnchorAgreement from './src/pages/AnchorTabs/AnchorAgreement'
+import AnchorLivingEndScreen from './src/pages/AnchorTabs/AnorchMeScreen/AnchorLivingEndScreen'
 import BankCardBag from './src/pages/AnchorTabs/CardBag'
 import AddBankCard from './src/pages/AnchorTabs/AddBankCard'
 import Withdraw from './src/pages/AnchorTabs/Withdraw'
+import Message from './src/pages/AnchorTabs/Message'
+import MessageDetail from './src/pages/AnchorTabs/Message/MessageDetail'
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -162,14 +172,14 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 
                 <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
                 <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false }} />
-                <Stack.Screen name='LiveSearchScreen' component={LiveSearch} options={{headerShown: false}} />
+                <Stack.Screen name='LiveSearchScreen' component={LiveSearch} />
                 <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
                 <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{headerShown: false}} />
                 <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} options={navHeadOption('发布预告')} />
                 <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{headerShown: false}} />
                 <Stack.Screen name='LiveGoodsManageScreen' component={LiveGoodsManage} options={navHeadOption('直播商品管理')} />
                 <Stack.Screen name='AnorchLivingRoomScreen' component={AnorchLivingRoom} options={{headerShown: false}} />
-                <Stack.Screen name='AnchorTrailers' component={AnchorTrailers} options={navHeadOption('我的预告片')} />
+                <Stack.Screen name='AnchorTrailers' component={AnchorTrailers} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorRecords' component={AnchorRecords} options={{headerShown: false}} />
                 <Stack.Screen name='LivesAnalyze' component={LivesAnalyze} options={{headerShown: false}} />
                 <Stack.Screen name='LivingGoodsWareHouse' component={LivingGoodsWareHouse} options={{headerShown: false}} />
@@ -183,13 +193,23 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='ActivityWebView' component={ActivityWebView} />
                 <Stack.Screen name='AddressList' component={AddressList} />
                 <Stack.Screen name='AnchorDetailScreen' component={AnchorDetail} options={{headerShown: false}} />
+                <Stack.Screen name='Setting' component={Setting} />
+                <Stack.Screen name='AboutUs' component={AboutUs} />
+                <Stack.Screen name='Tenants' component={Tenants} />
+                <Stack.Screen name='ServiceAgreement' component={ServiceAgreement} />
+                <Stack.Screen name='FoundInfo' component={FoundInfo} />
+                <Stack.Screen name='PublishWork' component={PublishWork} />
+                <Stack.Screen name='WorksGoodsList' component={WorksGoodsList} />
                 <Stack.Screen name='AddNewAddress' component={AddNewAddress} options={{headerShown: false}} />
                 <Stack.Screen name='GoodsSupply' component={GoodsSupply} options={{headerShown: false}} />
                 <Stack.Screen name='BrandGoods' component={BrandGoods} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorAgreement' component={AnchorAgreement} options={{headerShown: false}} />
+                <Stack.Screen name='AnchorLivingEnd' component={AnchorLivingEndScreen} options={{headerShown: false}} />
                 <Stack.Screen name='BankCardBag' component={BankCardBag} options={{headerShown: false}} />
                 <Stack.Screen name='AddBankCard' component={AddBankCard} options={{headerShown: false}} />
                 <Stack.Screen name='Withdraw' component={Withdraw} options={{headerShown: false}} />
+                <Stack.Screen name='Message' component={Message} options={{headerShown: false}} />
+                <Stack.Screen name='MessageDetail' component={MessageDetail} options={{headerShown: false}} />
 
               </Stack.Navigator>
             </NavigationContainer>

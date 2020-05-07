@@ -4,6 +4,8 @@
 import * as React from 'react';
 import {
   View,
+  Image,
+  ImageBackground,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
@@ -26,21 +28,21 @@ const ROW_HEIGHT = 120;
 
 const defaultCards: [] = [];
 const CardBag = () =>  {
-  const {navigate, goBack} = useNavigation();
+  const {navigate, goBack, replace} = useNavigation();
   const route = useRoute();
   const dispatch = useDispatch();
 
   /**
    * 获取参数
    */
-  const {
-    onPicked, // 选中银行卡后的动作
-  } = route.params || {};
+  // const {
+  //   onPicked, // 选中银行卡后的动作
+  // } = route.params || {};
 
-  console.log(onPicked, 'onPicked')
+  // console.log(onPicked, 'onPicked')
 
   const bankCards = useSelector(state => state.asset?.bankCards) || defaultCards;
-
+ 
   /**
    * 
    */
@@ -52,7 +54,7 @@ const CardBag = () =>  {
    * 跳转
    */
   const onPress = (card: any) => {
-    onPicked({card});
+    replace('Withdraw', {card})
   }
 
   /**
@@ -70,7 +72,7 @@ const CardBag = () =>  {
       />
       {
         isEmpty ? <Empty /> : (
-          <ScrollView>
+          <ScrollView style={{paddingTop: pad}}>
             {
               bankCards.map((card: any, index: number) => {
                 return (
@@ -85,7 +87,10 @@ const CardBag = () =>  {
         )
       }
       <TouchableOpacity onPress={() => navigate('AddBankCard')} style={styles.footer}>
-        <PrimaryText>添加银行卡</PrimaryText>
+        <ImageBackground source={images.addBankButton} style={styles.addButton}>
+          <Image source={images.addBankCardIcon} style={styles.addIcon} />
+          <PrimaryText >添加银行卡</PrimaryText>
+        </ImageBackground>
       </TouchableOpacity>
     </View>
   )
@@ -107,15 +112,27 @@ const styles = StyleSheet.create({
     
   },
   footer: {
+    marginBottom: pad,
     ...Platform.select({
       ios: {
-
       },
       android: {
         elevation: 1
       }
-    }) 
-  }
+    }),
+  },
+  addIcon: {
+    width: 18,
+    height: 18,
+    marginRight: pad,
+  },
+  addButton: {
+    height: 64,
+    marginHorizontal: pad,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default CardBag;
