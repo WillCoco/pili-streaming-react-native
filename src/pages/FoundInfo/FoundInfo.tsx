@@ -6,6 +6,9 @@ import { apiGetWorksDetailInfo, apiGetMoreComment, apiFollowWorks, apiGetMoreRep
 import Toast from 'react-native-tiny-toast'
 import pxToDp from '../../utils/px2dp'
 import { Ionicons } from '@expo/vector-icons'
+import { Colors } from '../../constants/Theme'
+
+import Video from 'react-native-video'
 
 import Header from './Header/Header'
 import Swiper from './Swiper/Swiper'
@@ -14,7 +17,6 @@ import Comment from './Comment/Comment'
 import Footer from './Footer/Footer'
 import ActionSheet from '../../components/ActionSheet/ActionSheet'
 import GoodsCard from './GoodsCard/GoodsCard'
-import { Colors } from '../../constants/Theme'
 
 function FoundInfo(props: any) {
   const commentPageSize = 10
@@ -298,7 +300,9 @@ function FoundInfo(props: any) {
         {
           worksInfo.worksType === 'PICTURE'
             ? <Swiper swiperList={swiperList} />
-            : <Text>1</Text>
+            : <Video
+              source={{ uri: "https://qpsc-1256479324.cos.ap-shanghai.myqcloud.com/qpsc-video/2020/2/30/6c500bf0-3e48-4607-9183-765ce64a1d86.mp4" }}
+            />
         }
 
         <WorksCard worksInfo={worksInfo} />

@@ -43,6 +43,5 @@ target 'championApp' do
 
   # react-native-cli autolinking
   use_native_modules!
-  pod 'RNSyanImagePicker', :path => '../node_modules/react-native-syan-image-picker'
 
 end

@@ -5929,11 +5929,6 @@ pify@^4.0.1:
   resolved "https://registry.npm.taobao.org/pify/download/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha1-SyzSXFDVmHNcUCkiJP2MbfQeMjE=
 
-pili-streaming-react-native@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npm.taobao.org/pili-streaming-react-native/download/pili-streaming-react-native-2.0.0.tgz#33ffd7d909ee0a31f8a93f7377514860d984ae71"
-  integrity sha1-M//X2QnuCjH4qT9zd1FIYNmErnE=
-
 pinkie-promise@^2.0.0:
   version "2.0.1"
   resolved "https://registry.npm.taobao.org/pinkie-promise/download/pinkie-promise-2.0.1.tgz#2135d6dfa7a358c069ac9b178776288228450ffa"
@@ -6337,11 +6332,6 @@ react-native-swiper@^1.6.0:
   integrity sha1-Wf29+Vrd7kljAxLycHdiLCd3aBk=
   dependencies:
     prop-types "^15.5.10"
-
-react-native-syan-image-picker@^0.4.7:
-  version "0.4.7"
-  resolved "https://registry.npm.taobao.org/react-native-syan-image-picker/download/react-native-syan-image-picker-0.4.7.tgz#5eedf07231ebfb1ce722f32deea75aef3e1f7f38"
-  integrity sha1-Xu3wcjHr+xznIvMt7qda7z4ffzg=
 
 react-native-tab-navigator@^0.3.4:
   version "0.3.4"
