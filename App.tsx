@@ -62,6 +62,7 @@ import LivesAnalyze from './src/pages/AnchorTabs/AnorchMeScreen/LivesAnalyze'
 import GoodsSupply from './src/pages/AnchorTabs/AnorchMeScreen/GoodsSupply'
 import LivingGoodsWareHouse from './src/pages/AnchorTabs/AnorchMeScreen/LivingGoodsWareHouse'
 import AnchorShowcaseManage from './src/pages/AnchorTabs/AnorchMeScreen/AnchorShowcaseManage'
+import BeAgent from './src/pages/AnchorTabs/AnorchMeScreen/BeAgent'
 import AssetManage from './src/pages/AnchorTabs/MyShopScreen/AssetManage'
 import GoodsManage from './src/pages/AnchorTabs/MyShopScreen/GoodsManage'
 import ShopAddressManage from './src/pages/AnchorTabs/MyShopScreen/ShopAddressManage'
@@ -178,6 +179,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='LivesAnalyze' component={LivesAnalyze} options={{headerShown: false}} />
                 <Stack.Screen name='LivingGoodsWareHouse' component={LivingGoodsWareHouse} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorShowcaseManage' component={AnchorShowcaseManage} options={{headerShown: false}} />
+                <Stack.Screen name='BeAgent' component={BeAgent} options={{headerShown: false}} />
                 <Stack.Screen name='ShopAgreement' component={ShopAgreement} options={{headerShown: false}} />
                 <Stack.Screen name='ShopAddressManage' component={ShopAddressManage} options={{headerShown: false}} />
                 <Stack.Screen name='GoodsManage' component={GoodsManage} options={{headerShown: false}} />

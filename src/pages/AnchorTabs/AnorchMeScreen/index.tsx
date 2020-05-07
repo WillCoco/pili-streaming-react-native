@@ -45,6 +45,7 @@ const AnorchMeScreen = () =>  {
     {img: images.anchorPieceGoods, text: '预组货', onPress: () => navigate('LivingGoodsWareHouse')},
     {img: images.anchorGoodsManage, text: '店铺商品管理', onPress: () => navigate('AnchorShowcaseManage')},
     {img: images.anchorShop, text: '我的店铺', onPress: () => navigate('AnchorDetail')},
+    {img: images.anchorBeAgent, text: '成为经纪人', onPress: () => navigate('BeAgent')}
   ];
 
   /**
@@ -67,7 +68,7 @@ const AnorchMeScreen = () =>  {
         right={
           () => {
             return (
-              <TouchableOpacity style={styles.messageIconWrapper} onPress={() => {navigate('Message')}}>
+              <TouchableOpacity onPress={() => {navigate('Message')}}>
                 <Image 
                   style={styles.messageIcon} 
                   source={images.liveMessageIcon} 
@@ -137,10 +138,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   nickText: {
-    // marginTop: pad
+    paddingLeft: pad * 2,
+    marginBottom: pad,
   },
   followText: {
-    marginBottom: pad
+    marginBottom: pad,
+    paddingLeft: pad * 2
   },
   title: {
     padding: pad,
@@ -148,7 +151,7 @@ const styles = StyleSheet.create({
 
   },
   blockWrapper: {
-    paddingHorizontal: pad * 3,
+    paddingHorizontal: pad * 2,
     paddingTop: pad,
     paddingBottom: pad * 2,
     borderBottomWidth: 4,
@@ -164,15 +167,7 @@ const styles = StyleSheet.create({
     top: 100,
     left: pad * 3
   },
-  messageIconWrapper: {
-    position: 'absolute',
-    top: -35,
-    right: pad,
-    width: 30,
-    height: 25,
-  },
   messageIcon: {
-    position: 'absolute',
     width: 20,
     height: 18
   },
