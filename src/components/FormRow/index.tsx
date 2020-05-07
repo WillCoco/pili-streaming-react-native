@@ -64,10 +64,10 @@ const styles = StyleSheet.create({
   },
   input: {
     color: Colors.darkBlack,
-    width: vw(100),
+    width: vw(40),
     position: 'absolute',
-    paddingLeft: '25%',
-    paddingRight: pad,
+    marginLeft: '25%',
+    marginRight: pad,
     height: '100%',
     zIndex: 99,
   },

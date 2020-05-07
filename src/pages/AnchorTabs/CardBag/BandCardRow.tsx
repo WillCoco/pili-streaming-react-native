@@ -61,7 +61,6 @@ const BrandGoodRow = (props: BrandGoodRowProps) =>  {
       onPress={onPress}
     >
       <ImageBackground source={images.bankBgBlue} style={styles.cardWrapper}>
-        {/* <Image source={data.img || images.goodCover} /> */}
         <Avatar source={data.img || images.BOCIcon} style={StyleSheet.flatten([styles.avatar, props.imgStyle])} />
         <View style={styles.contentWrapper}>
           <T3 numberOfLines={1} style={{color: Colors.whiteColor}}>{data.bank}</T3>

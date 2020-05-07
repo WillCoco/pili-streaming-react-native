@@ -28,21 +28,21 @@ const ROW_HEIGHT = 120;
 
 const defaultCards: [] = [];
 const CardBag = () =>  {
-  const {navigate, goBack} = useNavigation();
+  const {navigate, goBack, replace} = useNavigation();
   const route = useRoute();
   const dispatch = useDispatch();
 
   /**
    * 获取参数
    */
-  const {
-    onPicked, // 选中银行卡后的动作
-  } = route.params || {};
+  // const {
+  //   onPicked, // 选中银行卡后的动作
+  // } = route.params || {};
 
-  console.log(onPicked, 'onPicked')
+  // console.log(onPicked, 'onPicked')
 
   const bankCards = useSelector(state => state.asset?.bankCards) || defaultCards;
-
+ 
   /**
    * 
    */
@@ -54,7 +54,7 @@ const CardBag = () =>  {
    * 跳转
    */
   const onPress = (card: any) => {
-    onPicked({card});
+    replace('Withdraw', {card})
   }
 
   /**
@@ -101,7 +101,7 @@ CardBag.defaultProps = {
 
 const styles = StyleSheet.create({
   style: {
-    // flex: 1,
+    flex: 1,
     backgroundColor: Colors.bgColor
   },
   nav: {
@@ -112,9 +112,9 @@ const styles = StyleSheet.create({
     
   },
   footer: {
+    marginBottom: pad,
     ...Platform.select({
       ios: {
-
       },
       android: {
         elevation: 1

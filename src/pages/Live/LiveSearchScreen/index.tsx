@@ -15,11 +15,30 @@ import withPage from '../../../components/HOCs/withPage';
 import { Colors } from '../../../constants/Theme';
 import LiveSummaryBlock from '../../../components/LiveSummaryBlock';
 import {pad} from '../../../constants/Layout';
+import {useNavigation} from '@react-navigation/native';
+import SearchBar from '../../../components/SearchBar/SearchBar';
 import '../../../actions/im';
 
 const LiveHomeScreen = (props: any) : React.ReactElement =>  {
   console.log(props.safeTop, 'safeTop')
   const [data] = React.useState(['1', '2'])
+  const navgation = useNavigation();
+
+  const searchBarProps = {
+    isPlaceHolder: false,
+    hasSearchKey: false,
+  }
+
+  navgation.setOptions({
+    headerTitle: () => <SearchBar {...searchBarProps} />,
+    headerStyle: {
+      backgroundColor: Colors.basicColor,
+      elevation: 0,  // 去除安卓状态栏底部阴影
+    },
+    headerTitleAlign: 'center',
+    headerTintColor: Colors.whiteColor,
+    headerBackTitleVisible: false
+  })
 
   /**
    * 列表尾部
@@ -36,10 +55,11 @@ const LiveHomeScreen = (props: any) : React.ReactElement =>  {
     <SafeAreaView
       style={StyleSheet.flatten([styles.wrapper])}
     >
-      <View style={{marginTop: props.safeTop}}>
+      {/* <View style={{marginTop: props.safeTop}}>
         <Text>搜索组件</Text>
-      </View>
-      <View style={StyleSheet.flatten([styles.contentWrapper, {marginTop: props.safeTop}])}>
+      </View> */}
+      {/* <View style={StyleSheet.flatten([styles.contentWrapper, {marginTop: props.safeTop}])}> */}
+      <View style={StyleSheet.flatten([styles.contentWrapper])}>
         <FlatList
           refreshing
           data={data}
@@ -66,7 +86,7 @@ LiveHomeScreen.defaultProps = {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: Colors.basicColor,
+    backgroundColor: Colors.whiteColor,
   },
 
   listFooterWrapper: {

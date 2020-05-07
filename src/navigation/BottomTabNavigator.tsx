@@ -34,7 +34,7 @@ function BottomTabNavigator({ navigation, route }: any) {
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
 
   const showHeader = () => {
-    if (getHeaderTitle(route) === '直播' || getHeaderTitle(route) === '我的') return false
+    if (getHeaderTitle(route) === '我的') return false
     return true
   }
 
@@ -127,6 +127,12 @@ function getTabItemComponent(routeName: String, navigation: string[]) {
         hasSearchKey={true}
         isPlaceHolder={true}
         toSearchPage={() => navigation.push('HomeSearch')}
+      />
+    case '直播':
+      return <SearchBar
+        hasSearchKey={false}
+        isPlaceHolder={true}
+        toSearchPage={() => navigation.push('LiveSearchScreen')}
       />
     case '发现':
       return <SearchBar

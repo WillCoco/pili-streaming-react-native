@@ -32,9 +32,6 @@ const LiveHomeScreen = (props: any): React.ReactElement =>  {
     <SafeAreaView
       style={StyleSheet.flatten([styles.wrapper])}
     >
-      <View style={{marginTop: props.safeTop}}>
-        <Text onPress={() => navigate('LiveSearchScreen')}>搜索组件</Text>
-      </View>
       <LiveBanner />
       <LiveHomeTabs />
     </SafeAreaView>

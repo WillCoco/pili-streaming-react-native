@@ -64,6 +64,7 @@ import AnchroBill from './src/pages/AnchorTabs/MyShopScreen/AnchroBill'
 import GoodEdit from './src/pages/AnchorTabs/MyShopScreen/GoodEdit'
 import BrandGoods from './src/pages/AnchorTabs/BrandGoods'
 import AnchorAgreement from './src/pages/AnchorTabs/AnchorAgreement'
+import AnchorLivingEndScreen from './src/pages/AnchorTabs/AnorchMeScreen/AnchorLivingEndScreen'
 import BankCardBag from './src/pages/AnchorTabs/CardBag'
 import AddBankCard from './src/pages/AnchorTabs/AddBankCard'
 import Withdraw from './src/pages/AnchorTabs/Withdraw'
@@ -158,7 +159,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 
                 <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
                 <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false }} />
-                <Stack.Screen name='LiveSearchScreen' component={LiveSearch} options={{headerShown: false}} />
+                <Stack.Screen name='LiveSearchScreen' component={LiveSearch} />
                 <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
                 <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{headerShown: false}} />
                 <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} options={navHeadOption('发布预告')} />
@@ -183,6 +184,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='GoodsSupply' component={GoodsSupply} options={{headerShown: false}} />
                 <Stack.Screen name='BrandGoods' component={BrandGoods} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorAgreement' component={AnchorAgreement} options={{headerShown: false}} />
+                <Stack.Screen name='AnchorLivingEnd' component={AnchorLivingEndScreen} options={{headerShown: false}} />
                 <Stack.Screen name='BankCardBag' component={BankCardBag} options={{headerShown: false}} />
                 <Stack.Screen name='AddBankCard' component={AddBankCard} options={{headerShown: false}} />
                 <Stack.Screen name='Withdraw' component={Withdraw} options={{headerShown: false}} />
