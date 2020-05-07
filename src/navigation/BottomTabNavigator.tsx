@@ -128,6 +128,7 @@ function getTabItemComponent(routeName: String, navigation: string[]) {
         isPlaceHolder={true}
         toSearchPage={() => navigation.push('HomeSearch')}
       />
+      
     case '发现':
       return <SearchBar
         hasSearchKey={false}

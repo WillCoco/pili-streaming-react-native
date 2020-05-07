@@ -124,16 +124,16 @@ export default function Sale() {
    * @param e 事件参数
    */
   const scrollPage = (e: any) => {
-    const scrollY = e.nativeEvent.contentOffset.y
-    if (scrollY < 128) {
-      navigation.setOptions({
-        headerTransparent: true
-      })
-    } else {
-      navigation.setOptions({
-        headerTransparent: false
-      })
-    }
+    // const scrollY = e.nativeEvent.contentOffset.y
+    // if (scrollY < 128) {
+    //   navigation.setOptions({
+    //     headerTransparent: true
+    //   })
+    // } else {
+    //   navigation.setOptions({
+    //     headerTransparent: false
+    //   })
+    // }
   }
 
   /**
@@ -170,6 +170,7 @@ export default function Sale() {
       style={styles.container}
       onScroll={(e) => scrollPage(e)}
       scrollEventThrottle={200}
+      showsVerticalScrollIndicator={false}
     >
       <Header
         goodsList={headerGoodsList}

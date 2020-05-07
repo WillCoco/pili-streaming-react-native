@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, PixelRatio, TouchableOpacity } from 'rea
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import { AntDesign } from '@expo/vector-icons'
+import { apiGiveLaud } from '../../../service/api'
 import moment from 'moment'
 
 const likeIcon = require('../../../assets/works-image/like.png')
@@ -16,6 +17,23 @@ export default function Comment(props: any) {
     const commentYear = new Date(time).getFullYear()
 
     return moment(time).format(commentYear <= curYear ? 'MM-DD' : 'YY-MM-DD')
+  }
+
+  const giveLaud = (commentInfo: any) => {
+    const { commentId, isLike } = commentInfo
+
+    const params = {
+      giveLaudId: commentId,
+      operateType: isLike ? 1 : 0,
+      type: 'COMMENT'
+    }
+
+    apiGiveLaud(params).then(res => {
+      console.log('点赞评论', res)
+      if (res) {
+        props.giveLaud(commentInfo)
+      }
+    })
   }
 
   return (
@@ -32,11 +50,16 @@ export default function Comment(props: any) {
               styles.commentItem,
               index === commentInfoList.length - 1 && { borderBottomWidth: 0 }
             ]}>
-              <Image source={{ uri: item.userIcon }} style={styles.avatar} />
+              <TouchableOpacity onPress={() => props.toReply(item)}>
+                <Image source={{ uri: item.userIcon }} style={styles.avatar} />
+              </TouchableOpacity>
 
               <View style={styles.commentInfoList}>
-                <Text style={styles.userName}>{item.userName}</Text>
-                <Text style={[styles.content, { marginBottom: pxToDp(10) }]}>{item.content}    <Text style={styles.commentDate}>{formatDate(item.commentTime)}</Text></Text>
+                <TouchableOpacity onPress={() => props.toReply(item)}>
+                  <Text style={styles.userName}>{item.userName}</Text>
+                  <Text style={[styles.content, { marginBottom: pxToDp(10) }]}>{item.content}    <Text style={styles.commentDate}>{formatDate(item.commentTime)}</Text></Text>
+                </TouchableOpacity>
+
                 {
                   item.showReplyInfoList && item.showReplyInfoList.map((_item: any, _index: number) => {
                     return (
@@ -74,10 +97,10 @@ export default function Comment(props: any) {
                 }
               </View>
 
-              <View style={styles.likeContent}>
+              <TouchableOpacity style={styles.likeContent} onPress={() => giveLaud(item)}>
                 <Image source={item.isLike ? likeIcon : notLikeIcon} style={styles.likeIcon} />
                 <Text style={styles.likeCount}>{item.getLaudCount}</Text>
-              </View>
+              </TouchableOpacity>
             </View>
           )
         })

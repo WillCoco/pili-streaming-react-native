@@ -1,19 +1,65 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { View, Text, StyleSheet, Platform, PixelRatio, TextInput, Image, TouchableOpacity } from 'react-native'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
+import Toast from 'react-native-tiny-toast'
+
+import { apiPublishWorksComment, apiPublishWorksReply } from '../../../service/api'
 
 const heartSolidIcon = require('../../../assets/works-image/heart.png')
 const heartIcon = require('../../../assets/works-image/heart2.png')
 
 export default function Footer(props: any) {
-  const { worksInfo } = props
+  const { worksInfo, inputFocus, commentInfo } = props
+  const [inputValue, setInputValue] = useState('')
+  const inputRef = useRef()
+
+  useEffect(() => {
+    if (inputFocus) {
+      inputRef.current.focus()
+    }
+  }, [inputFocus])
+
+  const submit = async () => {
+    if (!inputValue) return
+
+    let result: any = {}
+
+    if (inputFocus) {  // 回复评论
+      const params = {
+        toUserId: commentInfo.userId,
+        commentId: commentInfo.commentId,
+        content: inputValue
+      }
+
+      result = await apiPublishWorksReply(params)
+    } else {  // 发表评论
+      const params = {
+        worksId: worksInfo.worksId,
+        content: inputValue
+      }
+
+      result = await apiPublishWorksComment(params)
+    }
+
+    if (result) {
+      Toast.showSuccess(inputFocus ? '回复成功' : '评论成功')
+      setInputValue('')
+      props.updateCommentList()
+    }
+  }
 
   return (
     <View style={styles.container}>
       <TextInput
-        placeholder='说点什么吧'
+        ref={inputRef}
+        placeholder={commentInfo && commentInfo.userName ? `回复@${commentInfo.userName}` : '说点什么吧'}
+        clearButtonMode='while-editing'
+        value={inputValue}
         style={styles.input}
+        onChangeText={(text) => setInputValue(text)}
+        onSubmitEditing={submit}
+        onBlur={props.inputBlur}
       />
       <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
 

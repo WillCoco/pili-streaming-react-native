@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { View, ScrollView, Dimensions, StyleSheet, Platform } from 'react-native'
+import { View, ScrollView, Dimensions, StyleSheet, Platform, Text } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
+import { connect } from 'react-redux'
 import HTML from 'react-native-render-html'
 import Toast from 'react-native-tiny-toast'
 
@@ -19,9 +20,11 @@ import { Colors } from '../../constants/Theme'
 import { strDiscode } from '../../utils/discodeRichText'
 import pxToDp from '../../utils/px2dp'
 
-export default function GoodsInfo() {
+function GoodsInfo(props: any) {
   const route = useRoute()
   const navigation = useNavigation()
+  const { isLogin } = props
+  const [isLoadingComplete, setIsLoadingComplete] = useState(false)
   const [swiperList, setSwiperList] = useState([])
   const [goodsInfo, setGoodsInfo] = useState({})
   const [goodsType, setGoodsType] = useState('')
@@ -71,7 +74,10 @@ export default function GoodsInfo() {
       }
 
       initGoodsSku(res.sku)  // 初始化商品规格信息
-      getGoodsCoupon(res.goods_id)
+
+      setIsLoadingComplete(true)
+
+      if (isLogin) getGoodsCoupon(res.goods_id)
     })
   }
 
@@ -246,12 +252,14 @@ export default function GoodsInfo() {
         {/* 店铺信息 */}
         <BrandCard goodsInfo={goodsInfo} />
         {/* 商品详情 */}
-        <View style={{ marginTop: pxToDp(10) }}>
-          <HTML
-            html={goodsContent}
-            imagesMaxWidth={Dimensions.get('window').width}
-          />
-        </View>
+        {
+          isLoadingComplete && <View style={{ marginTop: pxToDp(10) }}>
+            <HTML
+              html={goodsContent}
+              imagesMaxWidth={Dimensions.get('window').width}
+            />
+          </View>
+        }
       </ScrollView>
       {/* 底部操作栏 */}
       <FooterBar
@@ -291,6 +299,10 @@ export default function GoodsInfo() {
     </View>
   )
 }
+
+export default connect(
+  (state: any) => state.userData
+)(GoodsInfo)
 
 const deviceHeight = Dimensions.get('window').height
 

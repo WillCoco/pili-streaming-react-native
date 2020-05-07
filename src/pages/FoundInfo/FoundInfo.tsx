@@ -29,6 +29,8 @@ function FoundInfo(props: any) {
   const [navOpacity, setNavOpacity] = useState(0)
   const [commentCount, setCommentCount] = useState(0)
   const [showGoods, setShowGoods] = useState(false)
+  const [inputFocus, setInputFocus] = useState(false)
+  const [commentInfo, setCommentInfo] = useState({})
   let [commentPageNo, setCommentPageNo] = useState(1)
 
 
@@ -37,13 +39,13 @@ function FoundInfo(props: any) {
   })
 
   useEffect(() => {
-    getWorksInfo()
+    getWorksInfo(true)
   }, [])
 
   /**
    * 获取作品信息
    */
-  const getWorksInfo = () => {
+  const getWorksInfo = (isInit: boolean) => {
     let params = {
       worksId
     }
@@ -51,8 +53,6 @@ function FoundInfo(props: any) {
     if (isLogin) {
       params[`userId`] = props.userData.userInfo.userId
     }
-
-    console.log(params)
 
     apiGetWorksDetailInfo(params).then((res: any) => {
       console.log('发现详情', res)
@@ -64,7 +64,7 @@ function FoundInfo(props: any) {
         return
       }
 
-      initShowReplyList(res.commentInfoList, true)
+      initShowReplyList(res.commentInfoList, isInit)
       setCommentCount(res.commentCount)
       setSwiperList(res.worksMoreInfoList)
       setWorksInfo(res)
@@ -244,8 +244,46 @@ function FoundInfo(props: any) {
     Toast.show('没有相关商品')
   }
 
+  /**
+   * 隐藏商品窗口
+   */
   const hiddenGoodsActionSheet = () => {
     setShowGoods(false)
+  }
+
+  /**
+   * 更新评论列表
+   */
+  const updateCommentList = () => {
+    setCommentPageNo(1)
+
+    commentList.forEach(item => {
+      item.replyPageNo = 1
+    })
+
+    getWorksInfo(false)
+  }
+
+  /**
+   * 回复评论
+   */
+  const focusReply = (commentInfo: any) => {
+    setInputFocus(true)
+    setCommentInfo(commentInfo)
+  }
+
+  /**
+   * 评论点赞
+   */
+  const giveLaud = (commentInfo: any) => {
+    commentList.forEach((item: any) => {
+      if (item.commentId === commentInfo.commentId) {
+        item.getLaudCount = item.isLike ? item.getLaudCount - 1 : item.getLaudCount + 1
+        item.isLike = !item.isLike
+      }
+    })
+
+    setCommentList(JSON.parse(JSON.stringify(commentList)))
   }
 
   return (
@@ -263,19 +301,28 @@ function FoundInfo(props: any) {
             : <Text>1</Text>
         }
 
-        {/* <WorksCard worksInfo={worksInfo} /> */}
+        <WorksCard worksInfo={worksInfo} />
         <Comment
           commentInfoList={commentList}
           commentCount={commentCount}
           toggleCommentCount={toggleCommentCount}
           toggleReplyCount={(id: string) => toggleReplyCount(id)}
+          toReply={(commentInfo: any) => focusReply(commentInfo)}
+          giveLaud={(commentInfo: any) => giveLaud(commentInfo)}
         />
       </ScrollView>
 
       <Footer
         worksInfo={worksInfo}
+        inputFocus={inputFocus}
+        commentInfo={commentInfo}
         followWorks={followWorks}
         showGoodsActionSheet={showGoodsActionSheet}
+        updateCommentList={updateCommentList}
+        inputBlur={() => {
+          setInputFocus(false)
+          setCommentInfo({})
+        }}
       />
 
       <ActionSheet
