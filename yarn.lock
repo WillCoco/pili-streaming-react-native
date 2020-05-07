@@ -5929,11 +5929,6 @@ pify@^4.0.1:
   resolved "https://registry.npm.taobao.org/pify/download/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha1-SyzSXFDVmHNcUCkiJP2MbfQeMjE=
 
-pili-streaming-react-native@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npm.taobao.org/pili-streaming-react-native/download/pili-streaming-react-native-2.0.0.tgz#33ffd7d909ee0a31f8a93f7377514860d984ae71"
-  integrity sha1-M//X2QnuCjH4qT9zd1FIYNmErnE=
-
 pinkie-promise@^2.0.0:
   version "2.0.1"
   resolved "https://registry.npm.taobao.org/pinkie-promise/download/pinkie-promise-2.0.1.tgz#2135d6dfa7a358c069ac9b178776288228450ffa"

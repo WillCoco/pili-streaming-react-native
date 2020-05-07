@@ -37,7 +37,6 @@ const CountDown = (props: CountDownProps) =>  {
     const deadlineFixed = deadline + (timeOffset || 0); // 矫正后时间
 
     const remain = Math.round((deadlineFixed - Date.now()) / 1000);
-    console.log(remain < 0, '123123')
 
     if (remain <= 0) {
       timer.current.stop();

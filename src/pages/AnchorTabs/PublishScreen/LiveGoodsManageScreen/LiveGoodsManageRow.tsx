@@ -15,27 +15,36 @@ import { pad, radio } from '../../../../constants/Layout';
 import ShareProfit from '../../../../components/ShareProfit';
 import DiscountPrice from '../../../../components/DiscountPrice';
 import Iconremove from '../../../../components/Iconfont/Iconremove';
+import ButtonRadius from '../../../../components/Buttons/ButtonRadius';
 import CheckBox from '../../../../components/CheckBox';
 import images from '../../../../assets/images/index';
+import { Colors } from '../../../../constants/Theme';
 
-interface WarehouseRowProps {
+interface LiveGoodsManageRowProps {
   data: any,
-  dataAdapter: (d: any) => any,
+  dataAdapter: (d: any) => {
+    title: string,
+    img: any,
+    skuQuantity: number,
+    canAdd: boolean,
+  },
+  isChecked: boolean,
   imgStyle: StyleProp<any>,
   style: StyleProp<any>,
-  isChecked: boolean,
   onPressCheck: (d?: any) => any,
-  onPressRemove: (d?: any) => any,
   onPressAddShop: (d?: any) => any,
 }
 
-const WarehouseRow = (props: WarehouseRowProps) =>  {
+const LiveGoodsManageRow = (props: LiveGoodsManageRowProps) =>  {
 
   const data = (props.dataAdapter ? props.dataAdapter(props.data) : props.data) || {};
 
+  const btnText = data.canAdd ? '添加店铺' : '取消添加';
+  const btnBg = data.canAdd ? Colors.basicColor : Colors.lightGrey;
+
   return (
     <View style={StyleSheet.flatten([styles.style, props.style])}>
-      <CheckBox
+      <CheckBox 
         isChecked={props.isChecked}
         onPress={props.onPressCheck}
         style={{height: '100%', paddingHorizontal: pad}}
@@ -43,21 +52,34 @@ const WarehouseRow = (props: WarehouseRowProps) =>  {
       <Image source={data.img || images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
       <View style={styles.contentWrapper}>
         <View style={styles.titleWrapper}>
-          <PrimaryText numberOfLines={2} style={{flex: 1, marginRight: pad * 2}}>{data.title}</PrimaryText>
-          <TouchableOpacity onPress={props.onPressRemove} style={styles.removeBtn}>
+          <PrimaryText numberOfLines={2} style={{flex: 1}}>{data.title}</PrimaryText>
+          {/* <TouchableOpacity onPress={onPressRemove} style={styles.removeBtn}>
             <Iconremove />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
-        <ShareProfit profit={111} style={{flex: -1}} />
-        <DiscountPrice discountPrice={120} price={110} />
+        <View style={styles.rowBetween}>
+          <SmallText color="grey" profit={111} style={{flex: -1}}>总库存:  {data.skuQuantity}</SmallText>
+          <ShareProfit profit={111} style={{flex: -1}} />
+        </View>
+        <View style={styles.rowBetween}>
+          <DiscountPrice discountPrice={120} price={110} />
+          <ButtonRadius
+            text={btnText}
+            size={20}
+            style={{width: scale(75), backgroundColor: btnBg}}
+            onPress={props.onPressAddShop}
+          />
+        </View>
+        
       </View>
     </View>
   )
 };
 
-WarehouseRow.defaultProps = {
+LiveGoodsManageRow.defaultProps = {
   data: {
     title: '标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题',
+    skuQuantity: '11'
   }
 };
 
@@ -68,15 +90,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: ROW_HEIGHT,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff'
     // paddingHorizontal: pad
+  },
+  rowBetween: {
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   contentWrapper: {
     flex: 1,
     height: 100,
     marginRight: pad,
     justifyContent: 'space-between',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   img: {
     width: 100,
@@ -105,4 +132,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default WarehouseRow;
+export default LiveGoodsManageRow;

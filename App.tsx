@@ -143,7 +143,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
             }
             <NavigationContainer>
               <Stack.Navigator>
-                {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
+                <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
                 <Stack.Screen name='Root' component={Root} />
                 <Stack.Screen name='HomeSearch' component={HomeSearch} />
                 <Stack.Screen name='FoundSearch' component={FoundSearch} />
@@ -173,11 +173,11 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
                 <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false }} />
                 <Stack.Screen name='LiveSearchScreen' component={LiveSearch} />
-                <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
+                {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
                 <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{headerShown: false}} />
                 <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} options={navHeadOption('发布预告')} />
                 <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{headerShown: false}} />
-                <Stack.Screen name='LiveGoodsManageScreen' component={LiveGoodsManage} options={navHeadOption('直播商品管理')} />
+                <Stack.Screen name='LiveGoodsManageScreen' component={LiveGoodsManage} options={{headerShown: false}} />
                 <Stack.Screen name='AnorchLivingRoomScreen' component={AnorchLivingRoom} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorTrailers' component={AnchorTrailers} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorRecords' component={AnchorRecords} options={{headerShown: false}} />

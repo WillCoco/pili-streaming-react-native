@@ -11,11 +11,12 @@ interface InitStateTypes {
   },
   // 推流配置
   pusherConfig: any,
-  returnAddresses: Array<any>, // 寄回地址
+  livingGoods: Array<any>, // 直播商品管理
 }
 
 const DEFAULT_OPTIONS: any = {
-  outputUrl: "rtmp://pili-publish.qnsdk.com/sdk-live/111",
+  // outputUrl: "rtmp://pili-publish.qnsdk.com/sdk-live/111",
+  outputUrl: "rtmp://77154.livepush.myqcloud.com/live/test001?txSecret=86e7b0f4a8eb4e107cbcd09d0aeaf24a&txTime=5EB4307F",
   camera: {cameraId: 1, cameraFrontMirror: false},
   audio: {bitrate: 32000, profile: 1, samplerate: 44100},
   video: {preset: 12, bitrate: 400000, profile: 1, fps: 15, videoFrontMirror: false},
@@ -29,7 +30,7 @@ const INITIAL_STATE: InitStateTypes = {
     title: '',
   },
   pusherConfig: DEFAULT_OPTIONS,
-  returnAddresses: [],
+  livingGoods: [1,2],
 }
 
 export default function live(state = INITIAL_STATE, action: any) {

@@ -19,13 +19,12 @@ interface PageListProps {
   ListFooterComponent?: any,
 }
 
-const PagingList = (props: PageListProps) => {
+const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
   const [isRefreshing, setIsRefreshing] = React.useState(false); // 下拉刷新
   const [isLoading, setIsLoading] = React.useState(false); // 加载中
   const [listData, setListData] = React.useState(props.initListData || []);
   const [empty, setEmpty] = React.useState(false);
   const [noMore, setNoMore] = React.useState();
-
 
   /**
    * 容器高度(空居中)
@@ -126,6 +125,18 @@ const PagingList = (props: PageListProps) => {
   }, [])
 
 
+  React.useEffect(() => {
+    /**
+     * 暴露组件内部方法 
+     */
+    ref({
+      actions: {
+        setListData,
+        getListData: () => listData
+      }
+    })
+  }, [listData])
+
   return (
     <View style={StyleSheet.flatten([styles.flatList, props.style])}>
       <FlatList
@@ -169,7 +180,7 @@ const PagingList = (props: PageListProps) => {
       />
     </View>
   );
-};
+});
 
 PagingList.defaultProps = {
   isInitGetData: true, // 加载组件先获取一次数据
