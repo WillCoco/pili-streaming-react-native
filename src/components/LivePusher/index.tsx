@@ -15,17 +15,22 @@ import {useSelector, useDispatch} from 'react-redux';
 import {NodePlayerView, NodeCameraView} from 'react-native-nodemediaclient';
 import {PrimaryText} from 'react-native-normalization-text';
 import {vw, vh} from '../../utils/metric';
-import {isAndroid} from '../../constants/DeviceInfo';
+import { isAndroid, safeTop } from '../../constants/DeviceInfo';
 import {updateStarted} from '../../actions/live';
 import usePermissions from '../../hooks/usePermissions';
 import Toast from 'react-native-tiny-toast';
 
 interface LivePusherProps {
-  style?: StyleProp<any>
+  style?: StyleProp<any>,
 }
 
 const LivePusher = React.forwardRef((props: LivePusherProps, ref: any) : any =>  {
   const dispatch = useDispatch();
+
+  /**
+   * 实例
+   */
+  const pusher: {current: any} = React.useRef();
 
   /**
    * 必要权限
@@ -44,10 +49,9 @@ const LivePusher = React.forwardRef((props: LivePusherProps, ref: any) : any => 
       // 关闭
       // Toast.show('close')
       // return dispatch(updateStarted(false))
+      pusher.current && pusher.current.stopPreview();
     }
   }, [])
-
-  console.log(isPermissionGranted, 'isPermissionGranted')
 
 
   /**
@@ -62,8 +66,11 @@ const LivePusher = React.forwardRef((props: LivePusherProps, ref: any) : any => 
       {
         isPermissionGranted ? (
           <NodeCameraView
-            style={{flex: 1}}
-            ref={ref}
+            style={{width: '100%', height: '100%'}}
+            ref={(c: any) => {
+              pusher.current = c;
+              ref(c);
+            }}
             {...pusherConfig}
           />
         ) : null
@@ -75,11 +82,11 @@ const LivePusher = React.forwardRef((props: LivePusherProps, ref: any) : any => 
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
+    // position: 'absolute',
+    // top: 0,
+    // left: 0,
+    // bottom: 0,
+    // right: 0,
   },
   scrollerWrapper: {
   },

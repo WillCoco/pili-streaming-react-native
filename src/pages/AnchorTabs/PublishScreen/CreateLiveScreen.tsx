@@ -11,15 +11,11 @@ import {useNavigation} from '@react-navigation/native';
 import withPage from '../../../components/HOCs/withPage';
 // import NavBar from '../../../../components/NavBar'
 // import LiveWindow from '../../../../components/LiveWindow'
-import Iconcloselight from '../../../components/Iconfont/Iconcloselight';
-import Iconchangecamera from '../../../components/Iconfont/Iconchangecamera';
 import LiveReadyCard from '../../../components/LiveReadyCard';
 import LivePusher from '../../../components/LivePusher';
 import {vw} from '../../../utils/metric';
 import {Colors} from '../../../constants/Theme';
 import images from '../../../assets/images/index';
-import {pad} from '../../../constants/Layout';
-import {updatecamera} from '../../../actions/live';
 import usePermissions from '../../../hooks/usePermissions';
 
 const CreateLiveScreen = (props: any) =>  {
@@ -33,6 +29,9 @@ const CreateLiveScreen = (props: any) =>  {
 
     // 跳转
     navigate('LiveGoodsManageScreen');
+
+    // 暂停
+    camera.current.stopPreview();
   }
 
   const liveConfig = useSelector(state => state?.live?.liveConfig);
@@ -55,7 +54,10 @@ const CreateLiveScreen = (props: any) =>  {
 
   return (
     <View style={styles.style}>
-      <LivePusher ref={(c: any) => camera.current = c} />
+      <LivePusher
+        ref={(c: any) => camera.current = c}
+        safeTop={props.safeTop}
+      />
       {/* <View style={StyleSheet.flatten([styles.headWrapper, {marginTop: props.safeTop + 20}])}>
         <TouchableOpacity onPress={() => switchCamera()}>
           <Iconchangecamera />
@@ -64,30 +66,33 @@ const CreateLiveScreen = (props: any) =>  {
           <Iconcloselight />
         </TouchableOpacity>
       </View> */}
-      <View  style={StyleSheet.flatten([styles.liveReadyCardWrapper, {marginTop: props.safeTop + 80}])}>
-        <LiveReadyCard />
-      </View>
-      <View style={styles.functionBtnWrapper}>
-        <TouchableOpacity>
-          <PrimaryText color="white">美颜</PrimaryText>
+      <View style={styles.contentWrapper}>
+        <View style={StyleSheet.flatten([styles.liveReadyCardWrapper, {marginTop: props.safeTop + 80}])}>
+          <LiveReadyCard />
+        </View>
+        <View style={styles.functionBtnWrapper}>
+          <TouchableOpacity>
+            <PrimaryText color="white">美颜</PrimaryText>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image source={images.userDefaultAvatar} />
+            <PrimaryText color="white">滤镜</PrimaryText>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity onPress={onNextPress} style={styles.button}>
+          <PrimaryText style={styles.nextText}>下一步</PrimaryText>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <Image source={images.userDefaultAvatar} />
-          <PrimaryText color="white">滤镜</PrimaryText>
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity onPress={onNextPress} style={styles.button}>
-        <PrimaryText style={styles.nextText}>下一步</PrimaryText>
-      </TouchableOpacity>
-      <SmallText color="white" style={styles.agreement}>
-        开播默认已阅读
-        <SmallText
-          style={{color: Colors.yellowColor}}
-          onPress={() => navigate('AnchorAgreement')}
-        >
-          《圈品主播入驻协议》
+        <SmallText color="white" style={styles.agreement}>
+          开播默认已阅读
+          <SmallText
+            style={{color: Colors.yellowColor}}
+            onPress={() => navigate('AnchorAgreement')}
+          >
+            《圈品主播入驻协议》
+          </SmallText>
         </SmallText>
-      </SmallText>
+      </View>
+      
     </View>
   )
 };
@@ -99,7 +104,6 @@ const styles = StyleSheet.create({
   style: {
     flex: 1,
     backgroundColor: Colors.darkBlack,
-    paddingHorizontal: pad
   },
   navStyle: {
     backgroundColor: 'transparent',
@@ -107,6 +111,14 @@ const styles = StyleSheet.create({
   headWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between'
+  },
+  contentWrapper: {
+    flex: 1,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+     bottom: 0,
   },
   liveReadyCardWrapper: {
     flex: 1,

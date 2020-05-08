@@ -84,6 +84,13 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       camera.current.stopPreview();
     }
   }, [])
+  
+  React.useEffect(() => {
+    if (camera.current) {
+      alert(1)
+      camera.current.start()
+    }
+  }, [camera.current])
 
   /**
    * 公告气泡
@@ -99,37 +106,43 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
-      <Image
+      {/* <Image
         style={styles.imgBg}
         source={images.livingbg}
         resizeMode="cover"
+      /> */}
+      <LivePusher
+        ref={(c: any) => camera.current = c}
       />
-      <LivePusher ref={(c: any) => camera.current = c} />
-      <LiveIntro
-        anchorId={1}
-        liveTitle="湖南卫视直播间"
-        liveSubTitle={`123214`}
-      />
-      {
-        !!noticeBubbleText ?
-          <NoticeBubble
-            text={noticeBubbleText}
-            style={styles.noticeBubble}
-          /> : null
-      }
-      <LivingBottomBlock.Anchor
-        onShopBagPress={() =>alert('余组货')}
-        onPressBubble={onPressBubble}
-        onPressShare={() =>alert('余组货')}
-        onPressFaceBeauty={() => Modal.prompt('1', '123')}
-        onPressFilter={() =>alert('美颜')}
-      />
-      <TouchableOpacity onPress={switchCamera} style={StyleSheet.flatten([styles.camera, {top: props.safeTop + (pad * 2)}])}>
-        <Iconchangecamera size={24} />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={closeLive} style={StyleSheet.flatten([styles.close, {top: props.safeTop + (pad * 2)}])}>
-        <Iconcloselight size={24} />
-      </TouchableOpacity>
+      {/*  backgroundColor: 'rgba(0,0,0,0.01)' 修复摄像上层气泡边缘显示问题 */}
+      <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.01)', zIndex: 100}}>
+        <LiveIntro
+          anchorId={1}
+          liveTitle="湖南卫视直播间"
+          liveSubTitle={`123214`}
+        />
+        <LivingBottomBlock.Anchor
+          onShopBagPress={() =>alert('余组货')}
+          onPressBubble={onPressBubble}
+          onPressShare={() =>alert('余组货')}
+          onPressFaceBeauty={() => Modal.prompt('1', '123')}
+          onPressFilter={() =>alert('美颜')}
+        />
+        <TouchableOpacity onPress={switchCamera} style={StyleSheet.flatten([styles.camera, {top: props.safeTop + (pad * 2)}])}>
+          <Iconchangecamera size={24} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={closeLive} style={StyleSheet.flatten([styles.close, {top: props.safeTop + (pad * 2)}])}>
+          <Iconcloselight size={24} />
+        </TouchableOpacity>
+        {
+          !!noticeBubbleText ?
+            <NoticeBubble
+              text={noticeBubbleText}
+              style={styles.noticeBubble}
+            /> : null
+        }
+      </View>
+      
     </View>
   )
 };

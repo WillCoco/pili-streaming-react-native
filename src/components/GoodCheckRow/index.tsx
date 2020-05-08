@@ -9,6 +9,7 @@ import Iconchecked from '../../components/Iconfont/Iconchecked';
 import { PrimaryText, SmallText} from 'react-native-normalization-text';
 import Iconarrowright from '../Iconfont/Iconarrowright';
 import images from '../../assets/images/index';
+import { radio } from '../../constants/Layout';
 import {
   View,
   Image,
@@ -43,7 +44,7 @@ const GoodCheckRow = (props: GoodCheckRowProps) =>  {
         <PrimaryText>{props.good?.title}</PrimaryText>
         <SmallText>数量: {props.good?.quantity}</SmallText>
       </View>
-      <Iconarrowright size={30} style={styles.arrow} />
+      {/* <Iconarrowright size={30} style={styles.arrow} /> */}
     </TouchableOpacity>
   )
 };
@@ -51,13 +52,16 @@ const GoodCheckRow = (props: GoodCheckRowProps) =>  {
 GoodCheckRow.defaultProps = {
 };
 
+const ROW_HEIGHT = 124;
+const IMG_HEIGHT = 100;
+
 const styles = StyleSheet.create({
   style: {
     flex: 1,
     flexDirection: 'row',
     // justifyContent: 'space-around',
     alignItems: 'center',
-    height: 86,
+    height: ROW_HEIGHT,
     backgroundColor: '#fff',
     borderBottomWidth: StyleSheet.hairlineWidth * 2,
     borderColor: Colors.divider
@@ -69,8 +73,9 @@ const styles = StyleSheet.create({
     flex: 1
   },
   img: {
-    height: 58,
-    width: 58,
+    height: IMG_HEIGHT,
+    width: IMG_HEIGHT,
+    borderRadius: radio
   },
   checkImg: {
     height: 20,
