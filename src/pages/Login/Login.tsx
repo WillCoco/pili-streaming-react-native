@@ -64,7 +64,9 @@ function Logion(props: any) {
     if (disabled) return
 
     if (!phonePattern.test(telNum)) {
-      Toast.show('请输入正确的手机号')
+      Toast.show('请输入正确的手机号', {
+        position: 0
+      })
       return
     }
 
@@ -97,12 +99,16 @@ function Logion(props: any) {
    */
   const toLogin = () => {
     if (!phonePattern.test(telNum)) {
-      Toast.show('请输入正确的手机号')
+      Toast.show('请输入正确的手机号', {
+        position: 0
+      })
       return
     }
 
     if (verCode.length !== 6) {
-      Toast.show('请输入正确的验证码')
+      Toast.show('请输入正确的验证码', {
+        position: 0
+      })
       return
     }
 

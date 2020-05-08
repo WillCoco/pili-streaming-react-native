@@ -58,6 +58,10 @@ function Setting(props: any) {
         willSettle: 0,
       }))
       Toast.showSuccess('已退出登录')
+
+      setTimeout(() => {
+        navigation.navigate('首页')
+      }, 1000)
     })
   }
 

@@ -43,8 +43,6 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
     })
 
     getOrderDiscountDetail()
-
-    console.log('临时订单商品列表', tempOrderList)
   }, [])
 
   /**
@@ -229,7 +227,7 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
         <AddressBar defaultAddress={Object.keys(props.choosedAddress).length ? props.choosedAddress : defaultAddress} isEmpty={isEmptyAddr} />
         {/* 店铺 */}
         {
-          tempOrderList.map((item: any, index: number) => {
+          tempOrderList && tempOrderList.map((item: any, index: number) => {
             return (
               <ShopCard shopInfo={item} key={`shop-${index}`} inputMemo={(value: string, id: number) => inputMemo(value, id)} showCoupon={(id: number) => showCouponActionSheet(id)} />
             )

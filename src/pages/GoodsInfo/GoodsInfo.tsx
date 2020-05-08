@@ -186,7 +186,13 @@ function GoodsInfo(props: any) {
    */
   const showCouponActionSheet = () => {
     if (isLogin) {
-      setShowCoupon(true)
+      if (couponList.length) {
+        setShowCoupon(true)
+      } else {
+        Toast.show('当前无可用优惠券', {
+          position: 0
+        })
+      }
     } else {
       navigation.push('Login')
     }
@@ -253,10 +259,30 @@ function GoodsInfo(props: any) {
   }
 
   /**
-   * 与生成订单
+   * 预生成订单
    */
   const createOrder = () => {
-    navigation.push('CreateOrder')
+    let tempOrderList = [{
+      shop_info: {
+        shop_name: goodsInfo.shop_name,
+        shop_logo: goodsInfo.shop_logo,
+        is_selected: 1,
+        shop_id: goodsInfo.shop_id
+      },
+      selectedGoods: [{
+        sku_id: curSkuInfo.id,
+        goods_name: goodsInfo.goods_name,
+        original_img: curSkuInfo.img_url,
+        spec_key_name: curSkuInfo.keywords,
+        market_price: curSkuInfo.market_price,
+        shop_price: curSkuInfo.shop_price,
+        selected: 1,
+        goods_num: goodsNum,
+        goods_id: curSkuInfo.goods_id
+      }]
+    }]
+
+    navigation.push('CreateOrder', { tempOrderList })
   }
 
   /**

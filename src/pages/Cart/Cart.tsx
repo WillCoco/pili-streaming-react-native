@@ -14,6 +14,8 @@ import CartFooterAction from '../../components/CartFooterAction/CartFooterAction
 import pxToDp from '../../utils/px2dp'
 
 function Cart(props: any) {
+  const { isLogin } = props.userData
+  const { cartList } = props.cartData
   const navigation = useNavigation()
   const [isEmpty, setIsEmpty] = useState(false)
   const [allCartGoodsInfo, setAllCartGoodsInfo] = useState({})
@@ -21,7 +23,7 @@ function Cart(props: any) {
   const { userData, cartData } = props
 
   useEffect(() => {
-    if (props.userData.isLogin) {
+    if (isLogin) {
       navigation.addListener('focus', () => {
         getCartList()
       })
@@ -33,10 +35,10 @@ function Cart(props: any) {
   }, [navigation])
 
   useEffect(() => {
-    if (props.userData.isLogin) {
-      updateCartList(props.cartData.cartList)
+    if (isLogin) {
+      updateCartList(cartList)
     }
-  }, [props.cartData.cartList])
+  }, [cartList])
 
   /**
    * 获取购物车列表
@@ -265,7 +267,9 @@ function Cart(props: any) {
     const { totalCount } = allCartGoodsInfo
 
     if (!totalCount) {
-      Toast.show('请选择要结算的商品')
+      Toast.show('请选择要结算的商品', {
+        position: 0
+      })
       return
     }
 

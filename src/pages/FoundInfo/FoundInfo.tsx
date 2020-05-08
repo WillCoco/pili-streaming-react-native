@@ -59,7 +59,9 @@ function FoundInfo(props: any) {
     apiGetWorksDetailInfo(params).then((res: any) => {
       console.log('发现详情', res)
       if (!res) {
-        Toast.show('作品不存在')
+        Toast.show('作品不存在', {
+          position: 0
+        })
         setTimeout(() => {
           navigation.goBack()
         }, 1000)
@@ -251,7 +253,9 @@ function FoundInfo(props: any) {
       setShowGoods(true)
       return
     }
-    Toast.show('没有相关商品')
+    Toast.show('没有相关商品', {
+      position: 0
+    })
   }
 
   /**

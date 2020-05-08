@@ -7,13 +7,14 @@ import { setAddressList } from '../../actions/address'
 import cityData from '../../utils/chianCityData'
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
-import { apiEditAddr, apiAddrList } from '../../service/api'
+import { apiEditAddr, apiAddrList, apiAddAddr } from '../../service/api'
 import Toast from 'react-native-tiny-toast'
 
 function CreateOrEditAddr(props) {
   const navigation = useNavigation()
   const route = useRoute()
-  const [addressInfo] = useState(route.params.addressInfo || {})
+  const pageType = route.params.type
+  const addressInfo = route.params.addressInfo ? route.params.addressInfo : {}
   const [addrValue, setAddrValue] = useState([])  // 级联选择器对应的 code 数组
   const [userName, setUserName] = useState(addressInfo.consignee || '')
   const [userTel, setUserTel] = useState(addressInfo.mobile || '')
@@ -24,7 +25,7 @@ function CreateOrEditAddr(props) {
   const [isDefault, setIsDefault] = useState(0)
 
   navigation.setOptions({
-    headerTitle: route.params.type === 'edit' ? '编辑收货地址' : '新增收货地址',
+    headerTitle: pageType === 'edit' ? '编辑收货地址' : '新增收货地址',
     headerStyle: {
       backgroundColor: Colors.basicColor,
       elevation: 0,  // 去除安卓状态栏底部阴影
@@ -35,7 +36,7 @@ function CreateOrEditAddr(props) {
   })
 
   useEffect(() => {
-    if (route.params.type === 'edit') {
+    if (pageType === 'edit') {
       discodsCityCode()
     }
   }, [])
@@ -45,7 +46,7 @@ function CreateOrEditAddr(props) {
    */
   const discodsCityCode = () => {
     const provinceInfo = cityData.filter(item => item.label === addressInfo.province)[0]
-    const cityInfo = provinceInfo.children.filter(item => item.label === addressInfo.city)[0] 
+    const cityInfo = provinceInfo.children.filter(item => item.label === addressInfo.city)[0]
     const districtInfo = cityInfo && cityInfo.children.filter(item => item.label === addressInfo.district)[0]
 
     setAddrValue([provinceInfo.value, cityInfo ? cityInfo.value : '0', districtInfo ? districtInfo.value : '0'])
@@ -67,29 +68,42 @@ function CreateOrEditAddr(props) {
     setDistrict(district.label)
   }
 
-  const submit = () => {
-    const params = {
+  const submit = async () => {
+    let params = {
       city,
       province,
       district,
       consignee: userName,
       mobile: userTel,
       address: addrDetail,
-      is_default: isDefault,
-      address_id: addressInfo.address_id
+      is_default: isDefault
     }
 
-    apiEditAddr(params).then(res => {
-      console.log('编辑地址', res)
+    let result: any = {}
 
-      if (res.success) {
-        Toast.showSuccess('编辑成功')
-        updateAddrList()
-        setTimeout(() => {
-          navigation.goBack()
-        }, 1500)
+    for (const key in params) {
+      if (params[key].length === 0) {
+        Toast.show('请填写完整信息', {
+          position: 0
+        })
       }
-    })
+    }
+
+    if (pageType === 'edit') {
+      params[`address_id`] = addressInfo.address_id
+
+      result = await apiEditAddr(params)
+    } else {
+      result = await apiAddAddr(params)
+    }
+
+    if (result.success) {
+      Toast.showSuccess('编辑成功')
+      updateAddrList()
+      setTimeout(() => {
+        navigation.goBack()
+      }, 1500)
+    }
   }
 
   /**
@@ -140,12 +154,10 @@ function CreateOrEditAddr(props) {
             </Picker>
           </View>
 
-          <View style={[styles.formItem, styles.mutilineIpt]}>
-            <Text style={[styles.formItemTitle, { alignSelf: 'baseline', paddingTop: pxToDp(30) }]}>详细地址</Text>
+          <View style={[styles.formItem]}>
+            <Text style={styles.formItemTitle}>详细地址</Text>
             <TextInput
-              multiline
               maxLength={40}
-              style={[styles.input, { lineHeight: pxToDp(40), paddingTop: pxToDp(20) }]}
               placeholder='如道路、门牌号、小区、楼栋号、单元室等'
               defaultValue={addrDetail}
               onChangeText={(text) => setAddrDetail(text)}

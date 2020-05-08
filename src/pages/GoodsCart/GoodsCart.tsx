@@ -280,7 +280,9 @@ function Cart(props: any) {
     const { totalCount } = allCartGoodsInfo
 
     if (!totalCount) {
-      Toast.show('请选择要结算的商品')
+      Toast.show('请选择要结算的商品', {
+        position: 0
+      })
       return
     }
 

@@ -55,8 +55,10 @@ export const post = (path: RequestInfo, data: any) => {
       headers,
       body: JSON.stringify(data)
     })
-    .then((response: { json: () => any }) => {
-      return response.json()
+    .then(async (response: { text: () => any; }) => {
+      const r1 = await response.text()
+      const r2 = r1.trim && r1.trim()
+      return JSON.parse(r2)
     })
     .then((result: { data: unknown; }) => {
       resolve(result.data)

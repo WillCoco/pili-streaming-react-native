@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, ScrollView } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import React, { useState, useEffect, useCallback } from 'react'
+import { StyleSheet, ScrollView } from 'react-native'
+import { useNavigation, useIsFocused } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { setUserInfo } from '../../actions/user'
 import { apiGetUserData, apiGetOrderCount, apiGetIndexGoodsList } from '../../service/api'
@@ -16,20 +16,18 @@ function Mine(props) {
   const navigation = useNavigation()
   const pageSize = 20
   const { isLogin } = props
+  const focused = useIsFocused()
   const [orderCount, setOrderCount] = useState({})
   const [pageNo, setPageNo] = useState(1)
   const [goodsList, setGoodsList] = useState([])
 
   useEffect(() => {
-    getGoodsList()
-
-    if (isLogin) {
-      navigation.addListener('focus', () => {
-        getUserInfo()
-        getOrderCount()
-      })
+    if (focused) {
+      getGoodsList()
+      getUserInfo()
+      getOrderCount()
     }
-  }, [])
+  }, [focused])
 
   /**
    * 加载推荐商品
@@ -45,6 +43,8 @@ function Mine(props) {
    * 获取用户信息
    */
   const getUserInfo = () => {
+    if (!isLogin) return
+
     apiGetUserData().then((res: any) => {
       console.log('获取用户信息', res)
       props.dispatch(setUserInfo(res))
@@ -55,11 +55,17 @@ function Mine(props) {
    * 获取订单数量
    */
   const getOrderCount = () => {
-    apiGetOrderCount().then(res => {
+    if (!isLogin) return
+
+    apiGetOrderCount().then((res: any) => {
       console.log('订单数量', res)
       setOrderCount(res)
     })
   }
+
+  // if (true) {
+  //   return <></>
+  // }
 
   return (
     <ScrollView style={styles.container}>

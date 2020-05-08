@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, StyleSheet, ImageBackground } from 'react-native'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native'
 import Toast from 'react-native-tiny-toast'
 
 import BrandCard from './BrandCard/BrandCard'
@@ -13,6 +13,7 @@ import pxToDp from '../../utils/px2dp'
 export default function Brand() {
   const route = useRoute()
   const navgation = useNavigation()
+  const isFocused = useIsFocused()
 
   const pageSize = 20
   const pageType = route?.params?.type
@@ -32,8 +33,10 @@ export default function Brand() {
   })
 
   useEffect(() => {
-    getBrandList()
-  }, [])
+    if (isFocused) {
+      getBrandList()
+    }
+  }, [isFocused])
 
   const getBrandList = async () => {
     const loading = Toast.showLoading('')
@@ -68,9 +71,20 @@ export default function Brand() {
         pageSize: pageNo * pageSize
       }
 
-      apiBrandList(params).then((res: any) => {
-        setBrandList(JSON.parse(JSON.stringify(res.list)))
-      })
+      if (pageType === 'default') {
+        apiBrandList(params).then((res: any) => {
+          setBrandList(JSON.parse(JSON.stringify(res.list)))
+        })
+      } else {
+        console.log(1)
+        brandList.forEach((item: any, index: number) => {
+          if (item.brand_id === brand_id) {
+            brandList.splice(index, 1)
+          }
+        })
+
+        setBrandList(JSON.parse(JSON.stringify(brandList)))
+      }
     })
   }
 

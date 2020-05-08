@@ -117,7 +117,8 @@ const styles = StyleSheet.create({
     color: Colors.whiteColor
   },
   isFocus: {
-    backgroundColor: Colors.bgColor
+    backgroundColor: Colors.bgColor,
+    color: Colors.darkGrey
   },
   noFocus: {
     backgroundColor: Colors.basicColor
