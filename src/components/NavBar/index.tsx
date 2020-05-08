@@ -46,7 +46,7 @@ const NavBar = (props: NavBarProps) =>  {
    */
   const defaultLeftComponent = (
     <TouchableOpacity onPress={onLeftPress} style={styles.leftWrapper}>
-      {props.leftTheme === 'light' ? <Iconbacklight/> : <Iconback />}
+      {props.leftTheme === 'light' ? <Iconbacklight /> : <Iconback />}
     </TouchableOpacity>
   );
 

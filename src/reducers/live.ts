@@ -1,4 +1,4 @@
-import {consts} from 'pili-streaming-react-native';
+// import {consts} from 'pili-streaming-react-native';
 import {isAndroid} from '../constants/DeviceInfo';
 import liveActionTypes from '../constants/Live';
 

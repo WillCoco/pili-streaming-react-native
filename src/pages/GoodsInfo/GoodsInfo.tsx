@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { View, ScrollView, Dimensions, StyleSheet, Platform, Text } from 'react-native'
+import { View, ScrollView, Dimensions, StyleSheet, Platform, Text, ImageBackground } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import HTML from 'react-native-render-html'
@@ -15,10 +15,11 @@ import FooterBar from './FooterBar/FooterBar'
 import GoodsSku from './GoodsSku/GoodsSku'
 import Coupon from './Coupon/Coupon'
 
-import { apiGoodInfo, apiGetUnclaimedCoupons, apiAddCart } from '../../service/api'
+import { apiGoodInfo, apiGetUnclaimedCoupons, apiAddCart, apiGoodsIsLike } from '../../service/api'
 import { Colors } from '../../constants/Theme'
 import { strDiscode } from '../../utils/discodeRichText'
 import pxToDp from '../../utils/px2dp'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 function GoodsInfo(props: any) {
   const route = useRoute()
@@ -35,6 +36,7 @@ function GoodsInfo(props: any) {
   const [showGoodsSku, setShowGoodsSku] = useState(false)
   const [showCoupon, setShowCoupon] = useState(false)
   const [buttonType, setButtonType] = useState('')  // 商品规格操作面板购买按钮文字
+  const [soldOut, setSoldOut] = useState(false)
   let [goodsNum, setGoodsNum] = useState(1)
   const [couponList, setCouponList] = useState([])
   const goodsInfoRef = useRef()
@@ -59,15 +61,24 @@ function GoodsInfo(props: any) {
    * 加载商品详情
    */
   const getGoodsInfo = () => {
+    let loading = Toast.showLoading('')
+
     apiGoodInfo({
       goods_id: route.params.id
     }).then((res: any) => {
       console.log('商品详情', res)
+      Toast.hide(loading)
+      if (!res) {
+        setSoldOut(true)
+        setIsLoadingComplete(false)
+        return
+      }
 
       goodsInfoRef.current = res
       setGoodsInfo(goodsInfoRef.current)
       setSwiperList(res.goods_images_list)
       setGoodsContent(strDiscode(res.goods_content))
+
 
       if (res.is_sale || res.is_snap_up) {
         setGoodsType(res.is_sale ? 'sale' : 'seckill')
@@ -76,6 +87,7 @@ function GoodsInfo(props: any) {
       initGoodsSku(res.sku)  // 初始化商品规格信息
 
       setIsLoadingComplete(true)
+      setSoldOut(false)
 
       if (isLogin) getGoodsCoupon(res.goods_id)
     })
@@ -173,7 +185,11 @@ function GoodsInfo(props: any) {
    * 显示优惠券操作面板
    */
   const showCouponActionSheet = () => {
-    setShowCoupon(true)
+    if (isLogin) {
+      setShowCoupon(true)
+    } else {
+      navigation.push('Login')
+    }
   }
 
   /**
@@ -203,6 +219,12 @@ function GoodsInfo(props: any) {
    * 商品规格面板  点击 加入购物车 or 立即购买
    */
   const nextAction = () => {
+    if (!isLogin) {
+      hideGoodsSkuActionSheet()
+      navigation.push('Login')
+      return
+    }
+
     if (buttonType === 'add') {
       addToCart()
     } else {
@@ -237,66 +259,110 @@ function GoodsInfo(props: any) {
     navigation.push('CreateOrder')
   }
 
-  return (
-    <View>
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-        {/* 轮播图 */}
-        <Swiper swiperList={swiperList} />
-        {
-          !!goodsType && <ActivityBar type={goodsType} goodsInfo={goodsInfo} />
-        }
-        {/* 商品信息 */}
-        <GoodsCard goodsInfo={goodsInfo} showCouponActionSheet={showCouponActionSheet} />
-        {/* 平台优势 */}
-        <Advantage />
-        {/* 店铺信息 */}
-        <BrandCard goodsInfo={goodsInfo} />
-        {/* 商品详情 */}
-        {
-          isLoadingComplete && <View style={{ marginTop: pxToDp(10) }}>
+  /**
+   * 收藏/取消收藏
+   */
+  const toggleStarGoods = () => {
+    if (!isLogin) {
+      navigation.push('Login')
+      return
+    }
+
+    const { goods_id, is_collect } = goodsInfo
+
+    apiGoodsIsLike({
+      goods_id,
+      type: is_collect ? 0 : 1
+    }).then(res => {
+      console.log('收藏/取消收藏', res)
+
+      goodsInfo.is_collect = is_collect ? 0 : 1
+
+      setGoodsInfo(JSON.parse(JSON.stringify(goodsInfo)))
+    })
+  }
+
+  if (soldOut) {
+    return (
+      <View style={styles.soldOutContainer}>
+        <ImageBackground source={require('../../assets/images/img_empty-like.png')} style={styles.soldOutBgi}>
+          <Text style={styles.soldOutText}>该商品已下架</Text>
+        </ImageBackground>
+        <TouchableOpacity style={styles.goBackBtn} onPress={() => navigation.goBack()}>
+          <Text style={{
+            fontSize: pxToDp(28),
+            color: Colors.whiteColor
+          }}>返回继续浏览</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
+  if (isLoadingComplete) {
+    return (
+      <View>
+        <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+          {/* 轮播图 */}
+          <Swiper swiperList={swiperList} />
+          {
+            !!goodsType && <ActivityBar type={goodsType} goodsInfo={goodsInfo} />
+          }
+          {/* 商品信息 */}
+          <GoodsCard goodsInfo={goodsInfo} showCouponActionSheet={showCouponActionSheet} />
+          {/* 平台优势 */}
+          <Advantage />
+          {/* 店铺信息 */}
+          <BrandCard goodsInfo={goodsInfo} />
+          {/* 商品详情 */}
+          <View style={{ marginTop: pxToDp(10) }}>
             <HTML
               html={goodsContent}
               imagesMaxWidth={Dimensions.get('window').width}
             />
           </View>
-        }
-      </ScrollView>
-      {/* 底部操作栏 */}
-      <FooterBar
-        goodsInfo={goodsInfo}
-        showGoodsSkuActionSheet={(type: string) => showGoodsSkuActionSheet(type)}
-      />
-      {/* 商品属性弹窗 */}
-      <ActionSheet isShow={showGoodsSku}>
-        <GoodsSku
-          goodsNum={goodsNum}
-          sku={goodsSku}
-          curSku={curSku}
-          curSkuInfo={curSkuInfo}
-          buttonType={buttonType}
-          changeSku={(key: string, index: number) => changeSku(key, index)}
-          minusCount={minusCount}
-          addCount={addCount}
-          nextAction={nextAction}
-          hideGoodsSkuActionSheet={hideGoodsSkuActionSheet}
-        />
-      </ActionSheet>
-
-      {/* 优惠券弹窗 */}
-      <ActionSheet isShow={showCoupon}>
-        <Coupon
-          couponList={couponList}
+        </ScrollView>
+        {/* 底部操作栏 */}
+        <FooterBar
           goodsInfo={goodsInfo}
-          hideCouponActionSheet={hideCouponActionSheet}
-          getGoodsCoupon={() => getGoodsCoupon(goodsInfo.goods_id)}
+          showGoodsSkuActionSheet={(type: string) => showGoodsSkuActionSheet(type)}
+          toggleStarGoods={toggleStarGoods}
         />
-      </ActionSheet>
+        {/* 商品属性弹窗 */}
+        <ActionSheet isShow={showGoodsSku}>
+          <GoodsSku
+            goodsNum={goodsNum}
+            sku={goodsSku}
+            curSku={curSku}
+            curSkuInfo={curSkuInfo}
+            buttonType={buttonType}
+            changeSku={(key: string, index: number) => changeSku(key, index)}
+            minusCount={minusCount}
+            addCount={addCount}
+            nextAction={nextAction}
+            hideGoodsSkuActionSheet={hideGoodsSkuActionSheet}
+          />
+        </ActionSheet>
 
-      {/* 分享弹窗 */}
-      {/* <ActionSheet isShow={isShow} close={close}>
+        {/* 优惠券弹窗 */}
+        <ActionSheet isShow={showCoupon}>
+          <Coupon
+            couponList={couponList}
+            goodsInfo={goodsInfo}
+            hideCouponActionSheet={hideCouponActionSheet}
+            getGoodsCoupon={() => getGoodsCoupon(goodsInfo.goods_id)}
+          />
+        </ActionSheet>
+
+        {/* 分享弹窗 */}
+        {/* <ActionSheet isShow={isShow} close={close}>
         <Text style={{ height: 500, backgroundColor: '#f0f' }}>sdfs</Text>
       </ActionSheet> */}
-    </View>
+      </View>
+    )
+  }
+
+  return (
+    <></>
   )
 }
 
@@ -309,5 +375,26 @@ const deviceHeight = Dimensions.get('window').height
 const styles = StyleSheet.create({
   container: {
     height: deviceHeight - pxToDp(Platform.OS === 'ios' ? 128 : 100)
+  },
+  soldOutContainer: {
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  soldOutBgi: {
+    width: pxToDp(380),
+    height: pxToDp(360),
+    paddingTop: pxToDp(280)
+  },
+  soldOutText: {
+    textAlign: 'center'
+  },
+  goBackBtn: {
+    width: pxToDp(300),
+    height: pxToDp(80),
+    backgroundColor: Colors.basicColor,
+    borderRadius: pxToDp(40),
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })

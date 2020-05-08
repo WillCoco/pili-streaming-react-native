@@ -12,7 +12,8 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Video from 'react-native-video';
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
+import NoticeBubble from '../../components/NoticeBubble';
 import LiveIntro from '../LiveIntro';
 import LivingBottomBlock from '../LivingBottomBlock';
 import LivePuller from '../LivePuller';
@@ -36,6 +37,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
   const dispatch = useDispatch();
   const route = useRoute() || {};
 
+  const room = useSelector(state => state?.im?.room);
 
   /**
    * 播放类型
@@ -102,8 +104,9 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
    * 
    */
   React.useEffect(() => {
-    dispatch(joinGroup({groupID: '1'}))
+    dispatch(joinGroup({groupID: '@TGS#3PEWFMNGV'}))
       .then((success?: boolean) => {
+        alert(1)
         setIsIMJoinSecceed(!!success)
       })
       .catch((err: any) => {
@@ -114,9 +117,14 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
     
     return () => {
       player.current?.stop(); // 返回时停止
-      dispatch(quitGroup('1')); // 退im群
+      dispatch(quitGroup()); // 退im群
     }
   }, [])
+
+  /**
+   * 公告气泡
+   */
+  const noticeBubbleText = room?.notification;
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
@@ -125,22 +133,13 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
         source={images.livingbg}
         resizeMode="cover"
       />
-      {/* <LivePuller
-        ref={player}
-        inputUrl="rtmp://58.200.131.2:1935/livetv/hunantv"
-        onStatus={onPlayerStatus}
-      />
-      <Video source={{uri: 'http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4'}}   // Can be a URL or a local file.
-        repeat
-        fullscreen
-        resizeMode="cover"
-        // paused
-        // ref={ref}                                        // Store reference
-        // onBuffer={this.onBuffer}                // Callback when remote video is buffering
-        // onError={this.videoError}               // Callback when video cannot be loaded
-        style={styles.video}
-      /> */}
       {playerComponent}
+      {
+        !!noticeBubbleText ?
+          <NoticeBubble
+            text={noticeBubbleText}
+          /> : null
+      }
       <LiveIntro
         showFollowButton
         anchorId={1}

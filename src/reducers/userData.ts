@@ -41,7 +41,7 @@ const INITIAL_STATE = {
     hasSettle: 0,
     inviteCode: '',
     likeContent: 0,
-    lookCount: 297,
+    lookCount: 0,
     needMoney: 0,
     nextLevel: '',
     nickName: '',

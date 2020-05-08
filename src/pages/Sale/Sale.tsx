@@ -147,6 +147,8 @@ export default function Sale() {
     })
 
     setTimeList(JSON.parse(JSON.stringify(timeList)))
+    setHeaderGoodsList([])
+    setGoodsList([])
 
     const curTime = timeList.filter(item => item.ongoing)
 

@@ -59,7 +59,25 @@ const AnorchMeScreen = () =>  {
 
   return (
     <View style={styles.style}>
-      <NavBar leftTheme="light" title="" style={styles.navWrapper} onLeftPress={onBackPress} />
+      <NavBar 
+        leftTheme="light" 
+        title="" 
+        style={styles.navWrapper} 
+        onLeftPress={onBackPress} 
+        right={
+          () => {
+            return (
+              <TouchableOpacity style={styles.messageIconWrapper} onPress={() => {navigate('Message')}}>
+                <Image 
+                  style={styles.messageIcon} 
+                  source={images.liveMessageIcon} 
+                  resizeMode="stretch" 
+                />
+              </TouchableOpacity>
+            )
+          }
+        }
+      />
       <View style={styles.headerWrapper}>
         <Image style={styles.imgBg} source={images.anchorMeBg} resizeMode='stretch' />
         <Avatar size={60} style={styles.avatar}  />
@@ -145,6 +163,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 100,
     left: pad * 3
+  },
+  messageIconWrapper: {
+    position: 'absolute',
+    top: -35,
+    right: pad,
+    width: 30,
+    height: 25,
+  },
+  messageIcon: {
+    position: 'absolute',
+    width: 20,
+    height: 18
   },
   idText: {
     position: 'absolute',

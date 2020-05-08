@@ -15,6 +15,8 @@ import LiveSummaryBlock from '../../../components/LiveSummaryBlock';
 import {pad} from '../../../constants/Layout';
 import {Colors} from '../../../constants/Theme';
 import {vw} from '../../../utils/metric';
+import {getGroupList} from '../../../actions/im';
+import {useDispatch} from 'react-redux';
 
 interface LiveBannerProps {
   // bannerList?: any[],
@@ -23,6 +25,9 @@ interface LiveBannerProps {
 }
 
 const LiveBanner = (props: LiveBannerProps) : any =>  {
+
+  const dispatch = useDispatch();
+
   const renderItem = (d) => {
     return (
       <LiveSummaryBlock
@@ -31,9 +36,13 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
     )
   }
 
-  const onRefresh = () => Promise.resolve({
-    result: [111,222,1,1,1,1,1]
-  });
+  const onRefresh = async () => {
+    const result = await dispatch(getGroupList());
+    console.log(result, 'result')
+    return Promise.resolve({
+      result: [111,222,1,1,1,1,1]
+    })
+  };
 
   const onEndReached = () => {};
 

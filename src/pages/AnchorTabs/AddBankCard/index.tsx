@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
+import {Input} from 'react-native-elements';
 import {useSelector, useDispatch} from 'react-redux';
 import {PrimaryText} from 'react-native-normalization-text';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -18,6 +19,7 @@ import {Colors} from '../../../constants/Theme';
 import {vw} from '../../../utils/metric';
 import {pad} from '../../../constants/Layout';
 import {addBankCard} from '../../../actions/asset';
+import FormRow from '../../../components/FormRow'
 
 const ROW_HEIGHT = 120;
 
@@ -26,6 +28,8 @@ const AddBankCard = () =>  {
   const {navigate, goBack} = useNavigation();
   const route = useRoute();
   const dispatch = useDispatch();
+  const [name, setName] = React.useState('');
+  const [cardNum, setCardNum] = React.useState('');
 
   /**
    * 提交绑定
@@ -49,10 +53,20 @@ const AddBankCard = () =>  {
         style={styles.nav}
       />
       <View style={styles.contentWrapper}>
-        <PrimaryText>姓名</PrimaryText>
-        <PrimaryText>银行卡号</PrimaryText>
+        <FormRow 
+          title={'姓名:'}
+          value={name}
+          onChangeText={setName}
+          bottomDivider
+        />
+        <FormRow 
+          title={'银行卡号:'}
+          placeholder={'请填写银行卡号'}
+          value={cardNum}
+          onChangeText={setCardNum}
+        />
+        <PrimaryText style={styles.tip}>为了资金安全，请填写*大勇名下单银行卡</PrimaryText>
       </View>
-     
       <ButtonRadius
         text="提交"
         style={styles.button}
@@ -79,6 +93,10 @@ const styles = StyleSheet.create({
   },
   contentWrapper: {
     flex: 1,
+  },
+  tip: {
+    color: Colors.basicColor,
+    padding: pad
   },
   button: {
     width: vw(80),

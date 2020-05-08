@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, ScrollView  } from 'react-native'
+import { View, StyleSheet, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { setUserInfo } from '../../actions/user'
@@ -15,6 +15,7 @@ import GoodsList from './GoodsList/GoodsList'
 function Mine(props) {
   const navigation = useNavigation()
   const pageSize = 20
+  const { isLogin } = props
   const [orderCount, setOrderCount] = useState({})
   const [pageNo, setPageNo] = useState(1)
   const [goodsList, setGoodsList] = useState([])
@@ -22,12 +23,12 @@ function Mine(props) {
   useEffect(() => {
     getGoodsList()
 
-    navigation.addListener('focus', () => {
-      if (props.isLogin) {
+    if (isLogin) {
+      navigation.addListener('focus', () => {
         getUserInfo()
         getOrderCount()
-      }
-    })
+      })
+    }
   }, [])
 
   /**
@@ -65,7 +66,7 @@ function Mine(props) {
       {/* 头部区域 */}
       <Header />
       {/* 订单 */}
-      <OrdersContent orderCount={orderCount} />
+      <OrdersContent orderCount={orderCount} isLogin={isLogin} />
       {/* 粉丝数量 相关 */}
       <FansContent />
       {/* 账户 */}

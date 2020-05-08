@@ -1,16 +1,15 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, PixelRatio } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-
+import { connect } from 'react-redux'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 
 import formatGoodsPrice from '../../../utils/formatGoodsPrice'
 
-
-export default function BrandCard(props: { brandInfo: any }) {
+function BrandCard(props: { focusBrandShop?: any; brandInfo?: any; isLogin?: any }) {
   const navigation = useNavigation()
-  const { brandInfo } = props
+  const { brandInfo, isLogin } = props
 
   const toGoodsInfo = (id: number) => {
     navigation.push('GoodsInfo', { id })
@@ -22,8 +21,13 @@ export default function BrandCard(props: { brandInfo: any }) {
   }
 
   /**
-   * TODO: 关注、取消关注
+   * 关注、取消关注
    */
+  const focusBrandShop = () => {
+    if (!isLogin) navigation.push('Login')
+
+    props.focusBrandShop(brandInfo)
+  }
 
   /**
    * TODO: 品牌收藏
@@ -39,7 +43,10 @@ export default function BrandCard(props: { brandInfo: any }) {
             <Text style={styles.brandName}>{brandInfo.name}</Text>
           </View>
         </TouchableWithoutFeedback>
-        <Text style={[styles.focusText, brandInfo.is_focus ? styles.isFocus : styles.noFocus]}>{brandInfo.is_focus ? '已关注' : '关注'}</Text>
+        <Text
+          onPress={focusBrandShop}
+          style={[styles.focusText, brandInfo.is_focus ? styles.isFocus : styles.noFocus]}
+        >{brandInfo.is_focus ? '已关注' : '关注'}</Text>
       </View>
       {/* 商品列表 */}
       <View style={styles.goodsList}>
@@ -66,6 +73,10 @@ export default function BrandCard(props: { brandInfo: any }) {
     </View>
   )
 }
+
+export default connect(
+  (state: any) => state.userData
+)(BrandCard)
 
 const styles = StyleSheet.create({
   container: {
@@ -112,8 +123,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.basicColor
   },
   goodsList: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+    flexDirection: 'row'
   },
   goodsItem: {
     width: pxToDp(220),
@@ -121,7 +131,8 @@ const styles = StyleSheet.create({
     borderWidth: 1 / PixelRatio.get(),
     borderColor: Colors.borderColor,
     borderRadius: pxToDp(10),
-    overflow: 'hidden'
+    overflow: 'hidden',
+    marginRight: pxToDp(20)
   },
   goodsImg: {
     width: '100%',

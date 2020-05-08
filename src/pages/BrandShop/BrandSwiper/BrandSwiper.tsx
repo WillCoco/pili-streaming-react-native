@@ -25,8 +25,7 @@ export default function BrandSwiper(props) {
 
 const styles = StyleSheet.create({
   swiperContainer: {
-    height: pxToDp(460),
-    backgroundColor: '#0f0'
+    height: pxToDp(460)
   },
   img: {
     width: '100%',

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { View, Text, StyleSheet, Platform, PixelRatio, TextInput, Image, TouchableOpacity } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import Toast from 'react-native-tiny-toast'
@@ -10,9 +11,10 @@ const heartSolidIcon = require('../../../assets/works-image/heart.png')
 const heartIcon = require('../../../assets/works-image/heart2.png')
 
 export default function Footer(props: any) {
-  const { worksInfo, inputFocus, commentInfo } = props
+  const { worksInfo, inputFocus, commentInfo, isLogin } = props
   const [inputValue, setInputValue] = useState('')
   const inputRef = useRef()
+  const navigation = useNavigation()
 
   useEffect(() => {
     if (inputFocus) {
@@ -51,16 +53,26 @@ export default function Footer(props: any) {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        ref={inputRef}
-        placeholder={commentInfo && commentInfo.userName ? `回复@${commentInfo.userName}` : '说点什么吧'}
-        clearButtonMode='while-editing'
-        value={inputValue}
-        style={styles.input}
-        onChangeText={(text) => setInputValue(text)}
-        onSubmitEditing={submit}
-        onBlur={props.inputBlur}
-      />
+      {
+        isLogin
+          ? <TextInput
+            ref={inputRef}
+            placeholder={commentInfo && commentInfo.userName ? `回复@${commentInfo.userName}` : '说点什么吧'}
+            clearButtonMode='while-editing'
+            value={inputValue}
+            style={styles.input}
+            onChangeText={(text) => setInputValue(text)}
+            onSubmitEditing={submit}
+            onBlur={props.inputBlur}
+          />
+          : <TouchableOpacity
+            style={[styles.input, { justifyContent: 'center', alignItems: 'center' }]}
+            onPress={() => navigation.push('Login')}
+          >
+            <Text>登录后发表评论</Text>
+          </TouchableOpacity>
+      }
+
       <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
 
         <TouchableOpacity style={styles.iconItem} onPress={() => props.followWorks()}>

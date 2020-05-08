@@ -4,13 +4,15 @@
 import * as React from 'react';
 import {
   View,
+  Text,
   Image,
   StyleSheet,
   StyleProp,
   TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {PrimaryText, SmallText, T4, scale} from 'react-native-normalization-text';
+import {PrimaryText, SmallText, T3, scale, T1} from 'react-native-normalization-text';
 import Toast from 'react-native-tiny-toast';
 import {useNavigation} from '@react-navigation/native';
 import withPage from '../../../components/HOCs/withPage';
@@ -27,6 +29,7 @@ import DiscountPrice from '../../../components/DiscountPrice';
 import Iconremove from '../../../components/Iconfont/Iconremove';
 import {getPlatformBrands} from '../../../actions/shop';
 import images from '../../../assets/images/index';
+import Avatar from '../../../components/Avatar';
 
 interface BrandGoodRowProps {
   data: any,
@@ -57,12 +60,14 @@ const BrandGoodRow = (props: BrandGoodRowProps) =>  {
       style={StyleSheet.flatten([styles.style, props.style])}
       onPress={onPress}
     >
-      <Image source={data.img || images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
-      <View style={styles.contentWrapper}>
-        <PrimaryText numberOfLines={1} style={{}}>{data.bank}</PrimaryText>
-        <PrimaryText numberOfLines={1} style={{}}>{data.cardType}</PrimaryText>
-        <PrimaryText numberOfLines={1} style={{}}>{data.cardId}</PrimaryText>
-      </View>
+      <ImageBackground source={images.bankBgBlue} style={styles.cardWrapper}>
+        <Avatar source={data.img || images.BOCIcon} style={StyleSheet.flatten([styles.avatar, props.imgStyle])} />
+        <View style={styles.contentWrapper}>
+          <T3 numberOfLines={1} style={{color: Colors.whiteColor}}>{data.bank}</T3>
+          <PrimaryText numberOfLines={1} style={{color: Colors.whiteColor}}>{data.cardType}</PrimaryText>
+          <T1 numberOfLines={1} style={{color: Colors.whiteColor}}>{data.cardId}</T1>
+        </View>
+      </ImageBackground>
     </TouchableOpacity>
   )
 };
@@ -77,15 +82,28 @@ BrandGoodRow.defaultProps = {
   actionText: '添加'
 };
 
-const ROW_HEIGHT = 120;
+const ROW_HEIGHT = 120 + pad;
 const styles = StyleSheet.create({
   style: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     height: ROW_HEIGHT,
-    backgroundColor: '#fff'
-    // paddingHorizontal: pad
+    minHeight: ROW_HEIGHT,
+    paddingHorizontal: pad,
+    paddingVertical: 4,
+  },
+  avatar: {
+    width: 48,
+    height: 48,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+  },
+  cardWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    height: ROW_HEIGHT,
+    padding: pad,
   },
   contentWrapper: {
     flex: 1,
@@ -93,12 +111,6 @@ const styles = StyleSheet.create({
     marginRight: pad,
     justifyContent: 'space-between',
     alignItems: 'flex-start'
-  },
-  img: {
-    width: 100,
-    height: 100,
-    borderRadius: radio,
-    marginRight: pad
   },
   checkImg: {
     height: 20,
@@ -115,6 +127,9 @@ const styles = StyleSheet.create({
     height: scale(42),
     flexDirection: 'row',
     alignItems: 'flex-start',
+  },
+  typeText: {
+    color: Colors.whiteColor,
   },
   removeBtn: {
     padding: pad

@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
 
-function Header(props) {
+function Header(props: { userData: { userInfo: any; isLogin: any }; publicData: { statusBarHeight: any } }) {
   const navigation = useNavigation()
   const { userInfo, isLogin } = props.userData
   const { statusBarHeight } = props.publicData
@@ -27,7 +27,7 @@ function Header(props) {
     if (isLogin) {
       navigation.push('Brand', { type: 'focus' })
     } else {
-      toLogin
+      toLogin()
     }
   }
 
@@ -35,7 +35,7 @@ function Header(props) {
     if (isLogin) {
       navigation.push('LikeContent', { type: 'focus' })
     } else {
-      toLogin
+      toLogin()
     }
   }
 
@@ -43,12 +43,16 @@ function Header(props) {
     if (isLogin) {
       navigation.push('Coupon')
     } else {
-      toLogin
+      toLogin()
     }
   }
 
   const toSetting = () => {
-    navigation.push('Setting')
+    if (isLogin) {
+      navigation.push('Setting')
+    } else {
+      toLogin()
+    }
   }
 
   return (
@@ -59,35 +63,43 @@ function Header(props) {
     >
       {/* 顶部右侧操作区域 */}
       <View style={styles.rightOption}>
-        <TouchableOpacity onPress={() => navigation.push('AnchorTabs')}>
-          <ImageBackground source={require('../../../assets/mine-image/live-btn.png')} style={styles.liveBgi}>
-            <Text style={styles.liveText}>去直播</Text><Ionicons name='ios-play' color={Colors.whiteColor} size={20} />
-          </ImageBackground>
-        </TouchableOpacity>
+        {
+          isLogin && <TouchableOpacity onPress={() => navigation.push('AnchorTabs')}>
+            <ImageBackground source={require('../../../assets/mine-image/live-btn.png')} style={styles.liveBgi}>
+              <Text style={styles.liveText}>去直播</Text><Ionicons name='ios-play' color={Colors.whiteColor} size={20} />
+            </ImageBackground>
+          </TouchableOpacity>
+        }
         <TouchableOpacity onPress={toSetting}>
           <Image source={require('../../../assets/mine-image/icon_setting.png')} style={styles.setIcon} />
         </TouchableOpacity>
       </View>
 
       {/* 个人信息 */}
-      <View style={styles.userInfo}>
-        {
-          isLogin
-            ? <Image source={{ uri: userInfo.userAvatar }} style={styles.avatar} />
-            : <Image source={require('../../../assets/mine-image/default_avatar.png')} style={styles.avatar} />
-        }
-        <View>
-          <Text style={styles.userName}>{isLogin ? userInfo.nickName : '立即登录'}</Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={[styles.userLevel, styles.userLevelBgc]}>{userInfo.userLevel}</Text>
-            <Text style={styles.userLevel}>缺失</Text>
-            <View style={[styles.userLevel, { flexDirection: 'row', alignItems: 'center' }]}>
-              <Text style={{ fontSize: pxToDp(20), color: Colors.whiteColor }}>缺失</Text>
-              <Ionicons name='ios-play' color={Colors.whiteColor} />
-            </View>
+      <TouchableWithoutFeedback onPress={() => {
+        if (!isLogin) navigation.push('Login')
+      }}>
+        <View style={styles.userInfo}>
+          {
+            isLogin
+              ? <Image source={{ uri: userInfo.userAvatar }} style={styles.avatar} />
+              : <Image source={require('../../../assets/mine-image/default_avatar.png')} style={styles.avatar} />
+          }
+          <View>
+            <Text style={styles.userName}>{isLogin ? userInfo.nickName : '立即登录'}</Text>
+            {
+              isLogin && <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={[styles.userLevel, styles.userLevelBgc]}>{userInfo.userLevel}</Text>
+                <Text style={styles.userLevel}>缺失</Text>
+                <View style={[styles.userLevel, { flexDirection: 'row', alignItems: 'center' }]}>
+                  <Text style={{ fontSize: pxToDp(20), color: Colors.whiteColor }}>缺失</Text>
+                  <Ionicons name='ios-play' color={Colors.whiteColor} />
+                </View>
+              </View>
+            }
           </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
 
       {/* 关注、收藏 相关信息 */}
       <View style={styles.otherInfo}>

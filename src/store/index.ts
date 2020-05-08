@@ -8,14 +8,18 @@ import rootReducer from '../reducers'
 const persistConfig = {
   key: 'store',
   storage: AsyncStorage,
-  blacklist: ['shop', 'im', 'asset']
+  blacklist: ['shop', 'im', 'asset', 'live']
 }
 
 const middleware = [thunkMiddleware, logger]
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
+
+export const store = createStore(persistedReducer, applyMiddleware(...middleware))
+export let persistor = persistStore(store)
+
 export default function configStore() {
-  const store = createStore(persistedReducer, applyMiddleware(...middleware))
-  let persistor = persistStore(store)
+  // const store = createStore(persistedReducer, applyMiddleware(...middleware))
+  // let persistor = persistStore(store)
   return { store, persistor }
 }

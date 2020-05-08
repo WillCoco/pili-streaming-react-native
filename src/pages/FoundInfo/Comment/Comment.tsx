@@ -10,7 +10,7 @@ const likeIcon = require('../../../assets/works-image/like.png')
 const notLikeIcon = require('../../../assets/works-image/not_like.png')
 
 export default function Comment(props: any) {
-  const { commentInfoList, commentCount } = props
+  const { commentInfoList, commentCount, isLogin } = props
 
   const formatDate = (time: number) => {
     const curYear = new Date().getFullYear()
@@ -20,6 +20,8 @@ export default function Comment(props: any) {
   }
 
   const giveLaud = (commentInfo: any) => {
+    if (!isLogin) return
+
     const { commentId, isLike } = commentInfo
 
     const params = {

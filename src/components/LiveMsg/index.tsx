@@ -12,15 +12,17 @@ import {
   TouchableOpacity,
   PanResponder,
 } from 'react-native';
-import MsgRow from './MsgRow'
+import MsgRow, {dataAdapterType} from './MsgRow'
 import { vw } from '../../utils/metric';
 
 export type msgList = any[] | undefined;
 
 interface LiveMsgProps {
   msgList: msgList,
+  msgAdapter?: dataAdapterType,
   renderItem?: (d: string | object, i: number) => any,
   style?: StyleProp<any>,
+  onPressMsg?: (data: any) => any,
 }
 
 const DEFAULT_HEIGTH = 200; // 默认消息窗高度
@@ -123,14 +125,17 @@ const LiveMsg = (props: LiveMsgProps) : any =>  {
         contentContainerStyle={styles.contentWrapper}
         onMomentumScrollEnd={onMomentumScrollEnd}
         onScrollBeginDrag={onScrollBeginDrag}
-        onStartShouldSetResponder={() => true}
-        onMoveShouldSetResponder={() => true}
+        // onStartShouldSetResponder={() => true}
+        // onMoveShouldSetResponder={() => true}
       >
         {
           props.msgList?.map((d, i) => {
             return (
               <MsgRow
                 key={`msg_${i}`}
+                data={d}
+                dataAdapter={props.msgAdapter}
+                onPress={props.onPressMsg}
                 // onLayout={(e) => {
                   // 接近顶部的透明度
                   // console.log(e.nativeEvent.layout, i)

@@ -94,7 +94,6 @@ const LiveIntro = (props: LiveMsgProps) =>  {
           />
         )
       }
-      
     </TouchableOpacity>
   )
 }

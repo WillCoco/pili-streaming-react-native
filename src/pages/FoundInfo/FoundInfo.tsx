@@ -132,7 +132,10 @@ function FoundInfo(props: any) {
       worksId
     }
 
-    console.log(params)
+    if (!isLogin) {
+      navigation.push('Login')
+      return
+    }
 
     apiFollowWorks(params).then(res => {
       console.log('关注or取消关注作品', res)
@@ -239,6 +242,11 @@ function FoundInfo(props: any) {
    * 展示商品窗口
    */
   const showGoodsActionSheet = () => {
+    if (!isLogin) {
+      navigation.push('Login')
+      return
+    }
+
     if (!!worksInfo.worksRelationGoods.length) {
       setShowGoods(true)
       return
@@ -270,8 +278,10 @@ function FoundInfo(props: any) {
    * 回复评论
    */
   const focusReply = (commentInfo: any) => {
-    setInputFocus(true)
-    setCommentInfo(commentInfo)
+    if (isLogin) {
+      setInputFocus(true)
+      setCommentInfo(commentInfo)
+    }
   }
 
   /**
@@ -302,11 +312,18 @@ function FoundInfo(props: any) {
             ? <Swiper swiperList={swiperList} />
             : <Video
               source={{ uri: "https://qpsc-1256479324.cos.ap-shanghai.myqcloud.com/qpsc-video/2020/2/30/6c500bf0-3e48-4607-9183-765ce64a1d86.mp4" }}
+              autoplay
+              paused={true}
+              style={{
+                width: '100%',
+                height: pxToDp(400)
+              }}
             />
         }
 
         <WorksCard worksInfo={worksInfo} />
         <Comment
+          isLogin={isLogin}
           commentInfoList={commentList}
           commentCount={commentCount}
           toggleCommentCount={toggleCommentCount}
@@ -317,6 +334,7 @@ function FoundInfo(props: any) {
       </ScrollView>
 
       <Footer
+        isLogin={isLogin}
         worksInfo={worksInfo}
         inputFocus={inputFocus}
         commentInfo={commentInfo}

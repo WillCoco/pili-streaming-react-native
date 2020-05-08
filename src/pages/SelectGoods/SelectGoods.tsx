@@ -38,8 +38,12 @@ export default function SelectGoods() {
   /**
    * 切换 TAB
    */
-  const changeTab = (e) => {
+  const changeTab = (e: any) => {
+    if (!tags.length) return
+
     let { i } = e
+
+    setGoodsList([])
 
     getGoodsList(tags[i].cat_id)
   }

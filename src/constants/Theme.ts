@@ -9,6 +9,7 @@ export const Colors = {
   pinkColor: '#ffcec8',
   lightPink: '#ffeae8',
   yellowColor: '#ffc42b',
+  blueColor: '#1D61FA',
   bgColor: '#f6f6f6',
   bgColor1: '#fafafa',
   divider: '#f3f3f3',

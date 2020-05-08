@@ -13,7 +13,11 @@ export const getBankCards = () => {
   return async function(dispatch: Dispatch<any>, getState: any) {
     // 请求更新
     await sleep(1000);
-    const bankCards = [1,2,3]
+    const bankCards = [{
+      name: '中国银行',
+      icon: '',
+      cardNum: '2134325'
+    }]
 
     // 若成功去更新store
     dispatch(updateBankCards(bankCards));

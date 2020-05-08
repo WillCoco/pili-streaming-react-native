@@ -23,7 +23,7 @@ function Logion(props: any) {
   const [invCode, setInvCode] = useState('')
   const [disabled, setDisabled] = useState(false)
   const [hasRegister, setHasRegister] = useState(true)
-  let [countDown, setCountDown] = useState(16)
+  let [countDown, setCountDown] = useState(60)
 
   navigation.setOptions({
     headerTitle: '',
@@ -86,7 +86,7 @@ function Logion(props: any) {
         if (countDown <= 0) {
           clearInterval(timer)
           setDisabled(false)
-          setCountDown(16)
+          setCountDown(60)
         }
       }, 1000)
     })
