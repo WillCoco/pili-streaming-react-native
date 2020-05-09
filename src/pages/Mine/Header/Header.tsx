@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { Ionicons } from '@expo/vector-icons'
 import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
+import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
 function Header(props: { userData: { userInfo: any; isLogin: any }; publicData: { statusBarHeight: any } }) {
   const navigation = useNavigation()
@@ -64,10 +65,8 @@ function Header(props: { userData: { userInfo: any; isLogin: any }; publicData: 
       {/* 顶部右侧操作区域 */}
       <View style={styles.rightOption}>
         {
-          isLogin && <TouchableOpacity onPress={() => navigation.push('AnchorTabs')}>
-            <ImageBackground source={require('../../../assets/mine-image/live-btn.png')} style={styles.liveBgi}>
-              <Text style={styles.liveText}>去直播</Text><Ionicons name='ios-play' color={Colors.whiteColor} size={20} />
-            </ImageBackground>
+          isLogin && <TouchableOpacity onPress={() => navigation.push('AnchorTabs')} style={styles.liveBgi}>
+            <Text style={styles.liveText}>去直播</Text><Ionicons name='ios-play' color={Colors.basicColor} size={20} />
           </TouchableOpacity>
         }
         <TouchableOpacity onPress={toSetting}>
@@ -139,6 +138,20 @@ function Header(props: { userData: { userInfo: any; isLogin: any }; publicData: 
         source={require('../../../assets/mine-image/vip-card-bgi.png')}
         style={styles.vipCard}
       >
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <Image
+            source={require('../../../assets/mine-image/level.png')}
+            style={styles.levelIcon}
+          />
+          <Text style={[styles.leveltext, styles.vipLevel]}>圈品会员</Text>
+        </View>
+        <View style={{ flex: 1, alignSelf: 'center' }}>
+          <Text style={styles.leveltext}>累计已省:</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ fontSize: pxToDp(24), color: Colors.yellowColor }}>¥</Text>
+            <Text style={[styles.leveltext, styles.savePrice]}>{formatSinglePrice(userInfo.saveMoney)}</Text>
+          </View>
+        </View>
 
       </ImageBackground>
     </ImageBackground>
@@ -163,11 +176,13 @@ const styles = StyleSheet.create({
     paddingRight: pxToDp(30)
   },
   liveBgi: {
-    width: pxToDp(150),
+    width: pxToDp(160),
     height: pxToDp(58),
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingTop: pxToDp(4)
+    alignItems: 'center',
+    backgroundColor: Colors.whiteColor,
+    borderRadius: pxToDp(29)
   },
   setIcon: {
     width: pxToDp(40),
@@ -175,9 +190,8 @@ const styles = StyleSheet.create({
     marginLeft: pxToDp(30)
   },
   liveText: {
-    marginTop: pxToDp(7),
     marginRight: pxToDp(5),
-    color: Colors.whiteColor,
+    color: Colors.basicColor,
     fontSize: pxToDp(24)
   },
   userInfo: {
@@ -239,6 +253,27 @@ const styles = StyleSheet.create({
     left: '50%',
     width: pxToDp(692),
     height: pxToDp(120),
-    marginLeft: pxToDp(-346)
+    marginLeft: pxToDp(-346),
+    paddingLeft: pxToDp(30),
+    paddingRight: pxToDp(30),
+    flexDirection: 'row'
+  },
+  levelIcon: {
+    width: pxToDp(48),
+    height: pxToDp(56),
+  },
+  leveltext: {
+    color: Colors.yellowColor
+  },
+  vipLevel: {
+    marginTop: pxToDp(30),
+    marginLeft: pxToDp(30),
+    fontSize: pxToDp(40),
+    fontWeight: '600'
+  },
+  savePrice: {
+    fontSize: pxToDp(32),
+    fontWeight: '600',
+    marginLeft: pxToDp(5)
   }
 })

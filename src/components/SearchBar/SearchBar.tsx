@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { View, Text, StyleSheet, TextInput } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { connect } from 'react-redux'
@@ -7,21 +7,8 @@ import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
 
 function SearchBar(props: any) {
-  const [searchKey, setSearchKey] = useState('')
-
-  useEffect(() => {
-    setSearchKey(props.hasSearchKey ? props.searchKey : '请输入要搜索的内容')
-  }, [props.hasSearchKey])
 
   const toSearchPage = () => props.toSearchPage()
-
-  const toSearch = () => {
-    const params = {
-      search_word: searchKey || props.searchKey
-    }
-
-    console.log(params)
-  }
 
   if (props.isPlaceHolder) {
     return (
@@ -35,7 +22,7 @@ function SearchBar(props: any) {
           numberOfLines={1}
           style={[styles.searchKey, props.searchKeyStyle]}
           onPress={toSearchPage}
-        >{searchKey || props.searchKey}</Text>
+        >{props.hasSearchKey ? props.searchKey : '请输入要搜索的内容'}</Text>
       </View>
     )
   } else {
@@ -48,9 +35,10 @@ function SearchBar(props: any) {
         />
         <TextInput
           style={styles.searchKey}
-          placeholder={props.searchKey}
-          onChangeText={text => setSearchKey(text)}
-          onSubmitEditing={toSearch}
+          placeholder={props.hasSearchKey ? props.searchKey : '请输入要搜索的内容'}
+          onChangeText={text => props.inputSearchKey(text)}
+          onSubmitEditing={() => props.toSearch(props.searchKey)}
+          clearButtonMode='while-editing'
         />
       </View>
     )
@@ -76,7 +64,9 @@ const styles = StyleSheet.create({
     width: pxToDp(620)
   },
   searchKey: {
+    flex: 1,
     color: Colors.lightGrey,
-    marginLeft: pxToDp(20)
+    marginLeft: pxToDp(20),
+    padding: 0
   }
 })

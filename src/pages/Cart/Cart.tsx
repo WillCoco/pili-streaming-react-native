@@ -17,7 +17,7 @@ function Cart(props: any) {
   const { isLogin } = props.userData
   const { cartList } = props.cartData
   const navigation = useNavigation()
-  const [isEmpty, setIsEmpty] = useState(false)
+  const [isEmpty, setIsEmpty] = useState(true)
   const [allCartGoodsInfo, setAllCartGoodsInfo] = useState({})
 
   const { userData, cartData } = props
@@ -35,7 +35,7 @@ function Cart(props: any) {
   }, [navigation])
 
   useEffect(() => {
-    if (isLogin) {
+    if (isLogin && cartList.length) {
       updateCartList(cartList)
     }
   }, [cartList])

@@ -163,12 +163,8 @@ const styles = StyleSheet.create({
   goodsImg: {
     width: pxToDp(180),
     height: pxToDp(180),
-    backgroundColor: '#0f0',
     marginLeft: pxToDp(30),
     marginRight: pxToDp(20)
-  },
-  goodsInfo: {
-
   },
   goodName: {
     fontSize: pxToDp(28),

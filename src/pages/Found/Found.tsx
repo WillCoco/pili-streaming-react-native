@@ -8,7 +8,7 @@ import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
 import { Ionicons } from '@expo/vector-icons'
 
-import WorkCard from './WorkCard/WorkCard'
+import WorkCard from '../../components/WorkCard/WorkCard'
 
 function Found(props: any) {
   const navigation = useNavigation()
@@ -58,7 +58,7 @@ function Found(props: any) {
       <ScrollView>
         <View style={{ height: maxHeight }}>
           {
-            workList.map((item: any, index: number) => {
+            workList && workList.map((item: any, index: number) => {
               return (
                 <WorkCard key={`work-${index}`} workInfo={item} />
               )
