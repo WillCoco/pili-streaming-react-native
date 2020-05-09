@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { ScrollView, Text, View, StyleSheet, TouchableWithoutFeedback, Animated, Image } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { apiGetWorks } from '../../service/api'
+import { connect } from 'react-redux'
 import waterFall from '../../utils/waterFall'
 import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
@@ -9,9 +10,10 @@ import { Ionicons } from '@expo/vector-icons'
 
 import WorkCard from './WorkCard/WorkCard'
 
-export default function Home() {
+function Found(props: any) {
   const navigation = useNavigation()
   const pageSize = 20
+  const { isLogin } = props
   const [sort, setSort] = useState(0)
   const [pageNo, setPageNo] = useState(1)
   const [workList, setWorkList] = useState([])
@@ -79,11 +81,14 @@ export default function Home() {
           </TouchableWithoutFeedback>
         }
 
-        <TouchableWithoutFeedback onPress={showAddAction}>
-          <Animated.View style={[styles.icon]}>
-            <Ionicons name='ios-add' size={40} color={Colors.whiteColor} style={{ lineHeight: pxToDp(100) }} />
-          </Animated.View>
-        </TouchableWithoutFeedback>
+        {
+          isLogin && <TouchableWithoutFeedback onPress={showAddAction}>
+            <Animated.View style={[styles.icon]}>
+              <Ionicons name='ios-add' size={40} color={Colors.whiteColor} style={{ lineHeight: pxToDp(100) }} />
+            </Animated.View>
+          </TouchableWithoutFeedback>
+        }
+
       </View>
 
       {
@@ -92,6 +97,10 @@ export default function Home() {
     </View>
   )
 }
+
+export default connect(
+  (state: any) => state.userData
+)(Found)
 
 const styles = StyleSheet.create({
   addContainer: {

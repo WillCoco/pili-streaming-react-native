@@ -8,10 +8,14 @@ import CardTitle from '../../../components/CardTitle/CardTitle'
 
 export default function OrdersContent(props) {
   const navigation = useNavigation()
-  const { orderCount } = props
+  const { orderCount, isLogin } = props
 
   const toOrderList = (index: number) => {
-    navigation.push('OrderList', { index })
+    if (isLogin) {
+      navigation.push('OrderList', { index })
+    } else {
+      navigation.push('Login')
+    }
   }
 
   return (

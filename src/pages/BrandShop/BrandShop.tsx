@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
-
-import { apiBrandInfo, apiBrandGoodsList } from '../../service/api'
+import Toast from 'react-native-tiny-toast'
+import { connect } from 'react-redux'
+import { apiBrandInfo, apiBrandGoodsList, apiAttentionBrand } from '../../service/api'
 
 import BrandSwiper from './BrandSwiper/BrandSwiper'
 import GoodsCardRow from '../../components/GoodsCardRow/GoodsCardRow'
@@ -10,13 +11,16 @@ import GoodsCardRow from '../../components/GoodsCardRow/GoodsCardRow'
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
 
-export default function BrandShop() {
+function BrandShop(props: any) {
   const pageSize = 20
   const route = useRoute()
   const navigation = useNavigation()
+  const { isLogin } = props
+  const brandId = route.params.id
   const [pageNo, setPageNo] = useState(1)
   const [brandInfo, setBrandInfo] = useState({})
   const [goodsList, setGoodsList] = useState([])
+  const [isLoaded, setIsLoaded] = useState(false)
 
   navigation.setOptions({
     headerTitle: '',
@@ -38,11 +42,15 @@ export default function BrandShop() {
    * 获取品牌详情
    */
   const getBrandInfo = () => {
+    const loading = Toast.showLoading('')
+
     apiBrandInfo({
-      brand_id: route.params.id
+      brand_id: brandId
     }).then((res: any) => {
+      Toast.hide(loading)
       console.log('店铺详情', res)
       setBrandInfo(res)
+      setIsLoaded(true)
     })
   }
 
@@ -53,7 +61,7 @@ export default function BrandShop() {
     apiBrandGoodsList({
       pageNo,
       pageSize,
-      brand_id: route.params.id
+      brand_id: brandId
     }).then(res => {
       console.log('品牌商品列表', res)
       if (res.list.length) {
@@ -79,6 +87,29 @@ export default function BrandShop() {
     }
   }
 
+  const focusBrand = () => {
+    if (isLogin) {
+      const { is_attention } = brandInfo
+      apiAttentionBrand({
+        brand_id: brandId,
+        type: is_attention ? 0 : 1
+      }).then(res => {
+        console.log('关注/取消关注店铺', res)
+
+        brandInfo.is_attention = is_attention ? 0 : 1
+
+        setBrandInfo(JSON.parse(JSON.stringify(brandInfo)))
+      })
+
+    } else {
+      navigation.push('Login')
+    }
+  }
+
+  if (!isLoaded) {
+    return <></>
+  }
+
   return (
     <ScrollView
       onScroll={(e) => scrollPage(e)}
@@ -97,7 +128,10 @@ export default function BrandShop() {
             <Text style={styles.brandFansCount}>{brandInfo.people_attention}人关注</Text>
           </View>
         </View>
-        <Text style={[styles.focusText, brandInfo.is_attention && styles.isFoucs]}>{brandInfo.is_attention ? '已关注' : '关注'}</Text>
+        <Text
+          style={[styles.focusText, brandInfo.is_attention && styles.isFoucs]}
+          onPress={focusBrand}
+        >{brandInfo.is_attention ? '已关注' : '关注'}</Text>
       </View>
       {/* 商品列表 */}
       <View style={styles.goodsList}>
@@ -112,6 +146,10 @@ export default function BrandShop() {
     </ScrollView>
   )
 }
+
+export default connect(
+  (state: any) => state.userData
+)(BrandShop)
 
 const styles = StyleSheet.create({
   brandInfo: {
@@ -130,7 +168,6 @@ const styles = StyleSheet.create({
   logo: {
     width: pxToDp(80),
     height: pxToDp(80),
-    backgroundColor: '#0f0',
     borderRadius: pxToDp(40),
     marginRight: pxToDp(10)
   },

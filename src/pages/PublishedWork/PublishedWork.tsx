@@ -12,6 +12,7 @@ export default function PublishedWork() {
   const pageSize = 20
   const [pageNo, setPageNo] = useState(1)
   const [workList, setWorkList] = useState([])
+  const [isEmpty, setIsEmpty] = useState(false)
 
   navigation.setOptions({
     headerTitle: '我的作品',
@@ -29,14 +30,16 @@ export default function PublishedWork() {
   }, [])
 
   const getPublishedWorks = () => {
-    apiGetUserWorks({ page: pageNo, pageSize }).then(res => {
+    apiGetUserWorks({ page: pageNo, pageSize }).then((res: any) => {
       console.log('我的作品', res)
-      setWorkList(JSON.parse(JSON.stringify(res.worksInfoList)))
+      if (res.totalCount) {
+        setWorkList(JSON.parse(JSON.stringify(res.worksInfoList)))
+      }
+      setIsEmpty(!res.totalCount)
     })
   }
 
   const workAction = (id: string, opera: number) => {
-    console.log(id, opera)
     apiWorksManage({  
       worksId: id,
       operateMode: opera
@@ -48,7 +51,7 @@ export default function PublishedWork() {
     })
   }
 
-  if (!workList.length) {
+  if (isEmpty) {
     return (
       <View style={styles.container}>
         <ImageBackground source={require('../../assets/images/img_empty_work.png')} style={styles.emptyImg}>

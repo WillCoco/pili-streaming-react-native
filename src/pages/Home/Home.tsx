@@ -341,7 +341,8 @@ const styles = StyleSheet.create({
   },
   swiper: {
     height: pxToDp(240),
-    borderRadius: pxToDp(16)
+    borderRadius: pxToDp(16),
+    overflow: 'hidden'
   },
   activityContainer: {
     height: pxToDp(220),

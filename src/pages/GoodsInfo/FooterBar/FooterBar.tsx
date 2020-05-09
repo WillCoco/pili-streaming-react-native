@@ -1,29 +1,34 @@
 import React from 'react'
-import { View, Text, StyleSheet, Platform, Image, PixelRatio, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, StyleSheet, Platform, Image, PixelRatio, TouchableWithoutFeedback, TouchableOpacity } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
+const starIcon = require('../../../assets/goods-image/icon_star.png')
+const unstarIcon = require('../../../assets/goods-image/icon_unstar.png')
 
-export default function FooterBar(props: { showGoodsSkuActionSheet?: any; goodsInfo?: any }) {
+
+export default function FooterBar(props: any) {
   const { goodsInfo } = props
+  const navigation = useNavigation()
 
   return (
     <View style={styles.container}>
 
-      <View style={styles.iconContainer}>
+      <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.push('Service')}>
         <Image source={require('../../../assets/goods-image/icon_kefu.png')} style={styles.icon} />
         <Text>客服</Text>
-      </View>
+      </TouchableOpacity>
 
-      <View style={styles.iconContainer}>
-        <Image source={require('../../../assets/goods-image/icon_star.png')} style={styles.icon} />
+      <TouchableOpacity style={styles.iconContainer} onPress={() => props.toggleStarGoods()}>
+        <Image source={goodsInfo.is_collect ? starIcon : unstarIcon} style={styles.icon} />
         <Text>{goodsInfo.is_collect ? '已收藏' : '收藏'}</Text>
-      </View>
+      </TouchableOpacity>
 
-      <View style={styles.iconContainer}>
+      <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.push('GoodsCart')}>
         <Image source={require('../../../assets/goods-image/icon_cart.png')} style={styles.icon} />
         <Text>购物车</Text>
-      </View>
+      </TouchableOpacity>
 
       <TouchableWithoutFeedback onPress={() => props.showGoodsSkuActionSheet('add')}>
         <View style={styles.addCart}>

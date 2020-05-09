@@ -26,6 +26,7 @@ function AddressList(props) {
    * 添加新地址
    */
   const createNewAddress = () => {
+    console.log(111)
     navigation.push('CreateOrEditAddr', { type: 'create' })
   }
 
@@ -64,10 +65,8 @@ function AddressList(props) {
                 </TouchableWithoutFeedback>
 
 
-                <TouchableOpacity onPress={() => editAddress(item)}>
-                  <View style={styles.editBtn}>
-                    <Text style={styles.editBtnText}>编辑</Text>
-                  </View>
+                <TouchableOpacity onPress={() => editAddress(item)} style={styles.editBtn}>
+                  <Text style={styles.editBtnText}>编辑</Text>
                 </TouchableOpacity>
               </View>
             )
@@ -75,15 +74,13 @@ function AddressList(props) {
         }
       </ScrollView>
 
-      <TouchableOpacity onPress={createNewAddress}>
-        <View style={styles.addBtn}>
-          <Ionicons
-            size={40}
-            name='ios-add'
-            color={Colors.whiteColor}
-          />
-          <Text style={styles.addBtnText}>添加新地址</Text>
-        </View>
+      <TouchableOpacity onPress={createNewAddress} style={styles.addBtn}>
+        <Ionicons
+          size={40}
+          name='ios-add'
+          color={Colors.whiteColor}
+        />
+        <Text style={styles.addBtnText}>添加新地址</Text>
       </TouchableOpacity>
 
     </View>

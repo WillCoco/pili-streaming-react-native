@@ -90,7 +90,9 @@ function AddNewAddress(props) {
       address_id: addressInfo.address_id
     }
 
-    Toast.show('保存成功');
+    Toast.show('保存成功', {
+      position: 0
+    });
     navigation.goBack();
 
     // apiEditAddr(params).then(res => {

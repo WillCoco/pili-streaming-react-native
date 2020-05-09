@@ -47,7 +47,6 @@ function SearchBar(props: any) {
           color={Colors.lightGrey}
         />
         <TextInput
-          value={searchKey}
           style={styles.searchKey}
           placeholder={props.searchKey}
           onChangeText={text => setSearchKey(text)}

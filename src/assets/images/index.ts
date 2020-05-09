@@ -132,6 +132,10 @@ const images : {
   get anchorGoodsManage() {
     return require('./anchorGoodsManage.png')
   },
+  // 成为经纪人
+  get anchorBeAgent() {
+    return require('./anchorBeAgent.png')
+  },
   // 主播我的直播
   get anchorMyRecords() {
     return require('./anchorMyRecords.png')
@@ -171,6 +175,19 @@ const images : {
   },
   get orderAfterSale() {
     return require('./orderAfterSale.png')
+  },
+  // 直播结束
+  get liveEndBg() {
+    return require('./liveEndBg.png')
+  },
+  get liveEndTitle() {
+    return require('./liveEndTitle.png')
+  },
+  get liveEndData() {
+    return require('./liveEndData.png')
+  },
+  get liveEndGoods() {
+    return require('./liveEndGoods.png')
   },
   // 店铺资金
   get assetAvailable() {
@@ -278,7 +295,35 @@ const images : {
   },
   get iconHasReminded() {
     return require('./iconHasReminded.png')
-  }
+  },
+  // 成为经纪人
+  get agentBg() {
+    return require('../agent-image/agentBg.png')
+  },
+  get agentBgTop() {
+    return require('../agent-image/agentBgTop.png')
+  },
+  get agent() {
+    return require('../agent-image/agent.png')
+  },
+  get beAgentBg() {
+    return require('../agent-image/beAgentBg.png')
+  },
+  get beAgent() {
+    return require('../agent-image/beAgent.png')
+  },
+  get wxBg() {
+    return require('../agent-image/wxBg.png')
+  },
+  get wxIcon() {
+    return require('../agent-image/wxIcon.png')
+  },
+  get checkBeAgent() {
+    return require('../agent-image/check.png')
+  },
+  get unCheckBeAgent() {
+    return require('../agent-image/unCheck.png')
+  },
 }
 
 export default images;

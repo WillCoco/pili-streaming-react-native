@@ -86,14 +86,14 @@ export default function GoodsCard(props: { showCouponActionSheet?: any; goodsInf
                 <Text style={[styles.shareBarText, styles.totalPrice]}>¥{formatSinglePrice(goodsInfo.MaxDiscounts)}</Text>
               </View>
 
-              <View style={styles.upLevel}>
+              {/* <View style={styles.upLevel}>
                 <Text style={styles.upLevelText}>立即晋升</Text>
                 <Ionicons
                   size={20}
                   name='ios-arrow-forward'
                   color={Colors.darkGrey}
                 />
-              </View>
+              </View> */}
             </View>
           </View>
       }
