@@ -15,7 +15,7 @@ console.log(store, 'store')
 
 tim.on(TIM.EVENT.MESSAGE_RECEIVED, onMessageReceived);
 
-const TEST_ROOM = "@TGS#aNBWAYNGH";
+const TEST_ROOM = "@TGS#aQNQWYNGH";
 
 function onMessageReceived(event) {
   // 收到推送的单聊、群聊、群提示、群系统通知的新消息，可通过遍历 event.data 获取消息列表数据并渲染到页面

@@ -117,8 +117,17 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
   const onPressBubble = () => {
     if (room?.groupID) {
       // 显示输入框
-      maskDispatch({type: Mask.Actions.PUSH, payload: {type: Mask.ContentTypes.Normal}});
-
+      maskDispatch({
+        type: Mask.Actions.PUSH,
+        payload: {
+          type: Mask.ContentTypes.Normal,
+          data: {
+            text: '有2人正在观看你的直播 确认关闭直播吗？',
+            title: 'dasdas?',
+            rightBtnText: '确定',
+            onPressRight: () => {alert(noticeBubbleText)}
+          }
+        }});
       return
       dispatch(updateGroupProfile({notification: '抽奖抽奖, 随机踢走一名幸运观众'}));
     }

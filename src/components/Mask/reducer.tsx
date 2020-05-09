@@ -1,59 +1,77 @@
-export const Actions = {
-  'PUSH': 'PUSH',
-  'UNSHIFT': 'UNSHIFT',
-  'REMOVE': 'REMOVE',
-  'REMOVE_ALL': 'REMOVE_ALL',
+// type ActionTypes = 'PUSH' | 'UNSHIFT' | 'REMOVE' | 'REMOVE_ALL';
+
+export enum Actions {
+  PUSH = 'PUSH',
+  UNSHIFT = 'UNSHIFT',
+  REMOVE = 'REMOVE',
+  REMOVE_ALL = 'REMOVE_ALL',
 };
 
 export enum MaskContentTypes {
-  Normal,
+  Normal = 'Normal',
 };
 
 export interface MaskContent {
   type: MaskContentTypes,
-  data: any,
-  contentType: MaskContentTypes,
+  data?: any,
 }
 
 export interface State {
   list: Array<MaskContent>,
 }
 
-export function reducer(state: State, action: any) {
+type payloadType = {
+  type: MaskContentTypes, // 弹窗类型
+  data: any, // 自定义数据
+  [key: string]: any
+}
+
+interface ActionType {
+  type: Actions
+  payload: payloadType
+}
+
+interface RemoveActionType {
+  depth?: number,
+  payload?: payloadType
+}
+
+export function reducer(state: State, action: ActionType) {
   console.log(state, 'maskDispatchmaskDispatchmaskDispatchmaskDispatchmaskDispatch', action)
   switch(action.type) {
     case Actions.PUSH:
-      console.log(pushHandler(state, action.payload), 11111111111)
+      console.log(pushHandler(state, action), './//////', action)
       return pushHandler(state, action.payload);
     case Actions.UNSHIFT:
       return unshiftHandler(state, action.payload);
     case Actions.REMOVE:
       return removeHandler(state, action.payload);
     case Actions.REMOVE_ALL:
-      return removeAllHandler(state, action.payload);
+      return removeAllHandler(state);
     default: 
       throw new Error('请指定Mask动作');
   }
 }
 
-function pushHandler(state: State, payload: any) {
+function pushHandler(state: State, payload: payloadType) {
   const oldList = state.list;
-  const item = payload.item;
-  if (oldList.indexOf && oldList.indexOf(item) === -1) {
-    return {...state, list: [...oldList, item]};
-  }
-  return state;
+  const {type, data} = payload;
+  // if (oldList.indexOf && oldList.indexOf(type) === -1) {
+    return {...state, list: [...oldList, {type, data}]};
+  // }
+  // return state;
 }
 
-function unshiftHandler(state: State, payload: any) {
+function unshiftHandler(state: State, payload: payloadType) {
   const oldList = state.list;
-  const item = payload.item;
-  return {...state, list: [...new Set([item, ...oldList])]};
+  const {type, data} = payload;
+
+  return {...state, list: [...new Set([{type, data}, ...oldList])]};
 }
 
-function removeHandler(state: State, payload: any) {
+function removeHandler(state: State, payload: RemoveActionType) {
   const oldList = state.list;
-  const {depth = 1} = payload;
+  const {depth = 1} = payload || {};
   // 清除所有
   if (depth === -1) {
     return {...state, list: []};;
@@ -63,6 +81,6 @@ function removeHandler(state: State, payload: any) {
   return {...state, list: [...newList]};
 }
 
-function removeAllHandler(state: State, payload: any) {
-  return removeHandler(state, {item: payload.item, depth: -1});
+function removeAllHandler(state: State) {
+  return removeHandler(state, {depth: -1});
 }
