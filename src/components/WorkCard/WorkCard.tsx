@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, ImageBackground } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import pxToDp from '../../../utils/px2dp'
-import { Colors } from '../../../constants/Theme'
+import pxToDp from '../../utils/px2dp'
+import { Colors } from '../../constants/Theme'
 
 export default function WorkCard(props: { workInfo: any }) {
   const { workInfo } = props
@@ -23,7 +23,7 @@ export default function WorkCard(props: { workInfo: any }) {
     }}>
       <TouchableWithoutFeedback onPress={toFoundInfo}>
         <ImageBackground
-          defaultSource={require('../../../assets/mine-image/logo.png')}
+          defaultSource={require('../../assets/mine-image/logo.png')}
           source={{
             uri: workInfo.worksType === 'PICTURE'
               ? workInfo.worksMoreInfo.worksUrl
@@ -35,7 +35,7 @@ export default function WorkCard(props: { workInfo: any }) {
           }}
         >
           {
-            workInfo.worksType === 'VIDEO' && <Image source={require('../../../assets/works-image/play_small.png')} style={styles.playIcon} />
+            workInfo.worksType === 'VIDEO' && <Image source={require('../../assets/works-image/play_small.png')} style={styles.playIcon} />
           }
         </ImageBackground>
       </TouchableWithoutFeedback>
@@ -48,7 +48,7 @@ export default function WorkCard(props: { workInfo: any }) {
           </View>
 
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image source={require('../../../assets/works-image/eye.png')} style={styles.eyeIcon} />
+            <Image source={require('../../assets/works-image/eye.png')} style={styles.eyeIcon} />
             <Text style={styles.watchCount}>{workInfo.watchCount}</Text>
           </View>
         </View>
