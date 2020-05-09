@@ -31,6 +31,7 @@ interface LiveToolBarProps {
 }
 
 const LiveToolBar = (props: LiveToolBarProps) : any =>  {
+  // alert(props.onPressShopBag)
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
       <TouchableOpacity onPress={props.onPressShopBag}>
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    paddingRight: 4
+    paddingRight: 4,
   },
   shopBagImg: {
     width: scale(42),

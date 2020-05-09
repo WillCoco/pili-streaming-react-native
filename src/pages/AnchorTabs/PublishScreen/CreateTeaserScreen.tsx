@@ -18,6 +18,7 @@ import withPage from '../../../components/HOCs/withPage';
 import ImagePickerBox from '../../../components/ImagePickerBox';
 import VedioPickerBox from '../../../components/VedioPickerBox';
 import DateTimePicker from '../../../components/DateTimePicker';
+import NavBar from '../../../components/NavBar';
 import { pad, radio, radioLarge } from '../../../constants/Layout';
 import {Colors} from '../../../constants/Theme';
 import {isIOS, isAndroid} from '../../../constants/DeviceInfo';
@@ -102,6 +103,7 @@ const CreateTraserScreen = () =>  {
   return (
     <ScrollView style={styles.style}>
       <View style={styles.contentWrapper}>
+      <NavBar title="发布预告" />
         <PrimaryText style={styles.title}>直播封面图(必填)</PrimaryText>
         <View style={styles.row}>
           <ImagePickerBox

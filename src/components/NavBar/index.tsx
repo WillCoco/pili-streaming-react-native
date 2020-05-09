@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   rightWrapper: {
     // width: 34,

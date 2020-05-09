@@ -90,7 +90,7 @@ const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
     if (noMore) {
       return (
         <View style={styles.listFooterWrapper}>
-          <SmallText>没有更多啦~</SmallText>
+          <SmallText color="grey">没有更多啦~</SmallText>
         </View>
       );
     }
@@ -124,17 +124,18 @@ const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
     }
   }, [])
 
-
   React.useEffect(() => {
     /**
      * 暴露组件内部方法 
      */
-    ref({
-      actions: {
-        setListData,
-        getListData: () => listData
-      }
-    })
+    if (ref) {
+      ref({
+        actions: {
+          setListData,
+          getListData: () => listData
+        }
+      })
+    }
   }, [listData])
 
   return (
@@ -204,8 +205,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderTopWidth: StyleSheet.hairlineWidth * 2,
-    borderColor: colors.lightGrey,
+    // borderTopWidth: StyleSheet.hairlineWidth * 2,
+    // borderColor: colors.lightGrey,
   },
   divider: {
     marginHorizontal: vw(4),

@@ -17,6 +17,7 @@ import {vw} from '../../../utils/metric';
 import {Colors} from '../../../constants/Theme';
 import images from '../../../assets/images/index';
 import usePermissions from '../../../hooks/usePermissions';
+import { pad } from '../../../constants/Layout';
 
 const CreateLiveScreen = (props: any) =>  {
   const {navigate, goBack} = useNavigation();
@@ -56,16 +57,7 @@ const CreateLiveScreen = (props: any) =>  {
     <View style={styles.style}>
       <LivePusher
         ref={(c: any) => camera.current = c}
-        safeTop={props.safeTop}
       />
-      {/* <View style={StyleSheet.flatten([styles.headWrapper, {marginTop: props.safeTop + 20}])}>
-        <TouchableOpacity onPress={() => switchCamera()}>
-          <Iconchangecamera />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={goBack}>
-          <Iconcloselight />
-        </TouchableOpacity>
-      </View> */}
       <View style={styles.contentWrapper}>
         <View style={StyleSheet.flatten([styles.liveReadyCardWrapper, {marginTop: props.safeTop + 80}])}>
           <LiveReadyCard />
@@ -118,11 +110,12 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-     bottom: 0,
+    bottom: 0,
   },
   liveReadyCardWrapper: {
     flex: 1,
-    marginTop: 28
+    marginTop: 28,
+    paddingHorizontal: pad
   },
   functionBtnWrapper: {
     flexDirection: 'row',

@@ -16,10 +16,13 @@ export const Colors = {
   navDivider: '#e6e6e6',
   pageGreyBg: '#f2f2f2',
   opacityDarkBg: 'rgba(0,0,0,0.25)',
+  opacityDarkBg1: 'rgba(0,0,0,0.5)',
   opacityBasicColor: 'rgba(255,50,27,0.1)',
   borderColor: '#ddd',
+  brownColor: '#650002',
+  lightBrown: '#F5E6B9',
   darkBg: '#282324',
-  pink: '#ffd6d1'
+  pink: '#ffd6d1',
 }
 
 export const TextSize = {

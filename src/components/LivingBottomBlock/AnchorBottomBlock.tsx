@@ -87,7 +87,7 @@ const LivingRoomScreen = (props: any) : any =>  {
       />
       <AnchorLiveToolBar
         style={{marginTop: 28}}
-        ongPressShopBa={props.onShopBagPress}
+        onPressShopBag={props.onPressShopBag}
         onPressBubble={props.onPressBubble}
         onPressShare={props.onPressShare}
         onPressFaceBeauty={props.onPressFaceBeauty}
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'flex-end',
     paddingHorizontal: pad,
-    paddingBottom: pad
+    paddingBottom: pad,
   },
 });
 

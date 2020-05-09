@@ -15,7 +15,7 @@ console.log(store, 'store')
 
 tim.on(TIM.EVENT.MESSAGE_RECEIVED, onMessageReceived);
 
-const TEST_ROOM = "@TGS#3VEIMQNGY"
+const TEST_ROOM = "@TGS#aNBWAYNGH";
 
 function onMessageReceived(event) {
   // 收到推送的单聊、群聊、群提示、群系统通知的新消息，可通过遍历 event.data 获取消息列表数据并渲染到页面
@@ -198,19 +198,26 @@ export const createGroup = (params: {
     const groupList: any = await dispatch(getGroupList) || [];
     if (groupList && groupList.forEach) {
       groupList.forEach((d: any) => {
+        console.log('关闭直播见', d.groupID)
         dispatch(dismissGroup(d.groupID));
       })
     }
 
     return tim.createGroup({
-      type: TIM.TYPES.GRP_CHATROOM,
+      type: TIM.TYPES.GRP_AVCHATROOM,
       name: params.roomName,
     })
-      .then(function(imResponse: any) {
+      .then(async function(imResponse: any) {
         console.log(imResponse.data, '创建成功'); // 创建成功
         const room = imResponse?.data?.group
+        console.log(room, 'roomroomroomroom')
         if (room) {
-          dispatch(updateRoom(room));
+          const r = await dispatch(joinGroup({groupID: room.groupID}));
+
+          if (r) {
+            dispatch(updateRoom(room));
+          }
+          // 还要加入
         } else {
           Toast.show('创建群聊失败')
         }
@@ -231,16 +238,17 @@ export const dismissGroup = (id: string) => {
     const groupID = id || getState().im?.room?.groupID;
 
     tim.dismissGroup(groupID)
-      .then(function(imResponse: any) {
+      .then(async function(imResponse: any) {
         const groupID = imResponse?.data?.groupID;
         if (groupID) {
+        
           console.log(imResponse.data, 'dismissGroup'); // 登出成功
           // 清除store
           dispatch(updateRoom());
         }
       })
       .catch(function(imError: any) {
-        console.warn('logout error:', imError);
+        console.warn('dismissGroup error:', imError);
       });
   }
 }
@@ -252,21 +260,22 @@ export const joinGroup = (params: {
   groupID: string,
 }): any => {
   return async function (dispatch: Dispatch<any>): Promise<boolean> {
-    params.groupID = TEST_ROOM;
-    return tim.joinGroup(params)
+    return tim.joinGroup({
+      groupID: params.groupID || TEST_ROOM,
+      type: TIM.TYPES.GRP_AVCHATROOM
+    })
       .then(r => {
         console.log(r, 'rrr3');
         switch (r?.data?.status) {
           case TIM.TYPES.JOIN_STATUS_WAIT_APPROVAL: // 等待管理员同意
             break;
           case TIM.TYPES.JOIN_STATUS_SUCCESS: // 加群成功
-            console.log(r.data.group); // 加入的群组资料
+            console.log(r.data.group, '加群成功'); // 加入的群组资料
 
             // 更新所在房间信息
             dispatch(updateRoom(r?.data?.group));
 
             // 发送进入消息
-
             dispatch(sendRoomMessage({text: '进入直播间', description: MessageType.enter}));
             return Promise.resolve(true);
           case TIM.TYPES.JOIN_STATUS_ALREADY_IN_GROUP: // 已经在群中
@@ -330,7 +339,7 @@ export const sendRoomMessage = (msgInfo: SendMessageParams) => {
 
     const groupID = getState()?.im?.room?.groupID;
     let message = tim.createCustomMessage({
-      to: msgInfo.to || groupID,
+      to: TEST_ROOM || msgInfo.to || groupID,
       conversationType: TIM.TYPES.CONV_GROUP,
       // 消息优先级，用于群聊（v2.4.2起支持）。如果某个群的消息超过了频率限制，后台会优先下发高优先级的消息，详细请参考：https://cloud.tencent.com/document/product/269/3663#.E6.B6.88.E6.81.AF.E4.BC.98.E5.85.88.E7.BA.A7.E4.B8.8E.E9.A2.91.E7.8E.87.E6.8E.A7.E5.88.B6)
       // 支持的枚举值：TIM.TYPES.MSG_PRIORITY_HIGH, TIM.TYPES.MSG_PRIORITY_NORMAL（默认）, TIM.TYPES.MSG_PRIORITY_LOW, TIM.TYPES.MSG_PRIORITY_LOWEST
@@ -338,8 +347,8 @@ export const sendRoomMessage = (msgInfo: SendMessageParams) => {
       payload,
     });
 
-    console.log(message.payload, 'message1')
-    console.log(payload, 'payload')
+    console.log(message.payload, 'message1');
+    console.log(payload, 'payload');
 
     tim.sendMessage(message)
       .then(function(imResponse: any) {
@@ -391,8 +400,8 @@ export const updateGroupProfile = (params: updateGroupProfileParams) => {
     
     tim.updateGroupProfile(options)
       .then(function(imResponse: any) {
-        console.log(imResponse?.data?.group, 'updateGroupProfile'); // 登出成功
-        if (imResponse?.data?.group) {
+        console.log(imResponse, 'updateGroupProfile'); // 登出成功
+        if (imResponse?.data) {
           // Toast.show('更新成功')
           return;
         }

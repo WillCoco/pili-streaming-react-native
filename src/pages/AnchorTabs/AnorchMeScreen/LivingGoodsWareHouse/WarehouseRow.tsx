@@ -17,6 +17,8 @@ import DiscountPrice from '../../../../components/DiscountPrice';
 import Iconremove from '../../../../components/Iconfont/Iconremove';
 import CheckBox from '../../../../components/CheckBox';
 import images from '../../../../assets/images/index';
+import ButtonRadius from '../../../../components/Buttons/ButtonRadius';
+import {Colors} from '../../../../constants/Theme';
 
 interface WarehouseRowProps {
   data: any,
@@ -32,6 +34,9 @@ interface WarehouseRowProps {
 const WarehouseRow = (props: WarehouseRowProps) =>  {
 
   const data = (props.dataAdapter ? props.dataAdapter(props.data) : props.data) || {};
+
+  const btnText = data.canAdd ? '添加店铺' : '取消添加';
+  const btnBg = data.canAdd ? Colors.basicColor : Colors.lightGrey;
 
   return (
     <View style={StyleSheet.flatten([styles.style, props.style])}>
@@ -49,7 +54,15 @@ const WarehouseRow = (props: WarehouseRowProps) =>  {
           </TouchableOpacity>
         </View>
         <ShareProfit profit={111} style={{flex: -1}} />
-        <DiscountPrice discountPrice={120} price={110} />
+          <View style={styles.rowBetween}>
+            <DiscountPrice discountPrice={120} price={110} />
+            <ButtonRadius
+              text={btnText}
+              size={20}
+              style={{width: scale(75), backgroundColor: btnBg}}
+              onPress={props.onPressAddShop}
+            />
+          </View>
       </View>
     </View>
   )
@@ -101,8 +114,13 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   removeBtn: {
-    padding: pad
-  }
+    padding: pad,
+  },
+  rowBetween: {
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 });
 
 export default WarehouseRow;

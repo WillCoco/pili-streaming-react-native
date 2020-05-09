@@ -66,6 +66,8 @@ import LivesAnalyze from './src/pages/AnchorTabs/AnorchMeScreen/LivesAnalyze'
 import GoodsSupply from './src/pages/AnchorTabs/AnorchMeScreen/GoodsSupply'
 import LivingGoodsWareHouse from './src/pages/AnchorTabs/AnorchMeScreen/LivingGoodsWareHouse'
 import AnchorShowcaseManage from './src/pages/AnchorTabs/AnorchMeScreen/AnchorShowcaseManage'
+import BeAgent from './src/pages/AnchorTabs/AnorchMeScreen/BeAgent'
+import BeAgentAgreement from './src/pages/AnchorTabs/AnorchMeScreen/BeAgentAgreement'
 import AssetManage from './src/pages/AnchorTabs/MyShopScreen/AssetManage'
 import GoodsManage from './src/pages/AnchorTabs/MyShopScreen/GoodsManage'
 import ShopAddressManage from './src/pages/AnchorTabs/MyShopScreen/ShopAddressManage'
@@ -81,6 +83,10 @@ import AddBankCard from './src/pages/AnchorTabs/AddBankCard'
 import Withdraw from './src/pages/AnchorTabs/Withdraw'
 import Message from './src/pages/AnchorTabs/Message'
 import MessageDetail from './src/pages/AnchorTabs/Message/MessageDetail'
+import MaskProvider from './src/components/Mask/Provider';
+import RealName from './src/pages/RealName/RealName'
+import PrivacyPolicy from './src/pages/RealName/PrivacyPolicy'
+import PayWebView from './src/pages/PayWebView/PayWebView'
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -114,7 +120,8 @@ export default function App(props: { skipLoadingScreen: any; }) {
           store.dispatch(getStatusBarHeight(Number(StatusBar.currentHeight)))
         }
 
-        SplashScreen.hide()
+        // FIXME:
+        // SplashScreen.hide()
       }
     }
 
@@ -133,6 +140,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
     // return <AppLoading /> // tofix: 在android上报错
   } else {
     return (
+      <MaskProvider>
       <AntdProvider>
       <Provider store={store}>
         <PersistGate
@@ -177,7 +185,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='LiveSearchScreen' component={LiveSearch} />
                 {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
                 <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{headerShown: false}} />
-                <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} options={navHeadOption('发布预告')} />
+                <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} />
                 <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{headerShown: false}} />
                 <Stack.Screen name='LiveGoodsManageScreen' component={LiveGoodsManage} options={{headerShown: false}} />
                 <Stack.Screen name='AnorchLivingRoomScreen' component={AnorchLivingRoom} options={{headerShown: false}} />
@@ -186,6 +194,8 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='LivesAnalyze' component={LivesAnalyze} options={{headerShown: false}} />
                 <Stack.Screen name='LivingGoodsWareHouse' component={LivingGoodsWareHouse} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorShowcaseManage' component={AnchorShowcaseManage} options={{headerShown: false}} />
+                <Stack.Screen name='BeAgent' component={BeAgent} options={{headerShown: false}} />
+                <Stack.Screen name='BeAgentAgreement' component={BeAgentAgreement} />
                 <Stack.Screen name='ShopAgreement' component={ShopAgreement} options={{headerShown: false}} />
                 <Stack.Screen name='ShopAddressManage' component={ShopAddressManage} options={{headerShown: false}} />
                 <Stack.Screen name='GoodsManage' component={GoodsManage} options={{headerShown: false}} />
@@ -212,6 +222,9 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='Withdraw' component={Withdraw} options={{headerShown: false}} />
                 <Stack.Screen name='Message' component={Message} options={{headerShown: false}} />
                 <Stack.Screen name='MessageDetail' component={MessageDetail} options={{headerShown: false}} />
+                <Stack.Screen name='RealName' component={RealName} options={{headerShown: false}} />
+                <Stack.Screen name='PrivacyPolicy' component={PrivacyPolicy} />
+                <Stack.Screen name='PayWebView' component={PayWebView} />
                 <Stack.Screen name='Service' component={Service} />
                 <Stack.Screen name='GoodsCart' component={GoodsCart} />
               </Stack.Navigator>
@@ -220,6 +233,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
         </PersistGate>
       </Provider>
       </AntdProvider>
+      </MaskProvider>
     )
   }
 }

@@ -5,8 +5,9 @@ import { Ionicons } from '@expo/vector-icons'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 
-export default function Form() {
+export default function Form(props) {
   const navigation = useNavigation()
+  const realname = ''
 
   const contactService = () => {
     console.log('联系客服')
@@ -14,6 +15,11 @@ export default function Form() {
 
   const inviteFriends = () => {
     console.log('邀请好友')
+  }
+
+  const goRealname = () => {
+    if (realname) return
+    navigation.push('RealName')
   }
 
   return (
@@ -40,9 +46,20 @@ export default function Form() {
       </TouchableWithoutFeedback>
 
       <TouchableWithoutFeedback onPress={inviteFriends}>
-        <View style={[styles.formItem, { borderBottomWidth: 0 }]}>
+        <View style={styles.formItem}>
           <Text style={styles.title}>邀请好友</Text>
           <Ionicons size={20} name='ios-arrow-forward' color={Colors.darkGrey} />
+        </View>
+      </TouchableWithoutFeedback>
+
+      <TouchableWithoutFeedback onPress={goRealname}>
+        <View style={[styles.formItem, { borderBottomWidth: 0 }]}>
+          <Text style={styles.title}>实名认证</Text>
+          {
+            realname 
+              && <Text>{realname}</Text> 
+              || <Ionicons size={20} name='ios-arrow-forward' color={Colors.darkGrey} />
+          }
         </View>
       </TouchableWithoutFeedback>
     </View>
