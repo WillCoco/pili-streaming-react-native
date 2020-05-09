@@ -3,7 +3,6 @@ import {
   SWIPER_LIST,
   ACTIVITY_LIST,
   SELECTED_GOODS_INFO,
-  RECOMMEND_GOODS_LIST,
   SECKILL_LIST
 } from '../constants/Home'
 
@@ -21,10 +20,6 @@ export const setActivityList = (activityList: Array<any>) => {
 
 export const setSelectedGoodsInfo = (selectedGoodsInfo: any) => {
   return { type: SELECTED_GOODS_INFO, payload: selectedGoodsInfo } 
-}
-
-export const setRecommendGoodsList = (recommendGoodsList: Array<any>) => {
-  return { type: RECOMMEND_GOODS_LIST, payload: recommendGoodsList }
 }
 
 export const setSeckillList = (seckillList: Array<any>) => {

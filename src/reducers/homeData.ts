@@ -3,7 +3,6 @@ import {
   SWIPER_LIST,
   ACTIVITY_LIST,
   SELECTED_GOODS_INFO,
-  RECOMMEND_GOODS_LIST,
   SECKILL_LIST
 } from '../constants/Home'
 
@@ -26,8 +25,6 @@ export default function homeData(state = INITIAL_STATE, action: any) {
       return { ...state, activityList: action.payload }
     case SELECTED_GOODS_INFO:
       return { ...state, selectedGoodsInfo: action.payload }
-    case RECOMMEND_GOODS_LIST:
-      return { ...state, recommendGoodsList: action.payload}
     case SECKILL_LIST:
       return { ...state, seckillList: action.payload }
     default:

@@ -11,6 +11,7 @@ import FansContent from './FansContent/FansContent'
 import Account from './Account/Account'
 import Banner from './Banner/Banner'
 import GoodsList from './GoodsList/GoodsList'
+import ToolBar from './ToolBar/ToolBar'
 
 function Mine(props) {
   const navigation = useNavigation()
@@ -78,7 +79,9 @@ function Mine(props) {
       {/* 账户 */}
       <Account />
       {/* 邀新横幅 */}
-      <Banner />
+      {/* <Banner /> */}
+      {/* 工具栏 */}
+      <ToolBar />
       {/* 推荐商品 */}
       <GoodsList list={goodsList} />
     </ScrollView>

@@ -1,11 +1,31 @@
-import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, Text, RefreshControl, ScrollView, ImageBackground, Image, PixelRatio, TouchableWithoutFeedback } from 'react-native'
+import React, { useEffect, useState, useRef } from 'react'
+import {
+  View,
+  Text,
+  Image, 
+  StyleSheet,
+  ScrollView, 
+  PixelRatio, 
+  RefreshControl, 
+  ImageBackground, 
+  TouchableWithoutFeedback
+} from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { connect } from 'react-redux'
+import {
+  setSearchKey,
+  setSwiperList,
+  setSeckillList,
+  setActivityList,
+  setSelectedGoodsInfo
+} from '../../actions/home'
+import { apiGetIndexData, apiGetIndexGoodsList } from '../../service/api'
+
+import pxToDp from '../../utils/px2dp'
+import { Colors } from '../../constants/Theme'
+
 import { Ionicons } from '@expo/vector-icons'
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view'
-
-import { connect } from 'react-redux'
-import { setSearchKey, setSwiperList, setActivityList, setSelectedGoodsInfo, setRecommendGoodsList, setSeckillList } from '../../actions/home'
 
 import HomeSwiper from './HomeSwiper'
 import HomeNav from './HomeNav'
@@ -14,28 +34,33 @@ import GoodsCardRow from '../../components/GoodsCardRow/GoodsCardRow'
 import CardTitle from '../../components/CardTitle/CardTitle'
 import withPage from '../../components/HOCs/withPage'
 
-import pxToDp from '../../utils/px2dp'
-import { Colors } from '../../constants/Theme'
 
-import { apiGetIndexData, apiGetIndexGoodsList } from '../../service/api'
-
-function Home(props: any) {
-
+function Home(props: HomeProps) {
   const navigation = useNavigation()
-
+  let { swiperList, activityList, selectedGoodsInfo, seckillList } = props
+  let pageNoRef = useRef(1)
+  let hasMoreRef = useRef(true)
   const [categoryList, setCategoryList] = useState([{ name: '首页' }])
   const [categoryData, setCategoryData] = useState({})
   const [loading, setLoading] = useState(false)
-  const [pageNo, setPageNo] = useState(1)
-  const [pageSize] = useState(20)
   const [timeQuantum, setTimeQuantum] = useState('')
+  const [recommendGoodsList, setRecommendGoodsList] = useState([])
   const [countDownList, setCountDownList] = useState([
     { timeQuantum: '10:00', state: '' },
     { timeQuantum: '14:00', state: '' },
     { timeQuantum: '20:00', state: '' }
   ])
+  const pageSize = 20
 
   useEffect(() => {
+    initData(false)
+  }, [])
+
+  /**
+   * 加载初始化数据
+   * @param isPullDown 是否是下拉刷新
+   */
+  const initData = (isPullDown: boolean) => {
     apiGetIndexData().then((res: any) => {
       console.log('首页初始化数据', res)
       const selectedGoodsInfo = {
@@ -53,26 +78,45 @@ function Home(props: any) {
         setCategoryList([...categoryList, ...res.category])
       }
 
-      getRecommendGoodsList()
+      getRecommendGoodsList(isPullDown)
       setCountDown()
+      setLoading(false)
     })
-  }, [])
+  }
 
-  const getRecommendGoodsList = () => {
+  /**
+   * 加载圈重点数据
+   */
+  const getRecommendGoodsList = (isPullDown: boolean) => {
     apiGetIndexGoodsList({
-      pageNo,
+      pageNo: pageNoRef.current,
       pageSize
     }).then((res: any) => {
       console.log('首页圈重点数据', res)
-      props.dispatch(setRecommendGoodsList(res.list))
+      const totalPage = Math.ceil(res.count / pageSize)
+
+      hasMoreRef.current = pageNoRef.current < totalPage
+
+      setRecommendGoodsList(isPullDown ? res.list : [...recommendGoodsList, ...res.list])
     })
   }
 
   /**
    * 下拉刷新
    */
-  const getData = () => {
-    setLoading(false)
+  const onPullDownRefresh = () => {
+    pageNoRef.current = 1
+    setLoading(true)
+    initData(true)
+  }
+
+  /**
+   * 触底加载
+   */
+  const onReachBottom = () => {
+    if (!hasMoreRef.current) return
+    pageNoRef.current += 1
+    getRecommendGoodsList(false)
   }
 
   /**
@@ -142,7 +186,7 @@ function Home(props: any) {
    * 前往秒杀页
    */
   const toSeckillPage = () => {
-    navigation.push('Sale', { type: 'seckill'} )
+    navigation.push('Sale', { type: 'seckill' })
   }
 
   /**
@@ -180,13 +224,14 @@ function Home(props: any) {
         categoryList.map((item, index) => {
           return (
             <ScrollView
-              showsVerticalScrollIndicator={false}
-              key={`tab-${index}`}
               tabLabel={item.name}
+              key={`tab-${index}`}
+              showsVerticalScrollIndicator={false}
+              onMomentumScrollEnd={onReachBottom}
               refreshControl={
                 <RefreshControl
                   refreshing={loading}
-                  onRefresh={getData}
+                  onRefresh={onPullDownRefresh}
                 />
               }
             >
@@ -231,7 +276,7 @@ function Home(props: any) {
                       style={styles.swiperContainer}
                     >
                       <HomeSwiper
-                        swiperList={props.swiperList}
+                        swiperList={swiperList}
                         swiperStyle={styles.swiper}
                         tapSwiper={(id: number) => toGoodsInfo(id)}
                       />
@@ -242,21 +287,21 @@ function Home(props: any) {
                     <View style={styles.activityContainer}>
                       <HomeSwiper
                         showDots={false}
-                        swiperList={props.activityList}
+                        swiperList={activityList}
                         swiperStyle={styles.activity}
                         tapSwiper={(url: string) => toActivityWebView(url)}
                       />
                     </View>
                     {/* 精选话题 */}
                     <View style={styles.selectedGoods}>
-                      <CardTitle title='精选话题' subTitle={props.selectedGoodsInfo.subTitle} nextAction={toSelectedGoods} />
+                      <CardTitle title='精选话题' subTitle={selectedGoodsInfo.subTitle} nextAction={toSelectedGoods} />
                       <ScrollView
                         horizontal={true}
                         style={styles.selectedGoodsList}
                         showsHorizontalScrollIndicator={false}
                       >
                         {
-                          props.selectedGoodsInfo.goodsList && props.selectedGoodsInfo.goodsList.map((item: any, index: any) => <GoodsCard style={{ marginRight: pxToDp(10) }} key={`selected-${index}`} goodsInfo={item} tapGoodsCard={(id: number) => toSelectedGoodsInfo(id)} />)
+                          selectedGoodsInfo.goodsList && selectedGoodsInfo.goodsList.map((item: any, index: any) => <GoodsCard style={{ marginRight: pxToDp(10) }} key={`selected-${index}`} goodsInfo={item} tapGoodsCard={(id: number) => toSelectedGoodsInfo(id)} />)
                         }
                       </ScrollView>
                     </View>
@@ -296,7 +341,7 @@ function Home(props: any) {
                       </View>
                       <View style={styles.seckillGoodsList}>
                         {
-                          props.seckillList && props.seckillList.map((item: any, index: number) => <GoodsCardRow style={index && { marginTop: pxToDp(10) }} key={`goods-${index}`} goodsInfo={item} />)
+                          seckillList && seckillList.map((item: any, index: number) => <GoodsCardRow style={index && { marginTop: pxToDp(10) }} key={`goods-${index}`} goodsInfo={item} />)
                         }
                       </View>
                     </View>
@@ -305,7 +350,7 @@ function Home(props: any) {
                       <CardTitle title='圈重点' />
                       <View style={styles.recommendGoodsListContainer}>
                         {
-                          props.recommendGoodsList.map((item: any, index: any) => <GoodsCard key={`recommend-${index}`}
+                          recommendGoodsList.map((item: any, index: any) => <GoodsCard key={`recommend-${index}`}
                             style={{ marginBottom: pxToDp(20) }} goodsInfo={item} tapGoodsCard={(id: number) => toGoodsInfo(id)} />)
                         }
                       </View>
@@ -487,3 +532,11 @@ const styles = StyleSheet.create({
 export default connect(
   (state: any) => state.homeData
 )(withPage(Home))
+
+interface HomeProps {
+  dispatch?: any
+  swiperList?: any
+  activityList?: any
+  selectedGoodsInfo?: any
+  seckillList?: any
+}
