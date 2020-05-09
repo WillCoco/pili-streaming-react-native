@@ -35,6 +35,13 @@ const Normal = (props: {
   const onPressLeft = () => {
     props.onPressLeft ? props.onPressLeft() : dispatch({type: Actions.REMOVE});
   }
+  /**
+   * 左默认关闭
+   */
+  const onPressRight = () => {
+    props.onPressRight();
+    dispatch({type: Actions.REMOVE});
+  }
 
   return (
     <View style={styles.style}>
@@ -52,7 +59,7 @@ const Normal = (props: {
           size={40}
           disabled={props.disabledRight}
           text={props.rightBtnText}
-          onPress={props.onPressRight}
+          onPress={onPressRight}
           style={StyleSheet.flatten([styles.button, styles.rightButton])}
         />
       </View>
