@@ -70,7 +70,6 @@ const LiveGoodsManageRow = (props: LiveGoodsManageRowProps) =>  {
             onPress={props.onPressAddShop}
           />
         </View>
-        
       </View>
     </View>
   )

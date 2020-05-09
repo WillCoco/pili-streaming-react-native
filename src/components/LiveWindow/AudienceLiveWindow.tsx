@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   StyleProp,
-  KeyboardAvoidingView,
+  LayoutAnimation,
+  Keyboard,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Video from 'react-native-video';
@@ -23,6 +24,8 @@ import {pad} from '../../constants/Layout';
 import images from '../../assets/images';
 import {joinGroup, quitGroup} from '../../actions/im';
 import {MediaType} from '../../liveTypes';
+import AudienceShopCard from '../../components/LivingShopCard/AudienceShopCard';
+import { vw, vh } from '../../utils/metric';
 
 const {window} = L;
 
@@ -42,7 +45,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
   /**
    * 播放类型
    */
-  const {mediaType, } = route;
+  const {mediaType} = route;
 
   const playerComponent = React.useMemo(() => {
     // 预告片
@@ -67,6 +70,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
         ref={player}
         inputUrl="rtmp://58.200.131.2:1935/livetv/hunantv"
         onStatus={onPlayerStatus}
+        style={styles.video}
       />
     )
   }, [mediaType])
@@ -104,9 +108,8 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
    * 
    */
   React.useEffect(() => {
-    dispatch(joinGroup({groupID: '@TGS#3PEWFMNGV'}))
+    dispatch(joinGroup())
       .then((success?: boolean) => {
-        alert(1)
         setIsIMJoinSecceed(!!success)
       })
       .catch((err: any) => {
@@ -126,6 +129,36 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
    */
   const noticeBubbleText = room?.notification;
 
+  /**
+   * 商品卡可见
+   */
+  const [shopCardVisible,  setShopCardVisible]: [boolean | undefined, any] = React.useState();
+
+   /**
+   * 卡片动画
+   */
+  const shopCardAnim = (visiable: boolean) => {
+    Keyboard.dismiss();
+    LayoutAnimation.configureNext({
+      duration: 200,
+      create: {
+        type: LayoutAnimation.Types.linear,
+        property: LayoutAnimation.Properties.opacity
+      },
+      update: {
+        type: LayoutAnimation.Types.spring,
+        springDamping: 0.2,
+      },
+      delete: {
+        type: LayoutAnimation.Types.linear,
+        property: LayoutAnimation.Properties.opacity
+      }
+    });
+
+    // LayoutAnimation.spring();
+    setShopCardVisible(visiable)
+  }
+
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
       <Image
@@ -134,6 +167,12 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
         resizeMode="cover"
       />
       {playerComponent}
+      <View style={styles.livingBottomBlock}>
+        <LivingBottomBlock.Audience
+          onPressShopBag={() => shopCardAnim(true)}
+        />
+      </View>
+      
       {
         !!noticeBubbleText ?
           <NoticeBubble
@@ -146,10 +185,15 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
         liveTitle="湖南卫视直播间"
         liveSubTitle={`123214`}
       />
-      <LivingBottomBlock.Audience />
+      
       <TouchableOpacity onPress={closeLive} style={StyleSheet.flatten([styles.close, {top: props.safeTop + (pad * 2)}])}>
         <Iconcloselight size={24} />
       </TouchableOpacity>
+
+      <AudienceShopCard
+        visible={!!shopCardVisible}
+        onPressClose={() => shopCardAnim(false)}
+      />
     </View>
   )
 }
@@ -157,6 +201,15 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
+  },
+  livingBottomBlock: {
+    flex: 1,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    borderColor: 'red'
   },
   scrollerWrapper: {
   },
@@ -176,6 +229,8 @@ const styles = StyleSheet.create({
   },
   video: {
     flex: 1,
+    minHeight: vh(100),
+    minWidth: vw(100),
   }
 })
 

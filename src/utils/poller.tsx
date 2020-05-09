@@ -53,7 +53,6 @@ class Poll {
   };
 
   polling() {
-    console.log(this.frameId, 'polling')
     this.frameId = requestAnimationFrame(() => {
       const currentTime = Date.now();
       if (currentTime > this.lastTime + this.interval) {

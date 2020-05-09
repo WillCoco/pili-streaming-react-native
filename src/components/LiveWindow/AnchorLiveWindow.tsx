@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   StyleProp,
+  LayoutAnimation,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux'
@@ -18,10 +19,12 @@ import L from '../../constants/Layout';
 import Iconcloselight from '../../components/Iconfont/Iconcloselight';
 import Iconchangecamera from '../../components/Iconfont/Iconchangecamera';
 import NoticeBubble from '../../components/NoticeBubble';
+import Mask from '../../components/Mask';
+import AnchorShopCard from '../../components/LivingShopCard/AnchorShopCard';
 import {pad} from '../../constants/Layout';
 import images from '../../assets/images';
 import { joinGroup, quitGroup, createGroup, dismissGroup, updateGroupProfile } from '../../actions/im';
-import { Modal } from '@ant-design/react-native';
+import { Modal } from '@ant-design/react-native'
 
 const {window} = L;
 
@@ -34,6 +37,11 @@ interface LiveWindowProps {
 const LiveWindow = (props: LiveWindowProps) : any =>  {
   const {goBack} = useNavigation();
   const dispatch = useDispatch();
+
+  /**
+   * 实例
+   */
+  let [maskList, maskDispatch] = React.useContext(Mask.context);
 
   /**
    * 实例
@@ -62,8 +70,14 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
    * 退出直播
    */
   const closeLive = () => {
+
     goBack();
   };
+  
+  /**
+   * 商品卡可见
+   */
+  const [shopCardVisible,  setShopCardVisible]: [boolean | undefined, any] = React.useState();
 
   /**
    * 
@@ -81,14 +95,17 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
     
     return () => {
       dispatch(dismissGroup()); // 退im群
+      // todo 晴空room消息、message、livegoods
       camera.current.stopPreview();
     }
   }, [])
   
   React.useEffect(() => {
     if (camera.current) {
-      alert(1)
       camera.current.start()
+    }
+    return () => {
+      camera.current.stop()
     }
   }, [camera.current])
 
@@ -100,29 +117,51 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
   const onPressBubble = () => {
     if (room?.groupID) {
       // 显示输入框
+      maskDispatch({type: Mask.Actions.PUSH, payload: {type: Mask.ContentTypes.Normal}});
+
+      return
       dispatch(updateGroupProfile({notification: '抽奖抽奖, 随机踢走一名幸运观众'}));
     }
   }
 
+  /**
+   * 卡片动画
+   */
+  const shopCardAnim = (visiable: boolean) => {
+    LayoutAnimation.configureNext({
+      duration: 200,
+      create: {
+        type: LayoutAnimation.Types.linear,
+        property: LayoutAnimation.Properties.opacity
+      },
+      update: {
+        type: LayoutAnimation.Types.spring,
+        springDamping: 0.2,
+      },
+      delete: {
+        type: LayoutAnimation.Types.linear,
+        property: LayoutAnimation.Properties.opacity
+      }
+    });
+
+    // LayoutAnimation.spring();
+    setShopCardVisible(visiable)
+  }
+
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
-      {/* <Image
-        style={styles.imgBg}
-        source={images.livingbg}
-        resizeMode="cover"
-      /> */}
-      <LivePusher
+      <LivePusher 
         ref={(c: any) => camera.current = c}
       />
       {/*  backgroundColor: 'rgba(0,0,0,0.01)' 修复摄像上层气泡边缘显示问题 */}
-      <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.01)', zIndex: 100}}>
+      <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.01)', zIndex: 1}}>
         <LiveIntro
           anchorId={1}
           liveTitle="湖南卫视直播间"
           liveSubTitle={`123214`}
         />
         <LivingBottomBlock.Anchor
-          onShopBagPress={() =>alert('余组货')}
+          onPressShopBag={() => shopCardAnim(true)}
           onPressBubble={onPressBubble}
           onPressShare={() =>alert('余组货')}
           onPressFaceBeauty={() => Modal.prompt('1', '123')}
@@ -141,8 +180,11 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
               style={styles.noticeBubble}
             /> : null
         }
+        <AnchorShopCard
+          visible={!!shopCardVisible}
+          onPressClose={() => shopCardAnim(false)}
+        />
       </View>
-      
     </View>
   )
 };

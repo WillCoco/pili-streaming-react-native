@@ -3,7 +3,7 @@
  */
 // import withRole, {Role} from './withRole';
 import AnchorLiveToolBar from './AnchorLiveToolBar'
-import AudienceLiveToolBar from './LiveToolBar'
+import AudienceLiveToolBar from './AudienceLiveToolBar'
 
 export const Anchor: any = AnchorLiveToolBar;
 export const Audience: any = AudienceLiveToolBar;

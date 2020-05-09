@@ -79,6 +79,7 @@ import AddBankCard from './src/pages/AnchorTabs/AddBankCard'
 import Withdraw from './src/pages/AnchorTabs/Withdraw'
 import Message from './src/pages/AnchorTabs/Message'
 import MessageDetail from './src/pages/AnchorTabs/Message/MessageDetail'
+import MaskProvider, {MaskContext} from './src/components/Mask/Provider';
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -131,6 +132,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
     // return <AppLoading /> // tofix: 在android上报错
   } else {
     return (
+      <MaskProvider>
       <AntdProvider>
       <Provider store={store}>
         <PersistGate
@@ -175,7 +177,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='LiveSearchScreen' component={LiveSearch} />
                 {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
                 <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{headerShown: false}} />
-                <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} options={navHeadOption('发布预告')} />
+                <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} />
                 <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{headerShown: false}} />
                 <Stack.Screen name='LiveGoodsManageScreen' component={LiveGoodsManage} options={{headerShown: false}} />
                 <Stack.Screen name='AnorchLivingRoomScreen' component={AnorchLivingRoom} options={{headerShown: false}} />
@@ -217,6 +219,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
         </PersistGate>
       </Provider>
       </AntdProvider>
+      </MaskProvider>
     )
   }
 }

@@ -1,5 +1,5 @@
 /**
- * 预组货行
+ * 观众行
  */
 import * as React from 'react';
 import {
@@ -10,57 +10,47 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {PrimaryText, SmallText, T4, scale} from 'react-native-normalization-text';
-import { pad, radio } from '../../../../constants/Layout';
-import ShareProfit from '../../../../components/ShareProfit';
-import DiscountPrice from '../../../../components/DiscountPrice';
-import Iconremove from '../../../../components/Iconfont/Iconremove';
-import CheckBox from '../../../../components/CheckBox';
-import images from '../../../../assets/images/index';
-import ButtonRadius from '../../../../components/Buttons/ButtonRadius';
-import {Colors} from '../../../../constants/Theme';
+import { PrimaryText, SmallText, T4, scale, T3 } from 'react-native-normalization-text';
+import { pad, radio } from '../../constants/Layout';
+import ShareProfit from '../ShareProfit';
+import DiscountPrice from '..//DiscountPrice';
+import Iconremove from '../Iconfont/Iconremove';
+import CheckBox from '../CheckBox';
+import images from '../../assets/images/index';
+import ButtonRadius from '../Buttons/ButtonRadius';
+import {Colors} from '../../constants/Theme';
 
-interface WarehouseRowProps {
+interface AudienceRowProps {
   data: any,
   dataAdapter: (d: any) => any,
   imgStyle: StyleProp<any>,
   style: StyleProp<any>,
   isChecked: boolean,
-  onPressCheck: (d?: any) => any,
-  onPressRemove: (d?: any) => any,
-  onPressAddShop: (d?: any) => any,
+  index: number,
+  onPressBuy: (d?: any) => any,
 }
 
-const WarehouseRow = (props: WarehouseRowProps) =>  {
-
+const AudienceRow = (props: AudienceRowProps) =>  {
   const data = (props.dataAdapter ? props.dataAdapter(props.data) : props.data) || {};
-
-  const btnText = data.canAdd ? '添加店铺' : '取消添加';
-  const btnBg = data.canAdd ? Colors.basicColor : Colors.lightGrey;
 
   return (
     <View style={StyleSheet.flatten([styles.style, props.style])}>
-      <CheckBox
-        isChecked={props.isChecked}
-        onPress={props.onPressCheck}
-        style={{height: '100%', paddingHorizontal: pad}}
-      />
-      <Image source={data.img || images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
+      <View>
+        <Image source={data.img || images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
+        <T3 style={styles.index}>{props.index}</T3>
+      </View>
       <View style={styles.contentWrapper}>
         <View style={styles.titleWrapper}>
-          <PrimaryText numberOfLines={2} style={{flex: 1, marginRight: pad * 2}}>{data.title}</PrimaryText>
-          <TouchableOpacity onPress={props.onPressRemove} style={styles.removeBtn}>
-            <Iconremove />
-          </TouchableOpacity>
+          <PrimaryText numberOfLines={2} style={{flex: 1}}>{data.title}</PrimaryText>
         </View>
         <ShareProfit profit={111} style={{flex: -1}} />
           <View style={styles.rowBetween}>
             <DiscountPrice discountPrice={120} price={110} />
             <ButtonRadius
-              text={btnText}
-              size={20}
-              style={{width: scale(75), backgroundColor: btnBg}}
-              onPress={props.onPressAddShop}
+              text="去购买"
+              size={30}
+              style={{width: scale(75), borderRadius: radio * 2}}
+              onPress={props.onPressBuy}
             />
           </View>
       </View>
@@ -68,10 +58,10 @@ const WarehouseRow = (props: WarehouseRowProps) =>  {
   )
 };
 
-WarehouseRow.defaultProps = {
+AudienceRow.defaultProps = {
   data: {
     title: '标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题',
-  }
+  },
 };
 
 const ROW_HEIGHT = 120;
@@ -82,12 +72,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: ROW_HEIGHT,
     backgroundColor: '#fff',
-    // paddingHorizontal: pad
   },
   contentWrapper: {
     flex: 1,
     height: 100,
-    marginRight: pad,
     justifyContent: 'space-between',
     alignItems: 'flex-start'
   },
@@ -97,9 +85,12 @@ const styles = StyleSheet.create({
     borderRadius: radio,
     marginRight: pad
   },
-  checkImg: {
-    height: 20,
-    width: 20,
+  index: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    color: '#fff',
+    backgroundColor: Colors.opacityDarkBg1,
     paddingHorizontal: pad
   },
   checkImgWrapper: {
@@ -123,4 +114,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WarehouseRow;
+export default AudienceRow;

@@ -45,6 +45,10 @@ const images : {
   get forwardIcon() {
     return require('./forwardIcon.png')
   },
+  // 点赞
+  get liveLikeIcon() {
+    return require('./liveLikeIcon.png')
+  },
   // 用户消息等级tag
   get userLv1() {
     return require('./userLv1.png')
