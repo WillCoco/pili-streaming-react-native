@@ -14,7 +14,7 @@ const INITIAL_STATE: InitStateTypes = {
   returnAddresses: [],
   shopGoods: [],
   showcaseGoods: [],
-  warehouseGoods: [],
+  warehouseGoods: [1,2,3,4],
   platformBrands: [],
   platformGoods: {},
   personalGoods: {}

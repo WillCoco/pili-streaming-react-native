@@ -14,8 +14,10 @@ export default function AddressBar(props) {
    * 点击地址栏
    */
   const nextAction = () => {
+    console.log(isEmpty)
+
     if (isEmpty) {
-      navigation.push('CreateOrEditAddr')
+      navigation.push('CreateOrEditAddr', { type: 'add' })
       return
     }
 

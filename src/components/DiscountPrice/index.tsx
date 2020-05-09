@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
   style: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    borderWidth: 1
   },
   price: {
     // color: Colors.basicColor

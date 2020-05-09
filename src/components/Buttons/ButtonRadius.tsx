@@ -17,7 +17,7 @@ interface ButtonOutLineProps {
   style?: StyleProp<any>,
   textStyle?: StyleProp<any>,
   children?: any,
-  onPress?: () => void,
+  onPress?: () => any,
   disabled?: boolean,
 }
 

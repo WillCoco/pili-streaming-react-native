@@ -10,11 +10,8 @@ import {useSelector, useDispatch} from 'react-redux';
 import LiveMsg from '../LiveMsg';
 import {Audience as AudienceLiveToolBar} from '../LiveToolBar';
 import {pad} from '../../constants/Layout';
-import {vh} from '../../utils/metric';
-import {dataAdapterType} from '../LiveMsg/MsgRow';
 import {sendRoomMessage} from '../../actions/im';
 import {RoomMessageType} from '../../reducers/im';
-import {Modal} from '@ant-design/react-native';
 
 const BottomBlock = (props) : any =>  {
   const dispatch = useDispatch();

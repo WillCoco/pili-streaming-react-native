@@ -6338,11 +6338,6 @@ react-native-swiper@^1.6.0:
   dependencies:
     prop-types "^15.5.10"
 
-react-native-syan-image-picker@^0.4.7:
-  version "0.4.7"
-  resolved "https://registry.npm.taobao.org/react-native-syan-image-picker/download/react-native-syan-image-picker-0.4.7.tgz#5eedf07231ebfb1ce722f32deea75aef3e1f7f38"
-  integrity sha1-Xu3wcjHr+xznIvMt7qda7z4ffzg=
-
 react-native-tab-navigator@^0.3.4:
   version "0.3.4"
   resolved "https://registry.npm.taobao.org/react-native-tab-navigator/download/react-native-tab-navigator-0.3.4.tgz#54a18f1ad06a09d4a0de81ff00416bc1b760c960"

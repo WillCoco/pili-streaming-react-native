@@ -25,7 +25,7 @@ export default function GoodsCardRow(props: any) {
         <Text style={styles.goodsName} numberOfLines={2} onPress={toGoodsInfo}>{goodsInfo.goods_name}</Text>
         <View style={styles.goodsShare}>
           {
-            true
+            goodsInfo.is_proprietary
               ? <ImageBackground source={require('../../assets/home-image/badge_bg.png')} style={styles.badgeBg}>
                 <Text style={styles.badgeText}>自营</Text>
               </ImageBackground>

@@ -2,6 +2,7 @@ import React from 'react'
 import { Image, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { Carousel } from '@ant-design/react-native'
+import Swiper from 'react-native-swiper'
 
 import { Colors } from '../../../constants/Theme'
 
@@ -17,7 +18,7 @@ function HomeSwiper(props: Props) {
   const navigation = useNavigation()
 
   const changSwiper = () => {
-
+    console.log(1)
   }
 
   const tapSwiper = (item: any) => {
@@ -29,14 +30,19 @@ function HomeSwiper(props: Props) {
   }
 
   return (
-    <Carousel
-      infinite={true}
-      autoplayInterval={3000}
-      dots={props.showDots}
+    // <Carousel
+    //   infinite={true}
+    //   autoplay={true}
+    //   autoplayInterval={3000}
+    //   dots={props.showDots}
+    //   style={[swiperStyle.swiper, props.swiperStyle]}
+    //   dotStyle={{ backgroundColor: Colors.lightGrey }}
+    //   dotActiveStyle={{ backgroundColor: Colors.whiteColor }}
+    //   afterChange={() => changSwiper()}
+    // >
+    <Swiper
       style={[swiperStyle.swiper, props.swiperStyle]}
-      dotStyle={{ backgroundColor: Colors.lightGrey }}
-      dotActiveStyle={{ backgroundColor: Colors.whiteColor }}
-      afterChange={changSwiper}
+      autoplay
     >
       {
         swiperList && swiperList.map((item: { original_img: any }, index: any) => {
@@ -51,7 +57,8 @@ function HomeSwiper(props: Props) {
           )
         })
       }
-    </Carousel>
+    </Swiper>
+    // {/* </Carousel> */}
   )
 }
 

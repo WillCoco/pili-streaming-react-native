@@ -23,6 +23,7 @@ export default function WorkCard(props: { workInfo: any }) {
     }}>
       <TouchableWithoutFeedback onPress={toFoundInfo}>
         <ImageBackground
+          defaultSource={require('../../../assets/mine-image/logo.png')}
           source={{
             uri: workInfo.worksType === 'PICTURE'
               ? workInfo.worksMoreInfo.worksUrl

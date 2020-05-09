@@ -38,7 +38,9 @@ const AddBankCard = () =>  {
     Toast.showLoading('');
     const success = await dispatch(addBankCard());
     Toast.hide('')
-    Toast.show('添加成功')
+    Toast.show('添加成功', {
+      position: 0
+    })
     if (success) {
       goBack();
     }

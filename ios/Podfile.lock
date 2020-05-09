@@ -288,10 +288,6 @@ PODS:
     - React
   - RNSVG (11.0.1):
     - React
-  - RNSyanImagePicker (0.4.7):
-    - React
-    - TZImagePickerController
-  - TZImagePickerController (3.3.1)
   - UMAppLoader (1.0.1)
   - UMBarCodeScannerInterface (5.1.0)
   - UMCameraInterface (5.1.0)
@@ -364,7 +360,6 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
-  - RNSyanImagePicker (from `../node_modules/react-native-syan-image-picker/ios`)
   - UMAppLoader (from `../node_modules/unimodules-app-loader/ios`)
   - UMBarCodeScannerInterface (from `../node_modules/unimodules-barcode-scanner-interface/ios`)
   - UMCameraInterface (from `../node_modules/unimodules-camera-interface/ios`)
@@ -384,7 +379,6 @@ SPEC REPOS:
   trunk:
     - boost-for-react-native
     - NodeMediaClient
-    - TZImagePickerController
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -485,8 +479,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
-  RNSyanImagePicker:
-    :path: "../node_modules/react-native-syan-image-picker/ios"
   UMAppLoader:
     :path: "../node_modules/unimodules-app-loader/ios"
   UMBarCodeScannerInterface:
@@ -568,8 +560,6 @@ SPEC CHECKSUMS:
   RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
   RNScreens: b5c0e1b2b04512919e78bd3898e144a157ce2363
   RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
-  RNSyanImagePicker: 6d2c2a4df1e9b92c6a6d9bf7741d208074608c3c
-  TZImagePickerController: 99f03b64145a8c92c55b9b1b931410967d9be4cb
   UMAppLoader: 90273a65f9b1d789214e0c913dfcabc7a1b1590e
   UMBarCodeScannerInterface: 9dc692b87e5f20fe277fa57aa47f45d418c3cc6c
   UMCameraInterface: 625878bbf2ba188a8548675e1d1d2e438a653e6d
@@ -585,6 +575,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: cb890c79c63885504ddc0efd7a7d01481760aca2
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 8c4d76991a509f718160e0c1796203e3d30039f4
+PODFILE CHECKSUM: aa94defc4f12977e665bc2749427416d6c4899c3
 
 COCOAPODS: 1.8.4

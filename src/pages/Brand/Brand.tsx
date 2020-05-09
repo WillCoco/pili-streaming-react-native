@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, StyleSheet, ImageBackground } from 'react-native'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native'
+import Toast from 'react-native-tiny-toast'
 
 import BrandCard from './BrandCard/BrandCard'
 
-import { apiBrandList, apiGetAttention } from '../../service/api'
+import { apiBrandList, apiGetAttention, apiAttentionBrand } from '../../service/api'
 
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
 
-export default function Brand(props: any) {
+export default function Brand() {
   const route = useRoute()
   const navgation = useNavigation()
+  const isFocused = useIsFocused()
 
   const pageSize = 20
   const pageType = route?.params?.type
@@ -31,10 +33,13 @@ export default function Brand(props: any) {
   })
 
   useEffect(() => {
-    getBrandList()
-  }, [])
+    if (isFocused) {
+      getBrandList()
+    }
+  }, [isFocused])
 
   const getBrandList = async () => {
+    const loading = Toast.showLoading('')
     let result: any = {}
 
     if (pageType === 'default') {
@@ -43,9 +48,44 @@ export default function Brand(props: any) {
       result = await apiGetAttention({ pageNo, pageSize })
     }
 
+    Toast.hide(loading)
+
     console.log(result, '品牌列表')
 
     setBrandList(result.list)
+  }
+
+  /**
+   * 关注/取消关注
+   */
+  const focusBrandShop = (brandInfo: any) => {
+    const { brand_id, is_focus } = brandInfo
+
+    apiAttentionBrand({
+      brand_id,
+      type: is_focus ? 0 : 1
+    }).then(res => {
+      console.log('关注/取消关注', res)
+      const params = {
+        pageNo: 1,
+        pageSize: pageNo * pageSize
+      }
+
+      if (pageType === 'default') {
+        apiBrandList(params).then((res: any) => {
+          setBrandList(JSON.parse(JSON.stringify(res.list)))
+        })
+      } else {
+        console.log(1)
+        brandList.forEach((item: any, index: number) => {
+          if (item.brand_id === brand_id) {
+            brandList.splice(index, 1)
+          }
+        })
+
+        setBrandList(JSON.parse(JSON.stringify(brandList)))
+      }
+    })
   }
 
   if ( pageType === 'focus' && !brandList.length) {
@@ -61,7 +101,15 @@ export default function Brand(props: any) {
   return (
     <ScrollView>
       {
-        brandList && brandList.map((item, index) => <BrandCard key={`brand-${index}`} brandInfo={item} />)
+        brandList && brandList.map((item, index) => {
+          return (
+            <BrandCard
+              key={`brand-${index}`}
+              brandInfo={item}
+              focusBrandShop={(brandInfo: any) => focusBrandShop(brandInfo)}
+            />
+          )
+        })
       }
     </ScrollView>
   )

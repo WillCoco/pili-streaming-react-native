@@ -11,19 +11,32 @@ import Toast from 'react-native-tiny-toast'
 import DefaultContent from './DefaultContent/DefaultContent'
 import CartItem from '../../components/CartItem/CartItem'
 import CartFooterAction from '../../components/CartFooterAction/CartFooterAction'
+import CartHeaderButton from '../../components/CartHeaderButton/CartHeaderButton'
 import pxToDp from '../../utils/px2dp'
+import { Colors } from '../../constants/Theme'
 
 function Cart(props: any) {
-  const { isLogin } = props.userData
-  const { cartList } = props.cartData
   const navigation = useNavigation()
+
+  navigation.setOptions({
+    headerTitle: '购物车',
+    headerStyle: {
+      backgroundColor: Colors.basicColor,
+      elevation: 0,  // 去除安卓状态栏底部阴影
+    },
+    headerTitleAlign: 'center',
+    headerTintColor: Colors.whiteColor,
+    headerBackTitleVisible: false,
+    headerRight: () => <CartHeaderButton />
+  })
+  
   const [isEmpty, setIsEmpty] = useState(false)
   const [allCartGoodsInfo, setAllCartGoodsInfo] = useState({})
 
   const { userData, cartData } = props
 
   useEffect(() => {
-    if (isLogin) {
+    if (props.userData.isLogin) {
       navigation.addListener('focus', () => {
         getCartList()
       })
@@ -35,10 +48,10 @@ function Cart(props: any) {
   }, [navigation])
 
   useEffect(() => {
-    if (isLogin) {
-      updateCartList(cartList)
+    if (props.userData.isLogin) {
+      updateCartList(props.cartData.cartList)
     }
-  }, [cartList])
+  }, [props.cartData.cartList])
 
   /**
    * 获取购物车列表

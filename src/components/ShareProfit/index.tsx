@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 6,
     borderWidth: 1,
+    overflow: 'hidden',
   },
   shareWrapper: {
     flex: -1
