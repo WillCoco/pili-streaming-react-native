@@ -16,9 +16,10 @@ import {
 } from 'react-native';
 import MaskContext from './MaskContext';
 import {Actions} from './reducer';
+import { Colors } from '../../constants/Theme';
 
 const defaultOptions = {
-  canBgPressClose: true
+  canBgPressClose: false
 }
 
 const MaskWrapper = (props: {
@@ -34,7 +35,7 @@ const MaskWrapper = (props: {
    * 背景移除
    */
   const onPress = () => {
-    dispatch({type: Actions.remove})
+    dispatch({type: Actions.REMOVE})
   }
 
   return (
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     left: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'red'
+    backgroundColor: Colors.opacityDarkBg
   }
 });
 

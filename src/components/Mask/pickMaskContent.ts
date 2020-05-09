@@ -6,7 +6,7 @@ const pickMaskContent = (type: MaskContentTypes) => {
     case MaskContentTypes.Normal:
       return MaskContents;
     default:
-      throw "pickMaskContent: 未知MaskContentTypes";
+      throw `pickMaskContent: 未知MaskContentTypes "${type}"`;
   }
 }
 
