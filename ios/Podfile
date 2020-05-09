@@ -45,4 +45,6 @@ target 'championApp' do
   use_native_modules!
   # pod 'RNSyanImagePicker', :path => '../node_modules/react-native-syan-image-picker'
 
+  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
+
 end

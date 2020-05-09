@@ -16,21 +16,41 @@ import {
 import { CheckBox } from 'react-native-elements'
 import images from '../../../assets/images'
 import NavBar from '../../../components/NavBar'
-import { vw } from '../../../utils/metric'
+import { vw, vh } from '../../../utils/metric'
 import { Colors } from '../../../constants/Theme'
 import { AntDesign } from '@expo/vector-icons'
 import { pad } from '../../../constants/Layout'
 import { LinearGradient } from 'expo-linear-gradient'
-import { PrimaryText, SmallText, TinyText} from 'react-native-normalization-text'
-import ScrollableTabView, { ScrollableTabBar, DefaultTabBar } from 'react-native-scrollable-tab-view'
+import { T4, PrimaryText, SmallText, TinyText} from 'react-native-normalization-text'
+import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view'
 import Toast from 'react-native-tiny-toast'
 import ButtonOutLine from '../../../components/Buttons/ButtonOutLine'
+import { useNavigation } from '@react-navigation/native'
+import pxToDp from '../../../utils/px2dp'
 
 const BeAgent = props => {
+  const {navigate} = useNavigation()
+  const {goBack} = useNavigation()
   const [agree, setAgree] = React.useState(false) // 是否同意
   const [pass, setPass] = React.useState(false) // 是否符合升级条件
-  const agentTab = ['初级经纪人', '中级经纪人', '高级经纪人']
+  // const agentTab = ['初级经纪人', '中级经纪人', '高级经纪人']
 
+  // 经纪人等级
+  const agentList = [
+    { level: 1, name: '初级经纪人', },
+    { level: 2, name: '中级经纪人', },
+    { level: 3, name: '高级经纪人', },
+  ]
+
+  const curAgentLevel = 1
+
+  // 成为经纪人条件
+  const beAgentRequireList = [
+    {title: '缴费6000元', curProgress: 4000, totalProgress: 6000, needButton: true},
+    {title: '邀请20位主播加入', curProgress: 20, totalProgress: 20, needButton: false},
+    {title: '邀请3位初级经纪人', curProgress: 2, totalProgress: 3, needButton: false},
+    {title: '邀请3位中级经纪人', curProgress: 1, totalProgress: 3, needButton: false},
+  ]
 
   /**
    * 复制
@@ -45,30 +65,46 @@ const BeAgent = props => {
    */
   const changeTab = (e: any) => {
     console.log(e)
+    Toast.show('切换成功')
+    if (e.i !== 0) return
+    // return false
     // setAgentTab(agentTab[e])
+  }
+
+  /**
+   * 去缴费
+   */
+  const toPay = () => {
+    const URL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8&data={"head":{"accessType":"1","plMid":"","method":"sandpay.trade.orderCreate","productId":"00002000","mid":"S4514032","channelType":"07","reqTime":"20200508183504","version":"1.0"},"body":{"subject":"杉德收银台统测试订单标题","payModeList":"[alipay]","frontUrl":"http://61.129.71.103:8003/jspsandpay/payReturn.jsp","terminalId":"shzdbh001","body":"{\\"mallOrderCode\\":\\"mall00000000001\\",\\"receiveAddress\\":\\"上海市徐汇区田林路487号宝石园22号2楼\\",\\"goodsDesc\\":\\"杉德卡1张\\"}","storeId":"shmdbh001","userId":"C0908992","merchExtendParams":"shkzcs","clearCycle":"0","extend":"kzy","totalAmount":"000000000012","txnTimeOut":"20200509183504","bizExtendParams":"yykzcs","notifyUrl":"http://127.0.0.1/WebGateway/stateChangeServlet","orderCode":"20200508183504","operatorId":"czybh001","accountingMode":"02","riskRateInfo":"fkxxy"}}&signType=01&sign=CkAspqeYrEdPRBf9zoPebbls1vJwPNfSI%2B4LXjfKbN6WJDByFYCxV2jQR3sXADlxvuTCBzCSepF0NnSbpECFqJgKVQRTTev69xJt8hG2rsiRB6wTgafznTvePkrqmOB54hzo%2FI2XTCTX4rCt2tttd3qEBo%2Bp5TjZRa0s6%2FGs%2FiSqNSD4RhBwqSJkMHAh6Rv%2BYouw9XkDgHVCJ4iMrhX%2F%2FsUNsmwtjIh6vSnpfM7BdVzsPgCry3K2h%2BQTeH0DKYBxQICKtdkQHMZCn3Bw7oJ4U4clHv5gIwDH3T2K8k78wnUPTaTEhyoK%2Fut9ofsmpbKVHLGgk91AfJCPpWjdL1BATg%3D%3D&extend=kzy'
+
+    navigate('PayWebView', {url: URL})
   }
 
   /**
    * 升级经纪人
    */
   const submit = () => {
-
+    setPass(agree)
   }
 
-  const renderAgentRequireRow = (props) => {
+  /**
+   * 经纪人解锁
+   */
+  const renderAgentRequireRow = (item: any ) => {
     return (
-      <View style={{flexDirection: 'column', marginTop: pad}}>
+      <View style={{flexDirection: 'column', marginTop: pad * 2}} key={item.title}>
         <View style={styles.requireRow}>
-          <Text style={{color: Colors.brownColor}}>缴费6000元</Text>
-          <ButtonOutLine
+          <Text style={{color: Colors.brownColor}}>{item.title}</Text>
+          { item.needButton && <ButtonOutLine
             text='去缴费'
-            style={styles.unLockButton}
+            style={styles.toPayButton}
             textStyle={{color: Colors.brownColor}}
-          />
+            onPress={toPay}
+          />}
         </View>
         <View style={styles.progressBottom}>
           {/* 通过样式控制进度 */}
-          <View style={StyleSheet.flatten([styles.progressUp, {width: '40%'}])}></View>
+          <View style={StyleSheet.flatten([styles.progressUp, {width: (item.curProgress / item.totalProgress) * 100 + '%'}])}></View>
         </View>
       </View>
     )
@@ -76,14 +112,22 @@ const BeAgent = props => {
 
   return (
     <ScrollView style={{flex: 1}}>
-      <ImageBackground source={images.agentBg} style={styles.style}>
-        <ImageBackground source={images.agentBgTop} style={styles.topCard}>
+      <ImageBackground 
+        source={images.agentBg} 
+        style={styles.style}
+        resizeMode='cover'
+      >
+        <ImageBackground 
+          source={images.agentBgTop} 
+          style={styles.topCard}
+          resizeMode='cover'
+        >
           <NavBar 
             title={'成为经纪人'}
             style={styles.nav}
             titleStyle={{color: Colors.lightBrown}}
             left={
-              () => <AntDesign name="left" size={20} color={Colors.lightBrown} />
+              () => <AntDesign name="left" size={20} color={Colors.lightBrown} onPress={goBack}/>
             }
           />
           <Image source={images.agent} style={{width: 127, height: 22}}/>
@@ -112,46 +156,28 @@ const BeAgent = props => {
         </ImageBackground>
         <Image source={images.beAgent} style={styles.angetTitle} />
         <ImageBackground source={images.beAgentBg} style={styles.agentRules}>
-          <ScrollableTabView
-            initialPage={0}
-            tabBarUnderlineStyle={{ 
-              width: 35,  
-              height: 2,
-              backgroundColor: Colors.lightBrown, 
-              marginLeft: 35
-            }}
-            tabBarActiveTextColor={Colors.lightBrown}
-            tabBarInactiveTextColor={Colors.lightBrown}
-            renderTabBar={() => <DefaultTabBar />}
-            onChangeTab={(e) => changeTab(e)}
-          >
-            {
-              agentTab.map((item, index) => {
+          <View style={{height: pxToDp(100), flexDirection: 'row', justifyContent: 'space-around'}}>
+              {
+                agentList.map((item, index) => {
                 return (
-                  <View
-                    key={`tab-${index}`}
-                    tabLabel={item}
-                    style={styles.tabWrapper}
-                  >
-                    {
-                      renderAgentRequireRow(props)
-                    }
-                    {
-                      renderAgentRequireRow()
-                    }
-                    {
-                      renderAgentRequireRow()
-                    }
-                    {
-                      renderAgentRequireRow()
-                    }
-
-                    <TinyText style={styles.beAgentTip}>任意一条件达成即可成为经纪人</TinyText>
+                  <View key={item.name} style={styles.tabItem}>
+                    <PrimaryText style={StyleSheet.flatten([styles.tabText, (item.level === curAgentLevel) && styles.activeTabText])}>{item.name}</PrimaryText>
+                    <View style={(item.level === curAgentLevel) && styles.tabUnderLine}></View>
                   </View>
                 )
               })
+              }
+          </View>
+          <View
+            style={styles.tabWrapper}
+          >
+            {
+              beAgentRequireList.map((item, index) => {
+                return renderAgentRequireRow(item)
+              })
             }
-          </ScrollableTabView>
+            <TinyText style={styles.beAgentTip}>任意一条件达成即可成为经纪人</TinyText>
+          </View>
         </ImageBackground>
         <View style={styles.checkLine}>
           <TouchableOpacity onPress={() => setAgree(!agree)}>
@@ -162,7 +188,7 @@ const BeAgent = props => {
           </TouchableOpacity>
           <Text style={{color: Colors.lightBrown}}>
             升级即表示观看且同意
-            <Text style={{color: '#34C0FF'}}>《经纪人劳务电子合同》</Text>
+            <Text style={{color: '#34C0FF'}} onPress={() => navigate('BeAgentAgreement')}>《经纪人劳务电子合同》</Text>
           </Text>
         </View>
         <TouchableOpacity onPress={submit} disabled={!pass}>
@@ -171,11 +197,11 @@ const BeAgent = props => {
             start={[0, 0]}
             style={styles.subButton}
           >
-            <Text style={{color: '#0F0707'}}>
+            <T4 style={{color: Colors.brownColor}}>
               {
                 pass && '升级经纪人' || '暂未达成条件'
               }
-            </Text>
+            </T4>
           </LinearGradient>
         </TouchableOpacity>
       </ImageBackground>
@@ -190,15 +216,17 @@ BeAgent.defaultProps = {
 const styles = StyleSheet.create({
   style: {
     width: vw(100),
+    height: vh(100),
     flexDirection: 'column',
     alignItems: 'center',
+    borderWidth: 2,
   },
   nav: {
     backgroundColor: 'transparent',
     borderBottomWidth: 0,
   },
   topCard: {
-    height: 260,
+    height: pxToDp(520),
     width: vw(100),
     flexDirection: 'column',
     alignItems: 'center',
@@ -213,13 +241,13 @@ const styles = StyleSheet.create({
   },
   service: {
     width: vw(100) - pad * 6,
-    height: 36,
+    height: pxToDp(72),
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: pad,
   },
   serviceLeft: {
-    width: 100,
+    width: pxToDp(200),
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -229,29 +257,35 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   wxIcon: {
-    width: 20,
-    height: 17,
+    width: pxToDp(40),
+    height: pxToDp(34),
     marginRight: pad,
   },
   angetTitle: {
-    width: 304,
-    height: 22,
+    width: pxToDp(608),
+    height: pxToDp(44),
     marginVertical: pad * 2
   },
   agentRules: {
     width: vw(100) - pad * 2,
-    height: 320,
-  },
-  subButton: {
-    width:335,
-    height:40,
-    borderRadius:20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: pad
+    height: pxToDp(640),
   },
   colorLightBrown: {
     color: Colors.lightBrown
+  },
+  // 经纪人等级Tab
+  tabItem: {
+    height: pxToDp(96), 
+    flexDirection: 'column', 
+    justifyContent: 'center', 
+  },
+  tabText: {
+    height: '100%',
+    lineHeight: pxToDp(100),
+    color: Colors.lightBrown,
+  },
+  activeTabText: {
+    fontWeight: 'bold',
   },
   tabWrapper: {
     flex: 1,
@@ -263,7 +297,14 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     marginVertical: pad,
   },
-  unLockButton: {
+  tabUnderLine: {
+    width: pxToDp(70),  
+    height: pxToDp(4),
+    backgroundColor: Colors.lightBrown, 
+    marginLeft: pxToDp(30),
+    borderRadius: pxToDp(4),
+  },
+  toPayButton: {
     width: 'auto',
     height: 'auto',
     paddingVertical: 3,
@@ -295,10 +336,18 @@ const styles = StyleSheet.create({
     marginBottom: pad * 3,
   },
   checkIcon: {
-    width: 15,
-    height: 15,
+    width: pxToDp(30),
+    height: pxToDp(30),
     marginRight: pad
-  }
+  },
+  subButton: {
+    width: pxToDp(670),
+    height: pxToDp(80),
+    borderRadius: pxToDp(40),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: pad
+  },
 })
 
 export default BeAgent

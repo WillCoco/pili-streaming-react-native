@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   },
   idText: {
     position: 'absolute',
-    top: '50%',
+    top: '60%',
     right: pad
   },
   toolCellWrapper: {
