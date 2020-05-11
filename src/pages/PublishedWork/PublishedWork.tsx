@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, ImageBackground, StyleSheet } from 'react-native'
+import React, { useState, useEffect, useRef } from 'react'
+import { View, Text, ImageBackground, StyleSheet, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
 
@@ -10,7 +10,8 @@ import pxToDp from '../../utils/px2dp'
 export default function PublishedWork() {
   const navigation = useNavigation()
   const pageSize = 20
-  const [pageNo, setPageNo] = useState(1)
+  let pageNoRef = useRef(1)
+  let hasMoreRef = useRef(true)
   const [workList, setWorkList] = useState([])
   const [isEmpty, setIsEmpty] = useState(false)
 
@@ -30,9 +31,14 @@ export default function PublishedWork() {
   }, [])
 
   const getPublishedWorks = () => {
-    apiGetUserWorks({ page: pageNo, pageSize }).then((res: any) => {
+    apiGetUserWorks({
+      page: pageNoRef.current,
+      pageSize
+    }).then((res: any) => {
       console.log('我的作品', res)
       if (res.totalCount) {
+        const totalPage = res.totalCount / pageSize
+        hasMoreRef.current = pageNoRef.current < totalPage
         setWorkList(JSON.parse(JSON.stringify(res.worksInfoList)))
       }
       setIsEmpty(!res.totalCount)
@@ -51,6 +57,15 @@ export default function PublishedWork() {
     })
   }
 
+  /**
+   * 触底加载
+   */
+  const onBeachBottom = () => {
+    if (!hasMoreRef.current) return
+    pageNoRef.current += 1
+    getPublishedWorks()
+  }
+
   if (isEmpty) {
     return (
       <View style={styles.container}>
@@ -62,7 +77,9 @@ export default function PublishedWork() {
   }
 
   return (
-    <View>
+    <ScrollView
+      onMomentumScrollEnd={onBeachBottom}
+    >
       {
         workList && workList.map((item: any, index: number) => {
           return (
@@ -74,7 +91,7 @@ export default function PublishedWork() {
           )
         })
       }
-    </View>
+    </ScrollView>
   )
 }
 

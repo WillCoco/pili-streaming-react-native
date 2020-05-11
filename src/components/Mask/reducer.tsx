@@ -10,6 +10,7 @@ export enum Actions {
 export enum MaskContentTypes {
   Normal = 'Normal',
   Prompt = 'Prompt',
+  WithAvatar = 'WithAvatar'
 };
 
 export interface MaskContent {

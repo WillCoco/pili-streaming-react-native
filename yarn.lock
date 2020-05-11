@@ -3117,7 +3117,7 @@ eventemitter3@^3.0.0:
 
 events@1.0.1:
   version "1.0.1"
-  resolved "https://registry.npm.taobao.org/events/download/events-1.0.1.tgz#386f6471cbb609e7925e7bfe7468634b9e069ac2"
+  resolved "https://registry.npm.taobao.org/events/download/events-1.0.1.tgz?cache=0&sync_timestamp=1578498298945&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fevents%2Fdownload%2Fevents-1.0.1.tgz#386f6471cbb609e7925e7bfe7468634b9e069ac2"
   integrity sha1-OG9kccu2CeeSXnv+dGhjS54GmsI=
 
 events@^1.1.0:

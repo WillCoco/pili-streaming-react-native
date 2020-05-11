@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ImageBackground } from 'react-native'
+import React, { useState, useEffect, useRef } from 'react'
+import { View, Text, StyleSheet, ImageBackground, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
 import { apiGetEnshrine } from '../../service/api'
@@ -9,7 +9,8 @@ import pxToDp from '../../utils/px2dp'
 export default function CollectGoods() {
   const navigation = useNavigation()
   const pageSize = 20
-  const [pageNo, setPageNo] = useState(1)
+  let pageNoRef = useRef(1)
+  let hasMoreRef = useRef(true)
   const [goodsList, setGoodsList] = useState([])
 
   navigation.setOptions({
@@ -28,15 +29,34 @@ export default function CollectGoods() {
   }, [])
 
   const getMyCollectGoods = () => {
-    apiGetEnshrine({ pageNo, pageSize }).then(res => {
+    apiGetEnshrine({
+      pageNo: pageNoRef.current,
+      pageSize
+    }).then((res: any) => {
       console.log('我的收藏', res)
-      setGoodsList(res.list)
+      if (!res.count) return
+      const totalPage = Math.ceil(res.count / pageSize)
+
+      hasMoreRef.current = pageNoRef.current < totalPage
+
+      setGoodsList([...goodsList, ...res.list])
     })
+  }
+
+  /**
+   * 触底加载
+   */
+  const onBeachBottom = () => {
+    if (!hasMoreRef.current) return
+    pageNoRef.current += 1
+    getMyCollectGoods()
   }
 
   if (goodsList.length) {
     return (
-      <View>
+      <ScrollView
+        onMomentumScrollEnd={onBeachBottom}
+      >
         {
           goodsList.map((item: any, index: number) => {
             return (
@@ -48,7 +68,7 @@ export default function CollectGoods() {
             )
           })
         }
-      </View>
+      </ScrollView>
     )
   } else {
     return (

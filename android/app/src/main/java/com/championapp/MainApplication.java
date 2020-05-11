@@ -6,7 +6,7 @@ import android.net.Uri;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-//import com.syanpicker.RNSyanImagePickerPackage;
+import com.theweflex.react.WeChatPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -27,8 +27,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Nullable;
-
-import com.theweflex.react.WeChatPackage;
 
 
 public class MainApplication extends Application implements ReactApplication {

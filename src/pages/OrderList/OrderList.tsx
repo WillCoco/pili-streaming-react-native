@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view'
@@ -14,9 +14,10 @@ export default function OrderList() {
   const route = useRoute()
   const pageSize = 20
   const tabList = ['全部', '待付款', '待发货', '待收货', '已完成', '退款/售后']
-  const [pageNo, setPageNo] = useState(1)
   const [orderList, setOrderList] = useState([])
   const [activeIndex, setActiveIndex] = useState(0)
+  let pageNoRef = useRef(1)
+  let hasMoreRef = useRef(true)
 
   navigation.setOptions({
     headerTitle: `我的订单`,
@@ -48,6 +49,8 @@ export default function OrderList() {
   const changeTab = (e: any) => {
     const index = e.i
     setActiveIndex(index)
+    pageNoRef.current = 1
+
     if (index === 5) {
       getReturnOrderList()
     } else {
@@ -61,12 +64,26 @@ export default function OrderList() {
   const getOrderList = (index: number) => {
     const loading = Toast.showLoading('')
 
-    const params = index ? { pageNo, pageSize, orderStatus: index } : { pageNo, pageSize }
+    const params = index
+      ? {
+        pageNo: pageNoRef.current,
+        pageSize,
+        orderStatus: index
+      }
+      : {
+        pageNo: pageNoRef.current,
+        pageSize
+      }
 
-    apiGetOrderList(params).then(res => {
-      console.log('获取订单列表', res)
-      setOrderList(res.records)
+    apiGetOrderList(params).then((res: any) => {
       Toast.hide(loading)
+      console.log('获取订单列表', res)
+
+      const totalPage = Math.ceil(res.count / pageSize)
+
+      hasMoreRef.current = pageNoRef.current < totalPage
+
+      setOrderList([...orderList, ...res.records])
     })
   }
 
@@ -76,7 +93,10 @@ export default function OrderList() {
   const getReturnOrderList = () => {
     const loading = Toast.showLoading('')
 
-    apiGetReturnOrderList({ pageNo, pageSize }).then((res: any) => {
+    apiGetReturnOrderList({
+      pageNo: pageNoRef,
+      pageSize
+    }).then((res: any) => {
       console.log('售后订单列表', res)
       res.records.forEach((item: any) => {
         item.goodsList = [{
@@ -89,6 +109,13 @@ export default function OrderList() {
           specJson: item.specJson
         }]
       })
+
+      const totalPage = Math.ceil(res.count / pageSize)
+
+      hasMoreRef.current = pageNoRef.current < totalPage
+
+      setOrderList([...orderList, ...res.records])
+
       setOrderList(res.records)
       Toast.hide(loading)
     })
@@ -121,7 +148,7 @@ export default function OrderList() {
     apiConfirmReceiveGoods({ orderId: id }).then(res => {
       Toast.showSuccess('已完成收货')
     })
-  } 
+  }
 
   /**
    * 去支付
@@ -139,6 +166,19 @@ export default function OrderList() {
     })
   }
 
+  /**
+   * 触底加载
+   */
+  const onReachBottom = () => {
+    if (!hasMoreRef.current) return 
+    pageNoRef.current += 1
+
+    if (activeIndex === 5) {
+      getReturnOrderList()
+    } else {
+      getOrderList(activeIndex)
+    }
+  }
 
   return (
     <ScrollableTabView
@@ -153,7 +193,13 @@ export default function OrderList() {
       {
         tabList.map((item: string, index: number) => {
           return (
-            <ScrollView key={`tab-${index}`} tabLabel={item} style={{ padding: pxToDp(20) }}>
+            <ScrollView
+              key={`tab-${index}`}
+              tabLabel={item}
+              style={{ padding: pxToDp(20) }}
+              showsVerticalScrollIndicator={false}
+              onMomentumScrollEnd={onReachBottom}
+            >
               {
                 orderList.map((_item: any, _index: number) => {
                   return (

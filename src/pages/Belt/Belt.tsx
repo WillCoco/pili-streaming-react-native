@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { View, StyleSheet, Image, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
@@ -10,9 +10,10 @@ import pxToDp from '../../utils/px2dp'
 
 export default function Belt() {
   const navigation = useNavigation()
-  const [pageNo, setPageNo] = useState(1)
   const [goodsList, setGoodsList] = useState([])
   const pageSize = 20
+  let pageNoRef = useRef(1)
+  let hasMoreRef = useRef(true)
 
   navigation.setOptions({
     headerTitle: '产业带',
@@ -34,10 +35,28 @@ export default function Belt() {
    * 获取产业带商品列表
    */
   const getBeltGoodsList = () => {
-    apiGetBeltList({ pageNo, pageSize }).then((res: any) => {
+    apiGetBeltList({
+      pageNo: pageNoRef.current,
+      pageSize
+    }).then((res: any) => {
       console.log(res, '产业带数据')
-      if (res.list.length) setGoodsList(res.list)
+      if (res.count) {
+        const totalPage = Math.ceil(res.count / pageSize)
+
+        hasMoreRef.current = pageNoRef.current < totalPage
+
+        setGoodsList([...goodsList, ...res.list])
+      }
     })
+  }
+
+  /**
+   * 触底加载
+   */
+  const onReachBottom = () => {
+    if (!hasMoreRef.current) return
+    pageNoRef.current += 1
+    getBeltGoodsList()
   }
 
   return (
@@ -47,7 +66,9 @@ export default function Belt() {
         style={styles.headerImg}
         source={require('../../assets/belt-image/belt_bgi.png')}
       />
-      <ScrollView>
+      <ScrollView
+        onMomentumScrollEnd={onReachBottom}
+      >
         {
           goodsList && goodsList.map((item, index) => {
             return (

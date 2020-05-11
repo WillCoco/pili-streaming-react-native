@@ -21,7 +21,7 @@ function Account(props) {
 
   return (
     <View style={styles.container}>
-      <CardTitle title='账户' subTitle='更多' nextAction={toAccountInfo} />
+      <CardTitle title='我的账户' subTitle='更多' nextAction={toAccountInfo} />
       <View style={styles.accountInfo}>
         <View style={styles.accountItem}>
           <Image source={require('../../../assets/mine-image/img_yifanxian.png')} style={styles.icon} />

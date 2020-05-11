@@ -9,6 +9,4 @@ export const ACTIVITY_LIST = 'ACTIVITY_LIST'  // 活动轮播图
 
 export const SELECTED_GOODS_INFO = 'SELECTED_GOODS_INFO'  // 精选好物
 
-export const RECOMMEND_GOODS_LIST = 'RECOMMEND_GOODS_LIST'  // 圈重点
-
 export const SECKILL_LIST = 'SECKILL_LIST'  // 秒杀

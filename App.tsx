@@ -4,6 +4,7 @@ import { SplashScreen, AppLoading } from 'expo'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import * as Font from 'expo-font';
+// import * as WeChat from 'react-native-wechat-lib'
 import { Ionicons } from '@expo/vector-icons'
 
 import { Provider as AntdProvider } from '@ant-design/react-native'
@@ -129,6 +130,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
 
     // 登录im
     store.dispatch(login());
+    // WeChat.registerApp('appid', 'universalLink')
   }, [])
 
   const navHeadOption = (title?: string) => ({
@@ -153,7 +155,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
             }
             <NavigationContainer>
               <Stack.Navigator>
-                <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
+                {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
                 <Stack.Screen name='Root' component={Root} />
                 <Stack.Screen name='HomeSearch' component={HomeSearch} />
                 <Stack.Screen name='FoundSearch' component={FoundSearch} />
@@ -183,7 +185,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
                 <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false }} />
                 <Stack.Screen name='LiveSearchScreen' component={LiveSearch} />
-                {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
+                <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
                 <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{headerShown: false}} />
                 <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} />
                 <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{headerShown: false}} />

@@ -10,7 +10,6 @@ WeChat.isWXAppInstalled()
 
 console.log(WeChat.ShareMiniProgram, 'WeChat.ShareMiniProgram')
 
-
 // WeChat.ShareMiniProgram({
 //   title: '123',
 //   description: '123'

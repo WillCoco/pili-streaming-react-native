@@ -64,11 +64,6 @@ function Header(props: { userData: { userInfo: any; isLogin: any }; publicData: 
     >
       {/* 顶部右侧操作区域 */}
       <View style={styles.rightOption}>
-        {
-          isLogin && <TouchableOpacity onPress={() => navigation.push('AnchorTabs')} style={styles.liveBgi}>
-            <Text style={styles.liveText}>去直播</Text><Ionicons name='ios-play' color={Colors.basicColor} size={20} />
-          </TouchableOpacity>
-        }
         <TouchableOpacity onPress={toSetting}>
           <Image source={require('../../../assets/mine-image/icon_setting.png')} style={styles.setIcon} />
         </TouchableOpacity>
