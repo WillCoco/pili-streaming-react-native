@@ -4,6 +4,7 @@ import { SplashScreen, AppLoading } from 'expo'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import * as Font from 'expo-font';
+// import * as WeChat from 'react-native-wechat-lib'
 import { Ionicons } from '@expo/vector-icons'
 
 import { Provider as AntdProvider } from '@ant-design/react-native'
@@ -129,6 +130,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
 
     // 登录im
     store.dispatch(login());
+    // WeChat.registerApp('appid', 'universalLink')
   }, [])
 
   const navHeadOption = (title?: string) => ({

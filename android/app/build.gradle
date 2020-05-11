@@ -182,8 +182,12 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-wechat-lib')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:support-annotations:28.0.0"
 
     addUnimodulesDependencies()
 
