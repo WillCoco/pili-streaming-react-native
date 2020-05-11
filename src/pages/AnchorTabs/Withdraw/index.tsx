@@ -25,6 +25,7 @@ import {addBankCard} from '../../../actions/asset';
 import { sleep } from '../../../utils/tools';
 import FormRow from '../../../components/FormRow';
 import CountDown from '../../../components/CountDown';
+import Mask from '../../../components/Mask';
 
 const Withdraw = () =>  {
   const {navigate, goBack, replace} = useNavigation();
@@ -33,6 +34,7 @@ const Withdraw = () =>  {
   const [withdrawNum, setWithdrawNum] = React.useState('');
   const [verifyCode, setVerifyCode] =  React.useState('');
   const [countDownNum, setCountDownNum] = React.useState(0); // 倒计时
+  let [maskList, maskDispatch] = React.useContext(Mask.context);
 
   console.log(route.params?.card, '提现的银行卡')
 
@@ -60,6 +62,17 @@ const Withdraw = () =>  {
    * 提交提现
    */
   const onSumbit = async () => {
+    maskDispatch({
+      type: Mask.Actions.PUSH,
+      payload: {
+        type: Mask.ContentTypes.Normal,
+        data: {
+          text: '验证码错误，请重新输入!',
+          title: '提示',
+          rightBtnText: '确定',
+          onPressRight: () => {alert(421)}
+        }
+      }});
     Toast.showLoading('');
     // const success = await dispatch(addBankCard());
     await sleep(1000)

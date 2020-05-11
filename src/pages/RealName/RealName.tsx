@@ -13,16 +13,26 @@ import {pad} from '../../constants/Layout'
 import withPage from '../../components/HOCs/withPage'
 import pxToDp from '../../utils/px2dp'
 import { useNavigation } from '@react-navigation/native'
-
+import Mask from '../../components/Mask'
 
 const RealName = props => {
   const [name, setName] = React.useState('')
   const [idNumber, setIdNumber] = React.useState('')
+  let [maskList, maskDispatch] = React.useContext(Mask.context);
   const {navigate} = useNavigation()
 
-  const submit = () => {
-    // 
-    // navigate('ActivityWebView')
+  const beforeSubmit = () => {
+    maskDispatch({
+      type: Mask.Actions.PUSH,
+      payload: {
+        type: Mask.ContentTypes.Normal,
+        data: {
+          text: '实名认证信息一旦提交将无法更改！',
+          title: '提示',
+          rightBtnText: '确定',
+          onPressRight: () => {alert(421)}
+        }
+      }});
   }
 
   return (
@@ -53,7 +63,7 @@ const RealName = props => {
       <ButtonRadius
         text="开始视频认证"
         style={styles.button}
-        onPress={submit}
+        onPress={beforeSubmit}
       />
     </View>
   )
