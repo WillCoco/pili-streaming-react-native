@@ -7,6 +7,7 @@ import GoodsCardRow from '../../components/GoodsCardRow/GoodsCardRow'
 
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
+import checkIsBottom from '../../utils/checkIsBottom'
 
 export default function Belt() {
   const navigation = useNavigation()
@@ -53,10 +54,11 @@ export default function Belt() {
   /**
    * 触底加载
    */
-  const onReachBottom = () => {
-    if (!hasMoreRef.current) return
-    pageNoRef.current += 1
-    getBeltGoodsList()
+  const onReachBottom = (e: any) => {
+    if (hasMoreRef.current && checkIsBottom(e)) {
+      pageNoRef.current += 1
+      getBeltGoodsList()
+    }
   }
 
   return (
@@ -67,7 +69,8 @@ export default function Belt() {
         source={require('../../assets/belt-image/belt_bgi.png')}
       />
       <ScrollView
-        onMomentumScrollEnd={onReachBottom}
+        showsVerticalScrollIndicator={false}
+        onMomentumScrollEnd={(e) => onReachBottom(e)}
       >
         {
           goodsList && goodsList.map((item, index) => {

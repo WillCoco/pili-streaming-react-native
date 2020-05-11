@@ -6,6 +6,7 @@ import { apiGetUserFavorite } from '../../service/api'
 import pxToDp from '../../utils/px2dp'
 import waterFall from '../../utils/waterFall'
 import WorkCard from '../../components/WorkCard/WorkCard'
+import checkIsBottom from '../../utils/checkIsBottom'
 
 export default function LikeContent() {
   const navigation = useNavigation()
@@ -47,7 +48,7 @@ export default function LikeContent() {
 
       let tempList = [...worksList, ...waterFall(res.worksInfoList).items]
       let maxH = waterFall(tempList).maxHeight
-      
+
       setWorksList(tempList)
       setMaxHeight(maxH)
     })
@@ -56,10 +57,11 @@ export default function LikeContent() {
   /**
    * 触底加载
    */
-  const onReachBottom = () => {
-    if (!hasMoreRef.current) return
-    pageNoRef.current += 1
-    getWorksList()
+  const onReachBottom = (e: any) => {
+    if (hasMoreRef.current && checkIsBottom(e)) {
+      pageNoRef.current += 1
+      getWorksList()
+    }
   }
 
   if (isEmpty) {
@@ -74,19 +76,19 @@ export default function LikeContent() {
 
   return (
     <ScrollView
-        showsVerticalScrollIndicator={false}
-        onMomentumScrollEnd={onReachBottom}
-      >
-        <View style={{ height: maxHeight }}>
-          {
-            worksList && worksList.map((item: any, index: number) => {
-              return (
-                <WorkCard key={`work-${index}`} workInfo={item} />
-              )
-            })
-          }
-        </View>
-      </ScrollView>
+      showsVerticalScrollIndicator={false}
+      onMomentumScrollEnd={(e) => onReachBottom(e)}
+    >
+      <View style={{ height: maxHeight }}>
+        {
+          worksList && worksList.map((item: any, index: number) => {
+            return (
+              <WorkCard key={`work-${index}`} workInfo={item} />
+            )
+          })
+        }
+      </View>
+    </ScrollView>
   )
 }
 

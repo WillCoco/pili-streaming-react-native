@@ -8,6 +8,7 @@ import { apiSelectGoodsTags, apiSelectGoodsList } from '../../service/api'
 import GoodsCard from './GoodsCard/GoodsCard'
 
 import { Colors } from '../../constants/Theme'
+import checkIsBottom from '../../utils/checkIsBottom'
 
 export default function SelectGoods() {
   const pageSize = 20
@@ -46,8 +47,9 @@ export default function SelectGoods() {
     const { i } = e
     if (e.i === indexRef.current) return
     goodsListRef.current = []
-    setGoodsList(goodsListRef.current)
     indexRef.current = i
+    pageNoRef.current = 1
+    setGoodsList(goodsListRef.current)
     getGoodsList(tags[i].cat_id)
   }
 
@@ -75,10 +77,11 @@ export default function SelectGoods() {
   /**
    * 下拉触底
    */
-  const onReachBottom = () => {
-    if (!hasMoreRef.current) return
-    pageNoRef.current += 1
-    getGoodsList(tags[indexRef.current].cat_id)
+  const onReachBottom = (e: any) => {
+    if (hasMoreRef.current && checkIsBottom(e)) {
+      pageNoRef.current += 1
+      getGoodsList(tags[indexRef.current].cat_id)
+    }
   }
 
   return (
@@ -97,7 +100,7 @@ export default function SelectGoods() {
             <ScrollView
               tabLabel={item.name}
               key={`tag-${index}`}
-              onMomentumScrollEnd={onReachBottom}
+              onMomentumScrollEnd={(e) => onReachBottom(e)}
             >
               {
                 goodsList && goodsList.map((item: any, index: number) => {

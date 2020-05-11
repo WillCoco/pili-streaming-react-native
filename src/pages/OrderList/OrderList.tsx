@@ -8,6 +8,7 @@ import Toast from 'react-native-tiny-toast'
 
 import OrderItem from './OrderItem/OrderItem'
 import pxToDp from '../../utils/px2dp'
+import checkIsBottom from '../../utils/checkIsBottom'
 
 export default function OrderList() {
   const navigation = useNavigation()
@@ -84,7 +85,7 @@ export default function OrderList() {
 
       console.log('获取订单列表', res)
 
-      const totalPage = Math.ceil(res.count / pageSize)
+      const totalPage = Math.ceil(res.total / pageSize)
 
       hasMoreRef.current = pageNoRef.current < totalPage
 
@@ -135,7 +136,7 @@ export default function OrderList() {
     console.log(id)
     apiCancelOrder({ orderId: id }).then(res => {
       Toast.showSuccess('已取消该订单')
-      getOrderList(activeIndex)
+      getOrderList(indexRef.current)
     })
   }
 
@@ -194,14 +195,10 @@ export default function OrderList() {
   /**
    * 触底加载
    */
-  const onReachBottom = () => {
-    if (!hasMoreRef.current) return 
-    pageNoRef.current += 1
-
-    if (activeIndex === 5) {
-      getReturnOrderList()
-    } else {
-      getOrderList(activeIndex)
+  const onReachBottom = (e: any) => {
+    if (hasMoreRef.current && checkIsBottom(e)) {
+      pageNoRef.current += 1
+      indexRef.current === 5 ? getReturnOrderList() : getOrderList(indexRef.current)
     }
   }
 
@@ -223,7 +220,7 @@ export default function OrderList() {
               tabLabel={item}
               style={{ padding: pxToDp(20) }}
               showsVerticalScrollIndicator={false}
-              onMomentumScrollEnd={onReachBottom}
+              onMomentumScrollEnd={(e) => onReachBottom(e)}
             >
               {
                 orderList.map((_item: any, _index: number) => {

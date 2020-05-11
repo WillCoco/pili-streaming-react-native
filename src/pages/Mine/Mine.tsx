@@ -12,6 +12,7 @@ import Account from './Account/Account'
 import Banner from './Banner/Banner'
 import GoodsList from './GoodsList/GoodsList'
 import ToolBar from './ToolBar/ToolBar'
+import checkIsBottom from '../../utils/checkIsBottom'
 
 function Mine(props) {
   const navigation = useNavigation()
@@ -76,16 +77,18 @@ function Mine(props) {
   /**
    * 触底加载
    */
-  const onReachBottom = () => {
-    if (!hasMoreRef.current) return
-    pageNoRef.current += 1
-    getGoodsList()
+  const onReachBottom = (e: any) => {
+    if (hasMoreRef.current && checkIsBottom(e)) {
+      pageNoRef.current += 1
+      getGoodsList()
+    }
   }
 
   return (
     <ScrollView
       style={styles.container}
-      onMomentumScrollEnd={onReachBottom}
+      showsVerticalScrollIndicator={false}
+      onMomentumScrollEnd={(e) => onReachBottom(e)}
     >
       {/* 头部区域 */}
       <Header />
