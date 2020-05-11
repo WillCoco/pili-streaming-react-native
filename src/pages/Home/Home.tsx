@@ -2,12 +2,12 @@ import React, { useEffect, useState, useRef } from 'react'
 import {
   View,
   Text,
-  Image, 
+  Image,
   StyleSheet,
-  ScrollView, 
-  PixelRatio, 
-  RefreshControl, 
-  ImageBackground, 
+  ScrollView,
+  PixelRatio,
+  RefreshControl,
+  ImageBackground,
   TouchableWithoutFeedback
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
@@ -33,6 +33,7 @@ import GoodsCard from '../../components/GoodsCard/GoodsCard'
 import GoodsCardRow from '../../components/GoodsCardRow/GoodsCardRow'
 import CardTitle from '../../components/CardTitle/CardTitle'
 import withPage from '../../components/HOCs/withPage'
+import checkIsBottom from '../../utils/checkIsBottom'
 
 
 function Home(props: HomeProps) {
@@ -113,10 +114,11 @@ function Home(props: HomeProps) {
   /**
    * 触底加载
    */
-  const onReachBottom = () => {
-    if (!hasMoreRef.current) return
-    pageNoRef.current += 1
-    getRecommendGoodsList(false)
+  const onReachBottom = (e: any) => {
+    if (hasMoreRef.current && checkIsBottom(e)) {
+      pageNoRef.current += 1
+      getRecommendGoodsList(false)
+    }
   }
 
   /**
@@ -227,7 +229,7 @@ function Home(props: HomeProps) {
               tabLabel={item.name}
               key={`tab-${index}`}
               showsVerticalScrollIndicator={false}
-              onMomentumScrollEnd={onReachBottom}
+              onMomentumScrollEnd={(e) => onReachBottom(e)}
               refreshControl={
                 <RefreshControl
                   refreshing={loading}
