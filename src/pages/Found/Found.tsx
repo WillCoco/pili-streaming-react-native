@@ -1,8 +1,18 @@
-import React, { useState, useEffect } from 'react'
-import { ScrollView, Text, View, StyleSheet, TouchableWithoutFeedback, Animated, Image } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { apiGetWorks } from '../../service/api'
+import React, { useState, useEffect, useRef } from 'react'
+import {
+  View,
+  Image,
+  Animated,
+  ScrollView,
+  StyleSheet,
+  RefreshControl,
+  TouchableOpacity,
+  TouchableWithoutFeedback
+} from 'react-native'
+import { useNavigation, useIsFocused } from '@react-navigation/native'
 import { connect } from 'react-redux'
+import { apiGetWorks } from '../../service/api'
+
 import waterFall from '../../utils/waterFall'
 import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
@@ -12,23 +22,38 @@ import WorkCard from '../../components/WorkCard/WorkCard'
 
 function Found(props: any) {
   const navigation = useNavigation()
+  const isFocused = useIsFocused()
   const pageSize = 20
+  let pageNoRef = useRef(1)
+  let hasMoreRef = useRef(true)
   const { isLogin } = props
   const [sort, setSort] = useState(0)
-  const [pageNo, setPageNo] = useState(1)
   const [workList, setWorkList] = useState([])
   const [maxHeight, setMaxHeight] = useState(0)
   const [showMask, setShowMask] = useState(false)
+  const [loading, setLoading] = useState(false)
   const rotateAnim = new Animated.Value(0)
 
   useEffect(() => {
-    // navigation.addListener('focus', () => {
-    getFoundList()
-    // })
+    getFoundList(false)
+    console.log(pageNoRef)
   }, [])
 
-  const getFoundList = () => {
-    const params = { page: pageNo, pageSize, sort }
+  useEffect(() => {
+    if (!isFocused) setShowMask(false)
+  }, [isFocused])
+
+  /**
+   * 加载发现数据
+   * @param isPullDown 是否是下拉刷新
+   */
+  const getFoundList = (isPullDown: boolean) => {
+    const params = {
+      page: pageNoRef.current,
+      pageSize: pageSize,
+      sort: 0
+    }
+
     apiGetWorks(params).then((res: any) => {
       console.log('发现数据', res)
       res.worksInfoList.forEach((item: any) => {
@@ -36,8 +61,14 @@ function Found(props: any) {
         item.imageHeight = item.worksMoreInfo.imageHeight
       })
 
-      setWorkList(waterFall(res.worksInfoList).items)
-      setMaxHeight(waterFall(res.worksInfoList).maxHeight)
+      let tempList = [...workList, ...waterFall(res.worksInfoList).items]
+      let maxH = waterFall(tempList).maxHeight
+
+      const totalPage = Math.ceil(res.totalCount / pageSize)
+
+      hasMoreRef.current = pageNoRef.current < totalPage
+      setWorkList(isPullDown ? waterFall(res.worksInfoList).items : tempList)
+      setMaxHeight(isPullDown ? waterFall(res.worksInfoList).maxHeight : maxH)
     })
   }
 
@@ -49,13 +80,35 @@ function Found(props: any) {
     }
   }
 
-  const publishWork = (type: string) => {
-    navigation.push('PublishWork', { type })
+  /**
+   * 下拉刷新
+   */
+  const onPullDownRefresh = () => {
+    pageNoRef.current = 1
+    getFoundList(true)
+  }
+
+  /**
+   * 触底加载
+   */
+  const onReachBottom = () => {
+    if (!hasMoreRef.current) return
+    pageNoRef.current += 1
+    getFoundList(false)
   }
 
   return (
     <View>
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        onMomentumScrollEnd={onReachBottom}
+        refreshControl={
+          <RefreshControl
+            refreshing={loading}
+            onRefresh={onPullDownRefresh}
+          />
+        }
+      >
         <View style={{ height: maxHeight }}>
           {
             workList && workList.map((item: any, index: number) => {
@@ -70,13 +123,17 @@ function Found(props: any) {
 
       <View style={styles.addContainer}>
         {
-          showMask && <TouchableWithoutFeedback onPress={() => publishWork('video')}>
+          showMask && <TouchableWithoutFeedback
+            onPress={() => navigation.push('PublishWork', { type: 'video' })}
+          >
             <Image source={require('../../assets/works-image/video.png')} style={styles.mediaIcon} />
           </TouchableWithoutFeedback>
         }
 
         {
-          showMask && <TouchableWithoutFeedback onPress={() => publishWork('photo')}>
+          showMask && <TouchableWithoutFeedback
+            onPress={() => navigation.push('PublishWork', { type: 'photo' })}
+          >
             <Image source={require('../../assets/works-image/photo.png')} style={styles.mediaIcon} />
           </TouchableWithoutFeedback>
         }
@@ -88,11 +145,10 @@ function Found(props: any) {
             </Animated.View>
           </TouchableWithoutFeedback>
         }
-
       </View>
 
       {
-        showMask && <View style={styles.mask}></View>
+        showMask && <TouchableOpacity style={styles.mask} onPress={() => setShowMask(false)} />
       }
     </View>
   )

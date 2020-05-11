@@ -64,9 +64,9 @@ export default function OrderList() {
     const params = index ? { pageNo, pageSize, orderStatus: index } : { pageNo, pageSize }
 
     apiGetOrderList(params).then(res => {
+      Toast.hide(loading)
       console.log('获取订单列表', res)
       setOrderList(res.records)
-      Toast.hide(loading)
     })
   }
 
