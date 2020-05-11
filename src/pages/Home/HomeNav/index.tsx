@@ -17,8 +17,7 @@ const navList = [
   }, {
     text: '特卖专区',
     icon: require('../../../assets/home-image/icon_sale.png'),
-    // path: 'Sale'
-    path: 'Message'
+    path: 'Sale'
   }, {
     text: '产业带',
     icon: require('../../../assets/home-image/icon_belt.png'),
