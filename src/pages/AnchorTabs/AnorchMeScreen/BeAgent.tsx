@@ -27,6 +27,8 @@ import Toast from 'react-native-tiny-toast'
 import ButtonOutLine from '../../../components/Buttons/ButtonOutLine'
 import { useNavigation } from '@react-navigation/native'
 import pxToDp from '../../../utils/px2dp'
+import { apiSandCreateOrder } from '../../../service/api'
+import {useSelector} from 'react-redux';
 
 const BeAgent = props => {
   const {navigate} = useNavigation()
@@ -59,25 +61,33 @@ const BeAgent = props => {
     Clipboard.setString(props.wxNumber)
     Toast.show('复制成功')
   }
-  
-  /**
-   * 切换 TAB
-   */
-  const changeTab = (e: any) => {
-    console.log(e)
-    Toast.show('切换成功')
-    if (e.i !== 0) return
-    // return false
-    // setAgentTab(agentTab[e])
-  }
 
   /**
    * 去缴费
    */
   const toPay = () => {
-    const URL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8&data={"head":{"accessType":"1","plMid":"","method":"sandpay.trade.orderCreate","productId":"00002000","mid":"S4514032","channelType":"07","reqTime":"20200508183504","version":"1.0"},"body":{"subject":"杉德收银台统测试订单标题","payModeList":"[alipay]","frontUrl":"http://61.129.71.103:8003/jspsandpay/payReturn.jsp","terminalId":"shzdbh001","body":"{\\"mallOrderCode\\":\\"mall00000000001\\",\\"receiveAddress\\":\\"上海市徐汇区田林路487号宝石园22号2楼\\",\\"goodsDesc\\":\\"杉德卡1张\\"}","storeId":"shmdbh001","userId":"C0908992","merchExtendParams":"shkzcs","clearCycle":"0","extend":"kzy","totalAmount":"000000000012","txnTimeOut":"20200509183504","bizExtendParams":"yykzcs","notifyUrl":"http://127.0.0.1/WebGateway/stateChangeServlet","orderCode":"20200508183504","operatorId":"czybh001","accountingMode":"02","riskRateInfo":"fkxxy"}}&signType=01&sign=CkAspqeYrEdPRBf9zoPebbls1vJwPNfSI%2B4LXjfKbN6WJDByFYCxV2jQR3sXADlxvuTCBzCSepF0NnSbpECFqJgKVQRTTev69xJt8hG2rsiRB6wTgafznTvePkrqmOB54hzo%2FI2XTCTX4rCt2tttd3qEBo%2Bp5TjZRa0s6%2FGs%2FiSqNSD4RhBwqSJkMHAh6Rv%2BYouw9XkDgHVCJ4iMrhX%2F%2FsUNsmwtjIh6vSnpfM7BdVzsPgCry3K2h%2BQTeH0DKYBxQICKtdkQHMZCn3Bw7oJ4U4clHv5gIwDH3T2K8k78wnUPTaTEhyoK%2Fut9ofsmpbKVHLGgk91AfJCPpWjdL1BATg%3D%3D&extend=kzy'
 
-    navigate('PayWebView', {url: URL})
+    const baseURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
+
+    let URL = baseURL
+
+    // const userId = useSelector((state) => state?.publicData?.statusBarHeight)
+    const userId = useSelector((state) => state)
+    console.log(userId)
+
+    apiSandCreateOrder({
+      "goodsDesc": "4321532153215213",
+      "orderSn": "stri23532153253215123ng",
+      "receivedAddress": "fsdafsa",
+      "totalPay": "1",
+      "userId": "73050446"
+    }).then((res: any) => {
+      for (let item in res) {
+        URL += '&' + item + '=' + res[item]
+      }
+      console.log(URL)
+    // navigate('PayWebView', {url: URL})
+    })
   }
 
   /**

@@ -6,6 +6,7 @@ import { get, post } from './fetch'
 
 const HOST_PHP = __DEV__ ? 'http://129.211.138.215' : ''
 const HOST_JAVA = __DEV__ ? 'http://129.211.138.215:7000' : ''
+const SHANDE_HOST_JAVA = __DEV__ ? 'http://129.211.104.84:7001' : ''
 
 // http://129.211.138.215/
 
@@ -171,3 +172,6 @@ export const apiDecryptData = (data: any) => post(`${HOST_JAVA}/miniApp/decryptD
 export const apiRegister = (data: any) => post(`${HOST_JAVA}/user/register`, data)
 // 退出
 export const apiLogout = () => get(`${HOST_JAVA}/user/logout`)
+
+// 杉德支付
+export const apiSandCreateOrder = (data: any) => postSande(`${SHANDE_HOST_JAVA}/sandpay/createOrder`, data, false)

@@ -42,7 +42,7 @@ export const get = (path: any, data: any) => {
   })
 };
 
-export const post = (path: RequestInfo, data: any) => {
+export const post = (path: RequestInfo, data: any, onlyData: boolean = true) => {
   const { userData } = store.getState()
 
   if (userData.token) {
@@ -61,12 +61,15 @@ export const post = (path: RequestInfo, data: any) => {
       return JSON.parse(r2)
     })
     .then((result: { data: unknown; }) => {
-      resolve(result.data)
+      if (onlyData) {
+        resolve(result.data)
+      } else (
+        resolve(result)
+      )
     })
     .catch((error: any) => reject(error))
   })
 } 
-
 
 /**
  * 上传
