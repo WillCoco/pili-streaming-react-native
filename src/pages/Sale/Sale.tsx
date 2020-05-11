@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { StyleSheet, ScrollView } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import Toast from 'react-native-tiny-toast'
@@ -14,7 +14,8 @@ export default function Sale() {
   const navigation = useNavigation()
   const route = useRoute()
   const pageSize = 20
-  const [pageNo, setPageNo] = useState(1)
+  let pageNoRef = useRef(1)
+  let hasMoreRef = useRef(true)
   const [headerGoodsList, setHeaderGoodsList] = useState([])
   const [goodsList, setGoodsList] = useState([])
   const [isReady, setIsReady] = useState(false)
@@ -43,10 +44,8 @@ export default function Sale() {
   /**
    * 获取商品列表
    */
-  const getGoodsList = async () => {
+  const getGoodsList = () => {
     const { type } = route.params
-
-    let result: any
 
     if (type === 'seckill') {
       setSeckillQuantum()
@@ -55,18 +54,28 @@ export default function Sale() {
 
     let loading = Toast.showLoading('')
 
-    apiSaleList({ pageNo, pageSize }).then(res => {
+    apiSaleList({
+      pageNo: pageNoRef.current,
+      pageSize
+    }).then((res: any) => {
       console.log(res, '特卖专区')
+      Toast.hide(loading)
 
-      if (res.list.length) {
+      if (!res.count) return
+
+      const totalPage = Math.ceil(res.count / pageSize)
+
+      hasMoreRef.current = pageNoRef.current < totalPage
+
+      if (pageNoRef.current === 1) {
         setHeaderGoodsList(res.list.slice(0, 2))
 
-        if (res.list.length > 2) {
+        if (res.count > 2) {
           setGoodsList(res.list.slice(2))
         }
+      } else {
+        setGoodsList([...goodsList, ...res,list])
       }
-
-      Toast.hide(loading)
     })
   }
 
@@ -105,17 +114,29 @@ export default function Sale() {
       ])
     }
 
-    apiSeckillList({ pageNo, pageSize, time_quantum: timeQuantum }).then(res => {
+    apiSeckillList({
+      pageNo: pageNoRef.current,
+      pageSize,
+      time_quantum: timeQuantum
+    }).then((res: any) => {
       console.log(res, '限时秒杀')
-      if (res.list.length) {
+      Toast.hide(loading)
+
+      if (!res.count) return
+
+      const totalPage = Math.ceil(res.count / pageSize)
+
+      hasMoreRef.current = pageNoRef.current < totalPage
+
+      if (pageNoRef.current === 1) {
         setHeaderGoodsList(res.list.slice(0, 2))
 
-        if (res.list.length > 2) {
+        if (res.count > 2) {
           setGoodsList(res.list.slice(2))
         }
+      } else {
+        setGoodsList([...goodsList, ...res,list])
       }
-
-      Toast.hide(loading)
     })
   }
 
@@ -149,12 +170,17 @@ export default function Sale() {
     setTimeList(JSON.parse(JSON.stringify(timeList)))
     setHeaderGoodsList([])
     setGoodsList([])
+    pageNoRef.current = 1
 
     const curTime = timeList.filter(item => item.ongoing)
 
     let timeQuantum = curTime[0].time
 
-    apiSeckillList({ pageNo, pageSize, time_quantum: timeQuantum }).then(res => {
+    apiSeckillList({
+      pageNo: pageNoRef.current,
+      pageSize,
+      time_quantum: timeQuantum 
+    }).then((res: any) => {
       console.log(res, '限时秒杀')
       if (res.list.length) {
         setHeaderGoodsList(res.list.slice(0, 2))
@@ -166,6 +192,15 @@ export default function Sale() {
     })
   }
 
+  /**
+   * 触底加载
+   */
+  const onReachBottom = () => {
+    if (!hasMoreRef.current) return
+    pageNoRef.current += 1
+    getGoodsList()
+  }
+
 
   return (
     <ScrollView
@@ -173,6 +208,7 @@ export default function Sale() {
       onScroll={(e) => scrollPage(e)}
       scrollEventThrottle={200}
       showsVerticalScrollIndicator={false}
+      onMomentumScrollEnd={onReachBottom}
     >
       <Header
         goodsList={headerGoodsList}

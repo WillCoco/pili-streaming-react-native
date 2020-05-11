@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { StyleSheet, ScrollView } from 'react-native'
 import { useNavigation, useIsFocused } from '@react-navigation/native'
 import { connect } from 'react-redux'
@@ -19,12 +19,16 @@ function Mine(props) {
   const { isLogin } = props
   const focused = useIsFocused()
   const [orderCount, setOrderCount] = useState({})
-  const [pageNo, setPageNo] = useState(1)
   const [goodsList, setGoodsList] = useState([])
+  let pageNoRef = useRef(1)
+  let hasMoreRef = useRef(true)
+
+  useEffect(() => {
+    getGoodsList()
+  }, [])
 
   useEffect(() => {
     if (focused) {
-      getGoodsList()
       getUserInfo()
       getOrderCount()
     }
@@ -34,9 +38,14 @@ function Mine(props) {
    * 加载推荐商品
    */
   const getGoodsList = () => {
-    apiGetIndexGoodsList({ pageNo, pageSize }).then(res => {
+    apiGetIndexGoodsList({
+      pageNo: pageNoRef.current,
+      pageSize
+    }).then((res: any) => {
       console.log('推荐商品', res)
-      setGoodsList(res.list)
+      const totalPage = Math.ceil(res.count / pageSize)
+      hasMoreRef.current = pageNoRef.current < totalPage
+      setGoodsList([...goodsList, ...res.list])
     })
   }
 
@@ -64,12 +73,20 @@ function Mine(props) {
     })
   }
 
-  // if (true) {
-  //   return <></>
-  // }
+  /**
+   * 触底加载
+   */
+  const onReachBottom = () => {
+    if (!hasMoreRef.current) return
+    pageNoRef.current += 1
+    getGoodsList()
+  }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      onMomentumScrollEnd={onReachBottom}
+    >
       {/* 头部区域 */}
       <Header />
       {/* 订单 */}

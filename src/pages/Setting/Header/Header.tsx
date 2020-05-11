@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Colors } from '../../../constants/Theme'
 import { Ionicons } from '@expo/vector-icons'
 
-function Header(props) {
+function Header(props: { userInfo: any }) {
   const { userInfo } = props
   const [editable, setEditable] = useState(false)
   const [nickName, setNickName] = useState('')
@@ -60,7 +60,8 @@ const styles = StyleSheet.create({
     height: pxToDp(60),
     fontSize: pxToDp(32),
     textAlign: 'center',
-    color: Colors.whiteColor
+    color: Colors.whiteColor,
+    padding: 0
   },
   editIcon: {
     width: pxToDp(28),

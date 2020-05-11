@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { View, Text, ScrollView, StyleSheet, ImageBackground } from 'react-native'
 import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native'
 import Toast from 'react-native-tiny-toast'
@@ -17,8 +17,9 @@ export default function Brand() {
 
   const pageSize = 20
   const pageType = route?.params?.type
+  let pageNoRef = useRef(1)
+  let hasMoreRef = useRef(true)
 
-  const [pageNo, setPageNo] = useState(1)
   const [brandList, setBrandList] = useState([])
 
   navgation.setOptions({
@@ -42,17 +43,26 @@ export default function Brand() {
     const loading = Toast.showLoading('')
     let result: any = {}
 
+    const params = {
+      pageNo: pageNoRef.current,
+      pageSize
+    }
+
     if (pageType === 'default') {
-      result = await apiBrandList({ pageNo, pageSize })
+      result = await apiBrandList(params)
     } else {
-      result = await apiGetAttention({ pageNo, pageSize })
+      result = await apiGetAttention(params)
     }
 
     Toast.hide(loading)
 
+    const totalPage = Math.ceil(result.count / pageSize)
+
+    hasMoreRef.current = pageNoRef.current < totalPage
+
     console.log(result, '品牌列表')
 
-    setBrandList(result.list)
+    setBrandList([...brandList, ...result.list])
   }
 
   /**
@@ -76,7 +86,6 @@ export default function Brand() {
           setBrandList(JSON.parse(JSON.stringify(res.list)))
         })
       } else {
-        console.log(1)
         brandList.forEach((item: any, index: number) => {
           if (item.brand_id === brand_id) {
             brandList.splice(index, 1)
@@ -86,6 +95,15 @@ export default function Brand() {
         setBrandList(JSON.parse(JSON.stringify(brandList)))
       }
     })
+  }
+
+  /**
+   * 触底加载
+   */
+  const onReachBottom = () => {
+    if (!hasMoreRef.current) return
+    pageNoRef.current += 1
+    getBrandList()
   }
 
   if ( pageType === 'focus' && !brandList.length) {
@@ -99,7 +117,9 @@ export default function Brand() {
   }
 
   return (
-    <ScrollView>
+    <ScrollView
+      onMomentumScrollEnd={onReachBottom}
+    >
       {
         brandList && brandList.map((item, index) => {
           return (
