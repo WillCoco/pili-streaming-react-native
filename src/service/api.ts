@@ -174,4 +174,4 @@ export const apiRegister = (data: any) => post(`${HOST_JAVA}/user/register`, dat
 export const apiLogout = () => get(`${HOST_JAVA}/user/logout`)
 
 // 杉德支付
-export const apiSandCreateOrder = (data: any) => postSande(`${SHANDE_HOST_JAVA}/sandpay/createOrder`, data, false)
+export const apiSandCreateOrder = (data: any) => post(`${SHANDE_HOST_JAVA}/sandpay/createOrder`, data, false)

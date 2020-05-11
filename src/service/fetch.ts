@@ -15,7 +15,7 @@ let headers = {
   'authentication': ''
 }
 
-export const get = (path: any, data: any) => {
+export const get = (path: any, data?: any) => {
   const { userData } = store.getState()
 
   if (userData.token) {

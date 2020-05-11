@@ -28,14 +28,20 @@ import ButtonOutLine from '../../../components/Buttons/ButtonOutLine'
 import { useNavigation } from '@react-navigation/native'
 import pxToDp from '../../../utils/px2dp'
 import { apiSandCreateOrder } from '../../../service/api'
-import {useSelector} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux'
+import { setUserInfo } from '../../../actions/user'
+import { apiGetUserData } from '../../../service/api'
 
 const BeAgent = props => {
   const {navigate} = useNavigation()
   const {goBack} = useNavigation()
   const [agree, setAgree] = React.useState(false) // 是否同意
   const [pass, setPass] = React.useState(false) // 是否符合升级条件
-  // const agentTab = ['初级经纪人', '中级经纪人', '高级经纪人']
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    getUserInfo()
+  }, [])
 
   // 经纪人等级
   const agentList = [
@@ -63,24 +69,36 @@ const BeAgent = props => {
   }
 
   /**
+   * 获取用户信息
+   */
+  const getUserInfo = () => {
+
+    apiGetUserData().then((res: any) => {
+      console.log('获取用户信息', res)
+      dispatch(setUserInfo(res))
+    })
+  }
+
+  /**
    * 去缴费
    */
+  const userId = useSelector(state => state?.userData?.userInfo?.userId)
+  const state = useSelector(state => state)
   const toPay = () => {
+    apiGetUserData().then((res: any) => {
+      console.log('获取用户信息', res)
+      dispatch(setUserInfo(res))
+    })
 
     const baseURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
-
     let URL = baseURL
-
-    // const userId = useSelector((state) => state?.publicData?.statusBarHeight)
-    const userId = useSelector((state) => state)
-    console.log(userId)
 
     apiSandCreateOrder({
       "goodsDesc": "4321532153215213",
       "orderSn": "stri23532153253215123ng",
       "receivedAddress": "fsdafsa",
       "totalPay": "1",
-      "userId": "73050446"
+      "userId": userId
     }).then((res: any) => {
       for (let item in res) {
         URL += '&' + item + '=' + res[item]
