@@ -13,6 +13,8 @@ export default function SelectGoods() {
   const pageSize = 20
   let pageNoRef = useRef(1)
   let hasMoreRef = useRef(true)
+  let indexRef = useRef(0)
+  let goodsListRef = useRef([])
   const navigation = useNavigation()
   const [tags, setTags] = useState([])
   const [goodsList, setGoodsList] = useState([])
@@ -34,7 +36,6 @@ export default function SelectGoods() {
       console.log('精选好物标签', res)
       setTags(res.category)
       getGoodsList(res.category[0].cat_id)
-      setActiveIndex(res.category[0].cat_id)
     })
   }, [])
 
@@ -42,21 +43,18 @@ export default function SelectGoods() {
    * 切换 TAB
    */
   const changeTab = (e: any) => {
-    if (!tags.length) return
-
-    let { i } = e
-
-    setActiveIndex(tags[i].cat_id)
-
-    getGoodsList(tags[i].cat_id, true)
+    const { i } = e
+    if (e.i === indexRef.current) return
+    goodsListRef.current = []
+    setGoodsList(goodsListRef.current)
+    indexRef.current = i
+    getGoodsList(tags[i].cat_id)
   }
 
   /**
    * 获取商品列表
    */
-  const getGoodsList = (id: number, changeTab: boolean) => {
-    if (changeTab) setGoodsList([])
-
+  const getGoodsList = (id: number) => {
     const params = {
       pageNo: pageNoRef.current,
       pageSize,
@@ -65,11 +63,11 @@ export default function SelectGoods() {
 
     apiSelectGoodsList(params).then((res: any) => {
       console.log('精选好物商品', res)
-      if (res.list.length) {
+      if (res.count) {
         const totalPage = Math.ceil(res.count / pageSize)
         hasMoreRef.current = pageNoRef.current < totalPage
-        
-        setGoodsList([...goodsList, ...res.list])
+        goodsListRef.current = [...goodsListRef.current, ...res.list]
+        setGoodsList(goodsListRef.current)
       }
     })
   }
@@ -80,7 +78,7 @@ export default function SelectGoods() {
   const onReachBottom = () => {
     if (!hasMoreRef.current) return
     pageNoRef.current += 1
-    getGoodsList(activeIndex)
+    getGoodsList(tags[indexRef.current].cat_id)
   }
 
   return (

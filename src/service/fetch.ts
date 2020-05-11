@@ -15,7 +15,7 @@ let headers = {
   'authentication': ''
 }
 
-export const get = (path: any, data?: any) => {
+export const get = (path: any, data?: any, onlyData: boolean = true) => {
   const { userData } = store.getState()
 
   if (userData.token) {
@@ -36,7 +36,11 @@ export const get = (path: any, data?: any) => {
       return r2 && JSON.parse(r2)
     })
     .then((result: { data: any; }) => {
-      resolve(result && result.data)
+      if (onlyData) {
+        resolve(result.data)
+      } else (
+        resolve(result)
+      )
     })
     .catch((error: any) => reject(error))
   })
