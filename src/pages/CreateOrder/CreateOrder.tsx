@@ -12,8 +12,9 @@ import ShopCard from './ShopCard/ShopCard'
 import ActionSheet from '../../components/ActionSheet/ActionSheet'
 import CouponList from './CouponList/CouponList'
 
-import { apiAddrList, apiGetOrderDiscountDetail } from '../../service/api'
+import { apiAddrList, apiGetOrderDiscountDetail, apiCreateOrder } from '../../service/api'
 import formatSinglePrice from '../../utils/formatGoodsPrice'
+import Toast from 'react-native-tiny-toast'
 
 function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] }) => void; choosedAddress: {} }) {
   const route = useRoute()
@@ -86,7 +87,7 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
 
     apiGetOrderDiscountDetail(req).then((res: any) => {
       console.log('获取订单优惠信息', res)
-      
+
 
       tempOrderList.forEach(item => {
         item.shop_info.totalPrice = 0
@@ -152,7 +153,7 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
       }
     })
 
-    setTempOrderList(tempOrderList)
+    setTempOrderList(JSON.parse(JSON.stringify(tempOrderList)))
   }
 
   /**
@@ -176,7 +177,7 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
   const chooseCoupon = (shopId: number, couponId: number) => {
     tempOrderList.forEach((item: any) => {
       if (item.shop_info.shop_id === shopId) {
-        item.shop_info.couponList.forEach((_item: any)=> {
+        item.shop_info.couponList.forEach((_item: any) => {
           _item.isChoosed = false
           if (_item.id === couponId) {
             _item.isChoosed = true
@@ -217,7 +218,66 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
    * 提交订单
    */
   const submitOrder = () => {
-    console.log('提交订单')
+    const addressInfo = Object.keys(props.choosedAddress).length ? props.choosedAddress : defaultAddress
+
+    let shopReqs: {
+      deliveryType: number // 配送方式
+      remark: any // 备注
+      shopId: any // 购物车 ID
+      orderGoodsReqs: any
+      userCouponsId: string
+    }[] = []
+    let cartIds: any[] = []
+    let userCouponsId = ''
+
+    if (!addressInfo.address_id) {
+      Toast.show('请选择收货地址', {
+        position: 0
+      })
+      return
+    }
+
+    const loading = Toast.showLoading('')
+
+    tempOrderList.forEach((item: any, index: number) => {
+      item.orderGoodsReqs = []
+
+      item.selectedGoods.forEach((_item: any, _index: number) => {
+        item.orderGoodsReqs.push({
+          goodsNum: _item.goods_num,  // 商品数量
+          skuId: ~~_item.sku_id  // 规格 id
+        })
+
+        cartIds.push(_item.cart_id)
+      })
+
+      if (item.chooseCoupon && item.chooseCoupon.id > 0) {
+        userCouponsId = item.chooseCoupon.id
+      }
+
+      shopReqs[index] = {
+        deliveryType: 0,  // 配送方式
+        remark: tempOrderList[index].shop_info.memo,  // 备注
+        shopId: tempOrderList[index].shop_info.shop_id,  // 购物车 ID
+        orderGoodsReqs: tempOrderList[index].orderGoodsReqs,
+        userCouponsId
+      }
+    })
+
+    let params = {
+      cartIds,
+      payType: 2,  //  支付方式
+      shopReqs,
+      userAddressId: defaultAddress.address_id
+    }
+
+    apiCreateOrder(params).then((res: any) => {
+      Toast.hide(loading)
+
+      const payURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
+
+      console.log('提交订单', res)
+    })
   }
 
   return (
@@ -234,7 +294,7 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
           })
         }
         {/* 支付 */}
-        <View style={styles.payContainer}>
+        {/* <View style={styles.payContainer}>
           <View style={styles.payItem}>
             <Image source={require('../../assets/order-image/pay_icon.png')} style={styles.payIcon} />
             <Text style={styles.payText}>支付方式</Text>
@@ -243,7 +303,7 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
             <Text style={[styles.payText, { marginRight: pxToDp(30) }]}>微信支付</Text>
             <Ionicons size={20} name='ios-arrow-forward' color={Colors.darkGrey} />
           </View>
-        </View>
+        </View> */}
       </ScrollView>
       {/* 提交订单 */}
       <View style={styles.submitBar}>

@@ -35,6 +35,7 @@ interface MsgRowProps {
 const MsgRow = (props: MsgRowProps) : any =>  {
 
   const data = (props.dataAdapter ? props.dataAdapter(props.data) : props.data) || {}
+  console.log(data, '1123123123')
 
    /**
    * 用户等级图片
@@ -52,11 +53,18 @@ const MsgRow = (props: MsgRowProps) : any =>  {
   }, [data.isFollowed]);
 
 
-  const backgroundColor = React.useMemo(() => {
+  let backgroundColor = React.useMemo(() => {
     if (data.type === MessageType.enter) {
       return 'rgba(245,113,185,0.5)';
     }
     return Colors.opacityDarkBg;
+  }, [data.type]);
+  
+  let colon = React.useMemo(() => {
+    if (data.type === MessageType.roomMessage) {
+      return ': ';
+    }
+    return ''
   }, [data.type]);
 
   return (
@@ -65,13 +73,15 @@ const MsgRow = (props: MsgRowProps) : any =>  {
       onPress={() => props.onPress(props.data)}
       style={StyleSheet.flatten([styles.wrapper, {backgroundColor}, props.wrapperStyle])}
     >
-      <Image
-        style={styles.userLvImg}
-        source={userLvImg}
-        resizeMode="contain"
-      />
+      <View style={styles.imgWrapper}>
+        <Image
+          style={styles.userLvImg}
+          source={userLvImg}
+          resizeMode="contain"
+        />
+      </View>
       <PrimaryText style={styles.text} color="white">
-        <PrimaryText style={styles.userName} color="white">{data.name || '游客'}:  </PrimaryText>
+        <PrimaryText style={styles.userName} color="white">{data.name || '游客'}{colon}</PrimaryText>
         {data.text}
       </PrimaryText>
     </TouchableOpacity>
@@ -92,18 +102,25 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   userLvImg: {
-    height: 16,
-    width: 36,
+    height: scale(16),
+    width: scale(36),
     marginRight: 4,
-    marginTop: 1,
+    paddingTop: scale(1),
     alignSelf: 'flex-start'
   },
+  imgWrapper: {
+    // borderWidth: 1,
+    // borderColor: 'white'
+  },
   text: {
-    flex: 1
+    flex: 1,
+    // height: 20,
+    // lineHeight: 20,
   },
   userName: {
     color: Colors.yellowColor,
-    lineHeight: scale(20),
+    // height: 20,
+    // lineHeight: 20,
   },
 })
 

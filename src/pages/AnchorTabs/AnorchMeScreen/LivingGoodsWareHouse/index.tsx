@@ -17,16 +17,70 @@ import withPage from '../../../../components/HOCs/withPage';
 import PagingList from '../../../../components/PagingList';
 import {vw} from '../../../../utils/metric';
 import {Colors} from '../../../../constants/Theme';
-import { pad, radio } from '../../../../constants/Layout';
+import {pad, radio} from '../../../../constants/Layout';
 import NavBar from '../../../../components/NavBar';
 import WarehouseRow from './WarehouseRow';
 import CheckBox from '../../../../components/CheckBox';
 
 const ROW_HEIGHT = 120;
 
+const emptyList: [] = [];
+
 const LivingGoodsWareHouse = (props: any) =>  {
   const {navigate, goBack} = useNavigation();
   const dispatch = useDispatch();
+
+  /**
+   * 原始数据
+   */
+  const [dataList, setDataList]: [Array<any>, any] = React.useState(emptyList);
+
+  /**
+   * 过滤出选中的, 且是未添加到店铺的
+   */
+  const canAddFilter = (list: Array<any>) => {
+    return list.filter(o => o.isChecked && o.canAdd) // todo: 字段修正
+  }
+
+  /**
+   * 过滤出选中的
+   */
+  const checkedFilter = (list: Array<any>) => {
+    return list.filter(o => o.isChecked) // todo: 字段修正
+  }
+
+  /**
+   * 选中的列表
+   */
+  const checkedList = React.useMemo(() => {
+    return checkedFilter(dataList)
+  }, [dataList]);
+
+  /**
+   * 现在是否全选
+   */
+  const isCheckedAll = React.useMemo(() => {
+    return !dataList.find(o => (!o.isChecked)) // todo: 标识
+  }, [dataList]);
+
+  /**
+   * 待添加店铺的列表
+   */
+  const canAddShopList = React.useMemo(() => {
+    return canAddFilter(dataList)
+  }, [dataList]);
+
+  /**
+   * 是否可以选中添加店铺
+   */
+  const canAddShop = React.useMemo(() => {
+    return canAddShopList && canAddShopList.length > 0;
+  }, [canAddShopList]);
+
+  /**
+   * 是否可选中删除
+   */
+  const canRemove = checkedList && checkedList.length > 0;
 
   React.useEffect(() => {
     // let loading: any;
@@ -42,22 +96,20 @@ const LivingGoodsWareHouse = (props: any) =>  {
     }
   }, [])
 
-  // 
-  // const warehouseGoods = useSelector(state => state?.shop?.warehouseGoods) || [];
-
   /**
    * 刷新
    */
   const onRefresh = () => {
     const d = [{id: 1, canAdd: true},{id: 2}, {id: 3}];
-    const {getListData, setListData} = plist.current?.actions || {};
-    const checkList = getListData ? getListData() : undefined;
-
-    console.log(checkList, 1111)
-
-    const r = Promise.resolve({result: dataFormat(d, checkList)});
-
+    const r = Promise.resolve({result: dataFormat(d, dataList)});
     return r;
+  }
+
+  /**
+   * 更多
+   */
+  const onEndReached = () => {
+    
   }
 
   /**
@@ -93,76 +145,30 @@ const LivingGoodsWareHouse = (props: any) =>  {
     });
   }
 
-  /**
-   * 更多
-   */
-  const onEndReached = () => {
-    
-  }
-
-  /**
-   * 下拉组件实例actions
-   */
-  const plist: {current: any} = React.useRef();
 
   /**
    * 选择单个
    */
   const checkGood = (index: number) => {
-    const {getListData, setListData} = plist.current?.actions || {};
-
-    setListData((dataList: any) => {
-      const newDataList = [...dataList];
-      newDataList[index].isChecked = !newDataList[index].isChecked;
-      console.log(newDataList, 'newDataList')
-      setCanAddShopList(canAddFilter(newDataList));
-
-      const checkedList = checkedFilter(newDataList);
-      console.log(checkedList, 'checkedList')
-      const isCheckedAll = checkedList && checkedList.length === dataList.length && checkedList.length > 0;
-      setIsCheckedAll(isCheckedAll);
-      return newDataList;
-    }, )
+    const newDataList = [...dataList];
+    newDataList[index].isChecked = !newDataList[index].isChecked;
+    setDataList(newDataList);
   }
-
-  /**
-   * 现在是否全选
-   */
-  const [isCheckedAll, setIsCheckedAll] = React.useState(false);
-
-  /**
-   * 待添加店铺的列表
-   */
-  const [canAddShopList, setCanAddShopList]: Array<any> = React.useState([]);
-
-  /**
-   * 选中的列表
-   */
-  const [checkedList, setCheckedList]: Array<any> = React.useState([]);
 
   /**
    * 全选/反选
    */
   const onPressCheckAll = () => {
-    const {getListData, setListData} = plist.current?.actions || {};
-
     // 全选
     if (!isCheckedAll) {
-      const newCheckedList = getListData().map((good: any) => ({...good, isChecked: true}));
-      // 下拉组件更新数据
-      setListData(newCheckedList);
-      // 本组件更新
-      setCheckedList(newCheckedList);
-      setIsCheckedAll(true);
-      setCanAddShopList(canAddFilter(newCheckedList));
+      const newCheckedList = (dataList || emptyList).map((good: any) => ({...good, isChecked: true}));
+      setDataList(newCheckedList);
       return;
     }
 
     // 取消全选
-    const newCheckedList = getListData().map((good: any) => ({...good, isChecked: false}));
-    setListData(newCheckedList);
-    setIsCheckedAll(false);
-    setCanAddShopList(canAddFilter(newCheckedList))
+    const newCheckedList = (dataList || emptyList).map((good: any) => ({...good, isChecked: false}));
+    setDataList(newCheckedList);
   }
 
   /**
@@ -171,37 +177,6 @@ const LivingGoodsWareHouse = (props: any) =>  {
   const onPressRemove = (index) => {
     alert('移除选中' + index)
   }
-
-  /**
-   * 过滤出选中的, 且是未添加到店铺的
-   */
-  const canAddFilter = (list: Array<any>) => {
-    return list.filter(o => o.isChecked && o.canAdd) // todo: 字段修正
-  }
-
-  /**
-   * 过滤出选中的
-   */
-  const checkedFilter = (list: Array<any>) => {
-    return list.filter(o => o.isChecked) // todo: 字段修正
-  }
-
-  /**
-   * 是否可以选中添加店铺
-   */
-  const canAddShop = canAddShopList && canAddShopList.length > 0;
-
-  /**
-   * 是否可选中删除
-   */
-  const canRemove = checkedList && checkedList.length > 0;
-
-  /**
-   * 是否可以选中删除预组货
-   */
-  const canDelete = canAddShopList && canAddShopList.length > 0;
-
-  
 
   /**
    * 移除选中
@@ -233,7 +208,8 @@ const LivingGoodsWareHouse = (props: any) =>  {
         }
       />
         <PagingList
-          ref={c => plist.current = c}
+          data={dataList}
+          setData={setDataList}
           size={14}
           // initListData={warehouseGoods}
           renderItem={({item, index}: any) => {
@@ -267,12 +243,12 @@ const LivingGoodsWareHouse = (props: any) =>  {
             onPress={onPressCheckAll}
           />
           <View style={styles.bottomRightWrapper}>
-            <TouchableOpacity disabled={!canAddShop} onPress={onPressRemoveChecked}>
+            <TouchableOpacity disabled={!canAddShop} onPress={onPressAddChecked}>
               <PrimaryText color={canAddShop ? 'theme' : 'grey'}>添加店铺</PrimaryText>
             </TouchableOpacity>
             <View style={styles.strip}/>
             <TouchableOpacity disabled={!canRemove} onPress={onPressRemoveChecked}>
-              <PrimaryText color={canAddShop ? 'theme' : 'grey'}>删除</PrimaryText>
+              <PrimaryText color={canRemove ? 'theme' : 'grey'}>删除</PrimaryText>
             </TouchableOpacity>
           </View>
         </View>

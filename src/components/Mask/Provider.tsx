@@ -30,8 +30,6 @@ const MaskProvider = (props: any) =>  {
   const MaskContent = currentItem ? pickMaskContent(currentItem.type) : null;
   const maskContentProps = currentItem?.data;
 
-  console.log(MaskContent, maskContentProps, state, 1232133333333)
-
   return (
     <MaskContext.Provider value={[state, dispatch]}>
       {props.children}

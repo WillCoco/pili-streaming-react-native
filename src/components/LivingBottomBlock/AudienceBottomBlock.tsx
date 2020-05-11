@@ -11,7 +11,7 @@ import LiveMsg from '../LiveMsg';
 import {Audience as AudienceLiveToolBar} from '../LiveToolBar';
 import {pad} from '../../constants/Layout';
 import {sendRoomMessage} from '../../actions/im';
-import {RoomMessageType} from '../../reducers/im';
+import {RoomMessageType, MessageType} from '../../reducers/im';
 import Poller from '../../utils/poller';
 
 const BottomBlock = (props: any) : any =>  {
@@ -27,7 +27,7 @@ const BottomBlock = (props: any) : any =>  {
 
   // 发送消息
   const sendMessage = (text: string) => {
-    dispatch(sendRoomMessage({to: room?.groupID, description: 'roomMessage', text}));
+    dispatch(sendRoomMessage({to: room?.groupID, type: MessageType.roomMessage, text}));
   }
   
   // 喜欢
@@ -81,13 +81,13 @@ const BottomBlock = (props: any) : any =>  {
       <LiveMsg
         msgList={roomMessages}
         msgAdapter={(msg: RoomMessageType): any => {
-          const {data, description} = msg || {};
-          const {userName, text, userId} = data || {};
+          const {data} = msg || {};
+          const {userName, text, userId, type} = data || {};
           return {
             name: userName,
             id: userId,
             text,
-            type: description,
+            type,
             isFollowed: props.isFollowed, // todo: 和主播是否关注
           }
         }}

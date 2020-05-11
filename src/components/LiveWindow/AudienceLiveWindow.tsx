@@ -1,7 +1,7 @@
 /**
  * 主播直播窗体
  */
-import React from 'react';
+import React from "react";
 import {
   View,
   Image,
@@ -10,48 +10,57 @@ import {
   StyleProp,
   LayoutAnimation,
   Keyboard,
-} from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import Video from 'react-native-video';
-import {useDispatch, useSelector} from 'react-redux'
-import NoticeBubble from '../../components/NoticeBubble';
-import LiveIntro from '../LiveIntro';
-import LivingBottomBlock from '../LivingBottomBlock';
-import LivePuller from '../LivePuller';
-import L from '../../constants/Layout';
-import Iconcloselight from '../../components/Iconfont/Iconcloselight';
-import {pad} from '../../constants/Layout';
-import images from '../../assets/images';
-import {joinGroup, quitGroup} from '../../actions/im';
-import {MediaType} from '../../liveTypes';
-import AudienceShopCard from '../../components/LivingShopCard/AudienceShopCard';
-import { vw, vh } from '../../utils/metric';
+} from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import Video from "react-native-video";
+import { useDispatch, useSelector } from "react-redux";
+import NoticeBubble from "../../components/NoticeBubble";
+import LiveIntro from "../LiveIntro";
+import LivingBottomBlock from "../LivingBottomBlock";
+import LivePuller from "../LivePuller";
+import L from "../../constants/Layout";
+import Iconcloselight from "../../components/Iconfont/Iconcloselight";
+import { pad } from "../../constants/Layout";
+import images from "../../assets/images";
+import { joinGroup, quitGroup } from "../../actions/im";
+import { MediaType } from "../../liveTypes";
+import AudienceShopCard from "../../components/LivingShopCard/AudienceShopCard";
+import { vw, vh } from "../../utils/metric";
+import { PrimaryText } from "react-native-normalization-text";
 
-const {window} = L;
+const { window } = L;
 
 interface LiveWindowProps {
-  style?: StyleProp<any>,
-  liveData?: any,
-  safeTop: number
+  style?: StyleProp<any>;
+  liveData?: any;
+  safeTop: number;
 }
 
-const LiveWindow = (props: LiveWindowProps) : any =>  {
-  const {goBack} = useNavigation();
+const LiveWindow = (props: LiveWindowProps): any => {
+  const { goBack, replace } = useNavigation();
   const dispatch = useDispatch();
   const route = useRoute() || {};
 
-  const room = useSelector(state => state?.im?.room);
+  // 房间信息
+  const room = useSelector((state) => state?.im?.room);
+
+  // 直播结束
+  const isLiveOver = useSelector((state) => state?.im?.isLiveOver);
 
   /**
    * 播放类型
    */
-  const {mediaType} = route;
+  const { mediaType } = route;
 
   const playerComponent = React.useMemo(() => {
     // 预告片
     if (mediaType === MediaType.teaser) {
       return (
-        <Video source={{uri: 'http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4'}}   // Can be a URL or a local file.
+        <Video
+          source={{
+            uri:
+              "http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4",
+          }} // Can be a URL or a local file.
           repeat
           fullscreen
           resizeMode="cover"
@@ -61,7 +70,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
           // onError={this.videoError}               // Callback when video cannot be loaded
           style={styles.video}
         />
-      )
+      );
     }
 
     // 直播和回放都是拉流
@@ -72,57 +81,62 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
         onStatus={onPlayerStatus}
         style={styles.video}
       />
-    )
-  }, [mediaType])
-
+    );
+  }, [mediaType]);
 
   /**
    * 播放器状态
    */
-  const [playerStatus, setPlayerStatus]: [undefined|boolean, any] = React.useState(undefined);
+  const [playerStatus, setPlayerStatus]: [
+    undefined | boolean,
+    any
+  ] = React.useState(undefined);
 
   const onPlayerStatus = (status: number | string) => {
-    console.log(status, 'status')
-    setPlayerStatus(status)
-  }
-  
+    console.log(status, "status");
+    setPlayerStatus(status);
+  };
+
   /**
    * im加群状态
    */
-  const [isIMJoinSecceed, setIsIMJoinSecceed]: [undefined|boolean, any] = React.useState(undefined);
+  const [isIMJoinSecceed, setIsIMJoinSecceed]: [
+    undefined | boolean,
+    any
+  ] = React.useState(undefined);
 
   /**
    * 播放器示例
    */
-  const player: {current: any} = React.createRef();
+  const player: { current: any } = React.createRef();
 
   /**
    * 退出直播
    */
   const closeLive = () => {
     // player.current?.stop(); // 停止播放器实例
+    dispatch(quitGroup()); // 退im群
     goBack();
-  }
+  };
 
   /**
-   * 
+   *
    */
   React.useEffect(() => {
     dispatch(joinGroup())
       .then((success?: boolean) => {
-        setIsIMJoinSecceed(!!success)
+        setIsIMJoinSecceed(!!success);
       })
       .catch((err: any) => {
-        console.log(err, 'err');
+        console.log(err, "err");
         // 找不到指定群组 显示结束
-        setIsIMJoinSecceed(false)
+        setIsIMJoinSecceed(false);
       });
-    
+
     return () => {
-      player.current?.stop(); // 返回时停止
-      dispatch(quitGroup()); // 退im群
-    }
-  }, [])
+      // player.current?.stop(); // 返回时停止
+    };
+  }, []);
 
   /**
    * 公告气泡
@@ -132,9 +146,12 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
   /**
    * 商品卡可见
    */
-  const [shopCardVisible,  setShopCardVisible]: [boolean | undefined, any] = React.useState();
+  const [shopCardVisible, setShopCardVisible]: [
+    boolean | undefined,
+    any
+  ] = React.useState();
 
-   /**
+  /**
    * 卡片动画
    */
   const shopCardAnim = (visiable: boolean) => {
@@ -143,7 +160,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       duration: 200,
       create: {
         type: LayoutAnimation.Types.linear,
-        property: LayoutAnimation.Properties.opacity
+        property: LayoutAnimation.Properties.opacity,
       },
       update: {
         type: LayoutAnimation.Types.spring,
@@ -151,42 +168,44 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       },
       delete: {
         type: LayoutAnimation.Types.linear,
-        property: LayoutAnimation.Properties.opacity
-      }
+        property: LayoutAnimation.Properties.opacity,
+      },
     });
 
     // LayoutAnimation.spring();
-    setShopCardVisible(visiable)
+    setShopCardVisible(visiable);
+  };
+
+  console.log(isLiveOver, 'isLiveEnd')
+  // 直播结束
+  if (isLiveOver) {
+    replace('AnchorLivingEnd');
+    // return <PrimaryText>直播结束</PrimaryText>;
   }
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
-      <Image
-        style={styles.imgBg}
-        source={images.livingbg}
-        resizeMode="cover"
-      />
+      <Image style={styles.imgBg} source={images.livingbg} resizeMode="cover" />
       {playerComponent}
       <View style={styles.livingBottomBlock}>
-        <LivingBottomBlock.Audience
-          onPressShopBag={() => shopCardAnim(true)}
-        />
+        <LivingBottomBlock.Audience onPressShopBag={() => shopCardAnim(true)} />
       </View>
-      
-      {
-        !!noticeBubbleText ?
-          <NoticeBubble
-            text={noticeBubbleText}
-          /> : null
-      }
+
+      {!!noticeBubbleText ? <NoticeBubble text={noticeBubbleText} /> : null}
       <LiveIntro
         showFollowButton
         anchorId={1}
         liveTitle="湖南卫视直播间"
         liveSubTitle={`123214`}
       />
-      
-      <TouchableOpacity onPress={closeLive} style={StyleSheet.flatten([styles.close, {top: props.safeTop + (pad * 2)}])}>
+
+      <TouchableOpacity
+        onPress={closeLive}
+        style={StyleSheet.flatten([
+          styles.close,
+          { top: props.safeTop + pad * 2 },
+        ])}
+      >
         <Iconcloselight size={24} />
       </TouchableOpacity>
 
@@ -195,8 +214,8 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
         onPressClose={() => shopCardAnim(false)}
       />
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -204,34 +223,33 @@ const styles = StyleSheet.create({
   },
   livingBottomBlock: {
     flex: 1,
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     bottom: 0,
     right: 0,
-    borderColor: 'red'
+    borderColor: "red",
   },
-  scrollerWrapper: {
-  },
+  scrollerWrapper: {},
   contentWrapper: {
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   close: {
-    position: 'absolute',
+    position: "absolute",
     right: pad * 1.5,
   },
   imgBg: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   video: {
     flex: 1,
     minHeight: vh(100),
     minWidth: vw(100),
-  }
-})
+  },
+});
 
 export default LiveWindow;

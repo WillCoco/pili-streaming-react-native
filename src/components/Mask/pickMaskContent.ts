@@ -1,6 +1,7 @@
 import MaskContents from './MaskContents/Normal';
 import MaskWithAvatar from './MaskContents/WithAvatar';
 import MaskWithBorderTop from './MaskContents/WithBorderTop';
+import Prompt from './MaskContents/Prompt';
 import {MaskContentTypes} from './reducer';
 
 const pickMaskContent = (type: MaskContentTypes) => {
@@ -11,6 +12,8 @@ const pickMaskContent = (type: MaskContentTypes) => {
       return MaskWithAvatar;
     case MaskContentTypes.WithBorderTop:
       return MaskWithBorderTop;
+    case MaskContentTypes.Prompt:
+      return Prompt;
     default:
       throw `pickMaskContent: 未知MaskContentTypes "${type}"`;
   }

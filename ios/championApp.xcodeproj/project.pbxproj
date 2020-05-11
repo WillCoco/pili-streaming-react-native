@@ -17,6 +17,12 @@
 		449261313F0C4E4881FF5D5F /* antoutline.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C936887AC8C54FCE8A1AA2A0 /* antoutline.ttf */; };
 		74D35D4FE55C46E98F63B34B /* antfill.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09292F97975645E386F0AE05 /* antfill.ttf */; };
 		7B0C5784998A29E517983E0C /* libPods-championApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2502ACF51380E8237829647D /* libPods-championApp.a */; };
+		F69E630A24692A3D0073B935 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E630924692A3D0073B935 /* WebKit.framework */; };
+		F69E630C24692A570073B935 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E630B24692A570073B935 /* SystemConfiguration.framework */; };
+		F69E630E24692A620073B935 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E630D24692A620073B935 /* CoreTelephony.framework */; };
+		F69E631024692A760073B935 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E630F24692A760073B935 /* libsqlite3.0.tbd */; };
+		F69E631224692A820073B935 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E631124692A820073B935 /* libc++.tbd */; };
+		F69E631424692A8B0073B935 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E631324692A8B0073B935 /* libz.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +56,12 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F65DEA922461121F00DA78BF /* RNSyanImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSyanImagePicker.xcodeproj; path = "../node_modules/react-native-syan-image-picker/ios/RNSyanImagePicker.xcodeproj"; sourceTree = "<group>"; };
+		F69E630924692A3D0073B935 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		F69E630B24692A570073B935 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		F69E630D24692A620073B935 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		F69E630F24692A760073B935 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		F69E631124692A820073B935 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		F69E631324692A8B0073B935 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +69,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F69E631424692A8B0073B935 /* libz.tbd in Frameworks */,
+				F69E631224692A820073B935 /* libc++.tbd in Frameworks */,
+				F69E631024692A760073B935 /* libsqlite3.0.tbd in Frameworks */,
+				F69E630E24692A620073B935 /* CoreTelephony.framework in Frameworks */,
+				F69E630C24692A570073B935 /* SystemConfiguration.framework in Frameworks */,
+				F69E630A24692A3D0073B935 /* WebKit.framework in Frameworks */,
 				7B0C5784998A29E517983E0C /* libPods-championApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -84,6 +102,12 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F69E631324692A8B0073B935 /* libz.tbd */,
+				F69E631124692A820073B935 /* libc++.tbd */,
+				F69E630F24692A760073B935 /* libsqlite3.0.tbd */,
+				F69E630D24692A620073B935 /* CoreTelephony.framework */,
+				F69E630B24692A570073B935 /* SystemConfiguration.framework */,
+				F69E630924692A3D0073B935 /* WebKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,

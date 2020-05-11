@@ -97,7 +97,10 @@ const LiveToolBar = (props: LiveToolBarProps) : any =>  {
           source={images.liveLikeIcon}
           style={StyleSheet.flatten([styles.img, {
             transform: [{
-              scale: animValue
+              scale: animValue.interpolate({
+                inputRange: [0, 0.5, 1],
+                outputRange: [1, 0.2, 1]  // 0 : 150, 0.5 : 75, 1 : 0
+              })
             }],
           }])}
           resizeMode="contain"
@@ -140,13 +143,16 @@ const styles = StyleSheet.create({
     height: scale(50),
   },
   likeQty: {
+    height: scale(14),
+    minWidth: scale(30),
+    lineHeight: scale(14),
     position: 'absolute',
     top: -scale(11),
     color: '#fff',
     backgroundColor: Colors.basicColor,
-    minWidth: scale(30),
     textAlign: 'center',
-    borderRadius: scale(10)
+    borderRadius: scale(7),
+    overflow: 'hidden'
   }
 })
 export default LiveToolBar;

@@ -21,21 +21,24 @@ import Iconchangecamera from '../../components/Iconfont/Iconchangecamera';
 import NoticeBubble from '../../components/NoticeBubble';
 import Mask from '../../components/Mask';
 import AnchorShopCard from '../../components/LivingShopCard/AnchorShopCard';
+import withPage from '../../components/HOCs/withPage';
 import {pad} from '../../constants/Layout';
-import images from '../../assets/images';
-import { joinGroup, quitGroup, createGroup, dismissGroup, updateGroupProfile } from '../../actions/im';
-import { Modal } from '@ant-design/react-native'
+import { joinGroup, quitGroup, createGroup, dismissGroup, updateGroupProfile, getGroupProfile } from '../../actions/im';
+import Toast from 'react-native-tiny-toast';
 
 const {window} = L;
 
 interface LiveWindowProps {
   style?: StyleProp<any>,
   liveData?: any,
-  safeTop: number
+  safeTop: number,
+  safeBottom: number,
 }
 
 const LiveWindow = (props: LiveWindowProps) : any =>  {
-  const {goBack} = useNavigation();
+  const {goBack, replace} = useNavigation();
+
+  console.log(useNavigation(), 'useNavigation()useNavigation()useNavigation()')
   const dispatch = useDispatch();
 
   /**
@@ -62,32 +65,45 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
   const room = useSelector(state => state?.im?.room);
 
   /**
+   * 所在房间成员数量
+   */
+  const roomMemberNum = useSelector(state => state?.im?.roomMemberNum);
+
+  /**
    * im加群状态
    */
   const [isIMJoinSecceed, setIsIMJoinSecceed]: [undefined|boolean, any] = React.useState(undefined);
 
+  const onPressClose = () => {
+    replace('AnchorLivingEnd');
+    return true;
+  }
+
   /**
    * 退出直播
    */
-  const closeLive = () => {
+  const closeLive = async () => {
+    Toast.showLoading('');
+    // const r = await dispatch(getGroupProfile());
+    Toast.hide('');
+
     maskDispatch({
       type: Mask.Actions.PUSH,
       payload: {
         type: Mask.ContentTypes.Normal,
         data: {
-          text: '有2人正在观看你的直播 确认关闭直播吗？',
+          text: `有${roomMemberNum}人正在观看你的直播 确认关闭直播吗？`,
           title: 'dasdas?',
           rightBtnText: '确定',
-          onPressRight: goBack
+          onPressRight: onPressClose
         }
       }});
-    
   };
   
   /**
    * 商品卡可见
    */
-  const [shopCardVisible,  setShopCardVisible]: [boolean | undefined, any] = React.useState();
+  const [shopCardVisible,  setShopCardVisible]: [boolean | undefined, any] = React.useState(false);
 
   /**
    * 
@@ -107,6 +123,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       dispatch(dismissGroup()); // 退im群
       // todo 晴空room消息、message、livegoods
       camera.current.stopPreview();
+      Toast.hide('');
     }
   }, [])
   
@@ -130,16 +147,16 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       maskDispatch({
         type: Mask.Actions.PUSH,
         payload: {
-          type: Mask.ContentTypes.Normal,
+          type: Mask.ContentTypes.Prompt,
           data: {
-            text: '有2人正在观看你的直播 确认关闭直播吗？',
-            title: 'dasdas?',
+            title: '请输入气泡内容',
             rightBtnText: '确定',
-            onPressRight: () => {alert(noticeBubbleText)}
+            onPressRight: (v: string) => {
+              dispatch(updateGroupProfile({notification: v}));
+              return true;
+            }
           }
         }});
-      return
-      dispatch(updateGroupProfile({notification: '抽奖抽奖, 随机踢走一名幸运观众'}));
     }
   }
 
@@ -183,7 +200,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
           onPressShopBag={() => shopCardAnim(true)}
           onPressBubble={onPressBubble}
           onPressShare={() =>alert('余组货')}
-          onPressFaceBeauty={() => Modal.prompt('1', '123')}
+          onPressFaceBeauty={() => {}}
           onPressFilter={() =>alert('美颜')}
         />
         <TouchableOpacity onPress={switchCamera} style={StyleSheet.flatten([styles.camera, {top: props.safeTop + (pad * 2)}])}>
@@ -201,7 +218,9 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
         }
         <AnchorShopCard
           visible={!!shopCardVisible}
+          setVisible={setShopCardVisible}
           onPressClose={() => shopCardAnim(false)}
+          safeBottom={props.safeBottom}
         />
       </View>
     </View>
@@ -235,4 +254,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default LiveWindow;
+export default withPage(LiveWindow);
