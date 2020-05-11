@@ -17,14 +17,25 @@ import Empty from '../../components/Empty';
 
 interface PageListProps {
   ListFooterComponent?: any,
+  data: Array<any>,
+  setData: (d: any) => Array<any> | undefined,
 }
 
 const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
   const [isRefreshing, setIsRefreshing] = React.useState(false); // 下拉刷新
   const [isLoading, setIsLoading] = React.useState(false); // 加载中
-  const [listData, setListData] = React.useState(props.initListData || []);
   const [empty, setEmpty] = React.useState(false);
   const [noMore, setNoMore] = React.useState();
+
+ /**
+  * 列表数据
+  * 模式1: 需要外部维护数据的
+  * 模式2: 只需内部维护数据的
+  */
+  const [listData, setListData] = React.useState(props.initListData || []);
+  const data = props.data || listData;
+  const setData = props.setData || setListData;
+
 
   /**
    * 容器高度(空居中)
@@ -50,15 +61,15 @@ const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
     const {result, code} = (await props.onRefresh(page, size)) || {};
     setIsRefreshing(false);
     console.log(result, '====');
-    setListData(result || []);
+    setData(result || []);
 
     if (result && result.length > 0) {
       if (result.length < size) {
         setNoMore(true);
       }
-      setListData(result);
+      setData(result);
     } else {
-      setListData([]);
+      setData([]);
       setEmpty(true);
     }
   };
@@ -75,7 +86,7 @@ const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
       page.current--;
       setNoMore(true);
     } else {
-      setListData(listData => {
+      setData(listData => {
         console.log(result, 'r.result');
         return [...listData, ...result];
       });
@@ -124,25 +135,25 @@ const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
     }
   }, [])
 
-  React.useEffect(() => {
-    /**
-     * 暴露组件内部方法 
-     */
-    if (ref) {
-      ref({
-        actions: {
-          setListData,
-          getListData: () => listData
-        }
-      })
-    }
-  }, [listData])
+  // React.useEffect(() => {
+  //   /**
+  //    * 暴露组件内部方法 
+  //    */
+  //   if (ref) {
+  //     ref({
+  //       actions: {
+  //         setData,
+  //         getListData: () => listData
+  //       }
+  //     })
+  //   }
+  // }, [listData])
 
   return (
     <View style={StyleSheet.flatten([styles.flatList, props.style])}>
       <FlatList
         refreshing
-        data={listData}
+        data={data}
         initialNumToRender={props.initialNumToRender}
         //item显示的布局
         renderItem={props.renderItem}

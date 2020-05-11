@@ -3,12 +3,12 @@ import imActionTypes from '../constants/im';
 
 // export type messageType = 'roomMessage' | 'enter' | 'leave' | 'follow' | 'unfollow' | 'order';
 export enum MessageType  {
-  roomMessage,
-  enter,
-  leave,
-  follow,
-  unfollow,
-  order
+  roomMessage = 'roomMessage',
+  enter = 'enter',
+  leave = 'leave',
+  follow = 'follow',
+  unfollow = 'unfollow',
+  order = 'order'
 }
 
 export interface RoomMessageType {
@@ -17,8 +17,9 @@ export interface RoomMessageType {
     userName: string,
     userAvatar: string,
     text: string,
+    type: MessageType
   },
-  description: MessageType,
+  description: any,
   extension: string
 }
 
@@ -27,12 +28,15 @@ export interface RoomType {
   // type: string,
 }
 
+
 interface InitStateTypes {
   isIMSDKReady: boolean,
   isOnLine: boolean,
   userSig?: string,
   rooms?: Array<RoomType>,
   room?: RoomType,
+  isLiveOver: boolean | undefined,
+  roomMemberNum: number,
   roomMessages: Array<RoomMessageType>,
 }
 
@@ -41,6 +45,8 @@ const INITIAL_STATE: InitStateTypes = {
   isOnLine: false, // 是否在线
   userSig: undefined, // 登录签名(自动登录?)
   room: undefined, // 所在房间的信息(im group + 观看等数据)
+  roomMemberNum: 0, // 从room中抽出来的成员数量字段, 减少room依赖过度更新
+  isLiveOver: undefined, // 所在房间直播是否结束(观众端)
   roomMessages: [], // 房间消息
 }
 
@@ -56,6 +62,10 @@ export default function homeData(state = INITIAL_STATE, action: any) {
       return {...state, rooms: action.payload.rooms};
     case imActionTypes.UPDATE_ROOM_MESSAGES:
       return {...state, roomMessages: action.payload.roomMessages};
+    case imActionTypes.UPDATE_ROOM_STATUS:
+      return {...state, isLiveOver: action.payload.isLiveOver};
+    case imActionTypes.UPDATE_ROOM_MEMBER_NUM:
+      return {...state, roomMemberNum: action.payload.roomMemberNum};
     default:
       return state
   }

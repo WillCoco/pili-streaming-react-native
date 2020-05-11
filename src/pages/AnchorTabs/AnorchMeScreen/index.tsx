@@ -59,7 +59,7 @@ const AnorchMeScreen = () =>  {
   }
 
   return (
-    <View style={styles.style}>
+    <ScrollView style={styles.style}>
       <NavBar 
         leftTheme="light" 
         title="" 
@@ -100,7 +100,6 @@ const AnorchMeScreen = () =>  {
           })
         }
       </View>
-      
       <T4 style={styles.title}>我的工具</T4>
       <View style={StyleSheet.flatten([styles.blockWrapper, styles.row])}>
         {
@@ -116,7 +115,7 @@ const AnorchMeScreen = () =>  {
           })
         }
       </View>
-    </View>
+    </ScrollView>
   )
 };
 

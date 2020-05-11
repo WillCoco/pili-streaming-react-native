@@ -46,13 +46,13 @@ const LivingRoomScreen = (props: any) : any =>  {
       <LiveMsg
         msgList={roomMessages}
         msgAdapter={(msg: RoomMessageType) => {
-          const {data, description} = msg || {};
-          const {userName, text, userId} = data || {};
+          const {data} = msg || {};
+          const {userName, text, userId, type} = data || {};
           return {
             name: userName,
             id: userId,
             text,
-            type: description,
+            type,
             isFollowed: props.isFollowed // todo: 和主播是否关注
           }
         }}

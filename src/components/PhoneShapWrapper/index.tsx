@@ -8,16 +8,19 @@
  */
 import React from 'react';
 import { View, StyleSheet, StyleProp } from 'react-native';
-import { pad } from '../../constants/Layout';
+import { pad, radioLarge } from '../../constants/Layout';
 import { vw } from '../../utils/metric';
 import { Colors } from '../../constants/Theme';
 
 const phoneShapeWrapper = (props: {
   style: StyleProp<any>,
-  children: any
+  children: any,
 }) => {
   return (
-    <View style={StyleSheet.flatten([styles.historyWrapper, {...props.style}])}>
+    <View
+      style={StyleSheet.flatten([styles.historyWrapper, {...props.style}])}
+      onStartShouldSetResponder={() => true}
+    >
       <View style={styles.shape} />
       {props.children}
     </View>
@@ -26,11 +29,10 @@ const phoneShapeWrapper = (props: {
 
 const styles = StyleSheet.create({
   historyWrapper: {
-    flex: 1,
     backgroundColor: '#fff',
     marginTop: pad,
-    borderTopLeftRadius: pad,
-    borderTopRightRadius: pad,
+    borderTopLeftRadius: radioLarge * 3,
+    borderTopRightRadius: radioLarge * 3,
     overflow: 'hidden',
   },
   shape: {
