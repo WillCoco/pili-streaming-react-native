@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet, Image } from 'react-native'
 import Swiper from 'react-native-swiper'
 import pxToDp from '../../../utils/px2dp'
+import { Colors } from '../../../constants/Theme'
 
 
 export default function BrandSwiper(props: { swiperList: any }) {
@@ -9,7 +10,9 @@ export default function BrandSwiper(props: { swiperList: any }) {
 
   return (
     <View style={styles.swiperContainer}>
-      <Swiper>
+      <Swiper
+        activeDotColor={Colors.whiteColor}
+      >
         {
           swiperList && swiperList.map((item: any, index: number) => {
             return (

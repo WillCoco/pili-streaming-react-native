@@ -4,8 +4,12 @@ import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
-export default function ActivityBar(props: { type: string, goodsInfo: any }) {
-  const { type, goodsInfo } = props
+export default function ActivityBar(props: {
+  type: string,
+  goodsInfo: any,
+  countDownInfo: any
+}) {
+  const { type, goodsInfo, countDownInfo } = props
 
   const containerBgi = type === 'sale' ? require('../../../assets/goods-image/sale_bgi.png') : require('../../../assets/goods-image/seckill_bgi.png')
   const saleText = type === 'sale' ? require('../../../assets/goods-image/sale_text.png') : require('../../../assets/goods-image/seckill_text.png')
@@ -30,11 +34,11 @@ export default function ActivityBar(props: { type: string, goodsInfo: any }) {
           : <View style={{ marginRight: pxToDp(40) }}>
             <Text style={styles.seckillText}>距离结束仅剩：</Text>
             <View style={styles.countDonw}>
-              <Text style={styles.time}>01</Text>
+              <Text style={styles.time}>{(countDownInfo.hours + '').padStart(2, '0')}</Text>
               <Text style={{ marginLeft: pxToDp(3), marginRight: pxToDp(3) }}>:</Text>
-              <Text style={styles.time}>01</Text>
+              <Text style={styles.time}>{(countDownInfo.min + '').padStart(2, '0')}</Text>
               <Text style={{ marginLeft: pxToDp(3), marginRight: pxToDp(3) }}>:</Text>
-              <Text style={styles.time}>01</Text>
+              <Text style={styles.time}>{(~~countDownInfo.sec + '').padStart(2, '0')}</Text>
             </View>
           </View>
       }

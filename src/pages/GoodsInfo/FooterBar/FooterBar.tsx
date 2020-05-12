@@ -17,17 +17,17 @@ export default function FooterBar(props: any) {
 
       <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.push('Service')}>
         <Image source={require('../../../assets/goods-image/icon_kefu.png')} style={styles.icon} />
-        <Text>客服</Text>
+        <Text style={{ color: Colors.lightBlack }}>客服</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.iconContainer} onPress={() => props.toggleStarGoods()}>
         <Image source={goodsInfo.is_collect ? starIcon : unstarIcon} style={styles.icon} />
-        <Text>{goodsInfo.is_collect ? '已收藏' : '收藏'}</Text>
+        <Text style={{ color: Colors.lightBlack }}>{goodsInfo.is_collect ? '已收藏' : '收藏'}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.push('GoodsCart')}>
         <Image source={require('../../../assets/goods-image/icon_cart.png')} style={styles.icon} />
-        <Text>购物车</Text>
+        <Text style={{ color: Colors.lightBlack }}>购物车</Text>
       </TouchableOpacity>
 
       <TouchableWithoutFeedback onPress={() => props.showGoodsSkuActionSheet('add')}>

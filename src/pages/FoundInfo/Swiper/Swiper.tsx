@@ -12,7 +12,7 @@ export default function GoodsSwiper(props: { swiperList: any }) {
     <View style={styles.swiperContainer}>
       <Swiper
         autoplay
-        activeDotColor={Colors.basicColor}
+        activeDotColor={Colors.whiteColor}
       >
         {
           swiperList && swiperList.map((item: any, index: number) => {

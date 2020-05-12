@@ -79,7 +79,7 @@ export default function ShareBar(props: any) {
       <View style={styles.header}>
         <Text style={styles.title}>立即分享给好友</Text>
         <TouchableOpacity onPress={props.hideShareBar}>
-          <AntDesign name="closecircleo" size={24} color="black" />
+          <AntDesign name="closecircleo" size={24} color={Colors.lightBlack} />
         </TouchableOpacity>
       </View>
       <View style={styles.content}>

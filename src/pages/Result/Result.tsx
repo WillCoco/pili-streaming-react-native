@@ -25,7 +25,7 @@ export default function Result() {
         <Text style={styles.statusText}>支付成功</Text>
         <Text style={styles.price}>¥888.88</Text>
       </View>
-      <TouchableOpacity style={styles.completeBtn}>
+      <TouchableOpacity style={styles.completeBtn} onPress={() => navigation.navigate('')}>
         <Text style={styles.text}>完成</Text>
       </TouchableOpacity>
     </View>
@@ -60,11 +60,8 @@ const styles = StyleSheet.create({
     color: Colors.darkBlack
   },
   completeBtn: {
-    position: 'absolute',
-    bottom: Platform.OS === 'ios' ? pxToDp(60) : pxToDp(30),
-    left: '-50%',
+    marginTop: pxToDp(100),
     width: pxToDp(670),
-    marginLeft: pxToDp(-335),
     height: pxToDp(80),
     borderRadius: pxToDp(40),
     backgroundColor: Colors.basicColor,

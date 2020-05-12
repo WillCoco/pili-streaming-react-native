@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { View, ScrollView, Dimensions, StyleSheet, Platform, Text, ImageBackground } from 'react-native'
-import { useRoute, useNavigation } from '@react-navigation/native'
+import { useRoute, useNavigation, useIsFocused } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import HTML from 'react-native-render-html'
 import Toast from 'react-native-tiny-toast'
@@ -22,9 +22,12 @@ import { strDiscode } from '../../utils/discodeRichText'
 import pxToDp from '../../utils/px2dp'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
+let timer: any
+
 function GoodsInfo(props: any) {
   const route = useRoute()
   const navigation = useNavigation()
+  const isFocused = useIsFocused()
   const { isLogin } = props
   const [isLoadingComplete, setIsLoadingComplete] = useState(false)
   const [swiperList, setSwiperList] = useState([])
@@ -39,6 +42,11 @@ function GoodsInfo(props: any) {
   const [showShareBar, setShowShareBar] = useState(false)
   const [buttonType, setButtonType] = useState('')  // 商品规格操作面板购买按钮文字
   const [soldOut, setSoldOut] = useState(false)
+  const [countDownInfo, setCountDownInfo] = useState({
+    hours: 0,
+    min: 0,
+    sec: 0
+  })
   let [goodsNum, setGoodsNum] = useState(1)
   const [couponList, setCouponList] = useState([])
   const goodsInfoRef = useRef()
@@ -58,6 +66,10 @@ function GoodsInfo(props: any) {
   useEffect(() => {
     getGoodsInfo()
   }, [])
+
+  useEffect(() => {
+    if (!isFocused) clearInterval(timer)
+  }, [isFocused])
 
   /**
    * 加载商品详情
@@ -84,6 +96,24 @@ function GoodsInfo(props: any) {
 
       if (res.is_sale || res.is_snap_up) {
         setGoodsType(res.is_sale ? 'sale' : 'seckill')
+
+        if (res.is_snap_up) {
+          const curHour = new Date().getHours()
+          let seckillCountdown: number
+
+          if (curHour >= 20) {  // 当天 0 点之前
+            seckillCountdown = new Date().setHours(23, 59, 59, 999) + 1 - new Date().getTime()
+          } else if (curHour >= 0 && curHour < 10) {  // 当天 0 点到 10 点之间
+            seckillCountdown = new Date().setHours(10, 0, 0, 0) - new Date().getTime()
+          } else {
+            seckillCountdown = new Date().setHours(20, 0, 0, 0) - new Date().getTime()
+          }
+
+          timer = setInterval(() => {
+            seckillCountdown -= 1000
+            countDown(seckillCountdown)
+          }, 1000)
+        }
       }
 
       initGoodsSku(res.sku)  // 初始化商品规格信息
@@ -93,6 +123,36 @@ function GoodsInfo(props: any) {
 
       if (isLogin) getGoodsCoupon(res.goods_id)
     })
+  }
+
+  /**
+   * 倒计时
+   */
+  const countDown = (seckillCountdown: number) => {
+    let diff = seckillCountdown / 1000
+
+    if (diff <= 0) {
+      return false
+    }
+
+    const time = {
+      hours: 0,
+      min: 0,
+      sec: 0
+    }
+
+    if (diff >= 3600) {
+      time.hours = Math.floor(diff / 3600)
+      diff -= time.hours * 3600
+    }
+    if (diff >= 60) {
+      time.min = Math.floor(diff / 60)
+      diff -= time.min * 60
+    }
+
+    time.sec = diff
+
+    setCountDownInfo(time)
   }
 
   /**
@@ -319,7 +379,7 @@ function GoodsInfo(props: any) {
           {/* 轮播图 */}
           <Swiper swiperList={swiperList} />
           {
-            !!goodsType && <ActivityBar type={goodsType} goodsInfo={goodsInfo} />
+            !!goodsType && <ActivityBar type={goodsType} goodsInfo={goodsInfo} countDownInfo={countDownInfo} />
           }
           {/* 商品信息 */}
           <GoodsCard
