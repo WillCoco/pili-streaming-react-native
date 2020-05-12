@@ -49,6 +49,7 @@ import PublishWork from './src/pages/PublishWork/PublishWork'
 import WorksGoodsList from './src/pages/WorksGoodsList/WorksGoodsList'
 import Service from './src/pages/Service/Service'
 import GoodsCart from './src/pages/GoodsCart/GoodsCart'
+import Result from './src/pages/Result/Result'
 
 import NavBar from './src/components/NavBar'
 import AnchorTabs from './src/navigation/AnchorTabs'
@@ -225,6 +226,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='PayWebView' component={PayWebView} />
                 <Stack.Screen name='Service' component={Service} />
                 <Stack.Screen name='GoodsCart' component={GoodsCart} />
+                <Stack.Screen name='Result' component={Result} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>
