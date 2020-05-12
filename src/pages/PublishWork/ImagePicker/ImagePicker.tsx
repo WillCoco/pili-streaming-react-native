@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, TextInput, ImageBackground, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import * as ImagePicker from 'expo-image-picker'
@@ -20,6 +20,8 @@ export default function ImgPicker() {
         aspect: [4, 3],
         quality: 1,
       })
+
+      console.log(result)
 
       if (result.cancelled) return
 

@@ -87,7 +87,7 @@ export const apiGetUserLevelInfo = () => get(`${HOST_PHP}/mobile/mine/userLevel`
 // 获取 token
 export const apiGetToken = (data: any) => post(`${HOST_JAVA}/miniApp/login`, data)
 // 发送验证码
-export const apiSendVerCode = (data: any) => get(`${HOST_JAVA}/user/sendMessage`, data)
+export const apiSendVerCode = (data: any) => get(`${HOST_JAVA}/user/sendAppMessage`, data)
 // 检测用户是否绑定过邀请码
 export const apiCheckIsInvite = () => get(`${HOST_JAVA}/miniApp/isInvite`)
 // 更新用户信息

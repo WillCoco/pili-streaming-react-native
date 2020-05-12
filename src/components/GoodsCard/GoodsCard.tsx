@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
   shareText: {
     backgroundColor: Colors.basicColor,
     height: '100%',
+    fontSize: pxToDp(22),
     paddingTop: pxToDp(5),
     paddingBottom: pxToDp(5),
     paddingLeft: pxToDp(10),

@@ -4,8 +4,13 @@ import pxToDp from '../../../utils/px2dp'
 import { Ionicons } from '@expo/vector-icons'
 import { Colors } from '../../../constants/Theme'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
-export default function GoodsCard(props: { showCouponActionSheet?: any; goodsInfo?: any }) {
+export default function GoodsCard(props: {
+  showCouponActionSheet?: any
+  showShareBar?: any
+  goodsInfo?: any
+}) {
   const { goodsInfo } = props
 
   return (
@@ -25,7 +30,7 @@ export default function GoodsCard(props: { showCouponActionSheet?: any; goodsInf
                   <Text style={styles.saleTotalPriceText}>最高可赚：</Text>
                   <Text style={[styles.saleTotalPriceText, { color: Colors.basicColor }]}>¥{formatSinglePrice(goodsInfo.MaxDiscounts)}</Text>
                 </View>
-                <View style={{
+                {/* <View style={{
                   flexDirection: 'row',
                   alignItems: 'center'
                 }}>
@@ -35,7 +40,7 @@ export default function GoodsCard(props: { showCouponActionSheet?: any; goodsInf
                     name='ios-arrow-forward'
                     color={Colors.darkBlack}
                   />
-                </View>
+                </View> */}
               </View>
             </View>
             <TouchableWithoutFeedback onPress={props.showCouponActionSheet}>
@@ -101,10 +106,10 @@ export default function GoodsCard(props: { showCouponActionSheet?: any; goodsInf
       {/* 商品名称 */}
       <View style={styles.goodsName}>
         <Text style={styles.goodsNameText} numberOfLines={2}>{goodsInfo.goods_name}</Text>
-        <View style={styles.shareContainer}>
+        <TouchableOpacity style={styles.shareContainer} onPress={props.showShareBar}>
           <Image source={require('../../../assets/goods-image/icon_share.png')} style={styles.shareIcon} />
           <Text style={styles.shareText}>分享赚：¥{formatSinglePrice(goodsInfo.MyDiscounts)}</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   )

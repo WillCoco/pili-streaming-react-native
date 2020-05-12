@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, ScrollView, Text, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { apiGetWorksDetailInfo, apiGetMoreComment, apiFollowWorks, apiGetMoreReply } from '../../service/api'
@@ -8,7 +8,7 @@ import pxToDp from '../../utils/px2dp'
 import { Ionicons } from '@expo/vector-icons'
 import { Colors } from '../../constants/Theme'
 
-import Video from 'react-native-video'
+import VideoPlayer from 'react-native-video-controls'
 
 import Header from './Header/Header'
 import Swiper from './Swiper/Swiper'
@@ -23,7 +23,7 @@ function FoundInfo(props: any) {
 
   const navigation = useNavigation()
   const route = useRoute()
-  const worksId = route.params.id
+  const { id: worksId, width, height } = route.params
   const { isLogin } = props.userData
   const [worksInfo, setWorksInfo] = useState({})
   const [swiperList, setSwiperList] = useState([])
@@ -33,6 +33,9 @@ function FoundInfo(props: any) {
   const [showGoods, setShowGoods] = useState(false)
   const [inputFocus, setInputFocus] = useState(false)
   const [commentInfo, setCommentInfo] = useState({})
+  const [videoUrl, setVideoUrl] = useState('')
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [videoHeight, setVideoHeight] = useState(0)
   let [commentPageNo, setCommentPageNo] = useState(1)
 
 
@@ -72,6 +75,13 @@ function FoundInfo(props: any) {
       setCommentCount(res.commentCount)
       setSwiperList(res.worksMoreInfoList)
       setWorksInfo(res)
+      if (res.worksType === 'VIDEO') {
+        setVideoUrl(res.worksMoreInfoList[0].worksUrl)
+        const deviceWidth = Dimensions.get('window').width
+        setVideoHeight(deviceWidth / (width / height))
+      }
+
+      setIsLoaded(true)
     })
   }
 
@@ -302,6 +312,10 @@ function FoundInfo(props: any) {
     setCommentList(JSON.parse(JSON.stringify(commentList)))
   }
 
+  if (!isLoaded) {
+    return <></>
+  }
+
   return (
     <View style={styles.container}>
       <Header opacity={navOpacity} />
@@ -314,13 +328,14 @@ function FoundInfo(props: any) {
         {
           worksInfo.worksType === 'PICTURE'
             ? <Swiper swiperList={swiperList} />
-            : <Video
-              source={{ uri: "https://qpsc-1256479324.cos.ap-shanghai.myqcloud.com/qpsc-video/2020/2/30/6c500bf0-3e48-4607-9183-765ce64a1d86.mp4" }}
-              autoplay
-              paused={true}
+            : <VideoPlayer
+              source={{ uri: `${videoUrl}` }}
+              disableFullscreen
+              disableBack
+              disableVolume
               style={{
-                width: '100%',
-                height: pxToDp(400)
+                width: Dimensions.get('window').width,
+                height: videoHeight
               }}
             />
         }
