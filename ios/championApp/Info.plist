@@ -86,8 +86,11 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+<<<<<<< HEAD
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+=======
+>>>>>>> 2f6c6afa76c5599cda438d3de89b33ae4dea1627
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>

@@ -29,7 +29,7 @@ function GoodsList(props: any) {
         <TouchableOpacity style={[styles.btn, styles.pinkBtn]} onPress={() => navigation.push('WorksGoodsList')}>
           <Text style={{ fontSize: pxToDp(30), color: Colors.basicColor }}>添加商品</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity style={styles.btn} onPress={props.publish}>
           <Text style={{ fontSize: pxToDp(30), color: Colors.whiteColor }}>确认发布</Text>
         </TouchableOpacity>
       </View>

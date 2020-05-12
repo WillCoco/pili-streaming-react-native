@@ -113,7 +113,8 @@ const styles = StyleSheet.create({
     height: pxToDp(52),
     backgroundColor: Colors.bgColor,
     borderRadius: pxToDp(26),
-    paddingLeft: pxToDp(20)
+    paddingLeft: pxToDp(20),
+    padding: 0
   },
   bagIcon: {
     width: pxToDp(40),

@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, TextInput, ImageBackground, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import * as ImagePicker from 'expo-image-picker'
 import { Ionicons } from '@expo/vector-icons'
+import Toast from 'react-native-tiny-toast'
 
-export default function ImgPicker() {
+export default function ImgPicker(props: any) {
+  const { pageType } = props
+
   const [imageList, setImageList] = useState([
     { uri: require('../../../assets/order-image/add.png') }
   ])
@@ -13,10 +16,16 @@ export default function ImgPicker() {
   const chooseImage = async (index: number) => {
     if (index) return
 
+    if (pageType === 'video' && imageList.length === 2) {
+      Toast.show('只能上传一个视频', { position: 0 })
+      return
+    }
+
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
+        mediaTypes: pageType === 'video'
+          ? ImagePicker.MediaTypeOptions.Videos
+          : ImagePicker.MediaTypeOptions.Images,
         aspect: [4, 3],
         quality: 1,
       })
@@ -24,6 +33,8 @@ export default function ImgPicker() {
       if (result.cancelled) return
 
       setImageList([...imageList, ...[result]])
+
+      props.setMediaList([...imageList, ...[result]])
     } catch (error) {
       console.log(error)
     }

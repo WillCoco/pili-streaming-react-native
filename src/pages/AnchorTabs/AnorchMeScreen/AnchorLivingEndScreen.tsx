@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Image,
   ImageBackground,
+  TouchableOpacity,
 } from 'react-native';
 import {Icon, Divider, ListItem} from 'react-native-elements';
 import {PrimaryText, SmallText, T4, TinyText} from 'react-native-normalization-text'
@@ -43,9 +44,9 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
 
   return (
       <ImageBackground source={images.liveEndBg} style={StyleSheet.flatten([styles.wrapper, {paddingTop: props.safeTop}])} >
-        <View style={styles.close}>
+        <TouchableOpacity style={styles.close}>
           <Icon name="close" color={Colors.whiteColor} onPress={goBack} />
-        </View>
+        </TouchableOpacity>
         <Image source={images.liveEndTitle} style={styles.title} />
         <PrimaryText style={{color: Colors.whiteColor, paddingVertical: pad * 1.5}}>直播ID:7777777</PrimaryText>
         <View style={styles.dataWrapper}>

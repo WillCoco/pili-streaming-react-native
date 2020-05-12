@@ -9,6 +9,7 @@ import { apiBrandList, apiGetAttention, apiAttentionBrand } from '../../service/
 
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
+import checkIsBottom from '../../utils/checkIsBottom'
 
 export default function Brand() {
   const route = useRoute()
@@ -100,13 +101,14 @@ export default function Brand() {
   /**
    * 触底加载
    */
-  const onReachBottom = () => {
-    if (!hasMoreRef.current) return
-    pageNoRef.current += 1
-    getBrandList()
+  const onReachBottom = (e: any) => {
+    if (hasMoreRef.current && checkIsBottom(e)) {
+      pageNoRef.current += 1
+      getBrandList()
+    }
   }
 
-  if ( pageType === 'focus' && !brandList.length) {
+  if (pageType === 'focus' && !brandList.length) {
     return (
       <View style={styles.container}>
         <ImageBackground source={require('../../assets/images/img_empty_brand.png')} style={styles.emptyImg}>
@@ -118,7 +120,8 @@ export default function Brand() {
 
   return (
     <ScrollView
-      onMomentumScrollEnd={onReachBottom}
+      showsVerticalScrollIndicator={false}
+      onMomentumScrollEnd={(e) => onReachBottom(e)}
     >
       {
         brandList && brandList.map((item, index) => {

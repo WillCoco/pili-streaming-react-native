@@ -274,9 +274,21 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
     apiCreateOrder(params).then((res: any) => {
       Toast.hide(loading)
 
-      const payURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
+      if (res.code !== 200) {
+        Toast.show('创建订单失败')
+        return
+      }
+
+      let payURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
 
       console.log('提交订单', res)
+
+      for (let item in res.data) {
+        console.log(item)
+        payURL += '&' + item + '=' + res.data[item]
+      }
+
+      navigation.push('PayWebView', { url: payURL })
     })
   }
 

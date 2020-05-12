@@ -87,7 +87,7 @@ export const apiGetUserLevelInfo = () => get(`${HOST_PHP}/mobile/mine/userLevel`
 // 获取 token
 export const apiGetToken = (data: any) => post(`${HOST_JAVA}/miniApp/login`, data)
 // 发送验证码
-export const apiSendVerCode = (data: any) => get(`${HOST_JAVA}/user/sendMessage`, data)
+export const apiSendVerCode = (data: any) => get(`${HOST_JAVA}/user/sendAppMessage`, data)
 // 检测用户是否绑定过邀请码
 export const apiCheckIsInvite = () => get(`${HOST_JAVA}/miniApp/isInvite`)
 // 更新用户信息
@@ -117,7 +117,7 @@ export const  apiGetMoreComment = (data: any) => post(`${HOST_JAVA}/find/getMore
 // 发现模块搜索
 export const apiSearchWork = (data: any) => post(`${HOST_JAVA}/find/searchWorks`, data)
 // 创建订单
-export const apiCreateOrder = (data: any) => post(`${HOST_JAVA}/order/create`, data)
+export const apiCreateOrder = (data: any) => post(`${HOST_JAVA}/order/create`, data, false)
 // 获取订单列表
 export const apiGetOrderList = (data: any) => get(`${HOST_JAVA}/order/getOrderList`, data)
 // 获取订单数量
@@ -127,7 +127,7 @@ export const apiCancelOrder = (data: any) => get(`${HOST_JAVA}/order/cancelOrder
  // 确认收货
 export const apiConfirmReceiveGoods = (data: any) => get(`${HOST_JAVA}/order/confirmReceiveGoods`, data)
 // 订单发起支付
-export const apiPayOrder = (data: any) => get(`${HOST_JAVA}/order/payOrder`, data)
+export const apiPayOrder = (data: any) => get(`${HOST_JAVA}/order/payOrder`, data, false)
 // 提醒发货
 export const apiReminderDeliverGoods = (data: any) => get(`${HOST_JAVA}/order/reminderDeliverGoods`, data)
 // 延长收货

@@ -19,6 +19,7 @@ import { Colors } from '../../constants/Theme'
 import { Ionicons } from '@expo/vector-icons'
 
 import WorkCard from '../../components/WorkCard/WorkCard'
+import checkIsBottom from '../../utils/checkIsBottom'
 
 function Found(props: any) {
   const navigation = useNavigation()
@@ -91,17 +92,18 @@ function Found(props: any) {
   /**
    * 触底加载
    */
-  const onReachBottom = () => {
-    if (!hasMoreRef.current) return
-    pageNoRef.current += 1
-    getFoundList(false)
+  const onReachBottom = (e: any) => {
+    if (hasMoreRef.current && checkIsBottom(e)) {
+      pageNoRef.current += 1
+      getFoundList(false)
+    }
   }
 
   return (
     <View>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        onMomentumScrollEnd={onReachBottom}
+        onMomentumScrollEnd={(e) => onReachBottom(e)}
         refreshControl={
           <RefreshControl
             refreshing={loading}

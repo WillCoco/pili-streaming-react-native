@@ -42,10 +42,12 @@ const deviceHeight = Dimensions.get('window').height
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: "flex-end",
     width: deviceWidth,
     height: deviceHeight,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)'
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    zIndex: 999
   },
   content: {
     height: 'auto',

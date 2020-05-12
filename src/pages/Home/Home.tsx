@@ -2,15 +2,15 @@ import React, { useEffect, useState, useRef } from 'react'
 import {
   View,
   Text,
-  Image, 
+  Image,
   StyleSheet,
-  ScrollView, 
-  PixelRatio, 
-  RefreshControl, 
-  ImageBackground, 
+  ScrollView,
+  PixelRatio,
+  RefreshControl,
+  ImageBackground,
   TouchableWithoutFeedback
 } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useIsFocused } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import {
   setSearchKey,
@@ -33,10 +33,13 @@ import GoodsCard from '../../components/GoodsCard/GoodsCard'
 import GoodsCardRow from '../../components/GoodsCardRow/GoodsCardRow'
 import CardTitle from '../../components/CardTitle/CardTitle'
 import withPage from '../../components/HOCs/withPage'
+import checkIsBottom from '../../utils/checkIsBottom'
 
+let timer: any  // 定时器
 
 function Home(props: HomeProps) {
   const navigation = useNavigation()
+  const isFocused = useIsFocused()
   let { swiperList, activityList, selectedGoodsInfo, seckillList } = props
   let pageNoRef = useRef(1)
   let hasMoreRef = useRef(true)
@@ -45,6 +48,12 @@ function Home(props: HomeProps) {
   const [loading, setLoading] = useState(false)
   const [timeQuantum, setTimeQuantum] = useState('')
   const [recommendGoodsList, setRecommendGoodsList] = useState([])
+  const [isComplete, setIsComplete] = useState(false)
+  const [countDownInfo, setCountDownInfo] = useState({
+    hours: 0,
+    min: 0,
+    sec: 0
+  })
   const [countDownList, setCountDownList] = useState([
     { timeQuantum: '10:00', state: '' },
     { timeQuantum: '14:00', state: '' },
@@ -53,8 +62,15 @@ function Home(props: HomeProps) {
   const pageSize = 20
 
   useEffect(() => {
-    initData(false)
-  }, [])
+    if (isFocused) {
+      initData(false)
+      setCountDown()
+    } else {
+      clearInterval(timer)
+      pageNoRef.current = 1
+      setRecommendGoodsList([])
+    }
+  }, [isFocused])
 
   /**
    * 加载初始化数据
@@ -79,7 +95,6 @@ function Home(props: HomeProps) {
       }
 
       getRecommendGoodsList(isPullDown)
-      setCountDown()
       setLoading(false)
     })
   }
@@ -94,10 +109,9 @@ function Home(props: HomeProps) {
     }).then((res: any) => {
       console.log('首页圈重点数据', res)
       const totalPage = Math.ceil(res.count / pageSize)
-
       hasMoreRef.current = pageNoRef.current < totalPage
-
       setRecommendGoodsList(isPullDown ? res.list : [...recommendGoodsList, ...res.list])
+      setIsComplete(true)
     })
   }
 
@@ -113,10 +127,11 @@ function Home(props: HomeProps) {
   /**
    * 触底加载
    */
-  const onReachBottom = () => {
-    if (!hasMoreRef.current) return
-    pageNoRef.current += 1
-    getRecommendGoodsList(false)
+  const onReachBottom = (e: any) => {
+    if (hasMoreRef.current && checkIsBottom(e)) {
+      pageNoRef.current += 1
+      getRecommendGoodsList(false)
+    }
   }
 
   /**
@@ -172,7 +187,37 @@ function Home(props: HomeProps) {
       seckillCountdown = new Date().setHours(20, 0, 0, 0) - new Date().getTime()
     }
 
-    console.log(seckillCountdown)
+    timer = setInterval(() => {
+      seckillCountdown -= 1000
+      countDown(seckillCountdown)
+    }, 1000)
+  }
+
+  const countDown = (seckillCountdown: number) => {
+    let diff = seckillCountdown / 1000
+
+    if (diff <= 0) {
+      return false
+    }
+
+    const time = {
+      hours: 0,
+      min: 0,
+      sec: 0
+    }
+
+    if (diff >= 3600) {
+      time.hours = Math.floor(diff / 3600)
+      diff -= time.hours * 3600
+    }
+    if (diff >= 60) {
+      time.min = Math.floor(diff / 60)
+      diff -= time.min * 60
+    }
+
+    time.sec = diff
+
+    setCountDownInfo(time)
   }
 
   /**
@@ -210,6 +255,8 @@ function Home(props: HomeProps) {
     navigation.push('SelectGoodsInfo', { id })
   }
 
+  if (!isComplete) return <></>
+
   return (
     <ScrollableTabView
       initialPage={0}
@@ -217,7 +264,12 @@ function Home(props: HomeProps) {
       tabBarActiveTextColor={Colors.whiteColor}
       tabBarInactiveTextColor={Colors.whiteColor}
       tabBarBackgroundColor={Colors.basicColor}
-      renderTabBar={() => <ScrollableTabBar />}
+      renderTabBar={() => <ScrollableTabBar
+        style={{
+          borderWidth: 0,
+          height: pxToDp(80)
+        }}
+      />}
       onChangeTab={(e) => changeTab(e)}
     >
       {
@@ -227,7 +279,7 @@ function Home(props: HomeProps) {
               tabLabel={item.name}
               key={`tab-${index}`}
               showsVerticalScrollIndicator={false}
-              onMomentumScrollEnd={onReachBottom}
+              onMomentumScrollEnd={(e) => onReachBottom(e)}
               refreshControl={
                 <RefreshControl
                   refreshing={loading}
@@ -311,11 +363,11 @@ function Home(props: HomeProps) {
                         <View style={styles.seckillText}>
                           <Image source={require('../../assets/home-image/seckill_text.png')} style={styles.seckillTextImg} resizeMode='contain' />
                           <View style={styles.countDown}>
-                            <Text style={styles.time}>11</Text>
+                            <Text style={styles.time}>{(countDownInfo.hours + '').padStart(2, '0')}</Text>
                             <Text style={styles.colon}>:</Text>
-                            <Text style={styles.time}>22</Text>
+                            <Text style={styles.time}>{(countDownInfo.min + '').padStart(2, '0')}</Text>
                             <Text style={styles.colon}>:</Text>
-                            <Text style={styles.time}>22</Text>
+                            <Text style={styles.time}>{(~~countDownInfo.sec + '').padStart(2, '0')}</Text>
                           </View>
                         </View>
                         <View style={styles.seckillSubTitle}>

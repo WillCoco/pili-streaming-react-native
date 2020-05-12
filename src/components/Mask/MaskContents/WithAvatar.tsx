@@ -1,10 +1,11 @@
 /**
- * 
+ * 带头像 和 昵称的禁言弹窗
  */
 import * as React from 'react';
 import {
   View,
   StyleSheet,
+  Image,
 } from 'react-native';
 import {PrimaryText, T4} from 'react-native-normalization-text';
 import { vw } from '../../../utils/metric';
@@ -14,10 +15,11 @@ import { StyleProp } from 'react-native';
 import { Colors } from '../../../constants/Theme';
 import MaskContext from '../MaskContext';
 import {Actions} from '../reducer';
+import pxToDp from '../../../utils/px2dp';
 
-const Normal = (props: {
-  title: string,
-  text: string,
+const WithAvatar = (props: {
+  avatar: any,
+  name: string,
   leftBtnText: string,
   rightBtnText: string,
   disabledLeft?: boolean,
@@ -45,8 +47,8 @@ const Normal = (props: {
 
   return (
     <View style={styles.style}>
-      <T4 style={StyleSheet.flatten([styles.title, props.titleStyle])}>{props.title}</T4>
-      <PrimaryText style={StyleSheet.flatten([styles.text, props.textStyle])}>{props.text}</PrimaryText>
+      <Image source={props.avatar} style={styles.avatar}/>
+      <PrimaryText>{props.name}</PrimaryText>
       <View style={styles.btnsWrapper}>
         <ButtonRadius
           size={40}
@@ -67,8 +69,9 @@ const Normal = (props: {
   )
 };
 
-Normal.defaultProps = {
-  leftBtnText: '取消'
+WithAvatar.defaultProps = {
+  leftBtnText: '取消',
+  rightBtnText: '禁言',
 };
 
 const styles = StyleSheet.create({
@@ -89,6 +92,10 @@ const styles = StyleSheet.create({
     marginTop: pad * 2
 
   },
+  avatar: {
+    width: pxToDp(160),
+    height: pxToDp(160),
+  },
   btnsWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -98,6 +105,7 @@ const styles = StyleSheet.create({
   button: {
     width: 120,
     borderRadius: radio,
+    marginTop: pad * 2
   },
   leftButton: {
     backgroundColor: Colors.lightGrey
@@ -107,4 +115,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Normal;
+export default WithAvatar;

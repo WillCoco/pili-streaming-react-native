@@ -4,7 +4,6 @@ import { SplashScreen, AppLoading } from 'expo'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import * as Font from 'expo-font';
-// import * as WeChat from 'react-native-wechat-lib'
 import { Ionicons } from '@expo/vector-icons'
 
 import { Provider as AntdProvider } from '@ant-design/react-native'
@@ -50,6 +49,7 @@ import PublishWork from './src/pages/PublishWork/PublishWork'
 import WorksGoodsList from './src/pages/WorksGoodsList/WorksGoodsList'
 import Service from './src/pages/Service/Service'
 import GoodsCart from './src/pages/GoodsCart/GoodsCart'
+import Result from './src/pages/Result/Result'
 
 import NavBar from './src/components/NavBar'
 import AnchorTabs from './src/navigation/AnchorTabs'
@@ -83,7 +83,6 @@ import BankCardBag from './src/pages/AnchorTabs/CardBag'
 import AddBankCard from './src/pages/AnchorTabs/AddBankCard'
 import Withdraw from './src/pages/AnchorTabs/Withdraw'
 import Message from './src/pages/AnchorTabs/Message'
-import MessageDetail from './src/pages/AnchorTabs/Message/MessageDetail'
 import MaskProvider from './src/components/Mask/Provider';
 import RealName from './src/pages/RealName/RealName'
 import PrivacyPolicy from './src/pages/RealName/PrivacyPolicy'
@@ -130,7 +129,6 @@ export default function App(props: { skipLoadingScreen: any; }) {
 
     // 登录im
     store.dispatch(login());
-    // WeChat.registerApp('appid', 'universalLink')
   }, [])
 
   const navHeadOption = (title?: string) => ({
@@ -224,12 +222,12 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='AddBankCard' component={AddBankCard} options={{headerShown: false}} />
                 <Stack.Screen name='Withdraw' component={Withdraw} options={{headerShown: false}} />
                 <Stack.Screen name='Message' component={Message} options={{headerShown: false}} />
-                <Stack.Screen name='MessageDetail' component={MessageDetail} options={{headerShown: false}} />
                 <Stack.Screen name='RealName' component={RealName} options={{headerShown: false}} />
                 <Stack.Screen name='PrivacyPolicy' component={PrivacyPolicy} />
                 <Stack.Screen name='PayWebView' component={PayWebView} />
                 <Stack.Screen name='Service' component={Service} />
                 <Stack.Screen name='GoodsCart' component={GoodsCart} />
+                <Stack.Screen name='Result' component={Result} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>

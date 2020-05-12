@@ -31,6 +31,7 @@ import { apiSandCreateOrder } from '../../../service/api'
 import { useSelector, useDispatch } from 'react-redux'
 import { setUserInfo } from '../../../actions/user'
 import { apiGetUserData } from '../../../service/api'
+import withPage from '../../../components/HOCs/withPage'
 
 const BeAgent = props => {
   const {navigate} = useNavigation()
@@ -238,8 +239,11 @@ const BeAgent = props => {
 }
 
 BeAgent.defaultProps = {
+  // TODO:
   wxNumber: 'haduia81237'
 }
+
+export default withPage(BeAgent)
 
 const styles = StyleSheet.create({
   style: {
@@ -377,5 +381,3 @@ const styles = StyleSheet.create({
     marginBottom: pad
   },
 })
-
-export default BeAgent

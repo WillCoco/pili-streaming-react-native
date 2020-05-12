@@ -9,6 +9,7 @@ import Header from './Header/Header'
 import GoodsList from './GoodsList/GoodsList'
 
 import { Colors } from '../../constants/Theme'
+import checkIsBottom from '../../utils/checkIsBottom'
 
 export default function Sale() {
   const navigation = useNavigation()
@@ -74,7 +75,7 @@ export default function Sale() {
           setGoodsList(res.list.slice(2))
         }
       } else {
-        setGoodsList([...goodsList, ...res,list])
+        setGoodsList([...goodsList, ...res, list])
       }
     })
   }
@@ -135,7 +136,7 @@ export default function Sale() {
           setGoodsList(res.list.slice(2))
         }
       } else {
-        setGoodsList([...goodsList, ...res,list])
+        setGoodsList([...goodsList, ...res, list])
       }
     })
   }
@@ -179,7 +180,7 @@ export default function Sale() {
     apiSeckillList({
       pageNo: pageNoRef.current,
       pageSize,
-      time_quantum: timeQuantum 
+      time_quantum: timeQuantum
     }).then((res: any) => {
       console.log(res, '限时秒杀')
       if (res.list.length) {
@@ -195,10 +196,11 @@ export default function Sale() {
   /**
    * 触底加载
    */
-  const onReachBottom = () => {
-    if (!hasMoreRef.current) return
-    pageNoRef.current += 1
-    getGoodsList()
+  const onReachBottom = (e: any) => {
+    if (hasMoreRef.current && checkIsBottom(e)) {
+      pageNoRef.current += 1
+      getGoodsList()
+    }
   }
 
 
@@ -208,7 +210,7 @@ export default function Sale() {
       onScroll={(e) => scrollPage(e)}
       scrollEventThrottle={200}
       showsVerticalScrollIndicator={false}
-      onMomentumScrollEnd={onReachBottom}
+      onMomentumScrollEnd={(e) => onReachBottom(e)}
     >
       <Header
         goodsList={headerGoodsList}

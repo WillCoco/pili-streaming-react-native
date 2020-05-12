@@ -382,7 +382,7 @@ DEPENDENCIES:
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  trunk:
+  https://github.com/CocoaPods/Specs.git:
     - boost-for-react-native
     - NodeMediaClient
 
@@ -587,6 +587,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: cb890c79c63885504ddc0efd7a7d01481760aca2
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: c4c575696ca50ae310a917b77957504a3bb2a55f
+PODFILE CHECKSUM: 942809fc076aabb184a1286a2e61d13b9a64c21f
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.1

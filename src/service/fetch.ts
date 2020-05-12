@@ -1,4 +1,5 @@
 import configStore from '../store'
+import { UPLOAD_URL } from './api'
 
 const { store } = configStore()
 
@@ -15,7 +16,7 @@ let headers = {
   'authentication': ''
 }
 
-export const get = (path: any, data?: any) => {
+export const get = (path: any, data?: any, onlyData: boolean = true) => {
   const { userData } = store.getState()
 
   if (userData.token) {
@@ -36,7 +37,11 @@ export const get = (path: any, data?: any) => {
       return r2 && JSON.parse(r2)
     })
     .then((result: { data: any; }) => {
-      resolve(result && result.data)
+      if (onlyData) {
+        resolve(result.data)
+      } else (
+        resolve(result)
+      )
     })
     .catch((error: any) => reject(error))
   })
@@ -79,14 +84,14 @@ interface fileType {
   name: string,
   type: string,
 }
-export const upload = (path: RequestInfo, files: Array<fileType>) => {
+export const upload = (files: Array<fileType>) => {
   let formData = new FormData();
   files.forEach((file: fileType) => {
     const f: any = {uri: file.uri, name: file.name, type: file.type}
     formData.append('file', f);
   })
   return new Promise((resolve, reject) => {
-    fetch(path, {
+    fetch(UPLOAD_URL, {
       method: 'POST',
       headers: {
         'Content-Type':'multipart/form-data',
