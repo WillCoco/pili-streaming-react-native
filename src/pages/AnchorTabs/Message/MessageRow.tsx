@@ -22,7 +22,7 @@ interface MessageProps {
   time?: any
 }
 
-export default function MessageListItem(props: MessageProps) {
+export default function MessageRow(props: MessageProps) {
   const {navigate} = useNavigation()
   useEffect(() => {
     return () => {
@@ -31,7 +31,7 @@ export default function MessageListItem(props: MessageProps) {
   }, [])
 
   return (
-    <TouchableOpacity onPress={() => navigate('MessageDetail')}>
+    <TouchableOpacity>
       <View style={styles.style}>
         <Avatar source={props.avatarSource || images.defaultMessageAvatar} style={styles.avatar} />
         <View style={{flex: 1}}>

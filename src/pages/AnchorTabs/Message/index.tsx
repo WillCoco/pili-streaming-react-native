@@ -16,6 +16,7 @@ import withPage from '../../../components/HOCs/withPage'
 import { pad } from '../../../constants/Layout'
 import images from '../../../assets/images'
 import MessageRow from './MessageRow'
+import PagingList from '../../../components/PagingList'
 
 const mockList = [
   {
@@ -70,6 +71,20 @@ function Message(props) {
     setActiveIndex(index)
   }
 
+  /**
+   * 刷新
+   */
+  const onRefresh = () => {
+    
+  }
+
+  /**
+   * 更多
+   */
+  const onEndReached = () => {
+    
+  }
+
   return (
     <View style={styles.style}>
       <NavBar
@@ -94,18 +109,31 @@ function Message(props) {
         {
           tabList.map((item: string, index: number) => {
             return (
-              <ScrollView key={`tab-${index}`} tabLabel={item + `(${12})`} style={{ paddingTop: pxToDp(20) }}>
-                {
-                  mockList.map((_item: any, _index: number) => {
-                    return (
-                      <MessageRow 
-                        {..._item}
-                        key={_item.time}
-                      />
-                    )
-                  })
-                }
-              </ScrollView>
+              <PagingList
+                key={`tab-${index}`} tabLabel={item + `(${12})`}
+                // ref={c => plist.current = c}
+                size={14}
+                initListData={mockList}
+                renderItem={({item, index}: any) => {
+                  console.log(item, 'itemmmmmmm')
+                  return (
+                    <MessageRow 
+                      {...item}
+                      key={item.time}
+                    />
+                  )
+                }}
+                getItemLayout={(data, index) => (
+                  {length: ROW_HEIGHT, offset: ROW_HEIGHT * index, index}
+                )}
+                onRefresh={onRefresh}
+                onEndReached={onEndReached}
+                keyExtractor={(item, index) => 'index' + index + item}
+                initialNumToRender={14}
+                numColumns={1}
+                columnWrapperStyle={{justifyContent: 'space-between'}}
+                // contentContainerStyle={styles.pagingListWrapper}
+              />
             )
           })
         }
