@@ -224,12 +224,12 @@ const LivingGoodsWareHouse = (props: any) =>  {
               />
             )
           }}
-          getItemLayout={(data, index) => (
+          getItemLayout={(data: any, index: number) => (
             {length: ROW_HEIGHT, offset: ROW_HEIGHT * index, index}
           )}
           onRefresh={onRefresh}
           onEndReached={onEndReached}
-          keyExtractor={(item, index) => 'index' + index + item}
+          keyExtractor={(item: any, index: number) => 'index' + index + item}
           initialNumToRender={14}
           numColumns={1}
           columnWrapperStyle={{justifyContent: 'space-between'}}

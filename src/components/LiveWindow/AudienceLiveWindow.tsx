@@ -77,7 +77,8 @@ const LiveWindow = (props: LiveWindowProps): any => {
     return (
       <LivePuller
         ref={player}
-        inputUrl="rtmp://58.200.131.2:1935/livetv/hunantv"
+        // inputUrl="rtmp://58.200.131.2:1935/livetv/hunantv"
+        inputUrl="rtmp://pili-live-rtmp.youzfx.cn/pili-yunshanbo/live1212641224414990336"
         onStatus={onPlayerStatus}
         style={styles.video}
       />

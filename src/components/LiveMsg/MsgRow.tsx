@@ -29,7 +29,7 @@ interface MsgRowProps {
   data: any,
   dataAdapter?: dataAdapterType,
   wrapperStyle?: StyleProp<any>,
-  onPress?: (data: any) => any,
+  onPress: (data: any) => any,
 }
 
 const MsgRow = (props: MsgRowProps) : any =>  {
@@ -52,7 +52,9 @@ const MsgRow = (props: MsgRowProps) : any =>  {
     return images.roomMessageUnFollowed;
   }, [data.isFollowed]);
 
-
+  /**
+   * 背景色
+   */
   let backgroundColor = React.useMemo(() => {
     if (data.type === MessageType.enter) {
       return 'rgba(245,113,185,0.5)';
@@ -60,6 +62,9 @@ const MsgRow = (props: MsgRowProps) : any =>  {
     return Colors.opacityDarkBg;
   }, [data.type]);
   
+  /**
+   * 冒号
+   */
   let colon = React.useMemo(() => {
     if (data.type === MessageType.roomMessage) {
       return ': ';
@@ -70,7 +75,7 @@ const MsgRow = (props: MsgRowProps) : any =>  {
   return (
     <TouchableOpacity
       disabled={!props.onPress}
-      onPress={() => props.onPress(props.data)}
+      onPress={() => props.onPress && props.onPress(props.data)}
       style={StyleSheet.flatten([styles.wrapper, {backgroundColor}, props.wrapperStyle])}
     >
       <View style={styles.imgWrapper}>
@@ -89,7 +94,8 @@ const MsgRow = (props: MsgRowProps) : any =>  {
 }
 
 MsgRow.defaultProps = {
-  dataAdapter: (d: any = {}) => ({name: d.name, text: d.text, isFollowed: d.isFollowed})
+  dataAdapter: (d: any = {}) => ({name: d.name, text: d.text, isFollowed: d.isFollowed}),
+  onPress: () => {},
 }
 
 const styles = StyleSheet.create({

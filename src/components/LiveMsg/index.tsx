@@ -114,51 +114,58 @@ const LiveMsg = (props: LiveMsgProps) : any =>  {
   )
 
   return (
-    <View
-      style={StyleSheet.flatten([styles.wrapper, props.style])}
-      // {...m.current.panHandlers}
-    >
-      <ScrollView
-        ref={c => scroll.current = c}
-        style={StyleSheet.flatten([styles.scrollerWrapper])}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.contentWrapper}
-        onMomentumScrollEnd={onMomentumScrollEnd}
-        onScrollBeginDrag={onScrollBeginDrag}
-        // onStartShouldSetResponder={() => true}
-        // onMoveShouldSetResponder={() => true}
+    <View style={styles.wrapper}>
+      <View
+        style={StyleSheet.flatten([styles.contentWrapper, props.style])}
+        // {...m.current.panHandlers}
       >
-        {
-          props.msgList?.map((d, i) => {
-            return (
-              <MsgRow
-                key={`msg_${i}`}
-                data={d}
-                dataAdapter={props.msgAdapter}
-                onPress={props.onPressMsg}
-                // onLayout={(e) => {
-                  // 接近顶部的透明度
-                  // console.log(e.nativeEvent.layout, i)
-                // }}
-              />
-            )
-          })
-        }
-      </ScrollView>
+        <ScrollView
+          ref={c => scroll.current = c}
+          style={StyleSheet.flatten([styles.scrollerWrapper])}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContentWrapper}
+          onMomentumScrollEnd={onMomentumScrollEnd}
+          onScrollBeginDrag={onScrollBeginDrag}
+          // onStartShouldSetResponder={() => true}
+          // onMoveShouldSetResponder={() => true}
+        >
+          {
+            props.msgList?.map((d, i) => {
+              return (
+                <MsgRow
+                  key={`msg_${i}`}
+                  data={d}
+                  dataAdapter={props.msgAdapter}
+                  onPress={props.onPressMsg}
+                  // onLayout={(e) => {
+                    // 接近顶部的透明度
+                    // console.log(e.nativeEvent.layout, i)
+                  // }}
+                />
+              )
+            })
+          }
+        </ScrollView>
+      </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   wrapper: {
+    minHeight: DEFAULT_HEIGTH,
+    justifyContent: 'flex-end',
+  },
+  contentWrapper: {
     height: 'auto',
     maxHeight: DEFAULT_HEIGTH,
     width: DEFAULT_WIDTH,
     justifyContent: 'flex-end',
+    borderWidth: 1,
   },
   scrollerWrapper: {
   },
-  contentWrapper: {
+  scrollContentWrapper: {
     justifyContent: 'flex-end',
   }
 })

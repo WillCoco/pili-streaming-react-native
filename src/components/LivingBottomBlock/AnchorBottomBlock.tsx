@@ -11,20 +11,28 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import LiveMsg from '../LiveMsg';
 import {Anchor as AnchorLiveToolBar} from '../LiveToolBar';
+import MsgSlowOut from '../LiveMsg/MsgSlowOut';
 import {vh} from '../../utils/metric';
 import {pad} from '../../constants/Layout';
-import {RoomMessageType} from '../../reducers/im';
+import {RoomMessageType, MessageType} from '../../reducers/im';
 import {setGroupMemberMuteTime, getGroupMemberProfile} from '../../actions/im';
+import Iconcartlight from '../../components/Iconfont/Iconcartlight';
+import { Colors } from '../../constants/Theme';
+
+const emptyList: [] = [];
 
 const LivingRoomScreen = (props: any) : any =>  {
   const dispatch = useDispatch();
   
 
   // 房间消息
-  const roomMessages = useSelector(state => state?.im?.roomMessages);
+  const roomMessages = useSelector((state: any) => state?.im?.roomMessages);
+
+  // 下单消息
+  const orderMessages = useSelector((state: any) => (state?.im?.orderMessages || emptyList));
 
   // 房间信息
-  const room = useSelector(state => state?.im?.room);
+  const room = useSelector((state: any) => state?.im?.room);
 
   // 获取成员是否禁言
   const getUserSilent = async (userID: string) => {
@@ -43,6 +51,27 @@ const LivingRoomScreen = (props: any) : any =>  {
   // 观众
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
+      <View style={styles.msgSlowOutWrapper}>
+        <MsgSlowOut
+          dataList={orderMessages}
+          dataAdapter={(msg: RoomMessageType) => {
+            if (!msg?.data) {
+              return null
+            }
+
+            const {userName, text, userId, type} = msg?.data || {};
+
+            return {
+              name: userName,
+              id: userId,
+              text,
+              Icon: Iconcartlight,
+              backgroundColor: type === MessageType.order ? Colors.basicColor : Colors.yellowColor
+            }
+          }}
+          style={styles.msgSlowOut}
+        />
+      </View>
       <LiveMsg
         msgList={roomMessages}
         msgAdapter={(msg: RoomMessageType) => {
@@ -110,6 +139,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: pad,
     paddingBottom: pad,
   },
+  msgSlowOutWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    marginBottom: pad * 2
+  },
+  msgSlowOut: {
+  }
 });
 
 export default LivingRoomScreen;
