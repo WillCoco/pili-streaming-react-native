@@ -224,3 +224,5 @@ export const apiSelLiveGoods= (data: any) => post(`${HOST_JAVA}/Anchor/selLiveGo
 export const apiSelStartLive= (data: any) => post(`${HOST_JAVA}/Anchor/selStartLive`, data)
 // 选择商品开始直播
 export const apiStartLive= (data: any) => post(`${HOST_JAVA}/Anchor/startLive`, data)
+// 上传用户头像本地base64
+export const apiUploadFile = (data: any) => post(`${HOST_JAVA}/user/uploadFile`, data)

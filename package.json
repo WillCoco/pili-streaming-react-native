@@ -38,6 +38,7 @@
     "react-native-device-info": "^5.5.6",
     "react-native-draggable-flatlist": "^2.3.2",
     "react-native-elements": "^1.2.7",
+    "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-iconfont-cli": "^2.0.0",
     "react-native-nodemediaclient": "^0.1.9",

@@ -1,32 +1,131 @@
 import React, { useState } from 'react'
-import { View, ImageBackground, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, ImageBackground, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native'
 import pxToDp from '../../../utils/px2dp'
 import { connect } from 'react-redux'
 import { Colors } from '../../../constants/Theme'
 import { Ionicons } from '@expo/vector-icons'
+import * as ImagePicker from 'expo-image-picker'
+import RNFS from 'react-native-fs'
+import { apiUpdateUserInfo, apiGetUserData, apiUploadFile } from '../../../service/api'
+import Toast from 'react-native-tiny-toast'
+import { setUserInfo } from '../../../actions/user'
 
-function Header(props: { userInfo: any }) {
+function Header(props: { dispatch?: any; userInfo?: any }) {
   const { userInfo } = props
   const [editable, setEditable] = useState(false)
   const [nickName, setNickName] = useState('')
+  const [avatarPath, setAvatarPath] = useState('')
+  const [avatarBase64, setAvatarBase64] = useState('')
 
   const editName = () => {
     setEditable(!editable)
+    setNickName(userInfo.nickName)
+  }
+
+  /**
+   * 更换头像
+   */
+  const changeAvatar = async () => {
+    if (!editable) return
+
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        aspect: [4, 3],
+        quality: 0.6,
+      })
+
+      let imgSuffix = ''
+
+      if (result.cancelled) return
+
+      setAvatarPath(result.uri)
+
+      let suffixIndex = (result.uri).lastIndexOf('.')
+      imgSuffix = result.uri.substring(suffixIndex + 1)
+      console.log(imgSuffix)
+
+      RNFS.readFile(result.uri, 'base64').then(res => {
+        const tempImgPath = `data:image/${imgSuffix === 'jpg' ? 'jpeg' : imgSuffix};base64,${res}`
+
+        setAvatarBase64(tempImgPath)
+
+      }).catch(err => {
+        console.log(err)
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  /**
+   * 更新用户信息
+   */
+  const updateUserInfo = async () => {
+    console.log(nickName)
+
+    if (!nickName) {
+      Toast.show('昵称不能为空')
+      return
+    }
+
+    if (nickName === userInfo.nickName && !avatarPath) {
+      setEditable(!editable)
+      return
+    }
+
+    let params = {
+      nickName
+    }
+
+    if (avatarPath) {
+      params[`avatarUrl`] = await apiUploadFile(avatarBase64)
+    }
+
+    apiUpdateUserInfo(params).then(res => {
+      console.log('修改用户信息', res)
+      if (res === 'success') {
+        Toast.show('修改成功', { position: 0 })
+        setEditable(!editable)
+        apiGetUserData().then(res => {
+          props.dispatch(setUserInfo(res))
+        })
+      }
+    })
   }
 
   return (
     <ImageBackground source={require('../../../assets/mine-image/setting_bgi.png')} style={styles.container}>
       <View style={styles.content}>
-        <Image source={{ uri: userInfo.userAvatar }} style={styles.avatar} />
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <TextInput editable={editable} defaultValue={userInfo.nickName} style={styles.input} onChangeText={(text) => setNickName(text)} />
-          <TouchableOpacity onPress={editName}>
+        <TouchableOpacity onPress={changeAvatar}>
+          <ImageBackground source={{ uri: avatarPath || userInfo.userAvatar }} style={styles.avatar}>
             {
-              editable
-              ? <Ionicons name='md-checkmark' color={Colors.whiteColor} size={20} />
-              : <Image source={require('../../../assets/mine-image/edit.png')} style={styles.editIcon} />
+              editable && <Text style={styles.editAvatar}>更换头像</Text>
             }
-          </TouchableOpacity>
+          </ImageBackground>
+        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {
+            !editable
+              ? <Text style={styles.input}>{userInfo.nickName}</Text>
+              : <TextInput
+                autoFocus
+                editable={editable}
+                style={styles.input}
+                defaultValue={userInfo.nickName}
+                onChangeText={(text) => setNickName(text)}
+              />
+          }
+
+          {
+            editable
+              ? <TouchableOpacity onPress={updateUserInfo}>
+                <Ionicons name='md-checkmark' color={Colors.whiteColor} size={20} />
+              </TouchableOpacity>
+              : <TouchableOpacity onPress={editName}>
+                <Image source={require('../../../assets/mine-image/edit.png')} style={styles.editIcon} />
+              </TouchableOpacity>
+          }
         </View>
       </View>
     </ImageBackground>
@@ -53,7 +152,9 @@ const styles = StyleSheet.create({
     width: pxToDp(150),
     height: pxToDp(150),
     borderRadius: pxToDp(75),
-    marginBottom: pxToDp(15)
+    marginBottom: pxToDp(15),
+    overflow: 'hidden',
+    justifyContent: 'flex-end'
   },
   input: {
     width: '100%',
@@ -66,5 +167,12 @@ const styles = StyleSheet.create({
   editIcon: {
     width: pxToDp(28),
     height: pxToDp(28)
+  },
+  editAvatar: {
+    fontSize: pxToDp(20),
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    textAlign: 'center',
+    color: Colors.whiteColor,
+    height: pxToDp(40)
   }
 })
