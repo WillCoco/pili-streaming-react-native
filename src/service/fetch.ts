@@ -50,14 +50,20 @@ let headers = {
 export const get = (path: any, data?: any, onlyData: boolean = true) => {
   const { userData } = store.getState();
 
+  console.log('%cToken:', 'color: red; font-size: 20px; ', userData.token)
+
   if (userData.token) {
     headers["authentication"] = userData.token;
   }
 
+  console.log('%cPath:', 'color: red; font-size: 20px; ', path)
+  console.log('%cParams:', 'color: red; font-size: 20px; ', data)
+
   if (data) {
     path = `${path}?${getParam(data)}`;
   }
-
+  
+  
   return new Promise((resolve, reject) => {
     fetch(path, {
       headers,

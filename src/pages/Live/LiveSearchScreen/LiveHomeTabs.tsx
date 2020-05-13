@@ -99,7 +99,6 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
           style={{borderTopWidth: 4, borderColor: Colors.pageGreyBg}}
           contentContainerStyle={{paddingHorizontal: pad}}
         />
-        
       </ScrollableTabView>
     </View>
   )
