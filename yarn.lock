@@ -1530,6 +1530,14 @@
     "@types/react" "*"
     "@types/react-native" "*"
 
+"@types/react-native-share@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npm.taobao.org/@types/react-native-share/download/@types/react-native-share-3.1.0.tgz#06b3772257d77a8f56af05aa92729efaf6387069"
+  integrity sha1-BrN3IlfXeo9WrwWqknKe+vY4cGk=
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
 "@types/react-native-tab-navigator@^0.3.3":
   version "0.3.3"
   resolved "https://registry.npm.taobao.org/@types/react-native-tab-navigator/download/@types/react-native-tab-navigator-0.3.3.tgz#8bf075d6999ffeb16432062a4fd860105b260dcb"
@@ -6313,6 +6321,11 @@ react-native-scrollable-tab-view@^1.0.0:
     create-react-class "^15.6.2"
     prop-types "^15.6.0"
     react-timer-mixin "^0.13.3"
+
+react-native-share@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.npm.taobao.org/react-native-share/download/react-native-share-3.3.2.tgz#06d1d3f14ba8eeb95e7e94e4db6a286e9902bd29"
+  integrity sha1-BtHT8Uuo7rlefpTk22oobpkCvSk=
 
 react-native-status-bar-height@^2.2.0:
   version "2.5.0"

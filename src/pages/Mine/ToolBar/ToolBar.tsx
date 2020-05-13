@@ -8,6 +8,14 @@ import pxToDp from '../../../utils/px2dp'
 export default function ToolBar() {
   const navigation = useNavigation()
 
+  const toLive = () => {
+    if (true) { // 是主播，前往直播首页
+      navigation.push('AnchorTabs')
+    } else { // 不是主播，去开通
+      navigation.push('BeAnchor')
+    }
+  }
+
   return (
     <View style={styles.container}>
       <CardTitle title='我的工具栏' />
@@ -24,7 +32,7 @@ export default function ToolBar() {
           <Image source={require('../../../assets/mine-image/icon_xieyi.png')} style={styles.icon} />
           <Text style={styles.text}>云闪播协议</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.item} onPress={() => navigation.push('AnchorTabs')}>
+        <TouchableOpacity style={styles.item} onPress={toLive}>
           <Image source={require('../../../assets/mine-image/icon_live.png')} style={styles.icon} />
           <Text style={styles.text}>去直播</Text>
         </TouchableOpacity>

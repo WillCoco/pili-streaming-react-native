@@ -3,7 +3,7 @@ const images : {
 } = {
   // 默认头像
   get userAvatar() {
-    return require('./userAvatar.jpg')
+    return require('../mine-image/default_avatar.png')
   },
   // 默认播封面
   get liveCover() {
@@ -24,6 +24,10 @@ const images : {
   // 默认直播间背景
   get livingbg() {
     return require('./livingbg.png')
+  },
+  // 成为主播
+  get beAnchorIcon() {
+    return require('../be-anchor-image/beAnchorIcon.png')
   },
   // ❤️ 喜欢
   get heart() {

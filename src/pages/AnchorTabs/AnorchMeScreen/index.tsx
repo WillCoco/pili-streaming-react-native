@@ -18,6 +18,9 @@ import images from '../../../assets/images';
 import ToolRow from '../../../components/ToolRow';
 import {pad} from '../../../constants/Layout';
 import {Colors} from '../../../constants/Theme';
+import {apiAnchorHomePage} from '../../../service/api';
+import {setAnchorInfo} from '../../../actions/anchor';
+import {useDispatch, useSelector} from 'react-redux';
 
 const ToolCell = (props: {
   text: string,
@@ -34,6 +37,8 @@ const ToolCell = (props: {
 
 const AnorchMeScreen = () =>  {
   const {navigate, reset} = useNavigation();
+  const dispatch = useDispatch();
+  const anchorInfo = useSelector(state => state?.anchorInfo)
 
   const dataList = [
     {img: images.anchorMyRecords, text: '我的直播', onPress: () => navigate('AnchorRecords')},
@@ -47,6 +52,19 @@ const AnorchMeScreen = () =>  {
     {img: images.anchorShop, text: '我的店铺', onPress: () => navigate('AnchorDetail')},
     {img: images.anchorBeAgent, text: '成为经纪人', onPress: () => navigate('BeAgent')}
   ];
+
+  /**
+   * 获取主播详情
+   */
+  React.useEffect(() => {
+    apiAnchorHomePage({anchorId: 709828778884333568})
+      .then(res => {
+        console.log(res, 321464164326)
+        // dispatch(setAnchorInfo(res))
+      })
+    return () => {
+    }
+  }, [])
 
   /**
    * tab的返回到 我的 

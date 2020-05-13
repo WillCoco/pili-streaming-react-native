@@ -24,7 +24,7 @@ interface ImagePickerBoxProps {
   contentWrapper?: StyleProp<any>,
   placeholderText?: string,
   placeholderIcon?: any,
-  onPicked: (uri?: string) => undefined,
+  onPicked: (uri?: string) => any,
   canClose?: boolean,
   initImg?: any, // 初始图
 }

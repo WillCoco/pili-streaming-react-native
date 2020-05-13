@@ -53,6 +53,7 @@ import Result from './src/pages/Result/Result'
 
 import NavBar from './src/components/NavBar'
 import AnchorTabs from './src/navigation/AnchorTabs'
+import BeAnchor from './src/pages/AnchorTabs/BeAnchor'
 import LiveSearch from './src/pages/Live/LiveSearchScreen'
 import AnchorDetail from './src/pages/Live/AnchorDetailScreen'
 import LivingRoom from './src/pages/Live/LivingRoomScreen'
@@ -153,7 +154,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
             }
             <NavigationContainer>
               <Stack.Navigator>
-                {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
+                <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
                 <Stack.Screen name='Root' component={Root} />
                 <Stack.Screen name='HomeSearch' component={HomeSearch} />
                 <Stack.Screen name='FoundSearch' component={FoundSearch} />
@@ -180,15 +181,17 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='CreateOrder' component={CreateOrder} />
                 <Stack.Screen name='CreateOrEditAddr' component={CreateOrEditAddr} />
                 
+                <Stack.Screen name='BeAnchor' component={BeAnchor} options={{ headerShown: false }} />
                 <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
                 <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false }} />
                 <Stack.Screen name='LiveSearchScreen' component={LiveSearch} />
-                <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
+                {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
                 <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{headerShown: false}} />
-                <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} />
+                <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} options={{headerShown: false}} />
                 <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{headerShown: false}} />
-                <Stack.Screen name='LiveGoodsManageScreen' component={LiveGoodsManage} options={{headerShown: false}} />
-                <Stack.Screen name='AnorchLivingRoomScreen' component={AnorchLivingRoom} options={{headerShown: false}} />
+                <Stack.Screen name='LiveGoodsManage' component={LiveGoodsManage} options={{headerShown: false}} />
+                <Stack.Screen name='LiveGoodsManageAgain' component={LiveGoodsManage} options={{headerShown: false}} />
+                <Stack.Screen name='AnorchLivingRoomScreen' component={AnorchLivingRoom} options={{headerShown: false, gestureEnabled: false}} />
                 <Stack.Screen name='AnchorTrailers' component={AnchorTrailers} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorRecords' component={AnchorRecords} options={{headerShown: false}} />
                 <Stack.Screen name='LivesAnalyze' component={LivesAnalyze} options={{headerShown: false}} />
@@ -216,7 +219,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='GoodsSupply' component={GoodsSupply} options={{headerShown: false}} />
                 <Stack.Screen name='BrandGoods' component={BrandGoods} options={{headerShown: false}} />
                 <Stack.Screen name='AnchorAgreement' component={AnchorAgreement} options={{headerShown: false}} />
-                <Stack.Screen name='AnchorLivingEnd' component={AnchorLivingEndScreen} options={{headerShown: false}} />
+                <Stack.Screen name='AnchorLivingEnd' component={AnchorLivingEndScreen} options={{headerShown: false, gestureEnabled: false}} />
                 <Stack.Screen name='BankCardBag' component={BankCardBag} options={{headerShown: false}} />
                 <Stack.Screen name='AddBankCard' component={AddBankCard} options={{headerShown: false}} />
                 <Stack.Screen name='Withdraw' component={Withdraw} options={{headerShown: false}} />

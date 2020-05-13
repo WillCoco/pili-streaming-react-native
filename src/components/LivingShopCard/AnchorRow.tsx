@@ -10,58 +10,76 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import { PrimaryText, SmallText, T4, scale, T3 } from 'react-native-normalization-text';
+import {PrimaryText, SmallText, T4, scale} from 'react-native-normalization-text';
 import { pad, radio } from '../../constants/Layout';
-import ShareProfit from '../ShareProfit';
-import DiscountPrice from '..//DiscountPrice';
-import Iconremove from '../Iconfont/Iconremove';
-import CheckBox from '../CheckBox';
+import ShareProfit from '../../components/ShareProfit';
+import DiscountPrice from '../../components/DiscountPrice';
+import Iconremove from '../../components/Iconfont/Iconremove';
+import ButtonRadius from '../../components/Buttons/ButtonRadius';
+import CheckBox from '../../components/CheckBox';
 import images from '../../assets/images/index';
-import ButtonRadius from '../Buttons/ButtonRadius';
-import {Colors} from '../../constants/Theme';
+import { Colors } from '../../constants/Theme';
 
-interface AnchorRowProps {
+interface AnchorRowManageRowProps {
   data: any,
-  dataAdapter: (d: any) => any,
+  dataAdapter: (d: any) => {
+    title: string,
+    img: any,
+    skuQuantity: number,
+    canAdd: boolean,
+  },
+  isChecked: boolean,
   imgStyle: StyleProp<any>,
   style: StyleProp<any>,
-  isChecked: boolean,
-  index: number,
-  onPressBuy: (d?: any) => any,
+  onPressCheck: (d?: any) => any,
+  onPressAddShop: (d?: any) => any,
 }
 
-const AnchorRow = (props: AnchorRowProps) =>  {
+const AnchorRowManageRow = (props: AnchorRowManageRowProps) =>  {
+
   const data = (props.dataAdapter ? props.dataAdapter(props.data) : props.data) || {};
+
+  const btnText = data.canAdd ? '添加橱窗' : '取消添加';
+  const btnBg = data.canAdd ? Colors.basicColor : Colors.lightGrey;
 
   return (
     <View style={StyleSheet.flatten([styles.style, props.style])}>
-      <View>
-        <Image source={data.img || images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
-        <T3 style={styles.index}>{props.index}</T3>
-      </View>
+      <CheckBox 
+        isChecked={props.isChecked}
+        onPress={props.onPressCheck}
+        style={{height: '100%', paddingHorizontal: pad}}
+      />
+      <Image source={data.img || images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
       <View style={styles.contentWrapper}>
         <View style={styles.titleWrapper}>
           <PrimaryText numberOfLines={2} style={{flex: 1}}>{data.title}</PrimaryText>
+          {/* <TouchableOpacity onPress={onPressRemove} style={styles.removeBtn}>
+            <Iconremove />
+          </TouchableOpacity> */}
         </View>
-        <ShareProfit profit={111} style={{flex: -1}} />
-          <View style={styles.rowBetween}>
-            <DiscountPrice discountPrice={120} price={110} />
-            <ButtonRadius
-              text="去购买"
-              size={30}
-              style={{width: scale(75), borderRadius: radio * 2}}
-              onPress={props.onPressBuy}
-            />
-          </View>
+        <View style={styles.rowBetween}>
+          <SmallText color="grey" profit={111} style={{flex: -1}}>总库存:  {data.skuQuantity}</SmallText>
+          <ShareProfit profit={111} style={{flex: -1}} />
+        </View>
+        <View style={styles.rowBetween}>
+          <DiscountPrice discountPrice={120} price={110} />
+          <ButtonRadius
+            text={btnText}
+            size={20}
+            style={{width: scale(75), backgroundColor: btnBg}}
+            onPress={props.onPressAddShop}
+          />
+        </View>
       </View>
     </View>
   )
 };
 
-AnchorRow.defaultProps = {
+AnchorRowManageRow.defaultProps = {
   data: {
     title: '标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题',
-  },
+    skuQuantity: '11'
+  }
 };
 
 const ROW_HEIGHT = 120;
@@ -71,13 +89,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: ROW_HEIGHT,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff'
+    // paddingHorizontal: pad
+  },
+  rowBetween: {
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   contentWrapper: {
     flex: 1,
     height: 100,
+    marginRight: pad,
     justifyContent: 'space-between',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   img: {
     width: 100,
@@ -85,12 +110,9 @@ const styles = StyleSheet.create({
     borderRadius: radio,
     marginRight: pad
   },
-  index: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    color: '#fff',
-    backgroundColor: Colors.opacityDarkBg1,
+  checkImg: {
+    height: 20,
+    width: 20,
     paddingHorizontal: pad
   },
   checkImgWrapper: {
@@ -105,13 +127,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   removeBtn: {
-    padding: pad,
-  },
-  rowBetween: {
-    alignSelf: 'stretch',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+    padding: pad
+  }
 });
 
-export default AnchorRow;
+export default AnchorRowManageRow;
