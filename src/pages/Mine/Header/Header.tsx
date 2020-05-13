@@ -76,11 +76,11 @@ function Header(props: { userData: { userInfo: any; isLogin: any }; publicData: 
         <View style={styles.userInfo}>
           {
             isLogin
-              ? <Image source={{ uri: userInfo.userAvatar }} style={styles.avatar} />
+              ? <Image source={{ uri: userInfo?.userAvatar }} style={styles.avatar} />
               : <Image source={require('../../../assets/mine-image/default_avatar.png')} style={styles.avatar} />
           }
           <View>
-            <Text style={styles.userName}>{isLogin ? userInfo.nickName : '立即登录'}</Text>
+            <Text style={styles.userName}>{isLogin ? userInfo?.nickName : '立即登录'}</Text>
             {
               isLogin && <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 {
@@ -104,12 +104,6 @@ function Header(props: { userData: { userInfo: any; isLogin: any }; publicData: 
                     )
                   })
                 }
-                {/* <Text style={[styles.userLevel, styles.userLevelBgc]}>{userInfo.userLevel}</Text> */}
-                {/* <Text style={styles.userLevel}>缺失</Text>
-                <View style={[styles.userLevel, { flexDirection: 'row', alignItems: 'center' }]}>
-                  <Text style={{ fontSize: pxToDp(20), color: Colors.whiteColor }}>缺失</Text>
-                  <Ionicons name='ios-play' color={Colors.whiteColor} />
-                </View> */}
               </View>
             }
           </View>
@@ -121,28 +115,28 @@ function Header(props: { userData: { userInfo: any; isLogin: any }; publicData: 
 
         <TouchableWithoutFeedback onPress={toCollectGoods}>
           <View style={styles.otherInfoItem}>
-            <Text style={styles.count}>{userInfo.collectionCount}</Text>
+            <Text style={styles.count}>{userInfo?.collectionCount}</Text>
             <Text style={styles.text}>商品收藏</Text>
           </View>
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback onPress={toMyFocusBrand}>
           <View style={styles.otherInfoItem}>
-            <Text style={styles.count}>{userInfo.storeFollow}</Text>
+            <Text style={styles.count}>{userInfo?.storeFollow}</Text>
             <Text style={styles.text}>店铺关注</Text>
           </View>
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback onPress={toLikeContent}>
           <View style={styles.otherInfoItem}>
-            <Text style={styles.count}>{userInfo.likeContent}</Text>
+            <Text style={styles.count}>{userInfo?.likeContent}</Text>
             <Text style={styles.text}>喜欢的内容</Text>
           </View>
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback onPress={toCoupon}>
           <View style={styles.otherInfoItem}>
-            <Text style={styles.count}>{userInfo.card}</Text>
+            <Text style={styles.count}>{userInfo?.card}</Text>
             <Text style={styles.text}>优惠券</Text>
           </View>
         </TouchableWithoutFeedback>
@@ -165,7 +159,7 @@ function Header(props: { userData: { userInfo: any; isLogin: any }; publicData: 
           <Text style={styles.leveltext}>累计已省:</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ fontSize: pxToDp(24), color: Colors.yellowColor }}>¥</Text>
-            <Text style={[styles.leveltext, styles.savePrice]}>{formatSinglePrice(userInfo.saveMoney)}</Text>
+            <Text style={[styles.leveltext, styles.savePrice]}>{formatSinglePrice(userInfo?.saveMoney)}</Text>
           </View>
         </View>
 

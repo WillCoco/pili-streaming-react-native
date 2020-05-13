@@ -138,19 +138,17 @@ export const post = (
 /**
  * 上传
  */
-export interface File {
-  type: string;
-  uri: string;
+interface fileType {
+  uri: string,
+  name: string,
+  type: string,
 }
-export const upload = (path: RequestInfo, files: Array<File>) => {
+export const upload = (path: RequestInfo, files: Array<fileType>) => {
   let formData = new FormData();
-  const { userData } = store.getState();
-
-  files.forEach((item: File) => {
-    const file: any = { uri: item.uri, fileType: item.type };
-    formData.append("file", file);
-  });
-
+  files.forEach((file: fileType) => {
+    const f: any = {uri: file.uri, name: file.name, type: file.type}
+    formData.append('file', f);
+  })
   return new Promise((resolve, reject) => {
     fetch(path, {
       method: "POST",
@@ -160,11 +158,52 @@ export const upload = (path: RequestInfo, files: Array<File>) => {
       },
       body: JSON.stringify(formData),
     })
-      .then((response: { json: () => any }) => response.json())
-      .then((result: { data: unknown }) => {
-        console.log(result, "23123131");
-        resolve(result.data);
-      })
-      .catch((error: any) => reject(error));
-  });
-};
+    .then((response: { json: () => any; }) => response.json())
+    .then((result: { data: unknown; }) => resolve(result.data))
+    .catch((error: any) => reject(error))
+  })
+} 
+
+/**
+ * 直播上传接口
+ */
+export interface UpdateParams {
+  size: string,
+  fileType: string,
+  unit: string,
+  file: fileType
+}
+
+export const liveUpload = (path: RequestInfo, params: UpdateParams): any => {
+  let formData = new FormData();
+  console.log(params, 'file')
+  formData.append("fileType", params.fileType);
+  formData.append("unit", params.unit);
+  formData.append("size", params.size);
+  formData.append("file", params.file as any);
+
+  console.log(formData, 'formDataformData')
+
+  const headers = {
+    // 'Content-Type': 'multipart/form-data',
+    'authentication': '',
+    'platform': 'app',
+  }
+
+  const { userData } = store.getState()
+
+  if (userData.token) {
+    headers['authentication'] = userData.token
+  }
+
+  return new Promise((resolve, reject) => {
+    fetch(path, {
+      method: 'POST',
+      headers,
+      body: formData
+    })
+    .then((response: { json: () => any; }) => response.json())
+    .then((result: { data: any; }) => resolve(result))
+    .catch((error: any) => console.error(error))
+  })
+} 

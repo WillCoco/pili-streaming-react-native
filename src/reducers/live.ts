@@ -2,14 +2,20 @@
 import {isAndroid} from '../constants/DeviceInfo';
 import liveActionTypes from '../constants/Live';
 
+export interface LiveConfig {
+  cover?: { // 封面
+    uri?: string,
+    name?: string,
+    type?: string,
+  },
+  title?: string, // 标题
+  // 美颜
+  // 滤镜
+}
+
 interface InitStateTypes {
   // 直播配置
-  liveConfig: {
-    cover: any, // 封面
-    title: string, // 标题
-    // 美颜
-    // 滤镜
-  },
+  liveConfig: LiveConfig,
   // 推流配置
   pusherConfig: any,
   livingGoods: Array<any>, // 直播商品管理
