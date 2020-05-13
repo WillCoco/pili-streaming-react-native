@@ -1530,6 +1530,14 @@
     "@types/react" "*"
     "@types/react-native" "*"
 
+"@types/react-native-share@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npm.taobao.org/@types/react-native-share/download/@types/react-native-share-3.1.0.tgz#06b3772257d77a8f56af05aa92729efaf6387069"
+  integrity sha1-BrN3IlfXeo9WrwWqknKe+vY4cGk=
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
 "@types/react-native-tab-navigator@^0.3.3":
   version "0.3.3"
   resolved "https://registry.npm.taobao.org/@types/react-native-tab-navigator/download/@types/react-native-tab-navigator-0.3.3.tgz#8bf075d6999ffeb16432062a4fd860105b260dcb"
@@ -3197,6 +3205,14 @@ expo-asset@~8.1.0, expo-asset@~8.1.4:
     path-browserify "^1.0.0"
     url-parse "^1.4.4"
 
+expo-av@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.npm.taobao.org/expo-av/download/expo-av-8.1.0.tgz#376e2a821168cd83e997c6dd84350fab6b293f10"
+  integrity sha1-N24qghFozYPpl8bdhDUPq2spPxA=
+  dependencies:
+    lodash "^4.17.15"
+    nullthrows "^1.1.0"
+
 expo-constants@~9.0.0:
   version "9.0.0"
   resolved "https://registry.npm.taobao.org/expo-constants/download/expo-constants-9.0.0.tgz#35c600079ee91d38fe4f56375caae6e90f122fdd"
@@ -3207,7 +3223,7 @@ expo-error-recovery@~1.1.0:
   resolved "https://registry.npm.taobao.org/expo-error-recovery/download/expo-error-recovery-1.1.0.tgz#98b9de5400dbfd022d1631739f3bf5e7016565da"
   integrity sha1-mLneVADb/QItFjFznzv15wFlZdo=
 
-expo-file-system@~8.1.0:
+expo-file-system@^8.1.0, expo-file-system@~8.1.0:
   version "8.1.0"
   resolved "https://registry.npm.taobao.org/expo-file-system/download/expo-file-system-8.1.0.tgz#d6aa66fa32c19982b94d0013f963c5ee972dfd6d"
   integrity sha1-1qpm+jLBmYK5TQAT+WPF7pct/W0=
@@ -4963,7 +4979,7 @@ lodash.throttle@^4.1.1:
   resolved "https://registry.npm.taobao.org/lodash.throttle/download/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
   integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
 
-lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.5.0, lodash@^4.6.0:
+lodash@^4.16.4, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.5.0, lodash@^4.6.0:
   version "4.17.15"
   resolved "https://registry.npm.taobao.org/lodash/download/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha1-tEf2ZwoEVbv+7dETku/zMOoJdUg=
@@ -6306,6 +6322,11 @@ react-native-scrollable-tab-view@^1.0.0:
     prop-types "^15.6.0"
     react-timer-mixin "^0.13.3"
 
+react-native-share@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.npm.taobao.org/react-native-share/download/react-native-share-3.3.2.tgz#06d1d3f14ba8eeb95e7e94e4db6a286e9902bd29"
+  integrity sha1-BtHT8Uuo7rlefpTk22oobpkCvSk=
+
 react-native-status-bar-height@^2.2.0:
   version "2.5.0"
   resolved "https://registry.npm.taobao.org/react-native-status-bar-height/download/react-native-status-bar-height-2.5.0.tgz#bc0fb85230603850aab9667ee8111a62954de90c"
@@ -6384,6 +6405,13 @@ react-native-unimodules@~0.9.0:
     unimodules-permissions-interface "~5.1.0"
     unimodules-sensors-interface "~5.1.0"
     unimodules-task-manager-interface "~5.1.0"
+
+react-native-video-controls@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.npm.taobao.org/react-native-video-controls/download/react-native-video-controls-2.4.0.tgz#bfc38c56148e45881a4bc3f0ec3c040965c7ae82"
+  integrity sha1-v8OMVhSORYgaS8Pw7DwECWXHroI=
+  dependencies:
+    lodash "^4.16.4"
 
 react-native-video@^4.4.5:
   version "4.4.5"

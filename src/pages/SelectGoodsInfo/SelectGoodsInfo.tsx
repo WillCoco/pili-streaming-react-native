@@ -10,6 +10,7 @@ import GoodsCard from './GoodsCard/GoodsCard'
 import Swiper from './Swiper/Swiper'
 import pxToDp from '../../utils/px2dp'
 import formatSinglePrice from '../../utils/formatGoodsPrice'
+import { Flex } from '@ant-design/react-native'
 
 export default function SelectGoodsInfo() {
   const route = useRoute()
@@ -52,7 +53,7 @@ export default function SelectGoodsInfo() {
   }
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
         {/* 轮播题 */}
         <Swiper swiperList={swiperList} />
@@ -100,7 +101,8 @@ const deviceHeight = Dimensions.get('window').height
 
 const styles = StyleSheet.create({
   container: {
-    height: deviceHeight - pxToDp(98)
+    height: '100%',
+    paddingBottom: pxToDp(98)
   },
   goodsInfo: {
     backgroundColor: Colors.whiteColor,

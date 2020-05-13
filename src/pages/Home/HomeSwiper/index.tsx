@@ -1,10 +1,11 @@
 import React from 'react'
-import { Image, StyleSheet, TouchableWithoutFeedback } from 'react-native'
+import { Image, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { Carousel } from '@ant-design/react-native'
 import Swiper from 'react-native-swiper'
 
 import { Colors } from '../../../constants/Theme'
+import pxToDp from '../../../utils/px2dp'
 
 interface Props {
   swiperList?: Array<any>  // 传入的轮播图列表
@@ -29,19 +30,22 @@ function HomeSwiper(props: Props) {
     }
   }
 
+  // <Carousel
+  //   infinite={true}
+  //   autoplay={true}
+  //   autoplayInterval={3000}
+  //   dots={props.showDots}
+  //   style={[swiperStyle.swiper, props.swiperStyle]}
+  //   dotStyle={{ backgroundColor: Colors.lightGrey }}
+  //   dotActiveStyle={{ backgroundColor: Colors.whiteColor }}
+  //   afterChange={() => changSwiper()}
+  // >
+  // </Carousel>
+
   return (
-    // <Carousel
-    //   infinite={true}
-    //   autoplay={true}
-    //   autoplayInterval={3000}
-    //   dots={props.showDots}
-    //   style={[swiperStyle.swiper, props.swiperStyle]}
-    //   dotStyle={{ backgroundColor: Colors.lightGrey }}
-    //   dotActiveStyle={{ backgroundColor: Colors.whiteColor }}
-    //   afterChange={() => changSwiper()}
-    // >
     <Swiper
       style={[swiperStyle.swiper, props.swiperStyle]}
+      activeDotColor={Colors.whiteColor}
       autoplay
     >
       {
@@ -58,7 +62,6 @@ function HomeSwiper(props: Props) {
         })
       }
     </Swiper>
-    // {/* </Carousel> */}
   )
 }
 
@@ -68,7 +71,8 @@ const swiperStyle = StyleSheet.create({
   },
   swiperImage: {
     width: '100%',
-    height: '100%'
+    height: '100%',
+    borderRadius: pxToDp(16)
   }
 })
 

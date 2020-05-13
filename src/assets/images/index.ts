@@ -3,7 +3,7 @@ const images : {
 } = {
   // 默认头像
   get userAvatar() {
-    return require('./userAvatar.jpg')
+    return require('../mine-image/default_avatar.png')
   },
   // 默认播封面
   get liveCover() {

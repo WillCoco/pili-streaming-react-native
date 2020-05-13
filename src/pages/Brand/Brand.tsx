@@ -121,7 +121,7 @@ export default function Brand() {
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      onMomentumScrollEnd={() => onReachBottom(e)}
+      onMomentumScrollEnd={(e) => onReachBottom(e)}
     >
       {
         brandList && brandList.map((item, index) => {

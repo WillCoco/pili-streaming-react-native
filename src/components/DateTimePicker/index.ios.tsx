@@ -46,7 +46,7 @@ const ImagePickerBox = (props: ImagePickerBoxProps) =>  {
     if (isAndroid()) {
       setDatePickerMode(mode);
     }
-
+    
     // ios datetime一次选择
     setIsShowDatePicker(true);
   }
