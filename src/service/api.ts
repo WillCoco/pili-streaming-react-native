@@ -1,5 +1,5 @@
 
-import { get, post } from './fetch'
+import { get, post, upload, File } from './fetch'
 
 // const HOST_PHP = __DEV__ ? 'https://php.quanpinrtmp.com' : ''
 // const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''
@@ -177,7 +177,7 @@ export const apiLogout = (data: any) => get(`${HOST_JAVA}/user/logout`, data)
 export const apiSandCreateOrder = (data: any) => post(`${SHANDE_HOST_JAVA}/sandpay/createOrder`, data, false)
 
 
-/**
+/*
  * 主播相关接口 ==========================================================================================
  */
 // 主播添加商品到主播店铺
@@ -215,7 +215,7 @@ export const apiGetUserChatList= (data: any) => post(`${HOST_JAVA}/Anchor/getUse
 // 主播我的主页信息
 export const apiAnchorHomePage= (data: any) => get(`${HOST_JAVA}/Anchor/HomePage`, data, false)
 // 直播上传文件
-export const apiLiveUploadFile= (data: any) => post(`${HOST_JAVA}/Anchor/liveUploadFile`, data)
+export const apiLiveUploadFile = (files: Array<File>) => upload(`${HOST_JAVA}/Anchor/liveUploadFile`, files)
 // 直播发布预告
 export const apiReleaseNotice= (data: any) => post(`${HOST_JAVA}/Anchor/releaseNotice`, data)
 // 直播间商品管理数据列表

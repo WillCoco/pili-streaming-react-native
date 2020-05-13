@@ -12,11 +12,11 @@ import {
 import {SmallText, PrimaryText} from 'react-native-normalization-text';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import dayjs from 'dayjs';
-import pickCameraRoll from '../../utils/pickCameraRoll';
-import Iconadd from '../../components/Iconfont/Iconadd';
 import {Colors} from '../../constants/Theme';
 import {pad} from '../../constants/Layout';
+import Mask from '../../components/Mask';
 import {isIOS, isAndroid} from '../../constants/DeviceInfo';
+import {vw, vh} from '../../utils/metric';
 
 interface ImagePickerBoxProps {
   style?: StyleProp<any>,
@@ -24,94 +24,59 @@ interface ImagePickerBoxProps {
   dateWrapperStyle?: StyleProp<any>,
   timeWrapper?: StyleProp<any>,
   timeWrapperStyle?: StyleProp<any>,
-  onPicked?: (uri: string) => undefined,
+  onPicked: (uri: string) => undefined,
 }
 
 const ImagePickerBox = (props: ImagePickerBoxProps) =>  {
-  /**
-   * 显示时间选择器
-   */
-  const [isShowDatePicker, setIsShowDatePicker]: Array<any> = React.useState();
+  let [maskList, maskDispatch] = React.useContext(Mask.context);
 
-  /**
-   * 时间选择器模式
-   */
-  const initMode = isIOS ? 'datetime' : 'date'; // 初始化mode
-  const [datePickerMode, setDatePickerMode]: Array<any> = React.useState(initMode);
+  const [liveTime, setLiveTime]: Array<any> = React.useState();
 
-  const [liveTime, setLiveTime]: Array<any> = React.useState(Date.now());
-
-  const onPressPickDate = (mode?: 'date' | 'time' | 'datetime' | 'countdown') => {
+  const onPressPickDate = () => {
     // android 时间和日期需要分开选择
-    if (isAndroid()) {
-      setDatePickerMode(mode);
-    }
-    
-    // ios datetime一次选择
-    setIsShowDatePicker(true);
-  }
-
-  const onDeteChange = (e: any) => {
-    setIsShowDatePicker(false);
-
-    if (e.type === 'set') {
-      setLiveTime(e.nativeEvent.timestamp)
-    }
+    maskDispatch({
+      type: Mask.Actions.UNSHIFT,
+      payload: {
+        type: Mask.ContentTypes.IOSDatePicker,
+        data: {
+          onPicked: (time: number) => {
+            setLiveTime(time);
+            props.onPicked(time);
+          }
+        }
+      }
+    })
   }
 
   /**
    * 时间format
    */
-  const formatDate = (timestamp: number) => {
-    if (timestamp) {
+  const formatDate = (timestamp: number, format: any = {
+    Y: undefined,
+    M: '月',
+    D: '日',
+    h: '点',
+    m: '分',
+  }) => {
+    if (!timestamp) {
       return null;
     };
     const t =  dayjs(timestamp);
-    return `${t.month()+1}月${t.date()}日`
-  }
-
-  const formatTime = (timestamp: number) => {
-    if (timestamp) {
-      return null;
-    };
-    const t =  dayjs(timestamp);
-    return `${dayjs().hour()}点${dayjs().minute()}分`
+    if (format.Y) {
+      return `${t.year()}${format.Y || ''}${t.month()+1}${format.M || ''}${t.date()}${format.D || ''} ${t.hour()}${format.h || ''}${t.minute()}${format.m || ''}`;
+    }
+    return `${t.month()+1}${format.M || ''}${t.date()}${format.D || ''} ${t.hour()}${format.h || ''}${t.minute()}${format.m || ''}`;
   }
 
   const date = formatDate(liveTime);
-  const time = formatTime(liveTime);
+
+  console.log(liveTime, 'liveTimeliveTime', date)
 
   return (
     <View style={StyleSheet.flatten([styles.style, props.style])}>
-      {
-        isAndroid() ? (
-          <>
-            <TouchableOpacity style={StyleSheet.flatten([styles.dateWrapper, props.dateWrapperStyle])} onPress={() => onPressPickDate('date')}>
-              <PrimaryText style={styles.dateText}>{date || '选择日期'}</PrimaryText>
-            </TouchableOpacity>
-            <TouchableOpacity style={StyleSheet.flatten([styles.timeWrapper, props.timeWrapperStyle])} onPress={() => onPressPickDate('time')}>
-              <PrimaryText style={styles.timeText}>{time || '选择时间'}</PrimaryText>
-            </TouchableOpacity>
-          </>
-        ) : (
-          <TouchableOpacity style={StyleSheet.flatten([styles.dateWrapper, props.dateWrapperStyle])} onPress={() => onPressPickDate('datetime')}>
-            <PrimaryText style={styles.dateText}>{liveTime ? `${date} ${time}` : '选择时间'}</PrimaryText>
-          </TouchableOpacity>
-        )
-      }
-      {
-        isShowDatePicker && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            timeZoneOffsetInMinutes={0}
-            value={new Date(1598051730000)}
-            mode={datePickerMode}
-            is24Hour={true}
-            display="default"
-            onChange={onDeteChange}
-          />
-        )
-      }
+      <TouchableOpacity style={StyleSheet.flatten([styles.dateWrapper, props.dateWrapperStyle])} onPress={() => onPressPickDate('datetime')}>
+        <PrimaryText style={styles.dateText}>{liveTime ? `${date} ` : '选择时间'}</PrimaryText>
+      </TouchableOpacity>
     </View>
   )
 };
@@ -140,6 +105,12 @@ const styles = StyleSheet.create({
   placeholderText: {
     color: Colors.lightGrey,
     marginTop: pad * 2
+  },
+  picker: {
+    height: 200,
+    backgroundColor: 'red',
+    opacity: 1,
+    borderWidth: 10
   }
 });
 

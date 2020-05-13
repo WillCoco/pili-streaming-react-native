@@ -114,8 +114,8 @@ const CreateTraserScreen = () =>  {
 
   return (
     <ScrollView style={styles.style}>
-      <View style={styles.contentWrapper}>
       <NavBar title="发布预告" />
+      <View style={styles.contentWrapper}>
         <PrimaryText style={styles.title}>直播封面图(必填)</PrimaryText>
         <View style={styles.row}>
           <ImagePickerBox
@@ -143,6 +143,7 @@ const CreateTraserScreen = () =>  {
           <PrimaryText style={styles.title}><PrimaryText color="theme">* </PrimaryText> 直播时间</PrimaryText>
           <DateTimePicker
             onPicked={onPickedTime}
+            style={{position: 'absolute', left: -pad, paddingLeft: scale(70) + pad * 3}}
           />
           {/* <PrimaryText onPress={() => onPressPickDate('date')} style={styles.title}>{formatDate(liveTime) || '选择日期'}</PrimaryText> */}
           {/* <PrimaryText onPress={() => onPressPickDate('time')} style={styles.title}>{formatTime(liveTime) || '选择时间'}</PrimaryText> */}

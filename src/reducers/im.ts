@@ -16,6 +16,7 @@ export interface RoomMessageType {
     userId: string,
     userName: string,
     userAvatar: string,
+    isFollowed: boolean,
     text: string,
     type: MessageType
   },

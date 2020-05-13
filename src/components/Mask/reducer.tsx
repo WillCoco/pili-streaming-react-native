@@ -12,6 +12,7 @@ export enum MaskContentTypes {
   WithAvatar = 'WithAvatar',
   WithBorderTop = 'WithBorderTop',
   Prompt = 'Prompt',
+  IOSDatePicker = 'IOSDatePicker',
 };
 
 export interface MaskContent {
@@ -23,32 +24,31 @@ export interface State {
   list: Array<MaskContent>,
 }
 
-type payloadType = {
+interface PayloadType {
   type: MaskContentTypes, // 弹窗类型
   data: any, // 自定义数据
   [key: string]: any
 }
 
-interface ActionType {
-  type: Actions
-  payload: payloadType
+interface RemovePayloadType {
+  depth: number
 }
 
-interface RemoveActionType {
-  depth?: number,
-  payload?: payloadType
+interface ActionType {
+  type: Actions,
+  payload: PayloadType | RemovePayloadType
 }
 
 export function reducer(state: State, action: ActionType) {
-  console.log(state, 'maskDispatchmaskDispatchmaskDispatchmaskDispatchmaskDispatch', action)
+  // console.log(state, 'maskDispatchmaskDispatchmaskDispatchmaskDispatchmaskDispatch', action)
   switch(action.type) {
     case Actions.PUSH:
-      console.log(pushHandler(state, action), './//////', action)
-      return pushHandler(state, action.payload);
+      // console.log(pushHandler(state, action), './//////', action)
+      return pushHandler(state, action.payload as PayloadType);
     case Actions.UNSHIFT:
-      return unshiftHandler(state, action.payload);
+      return unshiftHandler(state, action.payload as PayloadType);
     case Actions.REMOVE:
-      return removeHandler(state, action.payload);
+      return removeHandler(state, action.payload as RemovePayloadType);
     case Actions.REMOVE_ALL:
       return removeAllHandler(state);
     default: 
@@ -56,7 +56,7 @@ export function reducer(state: State, action: ActionType) {
   }
 }
 
-function pushHandler(state: State, payload: payloadType) {
+function pushHandler(state: State, payload: PayloadType) {
   const oldList = state.list;
   const {type, data} = payload;
   // if (oldList.indexOf && oldList.indexOf(type) === -1) {
@@ -65,14 +65,14 @@ function pushHandler(state: State, payload: payloadType) {
   // return state;
 }
 
-function unshiftHandler(state: State, payload: payloadType) {
+function unshiftHandler(state: State, payload: PayloadType) {
   const oldList = state.list;
   const {type, data} = payload;
 
   return {...state, list: [...new Set([{type, data}, ...oldList])]};
 }
 
-function removeHandler(state: State, payload: RemoveActionType) {
+function removeHandler(state: State, payload: RemovePayloadType) {
   const oldList = state.list;
   const {depth = 1} = payload || {};
   // 清除所有
