@@ -171,7 +171,7 @@ export const apiDecryptData = (data: any) => post(`${HOST_JAVA}/miniApp/decryptD
 // 注册
 export const apiRegister = (data: any) => post(`${HOST_JAVA}/user/register`, data)
 // 退出
-export const apiLogout = () => get(`${HOST_JAVA}/user/logout`)
+export const apiLogout = (data: any) => get(`${HOST_JAVA}/user/logout`, data)
 
 // 杉德支付
 export const apiSandCreateOrder = (data: any) => post(`${SHANDE_HOST_JAVA}/sandpay/createOrder`, data, false)

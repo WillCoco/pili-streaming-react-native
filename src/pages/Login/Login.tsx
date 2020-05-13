@@ -119,7 +119,7 @@ function Logion(props: any) {
       inviteCode: invCode
     }
 
-    apiLogin(params).then(res => {
+    apiLogin(params).then((res: any) => {
       console.log('注册&登录', res)
 
       if (res) {

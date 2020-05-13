@@ -13,6 +13,7 @@ const getParam = (data: { [s: string]: unknown; } | ArrayLike<unknown>) => {
 let headers = {
   'Accept': 'application/json',
   'Content-Type': 'application/json',
+  'platform': 'app',
   'authentication': ''
 }
 
@@ -37,6 +38,7 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
       return r2 && JSON.parse(r2)
     })
     .then((result: { data: any; }) => {
+      console.log('get resulyt', result)
       if (onlyData) {
         resolve(result.data)
       } else (
@@ -66,6 +68,7 @@ export const post = (path: RequestInfo, data: any, onlyData: boolean = true) => 
       return JSON.parse(r2)
     })
     .then((result: { data: unknown; }) => {
+      console.log('post result', result)
       if (onlyData) {
         resolve(result.data)
       } else (
