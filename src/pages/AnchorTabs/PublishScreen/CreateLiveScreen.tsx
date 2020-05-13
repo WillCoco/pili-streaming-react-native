@@ -19,6 +19,7 @@ import images from '../../../assets/images/index';
 import usePermissions from '../../../hooks/usePermissions';
 import { pad } from '../../../constants/Layout';
 import { Toast } from '@ant-design/react-native';
+import * as api from '../../../service/api';
 
 const CreateLiveScreen = (props: any) =>  {
   const navigation = useNavigation();
@@ -70,6 +71,21 @@ const CreateLiveScreen = (props: any) =>  {
   //   camera.current.switchCamera()
   // }
 
+  /**
+   * 上传文件
+   */
+  const onChangeCover = async (r: any) => {
+    const result = await api.liveUploadFile([{
+      fileType: r.type,
+      size: 1024 * 2,
+      unit: r.uri
+    }]);
+
+    if (result) {
+      // Toast.show('')
+    }
+  }
+
   return (
     <View style={StyleSheet.flatten([styles.style, {paddingBottom: props.safeBottom}])}>
       <LivePusher
@@ -77,7 +93,7 @@ const CreateLiveScreen = (props: any) =>  {
       />
       <View style={styles.contentWrapper}>
         <View style={StyleSheet.flatten([styles.liveReadyCardWrapper, {marginTop: props.safeTop + 80}])}>
-          <LiveReadyCard />
+          <LiveReadyCard onChangeCover={onChangeCover} />
         </View>
         <View style={styles.functionBtnWrapper}>
           <TouchableOpacity>

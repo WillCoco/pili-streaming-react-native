@@ -84,14 +84,14 @@ interface fileType {
   name: string,
   type: string,
 }
-export const upload = (files: Array<fileType>) => {
+export const upload = (path: RequestInfo, files: Array<fileType>) => {
   let formData = new FormData();
   files.forEach((file: fileType) => {
     const f: any = {uri: file.uri, name: file.name, type: file.type}
     formData.append('file', f);
   })
   return new Promise((resolve, reject) => {
-    fetch(UPLOAD_URL, {
+    fetch(path, {
       method: 'POST',
       headers: {
         'Content-Type':'multipart/form-data',

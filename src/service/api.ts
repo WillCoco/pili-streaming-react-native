@@ -1,5 +1,5 @@
 
-import { get, post } from './fetch'
+import { get, post, upload } from './fetch'
 
 // const HOST_PHP = __DEV__ ? 'https://php.quanpinrtmp.com' : ''
 // const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''
@@ -175,3 +175,22 @@ export const apiLogout = () => get(`${HOST_JAVA}/user/logout`)
 
 // 杉德支付
 export const apiSandCreateOrder = (data: any) => post(`${SHANDE_HOST_JAVA}/sandpay/createOrder`, data, false)
+
+
+/**
+ * 直播相关 ==================================================================
+ */
+
+// 主播直播数据列表
+export const getLiveDataList = (data: any) => post(`${HOST_JAVA}/Anchor/getLiveDataList`, data, false)
+
+// 直播发布预告
+export const releaseNotice = (data: any) => post(`${HOST_JAVA}/Anchor/releaseNotice`, data, false)
+
+// 直播上传文件
+export type File = {
+  size: number,
+  fileType: string,
+  unit: string,
+}
+export const liveUploadFile = (files: Array<File>) => upload(`${HOST_JAVA}/Anchor/liveUploadFile`, files)

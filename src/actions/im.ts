@@ -476,7 +476,7 @@ export const getGroupProfile = (params: getGroupProfileParams) => {
 interface RoomMessage {
   data: string,
   description: string,
-  extension: string
+  extension: string,
 }
 
 function makeMsg({type, text}: {
@@ -492,6 +492,7 @@ function makeMsg({type, text}: {
       userName: userName || '游客',
       userAvatar,
       userId,
+      isFollowed: false,
       type
     })
     return {

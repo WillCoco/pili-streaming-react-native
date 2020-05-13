@@ -19,7 +19,7 @@ const DEFAULT_VEDIOS_OPTIONS = {
 
 const pick = async (options: ImagePicker.ImagePickerOptions = {
   mediaTypes: ImagePicker.MediaTypeOptions.Images
-}) : Promise<string | undefined> => {
+}) : Promise<any> => {
   let ops: any;
   
   if (options.mediaTypes === ImagePicker.MediaTypeOptions.Images) {
@@ -31,7 +31,7 @@ const pick = async (options: ImagePicker.ImagePickerOptions = {
   try {
     let result = await ImagePicker.launchImageLibraryAsync(ops);
     if (!result?.cancelled) {
-      return result.uri
+      return result
     }
   } catch (E) {
     console.log(E);

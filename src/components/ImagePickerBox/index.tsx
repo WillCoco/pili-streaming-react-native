@@ -35,10 +35,12 @@ const ImagePickerBox = (props: ImagePickerBoxProps) =>  {
    */
   const [coverUri, setCoverUri]: Array<any> = React.useState(props.initImg);
   const pickCover = async () => {
-    const uri = await pickCameraRoll({mediaTypes: ImagePicker.MediaTypeOptions.Images});
+    const r = await pickCameraRoll({mediaTypes: ImagePicker.MediaTypeOptions.Images});
+
+    const {uri} = r || {};
     if (uri) {
       setCoverUri(uri)
-      props.onPicked(uri);
+      props.onPicked(r);
     }
   };
 
