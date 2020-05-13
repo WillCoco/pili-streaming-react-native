@@ -73,7 +73,7 @@ export const post = (path: RequestInfo, data: any, onlyData: boolean = true) => 
     })
     .catch((error: any) => reject(error))
   })
-} 
+}
 
 /**
  * 上传
@@ -101,4 +101,4 @@ export const upload = (path: RequestInfo, files: Array<fileType>) => {
     .then((result: { data: unknown; }) => resolve(result.data))
     .catch((error: any) => reject(error))
   })
-} 
+}
