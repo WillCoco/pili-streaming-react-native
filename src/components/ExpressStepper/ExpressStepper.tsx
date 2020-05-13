@@ -1,8 +1,56 @@
-import React from 'react'
-import { View, Text } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import { Steps } from '@ant-design/react-native'
+import { Colors } from '../../constants/Theme'
+import pxToDp from '../../utils/px2dp'
 
-export default function ExpressStepper() {
+const Step = Steps.Step
+
+export default function ExpressStepper(props: any) {
+  const { expressList } = props
+
+  const [step, setStep] = useState([
+    { title: 'Finished', description: 'This is description', status: 'error' },
+    { title: 'In Progress', description: 'This is description', status: 'wait' },
+    { title: 'Waiting', description: 'This is description', status: 'finish' }
+  ])
+
   return (
-    <Text>111</Text>
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
+      <Steps current={1}>
+        {
+          expressList.map((item: any, index: number) => {
+            return (
+              <Step
+                key={`step-${index}`}
+                title={
+                  <View>
+                    <Text>{item.time}</Text>
+                  </View>
+                }
+                description={
+                  <View>
+                    <Text>{item.context}</Text>
+                  </View>
+                }
+                status={index === 0 ? 'wait' : 'finish'}
+              />
+            )
+          })
+        }
+      </Steps>
+    </ScrollView>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.whiteColor,
+    marginTop: pxToDp(10),
+    padding: pxToDp(30)
+  }
+})

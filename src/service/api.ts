@@ -73,7 +73,7 @@ export const apiSearchAddGoods = (data: any) => get(`${HOST_PHP}/mobile/goods/ad
 // 首页搜索
 export const apiSearch = (data: any) => get(`${HOST_PHP}/mobile/Goods/getGoodsList`, data)
 // 查看物流
-export const apiQueryExpress = (data: any) => get(`${HOST_PHP}/Home/Api/queryExpress`, data)
+export const apiQueryExpress = (data: any) => get(`${HOST_JAVA}/order/queryExpress`, data)
 // 我的收藏
 export const apiGetEnshrine = (data: any) => get(`${HOST_PHP}/mobile/goods/getEnshrine`, data)
 // 我关注的店铺

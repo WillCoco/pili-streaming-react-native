@@ -4,6 +4,7 @@ import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import * as ImagePicker from 'expo-image-picker'
 import { Ionicons } from '@expo/vector-icons'
+import Toast from 'react-native-tiny-toast'
 
 export default function Reason(props) {
   const [imageList, setImageList] = useState([
@@ -13,10 +14,14 @@ export default function Reason(props) {
   const chooseImage = async (index: number) => {
     if (index) return
 
+    if (imageList.length === 10) {
+      Toast.show('最多上传9张图片', { position: 0 })
+      return
+    }
+
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
       })

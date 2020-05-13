@@ -16,6 +16,11 @@ export default function ImgPicker(props: any) {
   const chooseImage = async (index: number) => {
     if (index) return
 
+    if (pageType !== 'video' && imageList.length === 10) {
+      Toast.show('最多上传9张图片', { position: 0 })
+      return
+    }
+
     if (pageType === 'video' && imageList.length === 2) {
       Toast.show('只能上传一个视频', { position: 0 })
       return

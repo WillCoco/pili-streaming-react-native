@@ -22,7 +22,7 @@ export default function ServiceType(props) {
         {
           typeList.map((item: any, index: number) => {
             return (
-              <Text key={`type-${index}`} style={[styles.btn, item.active && styles.btnActive]} onPress={() => toggleType(index)}>{item.type}</Text>
+              <Text key={`type-${index}`} style={[styles.btn, item.active && styles.btnActive]} onPress={() => toggleType(index)}>{item.value}</Text>
             )
           })
         }

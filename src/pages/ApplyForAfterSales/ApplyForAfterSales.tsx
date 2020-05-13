@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import { TouchableOpacity, Text, ScrollView, StyleSheet } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
 
@@ -8,17 +8,21 @@ import ServiceType from './ServiceType/ServiceType'
 import Reason from './Reason/Reason'
 import Contact from './Contact/Contact'
 import pxToDp from '../../utils/px2dp'
+import { apiCreateReturnOrder } from '../../service/api'
+import Toast from 'react-native-tiny-toast'
+
+const phonePattern = /^1[3456789]\d{9}$/
 
 export default function ApplyForAfterSales() {
   const route = useRoute()
   const navigation = useNavigation()
-  const [orderInfo]= useState(route.params)
+  const [orderInfo] = useState(route.params)
   const [reason, setReason] = useState('')
   const [tel, setTel] = useState('')
   const [typeList, setTypeList] = useState([
-    { type: '仅退款', active: true },
-    { type: '退货退款', active: false },
-    { type: '换货', active: false }
+    { value: '仅退款', type: 1, active: true },
+    { value: '退货退款', type: 2, active: false },
+    { value: '换货', type: 3, active: false }
   ])
 
   navigation.setOptions({
@@ -32,8 +36,39 @@ export default function ApplyForAfterSales() {
     headerBackTitleVisible: false
   })
 
+
+
   const submit = () => {
-    
+    const { goodsInfo } = orderInfo
+
+    if (!reason) {
+      Toast.show('请填写申请原因', {
+        position: 0
+      })
+      return
+    }
+
+    if (!phonePattern.test(tel)) {
+      Toast.show('请输入正确的手机号', {
+        position: 0
+      })
+      return
+    }
+
+    const params = {
+      applyImgs: [],
+      applyReason: reason,
+      goodsNum: goodsInfo.goodsNum,
+      mobile: tel,
+      orderId: orderInfo.id,
+      shopId: orderInfo.shopId,
+      skuId: goodsInfo.skuId,
+      type: typeList.filter(item => item.active)[0].type
+    }
+
+    apiCreateReturnOrder(params).then(res => {
+      console.log(res, '申请退款')
+    })
   }
 
   return (
@@ -48,7 +83,10 @@ export default function ApplyForAfterSales() {
       <Contact inputTel={(value: string) => setTel(value)} />
       {/* 退货说明 */}
       <Text style={styles.tips}>退货说明：退货成功后，退款将原路返回，退款只会退还实际支付的价格。提交退款申请后，售后专员可能与您电话沟通，请保持手机畅通。</Text>
-      <Text style={styles.submitBtn} onPress={submit}>提交</Text>
+      <TouchableOpacity style={styles.submitBtn} onPress={submit}>
+        <Text style={styles.btnText}>提交</Text>
+      </TouchableOpacity>
+
     </ScrollView>
   )
 }
@@ -65,14 +103,15 @@ const styles = StyleSheet.create({
     marginTop: pxToDp(30),
     width: pxToDp(670),
     height: pxToDp(80),
-    lineHeight: pxToDp(80),
     borderRadius: pxToDp(40),
-    overflow: 'hidden',
     alignSelf: 'center',
     backgroundColor: Colors.basicColor,
-    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  btnText: {
     fontSize: pxToDp(32),
-    fontWeight: '500',
-    color: Colors.whiteColor
+    color: Colors.whiteColor,
+    fontWeight: '500'
   }
 })

@@ -23,8 +23,8 @@ export default function PayWebview() {
   return (
     <WebView
       source={{ uri: route?.params?.url }}
-      onMessage={() => {
-        
+      onMessage={(msg) => {
+        console.log(msg)
       }}
     />
   )

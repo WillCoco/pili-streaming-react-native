@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import React, { useEffect } from 'react'
+import { View, ScrollView } from 'react-native'
 import { connect } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import { apiAddGoods } from '../../service/api'

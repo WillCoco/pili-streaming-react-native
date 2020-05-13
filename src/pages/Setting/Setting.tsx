@@ -56,7 +56,7 @@ function Setting(props: any) {
         totalProfit: 0,
         userAvatar: '',
         userId: '',
-        userLevel: '',
+        userLevel: [],
         willSettle: 0,
       }))
       Toast.showSuccess('已退出登录')
