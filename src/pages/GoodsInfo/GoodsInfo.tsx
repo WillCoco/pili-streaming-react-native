@@ -29,6 +29,7 @@ function GoodsInfo(props: any) {
   const navigation = useNavigation()
   const isFocused = useIsFocused()
   const { isLogin } = props
+  const { id: goodsId, shareUserId } = route.params
   const [isLoadingComplete, setIsLoadingComplete] = useState(false)
   const [swiperList, setSwiperList] = useState([])
   const [goodsInfo, setGoodsInfo] = useState({})
@@ -78,7 +79,7 @@ function GoodsInfo(props: any) {
     let loading = Toast.showLoading('')
 
     apiGoodInfo({
-      goods_id: route.params.id
+      goods_id: goodsId
     }).then((res: any) => {
       console.log('商品详情', res)
       Toast.hide(loading)
@@ -330,7 +331,7 @@ function GoodsInfo(props: any) {
       }]
     }]
 
-    navigation.push('CreateOrder', { tempOrderList })
+    navigation.push('CreateOrder', { tempOrderList, shareUserId })
   }
 
   /**
@@ -404,6 +405,7 @@ function GoodsInfo(props: any) {
           goodsInfo={goodsInfo}
           showGoodsSkuActionSheet={(type: string) => showGoodsSkuActionSheet(type)}
           toggleStarGoods={toggleStarGoods}
+          shareUserId={shareUserId}
         />
         {/* 商品属性弹窗 */}
         <ActionSheet isShow={showGoodsSku}>

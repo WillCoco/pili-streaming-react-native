@@ -1,5 +1,5 @@
 
-import { get, post } from './fetch'
+import { get, post, upload, File } from './fetch'
 
 // const HOST_PHP = __DEV__ ? 'https://php.quanpinrtmp.com' : ''
 // const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''
@@ -171,13 +171,13 @@ export const apiDecryptData = (data: any) => post(`${HOST_JAVA}/miniApp/decryptD
 // 注册
 export const apiRegister = (data: any) => post(`${HOST_JAVA}/user/register`, data)
 // 退出
-export const apiLogout = () => get(`${HOST_JAVA}/user/logout`)
+export const apiLogout = (data: any) => get(`${HOST_JAVA}/user/logout`, data)
 
 // 杉德支付
 export const apiSandCreateOrder = (data: any) => post(`${SHANDE_HOST_JAVA}/sandpay/createOrder`, data, false)
 
 
-/**
+/*
  * 主播相关接口 ==========================================================================================
  */
 // 成为主播
@@ -217,7 +217,7 @@ export const apiGetUserChatList = (data: any) => post(`${HOST_JAVA}/anchor/getUs
 // 主播我的主页信息
 export const apiAnchorHomePage = (data: any) => get(`${HOST_JAVA}/anchor/HomePage`, data)
 // 直播上传文件
-export const apiLiveUploadFile = (data: any) => post(`${HOST_JAVA}/anchor/liveUploadFile`, data)
+export const apiLiveUploadFile = (files: Array<File>) => upload(`${HOST_JAVA}/Anchor/liveUploadFile`, files)
 // 直播发布预告
 export const apiReleaseNotice = (data: any) => post(`${HOST_JAVA}/anchor/releaseNotice`, data)
 // 直播间商品管理数据列表
@@ -251,3 +251,5 @@ export const apiSearchLiveStreamList = (data: any) => get(`${HOST_JAVA}/userLive
 export const apiShoppingBag = (data: any) => get(`${HOST_JAVA}/userLive/shoppingBag`, data)
 // 用户直播列表轮播图
 export const apiUserLiveBanner = () => post(`${HOST_JAVA}/userLive/userLiveBanner`)
+// 上传用户头像本地base64
+export const apiUploadFile = (data: any) => post(`${HOST_JAVA}/user/uploadFile`, data)

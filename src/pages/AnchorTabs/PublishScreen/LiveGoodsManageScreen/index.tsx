@@ -132,7 +132,7 @@ const LiveGoodsManage = (props: any) =>  {
    */
   const isVaildData = () => {
     if (!checkedList || checkedList.length === 0) {
-      Toast.show('请至少选择一个商品');
+      Toast.show('请至少选择一个商品')
       return false;
     }
 

@@ -1,10 +1,10 @@
 import { Platform } from 'react-native';
 import Share, {Options} from 'react-native-share';
 
-const url = 'https://awesome.contents.com/';
-const title = 'Awesome Contents';
-const message = 'Please check this out.';
-const icon = 'data:<data_type>/<file_extension>;base64,<base64_data>';
+// const url = 'https://awesome.contents.com/';
+// const title = 'Awesome Contents';
+// const message = 'Please check this out.';
+// const icon = 'data:<data_type>/<file_extension>;base64,<base64_data>';
 
 const share = (options: Options) => {
 

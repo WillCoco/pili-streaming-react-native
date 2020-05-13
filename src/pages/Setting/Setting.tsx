@@ -27,7 +27,9 @@ function Setting(props: any) {
   })
 
   const logOut = () => {
-    apiLogout().then(res => {
+    apiLogout({
+      platform: 'app'
+    }).then(res => {
       console.log('退出', res)
       props.dispatch(toggleLoginState(false))
       props.dispatch(setToke(''))

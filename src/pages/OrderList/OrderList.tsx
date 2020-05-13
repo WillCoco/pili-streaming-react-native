@@ -136,6 +136,8 @@ export default function OrderList() {
     console.log(id)
     apiCancelOrder({ orderId: id }).then(res => {
       Toast.showSuccess('已取消该订单')
+      orderListRef.current = []
+      setOrderList(orderListRef.current)
       getOrderList(indexRef.current)
     })
   }
