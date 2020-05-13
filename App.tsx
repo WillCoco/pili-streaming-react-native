@@ -52,6 +52,7 @@ import GoodsCart from './src/pages/GoodsCart/GoodsCart'
 
 import NavBar from './src/components/NavBar'
 import AnchorTabs from './src/navigation/AnchorTabs'
+import BeAnchor from './src/pages/AnchorTabs/BeAnchor'
 import LiveSearch from './src/pages/Live/LiveSearchScreen'
 import AnchorDetail from './src/pages/Live/AnchorDetailScreen'
 import LivingRoom from './src/pages/Live/LivingRoomScreen'
@@ -179,6 +180,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 <Stack.Screen name='CreateOrder' component={CreateOrder} />
                 <Stack.Screen name='CreateOrEditAddr' component={CreateOrEditAddr} />
                 
+                <Stack.Screen name='BeAnchor' component={BeAnchor} options={{ headerShown: false }} />
                 <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
                 <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false }} />
                 <Stack.Screen name='LiveSearchScreen' component={LiveSearch} />

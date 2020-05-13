@@ -25,6 +25,10 @@ const images : {
   get livingbg() {
     return require('./livingbg.png')
   },
+  // 成为主播
+  get beAnchorIcon() {
+    return require('../be-anchor-image/beAnchorIcon.png')
+  },
   // ❤️ 喜欢
   get heart() {
     return require('./heart.png')
