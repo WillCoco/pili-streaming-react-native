@@ -1,5 +1,5 @@
 
-import { get, post } from './fetch'
+import { get, post, upload, File } from './fetch'
 
 // const HOST_PHP = __DEV__ ? 'https://php.quanpinrtmp.com' : ''
 // const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''
@@ -49,7 +49,7 @@ export const apiSelectGoodsList = (data: any) => get(`${HOST_PHP}/mobile/index/a
 // 好物详情
 export const apiSelectGoodsInfo = (data: any) => get(`${HOST_PHP}/mobile/index/jxhwInfoOne`, data)
 // 喜欢 || 取消喜欢 好物
-export const apiGoodsIsLike = (data: any) => get(`${HOST_PHP}/mobile/goods/goodsLike`, data)
+export const apiGoodsIsLike = (data: any) => get(`${HOST_PHP}/mobile/goods/goodsLike`, data) 
 // 添加地址
 export const apiAddAddr = (data: any) => post(`${HOST_PHP}/mobile/user_address/add_address`, data)
 // 地址列表
@@ -81,15 +81,13 @@ export const apiGetAttention = (data: any) => get(`${HOST_PHP}/mobile/brand/getA
 // 会员详情
 export const apiGetUserLevelInfo = () => get(`${HOST_PHP}/mobile/mine/userLevel`)
 
-
-
 /**
  * JAVA 接口 ==================================================================
  */
 // 获取 token
 export const apiGetToken = (data: any) => post(`${HOST_JAVA}/miniApp/login`, data)
 // 发送验证码
-export const apiSendVerCode = (data: any) => get(`${HOST_JAVA}/user/sendMessage`, data)
+export const apiSendVerCode = (data: any) => get(`${HOST_JAVA}/user/sendAppMessage`, data)
 // 检测用户是否绑定过邀请码
 export const apiCheckIsInvite = () => get(`${HOST_JAVA}/miniApp/isInvite`)
 // 更新用户信息
@@ -103,7 +101,7 @@ export const apiGetWorks = (data: any) => post(`${HOST_JAVA}/find/getWorks`, dat
 // 获取发现详情
 export const apiGetWorksDetailInfo = (data: any) => post(`${HOST_JAVA}/find/getWorksDetailInfo`, data)
 // 查询优惠金额 （预生成订单）
-export const apiGetSellerDiscount = (data: any) => post(`${HOST_JAVA}/order/getSellerDiscount`, data)
+export const apiGetSellerDiscount = (data: any) => post(`${HOST_JAVA}/order/getSellerDiscount`, data) 
 // 发布作品
 export const apiPublishWorks = (data: any) => post(`${HOST_JAVA}/find/publishWorks`, data)
 // 关注/取消关注作品
@@ -173,9 +171,58 @@ export const apiDecryptData = (data: any) => post(`${HOST_JAVA}/miniApp/decryptD
 // 注册
 export const apiRegister = (data: any) => post(`${HOST_JAVA}/user/register`, data)
 // 退出
-export const apiLogout = () => get(`${HOST_JAVA}/user/logout`)
-//我的直播列表
-export const apiGetLiveList = (data: any) => get(`${HOST_JAVA}/anchor/getLiveList`, data)
+export const apiLogout = (data: any) => get(`${HOST_JAVA}/user/logout`, data)
 
 // 杉德支付
 export const apiSandCreateOrder = (data: any) => post(`${SHANDE_HOST_JAVA}/sandpay/createOrder`, data, false)
+
+
+/*
+ * 主播相关接口 ==========================================================================================
+ */
+// 主播添加商品到主播店铺
+export const apiAddAnchorGoods = (data: any) => post(`${HOST_JAVA}/Anchor/addAnchorGoods`, data)
+// 主播添加商品到主播预组货
+export const apiAddGroupGoods = (data: any) => post(`${HOST_JAVA}/Anchor/addGroupGoods`, data)
+// 开播后确认是否存在直播封面
+export const apiAffirmCover = (data: any) => post(`${HOST_JAVA}/Anchor/affirmCover`, data)
+// 直播重新组货
+export const apiAnewAddLiveGoods = (data: any) => post(`${HOST_JAVA}/Anchor/anewAddLiveGoods`, data)
+// 新增或修改寄回地址
+export const apiAuReturnedAddress = (data: any) => post(`${HOST_JAVA}/Anchor/auReturnedAddress`, data)
+// 主播删除预组货商品
+export const apiDelGroupGoods = (data: any) => post(`${HOST_JAVA}/Anchor/delGroupGoods`, data)
+// 删除主播直播回放
+export const apiDelLivePlayback = (data: any) => post(`${HOST_JAVA}/Anchor/delLivePlayback`, data)
+// 删除寄回地址
+export const apiDelReturnedAddress = (data: any) => post(`${HOST_JAVA}/Anchor/delReturnedAddress`, data)
+// 我的预告列表
+export const apiGetAdvanceList = (data: any) => post(`${HOST_JAVA}/Anchor/getAdvanceList`, data)
+// 主播预组货(店铺)添加商品品牌商品列表
+export const apiGetBrandGoodsList = (data: any) => post(`${HOST_JAVA}/Anchor/getBrandGoodsList`, data)
+// 主播添加预组货分类品牌数据
+export const apiGetCatBrandAll = (data: any) => post(`${HOST_JAVA}/Anchor/getCatBrandAll`, data)
+// 主播预组货(店铺)商品列表
+export const apiGetGroupGoods = (data: any) => post(`${HOST_JAVA}/Anchor/getGroupGoods`, data)
+// 主播直播数据列表
+export const apiGetLiveDataList = (data: any) => post(`${HOST_JAVA}/Anchor/getLiveDataList`, data)
+// 我的直播列表
+export const apiGetLiveList = (data: any) => post(`${HOST_JAVA}/Anchor/getLiveList`, data)
+// 分页查询寄回地址列表
+export const apiGetReturnAddressList= (data: any) => post(`${HOST_JAVA}/Anchor/getReturnAddressList`, data)
+// 主播消息通知列表
+export const apiGetUserChatList= (data: any) => post(`${HOST_JAVA}/Anchor/getUserChatList`, data)
+// 主播我的主页信息
+export const apiAnchorHomePage= (data: any) => get(`${HOST_JAVA}/Anchor/HomePage`, data, false)
+// 直播上传文件
+export const apiLiveUploadFile = (files: Array<File>) => upload(`${HOST_JAVA}/Anchor/liveUploadFile`, files)
+// 直播发布预告
+export const apiReleaseNotice= (data: any) => post(`${HOST_JAVA}/Anchor/releaseNotice`, data)
+// 直播间商品管理数据列表
+export const apiSelLiveGoods= (data: any) => post(`${HOST_JAVA}/Anchor/selLiveGoods`, data)
+// 准时开播页面展示数据
+export const apiSelStartLive= (data: any) => post(`${HOST_JAVA}/Anchor/selStartLive`, data)
+// 选择商品开始直播
+export const apiStartLive= (data: any) => post(`${HOST_JAVA}/Anchor/startLive`, data)
+// 上传用户头像本地base64
+export const apiUploadFile = (data: any) => post(`${HOST_JAVA}/user/uploadFile`, data)

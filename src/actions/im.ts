@@ -8,6 +8,7 @@ import {RoomType, MessageType, RoomMessageType} from '../reducers/im';
 import Toast from 'react-native-tiny-toast';
 import {store} from '../store';
 import {safeParse} from '../utils/saftyFn';
+
 const {tim, TIM, userSig, getUserSig: getUserSigLocal} = timModlue;
 
 console.log(userSig, 'userss2')
@@ -17,7 +18,7 @@ tim.on(TIM.EVENT.MESSAGE_RECEIVED, onMessageReceived);
 
 const TEST_ROOM = "@TGS#aQNQWYNGH";
 
-function onMessageReceived(event) {
+function onMessageReceived(event: any) {
   // 收到推送的单聊、群聊、群提示、群系统通知的新消息，可通过遍历 event.data 获取消息列表数据并渲染到页面
   // event.name - TIM.EVENT.MESSAGE_RECEIVED
   // event.data - 存储 Message 对象的数组 - [Message]
@@ -70,21 +71,13 @@ function handleCustomMsg(message: any) {
     const msgData = safeParse(data);
     const type = msgData?.type;
 
-    if (
-      type === MessageType.roomMessage ||
-      type === MessageType.enter ||
-      type === MessageType.leave
-    ) {
-      
-    };
-
     const newRoomMessage = {
       data: safeParse(data),
       description,
       extension
     }
-    
-    dispatch(addRoomMessage(newRoomMessage));
+
+    dispatch(updateMessage2Store(newRoomMessage))
   }
 }
 
@@ -146,7 +139,7 @@ function handleSysMsg(message: any) {
   }
 }
 
-const onReadyHandler = function (event) {
+const onReadyHandler = function (event: any) {
   // SDK ready 后接入侧才可以调用 sendMessage 等需要鉴权的接口，否则会提示失败！
   // event.name - TIM.EVENT.SDK_READY
   console.log(event, 'onReadyHandler');
@@ -210,12 +203,12 @@ export function login(params?: {
  * 退出im登录
  */
 export const logout = () => {
-  return function(dispatch, getState) {
+  return function(dispatch: Dispatch<any>, getState: any) {
     tim.logout()
-      .then(function(imResponse) {
+      .then(function(imResponse: any) {
         console.log(imResponse.data); // 登出成功
       })
-      .catch(function(imError) {
+      .catch(function(imError: any) {
         console.warn('logout error:', imError);
       });
   }
@@ -300,7 +293,7 @@ export const joinGroup = (params: {
       groupID: params?.groupID || TEST_ROOM,
       type: TIM.TYPES.GRP_AVCHATROOM
     })
-      .then(r => {
+      .then((r: any) => {
         console.log(r, 'rrr3');
         switch (r?.data?.status) {
           case TIM.TYPES.JOIN_STATUS_WAIT_APPROVAL: // 等待管理员同意
@@ -325,7 +318,7 @@ export const joinGroup = (params: {
         // dispatch(updateRoom({groupID: params.groupID}));
         return Promise.resolve(false)
       })
-      .catch(err => {
+      .catch((err: any) => {
         console.log('joinGroup_err:', err)
         return Promise.resolve(false)
       })
@@ -336,13 +329,13 @@ export const joinGroup = (params: {
  * 退出房间
  */
 export const quitGroup = () => {
-  return function(dispatch, getState) {
+  return function(dispatch: Dispatch<any>, getState: any) {
     const groupID = getState().im?.room?.groupID;
 
     console.log(groupID, 123123213)
 
     tim.quitGroup(groupID)
-      .then(function(imResponse) {
+      .then(function(imResponse: any) {
         console.log(imResponse.data, 'quitGroup'); // 登出成功
         // 离开消息
         dispatch(sendRoomMessage({text: '离开直播间', type: MessageType.leave}));
@@ -350,7 +343,7 @@ export const quitGroup = () => {
         // 清空房间相关数据
         dispatch(clearLiveRoom('AUDIENCE'));
       })
-      .catch(function(imError) {
+      .catch(function(imError: any) {
         console.log('logout error:', imError);
       });
   }
@@ -399,7 +392,7 @@ export const sendRoomMessage = (msgInfo: SendMessageParams) => {
 
         console.log(newRoomMessage, 'aaanewRoomMessage')
 
-        dispatch(addRoomMessage(newRoomMessage));
+        dispatch(updateMessage2Store(newRoomMessage));
       }).catch(function(imError: any) {
         if (imError.code === 10017) {
           Toast.show('您已被禁言');
@@ -483,7 +476,7 @@ export const getGroupProfile = (params: getGroupProfileParams) => {
 interface RoomMessage {
   data: string,
   description: string,
-  extension: string
+  extension: string,
 }
 
 function makeMsg({type, text}: {
@@ -499,6 +492,7 @@ function makeMsg({type, text}: {
       userName: userName || '游客',
       userAvatar,
       userId,
+      isFollowed: false,
       type
     })
     return {
@@ -550,7 +544,7 @@ export const setGroupMemberMuteTime = (params: {
   userID: string,
   muteTime?: number // 禁言设为0，则表示取消禁言
 }) => {
-  return async function(dispatch, getState) {
+  return async function(dispatch: Dispatch<any>, getState: any) {
     if (!params.groupID) {
       params.groupID = getState()?.im?.room?.groupID;
     }
@@ -566,11 +560,11 @@ export const setGroupMemberMuteTime = (params: {
       groupID: params.groupID,
       muteTime: params.muteTime, 
     })
-      .then(function(imResponse) {
+      .then(function(imResponse: any) {
         console.log(imResponse.data, '设置room成员禁言'); // 登出成功
         Toast.show('设置成功')
       })
-      .catch(function(imError) {
+      .catch(function(imError: any) {
         Toast.show('设置失败')
         console.warn('logout error:', imError);
       });
@@ -584,7 +578,7 @@ export const getGroupMemberProfile = (params: {
   groupID?: string,
   userID: string,
 }) => {
-  return async function(dispatch, getState) {
+  return async function(dispatch: Dispatch<any>, getState: any) {
     if (!params.groupID) {
       const groupID = getState()?.im?.room?.groupID;
       params.groupID = groupID;
@@ -603,7 +597,7 @@ export const getGroupMemberProfile = (params: {
         const [userInfo] = imResponse?.data?.memberList || [];
         return Promise.resolve(userInfo)
       })
-      .catch(function(imError) {
+      .catch(function(imError: any) {
         console.warn('logout error:', imError);
       });
   }
@@ -613,7 +607,7 @@ export const getGroupMemberProfile = (params: {
 /**
  * 收到 SDK 发生错误通知
  */
-tim.on(TIM.EVENT.ERROR, function(event) {
+tim.on(TIM.EVENT.ERROR, function(event: any) {
   // event.name - TIM.EVENT.ERROR
   // event.data.code - 错误码
   // event.data.message - 错误信息
@@ -622,7 +616,7 @@ tim.on(TIM.EVENT.ERROR, function(event) {
 /**
  * 收到被踢下线通知
  */
-tim.on(TIM.EVENT.KICKED_OUT, function(event) {
+tim.on(TIM.EVENT.KICKED_OUT, function(event: any) {
   // event.name - TIM.EVENT.KICKED_OUT
   // event.data.type - 被踢下线的原因，例如 :
   //   - TIM.TYPES.KICKED_OUT_MULT_ACCOUNT 多实例登录被踢
@@ -671,12 +665,36 @@ export function updateRoom(room?: RoomType) {
 export function addRoomMessage(message: RoomMessageType) {
   return async function(dispatch: Dispatch<any>, getState: any) {
     const roomMessages = getState().im?.roomMessages;
-    console.log(roomMessages, 'roomMessages')
     const newRoomMessages = roomMessages ? [...roomMessages, message] : [message]
 
-    console.log(newRoomMessages, '新增一条房间消息')
-    
+    // console.log(newRoomMessages, '新增一条房间消息')
     dispatch(updateRoomMessage(newRoomMessages));
+  }
+}
+
+/**
+ * 新增一条滚动消息
+ */
+export function addScrollMessage(message: RoomMessageType) {
+  return async function(dispatch: Dispatch<any>, getState: any) {
+    const orderMessages = getState().im?.orderMessages;
+    const newRoomMessages = orderMessages ? [...orderMessages, message] : [message]
+
+    dispatch(updateScrollMessage(newRoomMessages));
+  }
+}
+
+/**
+ * 出列一条滚动消息
+ */
+export function popScrollMessage() {
+  return async function(dispatch: Dispatch<any>, getState: any) {
+    const orderMessages = getState().im?.orderMessages;
+    const newRoomMessages = orderMessages.splice(1) || [];
+
+    console.log(orderMessages, 'orderMessages')
+
+    dispatch(updateScrollMessage(newRoomMessages));
   }
 }
 
@@ -695,6 +713,41 @@ export function updateRoomMemberNum(memberNum: number) {
  */
 export function updateRoomMessage(roomMessages: Array<RoomMessageType>) {
   return {type: imActionType.UPDATE_ROOM_MESSAGES, payload: {roomMessages}}
+}
+
+/**
+ * 更新滚动消息
+ */
+export function updateScrollMessage(orderMessages: Array<RoomMessageType>) {
+  return {type: imActionType.UPDATE_ORDER_MESSAGES, payload: {orderMessages}}
+}
+
+/**
+ * 更新类型消息到对应store
+ */
+function updateMessage2Store(newRoomMessage: RoomMessageType) {
+  return function(dispatch: Dispatch<any>, getState: any) {
+    const type = newRoomMessage?.data?.type;
+
+    // 聊天消息
+    if (
+      type === MessageType.roomMessage ||
+      type === MessageType.enter ||
+      type === MessageType.leave
+    ) {
+      dispatch(addRoomMessage(newRoomMessage));
+      return;
+    };
+
+    // 购买、关注消息
+    if (
+      type === MessageType.order ||
+      type === MessageType.follow
+    ) {
+      dispatch(addScrollMessage(newRoomMessage));
+      return;
+    };
+  }
 }
 
 /**

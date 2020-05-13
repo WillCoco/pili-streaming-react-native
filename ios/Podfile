@@ -1,5 +1,5 @@
-# source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
 platform :ios, '10.0'
+# source 'https://github.com/CocoaPods/Specs.git'
 
 require_relative '../node_modules/react-native-unimodules/cocoapods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
@@ -45,5 +45,7 @@ target 'championApp' do
   # react-native-cli autolinking
   use_native_modules!
 
+
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
 
 end

@@ -12,6 +12,8 @@ import live from './live'
 import shop from './shop'
 import asset from './asset'
 
+import anchorData from './anchor'
+
 export default combineReducers({
   publicData,
   homeData,
@@ -23,4 +25,5 @@ export default combineReducers({
   live,
   shop,
   asset,
+  anchorData,
 })

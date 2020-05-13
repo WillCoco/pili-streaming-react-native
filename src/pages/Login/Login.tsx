@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { toggleLoginState, setToke } from '../../actions/user'
 import Toast from 'react-native-tiny-toast'
+import * as WeChat from 'react-native-wechat-lib'
 
 import Form from './Form/Form'
 
@@ -118,7 +119,7 @@ function Logion(props: any) {
       inviteCode: invCode
     }
 
-    apiLogin(params).then(res => {
+    apiLogin(params).then((res: any) => {
       console.log('注册&登录', res)
 
       if (res) {
@@ -132,6 +133,19 @@ function Logion(props: any) {
         }, 1500)
       }
     })
+  }
+
+  /**
+   * 微信登录
+   */
+  const loginWithWeChat = () => {
+    // WeChat.sendAuthRequest({
+    //   scope: 'snsapi_userinfo'
+    // }).then((res: any) => {
+    //   console.log(res)
+    // }).catch((err: any) => {
+    //   console.log(err)
+    // })
   }
 
   return (
@@ -161,6 +175,11 @@ function Logion(props: any) {
         <Text style={styles.btnText}>登录/注册</Text>
       </TouchableOpacity>
 
+      <TouchableOpacity style={styles.weChatContent} onPress={loginWithWeChat}>
+        <Image source={require('../../assets/login-image/wechat.png')} style={styles.wechatIcon} />
+        <Text style={styles.text}>微信登录</Text>
+      </TouchableOpacity>
+
     </ImageBackground>
   )
 }
@@ -169,6 +188,7 @@ export default connect()(Logion)
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     position: 'relative',
     width: '100%',
     height: '100%',
@@ -193,6 +213,19 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: pxToDp(28),
     color: Colors.whiteColor
+  },
+  weChatContent: {
+    alignItems: 'center',
+    marginTop: pxToDp(50)
+  },
+  wechatIcon: {
+    width: pxToDp(80),
+    height: pxToDp(80)
+  },
+  text: {
+    fontSize: pxToDp(30),
+    color: Colors.darkBlack,
+    marginTop: pxToDp(10)
   }
 })
 

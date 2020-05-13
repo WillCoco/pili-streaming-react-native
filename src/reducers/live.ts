@@ -5,9 +5,10 @@ import liveActionTypes from '../constants/Live';
 interface InitStateTypes {
   // 直播配置
   liveConfig: {
-    cameraIndex: number, // 摄像头
     cover: any, // 封面
     title: string, // 标题
+    // 美颜
+    // 滤镜
   },
   // 推流配置
   pusherConfig: any,
@@ -17,7 +18,8 @@ interface InitStateTypes {
 
 const DEFAULT_OPTIONS: any = {
   // outputUrl: "rtmp://pili-publish.qnsdk.com/sdk-live/111",
-  outputUrl: "rtmp://77154.livepush.myqcloud.com/live/test003?txSecret=e6aaf45458ce4f0626c0dafca4b6bf5a&txTime=5EB581FF",
+  // outputUrl: "rtmp://77154.livepush.myqcloud.com/live/test003?txSecret=e6aaf45458ce4f0626c0dafca4b6bf5a&txTime=5EB581FF",
+  outputUrl: "rtmp.youzfx.cn",
   camera: {cameraId: 1, cameraFrontMirror: false},
   audio: {bitrate: 32000, profile: 1, samplerate: 44100},
   video: {preset: 12, bitrate: 400000, profile: 1, fps: 15, videoFrontMirror: false},
@@ -26,7 +28,6 @@ const DEFAULT_OPTIONS: any = {
 
 const INITIAL_STATE: InitStateTypes = {
   liveConfig: {
-    cameraIndex: 0,
     cover: undefined,
     title: '',
   },

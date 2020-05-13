@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {PrimaryText, SmallText, T1, scale} from 'react-native-normalization-text';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import withPage from '../../../../components/HOCs/withPage';
 import {vw} from '../../../../utils/metric';
 import {Colors} from '../../../../constants/Theme';
@@ -21,21 +21,38 @@ import GoodCheckRow from './LiveGoodsManageRow';
 import NavBar from '../../../../components/NavBar';
 import ButtonRadius from '../../../../components/Buttons/ButtonRadius';
 import CheckBox from '../../../../components/CheckBox';
+import { Toast } from '@ant-design/react-native';
 
-const emptyList: Array<any> = [];
+const emptyList: [] = [];
+const emptyObj: {} = {};
 
 const LiveGoodsManage = (props: any) =>  {
   const {navigate, goBack} = useNavigation();
   const dispatch = useDispatch();
 
-  const liveConfig = useSelector(state => state?.live?.liveConfig);
-
   /**
-   * 删除
+   * 页面参数
    */
-  const onDeletePress = () => {
-    console.log('shanchu')
-  }
+  const route = useRoute();
+  const {
+    navTitle = '预组货',
+    nextNav = 'AnorchLivingRoomScreen',
+    btnText,
+  } : {
+    navTitle?: string, // navTitle
+    nextNav?: string, // 
+    btnText?: string, // 
+  } = route.params || emptyObj;
+
+
+  // const liveConfig = useSelector(state => state?.live?.liveConfig);
+
+  // /**
+  //  * 删除
+  //  */
+  // const onDeletePress = () => {
+  //   console.log('shanchu')
+  // }
 
   /**
    * 预组货列表
@@ -52,25 +69,41 @@ const LiveGoodsManage = (props: any) =>  {
   });
 
   /**
+   * 预组货货物
+   */
+  const [dataList, setDataList] = React.useState(warehouseGoods);
+
+  /**
+   * 过滤出选中的
+   */
+  const checkedFilter = (list: Array<any>) => {
+    return list.filter(o => o.isChecked) // todo: 字段修正
+  }
+
+  /**
    * 选中的预组货
    */
-  const [checkedList, setCheckedList] = React.useState(warehouseGoods);
+  const checkedList = React.useMemo(() => {
+    return checkedFilter(dataList)
+  }, [dataList]);
+
+  console.log(dataList, 'dataListdataList')
 
   /**
    * 选择
    */
   const checkGood = (index: number) => {
-    const newCheckedList = [...checkedList];
-    newCheckedList[index].isChecked = !newCheckedList[index].isChecked;
+    const newDataList = [...dataList];
+    newDataList[index].isChecked = !newDataList[index].isChecked;
 
-    console.log(newCheckedList, 'newCheckedList')
-    setCheckedList(newCheckedList);
+    console.log(newDataList, 'newDataList')
+    setDataList(newDataList);
   }
 
   /**
    * 现在是否全选
    */
-  const isCheckedAll = !checkedList.find((o: any) => !o.isChecked);
+  const isCheckedAll = !dataList.find((o: any) => !o.isChecked);
 
   /**
    * 全选/反选
@@ -78,13 +111,13 @@ const LiveGoodsManage = (props: any) =>  {
   const onPressCheckAll = () => {
     // 全选
     if (!isCheckedAll) {
-      const newCheckedList = checkedList.map((good: any) => ({...good, isChecked: true}));
-      setCheckedList(newCheckedList);
+      const newDataList = dataList.map((good: any) => ({...good, isChecked: true}));
+      setDataList(newDataList);
       return;
     }
 
-    const newCheckedList = checkedList.map((good: any) => ({...good, isChecked: false}));
-    setCheckedList(newCheckedList);
+    const newDataList = dataList.map((good: any) => ({...good, isChecked: false}));
+    setDataList(newDataList);
   }
 
   /**
@@ -95,37 +128,50 @@ const LiveGoodsManage = (props: any) =>  {
   }
 
   /**
+   * 确认预检
+   */
+  const isVaildData = () => {
+    if (!checkedList || checkedList.length === 0) {
+      Toast.show('请至少选择一个商品')
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
    * 确认
    */
   const onSubmit = () => {
-    // 提交更改
-    console.log(checkedList, '选中要去直播卖的商品');
+    if (!isVaildData()) {
+      return;
+    }
 
+    // 提交更改
+    console.log(dataList, '选中要去直播卖的商品');
 
     // 跳转
-    navigate('AnorchLivingRoomScreen');
+    navigate(nextNav);
   }
 
   return (
     <View style={styles.style}>
-      <NavBar title="预组货" leftTheme="light" titleStyle={{color: '#fff'}} style={{backgroundColor: Colors.basicColor}} />
+      <NavBar title={navTitle} leftTheme="light" titleStyle={{color: '#fff'}} style={{backgroundColor: Colors.basicColor}} />
       {
-        checkedList && checkedList.length > 0 ? (
+        dataList && dataList.length > 0 ? (
           <ScrollView style={styles.scroll} contentContainerStyle={{backgroundColor: Colors.bgColor}}>
             {
-              checkedList.map((good: any, index: number) => {
+              dataList.map((good: any, index: number) => {
                 return (
-                  // <View key={`g_${index}`} style={styles.rowWrapper}>
-                    <GoodCheckRow 
-                      // data={{goodTitle: 1}}
-                      isChecked={good.isChecked}
-                      onPressCheck={() => checkGood(index)}
-                      onPressAddShop={() => addShop(good?.isInShopList)} // 是否在橱窗列表
-                      style={{
-                        marginBottom: 4,
-                      }}
-                    />
-                  // </View>
+                  <GoodCheckRow 
+                    // data={{goodTitle: 1}}
+                    isChecked={good.isChecked}
+                    onPressCheck={() => checkGood(index)}
+                    onPressAddShop={() => addShop(good?.isInShopList)} // 是否在橱窗列表
+                    style={{
+                      marginBottom: 4,
+                    }}
+                  />
                 )
               })
             }
@@ -142,7 +188,7 @@ const LiveGoodsManage = (props: any) =>  {
           onPress={onPressCheckAll}
         />
         <ButtonRadius
-          text={`开播(${0})`}
+          text={btnText || `开播(${0})`}
           onPress={onSubmit}
         />
       </View>

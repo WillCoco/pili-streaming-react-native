@@ -21,6 +21,11 @@ export default function PayWebview() {
   })
 
   return (
-    <WebView source={{ uri: route?.params?.url }} />
+    <WebView
+      source={{ uri: route?.params?.url }}
+      onMessage={() => {
+        
+      }}
+    />
   )
 }

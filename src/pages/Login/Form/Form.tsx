@@ -39,7 +39,7 @@ const deviceHeight = Dimensions.get('window').height
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: (deviceHeight - pxToDp(380)) / 2
+    marginTop: (deviceHeight - pxToDp(240)) / 2
   },
   formItem: {
     width: pxToDp(560),

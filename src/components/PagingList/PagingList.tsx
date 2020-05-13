@@ -16,9 +16,14 @@ import {vw} from '../../utils/metric';
 import Empty from '../../components/Empty';
 
 interface PageListProps {
+  initPage?: number,
   ListFooterComponent?: any,
   data: Array<any>,
-  setData: (d: any) => Array<any> | undefined,
+  initListData?: Array<any>,
+  setData?: (d: any) => Array<any> | undefined,
+  size: number,
+  isInitGetData?: boolean,
+  renderItem: (data?: any) => JSX.Element
 }
 
 const PagingList = React.forwardRef((props: PageListProps, ref: any) => {

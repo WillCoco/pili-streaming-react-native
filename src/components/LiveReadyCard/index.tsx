@@ -13,12 +13,13 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import { pad, radioLarge } from '../../constants/Layout';
 import {PrimaryText, SmallText} from 'react-native-normalization-text';
-import * as ImagePicker from 'expo-image-picker';
 import images from '../../assets/images';
-import {isAndroid} from '../../constants/DeviceInfo';
+import ImagePickerBox from '../../components/ImagePickerBox';
 import {updateLiveConfig} from '../../actions/live';
 
-const LiveReadyCard = (props) =>  {
+const LiveReadyCard = (props: {
+  onChangeCover: (cover?: string) => any,
+}) =>  {
   const dispatch = useDispatch();
   
   React.useEffect(() => {
@@ -27,60 +28,35 @@ const LiveReadyCard = (props) =>  {
   /**
    * 封面
    */
-  const liveCover = useSelector(state => state?.live?.liveConfig?.cover)
+  const liveCover = useSelector((state: any) => state?.live?.liveConfig?.cover)
 
   /**
    * 标题
    */
-  const title = useSelector(state => state?.live?.liveConfig?.title)
+  const title = useSelector((state: any) => state?.live?.liveConfig?.title)
 
   /**
    * 提交直播配置更改
    */
   // 标题
-  const onChangeTitle = (title: string) => {
+  const onChangeTitle = (title?: string) => {
     dispatch(updateLiveConfig({title}))
   }
 
   // 封面
-  const onChangeCover = (cover: string) => {
+  const onChangeCover = (cover?: string): any => {
     dispatch(updateLiveConfig({cover}))
+    props.onChangeCover(cover)
   }
 
-  const pickImage = async () => {
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        // allowsEditing: true, // 这引起了cancelled
-        allowsMultipleSelection: false,
-        aspect: [4, 3],
-        quality: 1,
-        exif: false,
-      });
-      if (!result.cancelled) {
-        onChangeCover(result.uri);
-      }
-      console.log(result);
-    } catch (E) {
-      console.log(E);
-    }
-  };
+  // console.log('liveCover', liveCover)
 
-  console.log('liveCover', liveCover)
-
-  const coverImgSource = liveCover ? {uri: liveCover} : images.editLiveCover;
   return (
     <View style={styles.style}>
-      <TouchableOpacity
-        onPress={() => {pickImage()}}
+      <ImagePickerBox
+        onPicked={(r?: any) => {onChangeCover(r)}}
         style={styles.imgWrapper}
-      >
-        <Image
-          style={styles.cover}
-          source={coverImgSource}
-          resizeMode="cover"
-        />
-      </TouchableOpacity>
+      />
       <View style={styles.contentWrapper}>
         <TextInput
           multiline

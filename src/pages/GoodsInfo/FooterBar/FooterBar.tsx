@@ -9,7 +9,7 @@ const unstarIcon = require('../../../assets/goods-image/icon_unstar.png')
 
 
 export default function FooterBar(props: any) {
-  const { goodsInfo } = props
+  const { goodsInfo, shareUserId } = props
   const navigation = useNavigation()
 
   return (
@@ -17,28 +17,30 @@ export default function FooterBar(props: any) {
 
       <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.push('Service')}>
         <Image source={require('../../../assets/goods-image/icon_kefu.png')} style={styles.icon} />
-        <Text>客服</Text>
+        <Text style={{ color: Colors.lightBlack }}>客服</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.iconContainer} onPress={() => props.toggleStarGoods()}>
         <Image source={goodsInfo.is_collect ? starIcon : unstarIcon} style={styles.icon} />
-        <Text>{goodsInfo.is_collect ? '已收藏' : '收藏'}</Text>
+        <Text style={{ color: Colors.lightBlack }}>{goodsInfo.is_collect ? '已收藏' : '收藏'}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.push('GoodsCart')}>
         <Image source={require('../../../assets/goods-image/icon_cart.png')} style={styles.icon} />
-        <Text>购物车</Text>
+        <Text style={{ color: Colors.lightBlack }}>购物车</Text>
       </TouchableOpacity>
 
-      <TouchableWithoutFeedback onPress={() => props.showGoodsSkuActionSheet('add')}>
-        <View style={styles.addCart}>
-          <Text style={styles.addCartText}>加入购物车</Text>
-        </View>
-      </TouchableWithoutFeedback>
+      {
+        !shareUserId && <TouchableWithoutFeedback onPress={() => props.showGoodsSkuActionSheet('add')}>
+          <View style={styles.addCart}>
+            <Text style={styles.addCartText}>加入购物车</Text>
+          </View>
+        </TouchableWithoutFeedback>
+      }
 
       <TouchableWithoutFeedback onPress={() => props.showGoodsSkuActionSheet('buy')}>
         <View style={styles.buyBtn}>
-          <Text style={styles.addCartText}>购买省¥{formatSinglePrice(goodsInfo.MyDiscounts)}</Text>
+          <Text style={styles.addCartText}>{shareUserId ? '立即购买' : `购买省¥${formatSinglePrice(goodsInfo.MyDiscounts)}`}</Text>
         </View>
       </TouchableWithoutFeedback>
 

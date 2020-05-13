@@ -18,26 +18,45 @@ import {Colors} from '../../../constants/Theme';
 import images from '../../../assets/images/index';
 import usePermissions from '../../../hooks/usePermissions';
 import { pad } from '../../../constants/Layout';
+import { Toast } from '@ant-design/react-native';
+import * as api from '../../../service/api';
 
 const CreateLiveScreen = (props: any) =>  {
-  const {navigate, goBack} = useNavigation();
+  const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const granted = usePermissions(['android.permission.CAMERA'])
+  /**
+   * 直播设置
+   */
+  const liveConfig = useSelector((state: any) => state?.live?.liveConfig)
+  console.log(liveConfig, 'liveConfig')
+
+  const isValidData = (): boolean => {
+    if (!liveConfig.cover) {
+      Toast.show('请选择直播封面');
+      return false;
+    }
+
+    if (!liveConfig.title) {
+      Toast.show('请填写标题');
+      return false;
+    }
+
+    return true;
+  }
 
   const onNextPress = () => {
     // 存直播配置
+    if (!isValidData()) {
+      return;
+    }
 
     // 跳转
-    navigate('LiveGoodsManageScreen');
+    navigation.navigate('LiveGoodsManage');
 
     // 暂停
-    camera.current.stopPreview();
+    // camera.current.stopPreview();
   }
-
-  const liveConfig = useSelector(state => state?.live?.liveConfig);
-
-  console.log(liveConfig, 'liveConfig')
 
 
   /**
@@ -52,15 +71,29 @@ const CreateLiveScreen = (props: any) =>  {
   //   camera.current.switchCamera()
   // }
 
+  /**
+   * 上传文件
+   */
+  const onChangeCover = async (r: any) => {
+    const result = await api.liveUploadFile([{
+      fileType: r.type,
+      size: 1024 * 2,
+      unit: r.uri
+    }]);
+
+    if (result) {
+      // Toast.show('')
+    }
+  }
 
   return (
-    <View style={styles.style}>
+    <View style={StyleSheet.flatten([styles.style, {paddingBottom: props.safeBottom}])}>
       <LivePusher
         ref={(c: any) => camera.current = c}
       />
       <View style={styles.contentWrapper}>
         <View style={StyleSheet.flatten([styles.liveReadyCardWrapper, {marginTop: props.safeTop + 80}])}>
-          <LiveReadyCard />
+          <LiveReadyCard onChangeCover={onChangeCover} />
         </View>
         <View style={styles.functionBtnWrapper}>
           <TouchableOpacity>
@@ -74,17 +107,16 @@ const CreateLiveScreen = (props: any) =>  {
         <TouchableOpacity onPress={onNextPress} style={styles.button}>
           <PrimaryText style={styles.nextText}>下一步</PrimaryText>
         </TouchableOpacity>
-        <SmallText color="white" style={styles.agreement}>
+        <SmallText color="white" style={StyleSheet.flatten([styles.agreement, {paddingBottom: props.safeBottom}])}>
           开播默认已阅读
           <SmallText
             style={{color: Colors.yellowColor}}
-            onPress={() => navigate('AnchorAgreement')}
+            onPress={() => navigation.navigate('AnchorAgreement')}
           >
             《圈品主播入驻协议》
           </SmallText>
         </SmallText>
       </View>
-      
     </View>
   )
 };

@@ -17,12 +17,13 @@ import dayjs from 'dayjs';
 import withPage from '../../../components/HOCs/withPage';
 import ImagePickerBox from '../../../components/ImagePickerBox';
 import VedioPickerBox from '../../../components/VedioPickerBox';
-import DateTimePicker from '../../../components/DateTimePicker';
+import DateTimePicker, {PickTimeMode} from '../../../components/DateTimePicker';
 import NavBar from '../../../components/NavBar';
 import { pad, radio, radioLarge } from '../../../constants/Layout';
 import {Colors} from '../../../constants/Theme';
 import {isIOS, isAndroid} from '../../../constants/DeviceInfo';
 import {vw} from '../../../utils/metric';
+import { Toast } from '@ant-design/react-native';
 
 const CreateTraserScreen = () =>  {
   const {goBack} = useNavigation();
@@ -39,71 +40,82 @@ const CreateTraserScreen = () =>  {
   const [vedioUri, setVedioUri]: Array<any> = React.useState();
 
   /**
-   * 显示时间选择器
+   * 直播时间
    */
-  const [isShowDatePicker, setIsShowDatePicker]: Array<any> = React.useState();
+  const liveTime: {current: [string | undefined, string | undefined]} = React.useRef([undefined, undefined]);
 
   /**
-   * 时间选择器模式
+   * 标题
    */
-  const initMode = isIOS ? 'datetime' : 'date'; // 初始化mode
-  const [datePickerMode, setDatePickerMode]: Array<any> = React.useState(initMode);
+  const [title, setTitle]: Array<any> = React.useState();
 
-  const [liveTime, setLiveTime]: Array<any> = React.useState(Date.now());
+  /**
+   * 内容简介
+   */
+  const [introductoryText, setIntroductoryText]: Array<any> = React.useState();
 
-  const onPressPickDate = (mode?: 'date' | 'time' | 'datetime' | 'countdown') => {
-    // android 时间和日期需要分开选择
+  // 时间戳
+  const liveTimeStamp: {current: any} = React.useRef();
+
+  console.log(liveTimeStamp, 'liveTimeStampliveTimeStampliveTimeStamp')
+
+  const onPickedTime = (type: string, time: string) => {
+    console.log(type, time, 123123)
+
     if (isAndroid()) {
-      setDatePickerMode(mode);
+      if (type === PickTimeMode.date) {
+        liveTime.current[0] = time;
+      } else if (type === PickTimeMode.time) {
+        liveTime.current[1] = time;
+      }
+
+      // 收集满了计算时间戳
+      if (liveTime.current[0] && liveTime.current[1]) {
+        const t = new Date(liveTime.current.join(' '))
+        liveTimeStamp.current = t.getTime && t.getTime();
+      }
     }
 
-    // ios datetime一次选择
-    setIsShowDatePicker(true);
-  }
-
-  const onDeteChange = (e: any) => {
-    setIsShowDatePicker(false);
-
-    if (e.type === 'set') {
-      setLiveTime(e.nativeEvent.timestamp)
-    }
+    // todo: ios
   }
 
   /**
-   * 时间format
+   * 提交前审核 
    */
-  const formatDate = (timestamp: number) => {
-    if (timestamp) {
-      return null;
-    };
-    const t =  dayjs(timestamp);
-    return `${t.month()+1}月${t.date()}日`
-  }
+  const isDataVaild = (): boolean => {
+    console.log(title, '123123')
+    if (!cover1Uri) {
+      Toast.show('请选择封面图');
+      return false;
+    }
+    if (!liveTimeStamp.current) {
+      Toast.show('请选择开播时间');
+      return false;
+    }
+    Toast.show('请填写标题');
+    if (!title) {
+      return false;
+    }
 
-  const formatTime = (timestamp: number) => {
-    if (timestamp) {
-      return null;
-    };
-    const t =  dayjs(timestamp);
-    return `${dayjs().hour()}点${dayjs().minute()}分`
+    return true;
   }
 
   /**
    * 提交 
    */
   const onSubmitPress = () => {
-    alert('提交');
+    if (!isDataVaild()) {
+      return;
+    }
 
-    // 跳转
+    Toast.show('发布成功')
     goBack();
   }
 
-  console.log(isShowDatePicker, 'isShowDatePicker')
-
   return (
     <ScrollView style={styles.style}>
-      <View style={styles.contentWrapper}>
       <NavBar title="发布预告" />
+      <View style={styles.contentWrapper}>
         <PrimaryText style={styles.title}>直播封面图(必填)</PrimaryText>
         <View style={styles.row}>
           <ImagePickerBox
@@ -111,11 +123,11 @@ const CreateTraserScreen = () =>  {
             onPicked={(v) => setCover1Uri(v)}
             style={{marginRight: pad}}
           />
-          <ImagePickerBox
+          {/* <ImagePickerBox
             placeholderText="封面图2"
             onPicked={(v) => setCover2Uri(v)}
             style={{flex: 1}}
-          />
+          /> */}
         </View>
         <PrimaryText style={styles.title}>预告片(可选)</PrimaryText>
         <VedioPickerBox
@@ -129,14 +141,20 @@ const CreateTraserScreen = () =>  {
       <View style={styles.contentWrapper}>
         <View style={StyleSheet.flatten([styles.rowWrapper, styles.bottomDivider])}>
           <PrimaryText style={styles.title}><PrimaryText color="theme">* </PrimaryText> 直播时间</PrimaryText>
-          <PrimaryText onPress={() => onPressPickDate('date')} style={styles.title}>{formatDate(liveTime) || '选择日期'}</PrimaryText>
-          <PrimaryText onPress={() => onPressPickDate('time')} style={styles.title}>{formatTime(liveTime) || '选择时间'}</PrimaryText>
+          <DateTimePicker
+            onPicked={onPickedTime}
+            style={{position: 'absolute', left: -pad, paddingLeft: scale(70) + pad * 3}}
+          />
+          {/* <PrimaryText onPress={() => onPressPickDate('date')} style={styles.title}>{formatDate(liveTime) || '选择日期'}</PrimaryText> */}
+          {/* <PrimaryText onPress={() => onPressPickDate('time')} style={styles.title}>{formatTime(liveTime) || '选择时间'}</PrimaryText> */}
         </View>
-        <DateTimePicker />
         <View style={StyleSheet.flatten([styles.rowWrapper, styles.bottomDivider])}>
           <PrimaryText style={styles.title}><PrimaryText color="theme">* </PrimaryText> 直播标题</PrimaryText>
           <TextInput
             placeholder="请输入10个汉字内直播间名称"
+            maxLength={10}
+            value={title}
+            onChangeText={setTitle}
           />
         </View>
         <PrimaryText style={styles.title}>内容简介</PrimaryText>
@@ -144,25 +162,15 @@ const CreateTraserScreen = () =>  {
           multiline
           textAlignVertical="top"
           placeholder="介绍直播内容或注意事项，少于60字"
+          maxLength={60}
+          value={introductoryText}
+          onChangeText={setIntroductoryText}
           style={styles.contentInput}
         />
       </View>
       <TouchableOpacity style={styles.btnWrapper} onPress={onSubmitPress}>
         <PrimaryText color="white">发布预告</PrimaryText>
       </TouchableOpacity>
-      {
-        // isShowDatePicker && (
-        //   <DateTimePicker
-        //     testID="dateTimePicker"
-        //     timeZoneOffsetInMinutes={0}
-        //     value={new Date(1598051730000)}
-        //     mode={datePickerMode}
-        //     is24Hour={true}
-        //     display="default"
-        //     onChange={onDeteChange}
-        //   />
-        // )
-      }
     </ScrollView>
   )
 };
@@ -245,6 +253,6 @@ const styles = StyleSheet.create({
 export default withPage(CreateTraserScreen, {
   statusBarOptions: {
     barStyle: 'dark-content',
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
   }
 });

@@ -10,7 +10,7 @@ export default function Form(props) {
   const realname = ''
 
   const contactService = () => {
-    console.log('联系客服')
+    navigation.push('Service')
   }
 
   const inviteFriends = () => {

@@ -70,12 +70,18 @@ const AnchorShopCard = (props: {
     return checkedFilter(dataList)
   }, [dataList]);
 
-
   /**
    * 现在是否全选
    */
   const isCheckedAll = React.useMemo(() => {
     return !dataList.find(o => (!o.isChecked)) // todo: 标识
+  }, [dataList]);
+  
+  /**
+   * 是否可批量提交
+   */
+  const canSubmit = React.useMemo(() => {
+    return dataList.find(o => (o.isChecked)) // todo: 标识
   }, [dataList]);
 
   /**
@@ -127,14 +133,6 @@ const AnchorShopCard = (props: {
     
   }
 
-  /**
-   * 提交选中
-   */
-  const onPressSubmit = () => {
-
-
-  }
-
    /**
    * 全选/反选
    */
@@ -149,6 +147,33 @@ const AnchorShopCard = (props: {
     // 取消全选
     const newCheckedList = (dataList || emptyList).map((good: any) => ({...good, isChecked: false}));
     setDataList(newCheckedList);
+  }
+
+  if (!props.visible) {
+    return null
+  }
+
+  /**
+   * 添加店铺
+   */
+  const onPressAddShop = () => {
+  }
+
+   /**
+   * 提交选中
+   */
+  const onPressSubmit = () => {
+  }
+
+  /**
+   * 选择
+   */
+  const checkGood = (index: number) => {
+    const newDataList = [...dataList];
+    newDataList[index].isChecked = !newDataList[index].isChecked;
+
+    console.log(newDataList, '单选')
+    setDataList(newDataList);
   }
 
   if (!props.visible) {
@@ -171,7 +196,11 @@ const AnchorShopCard = (props: {
                 <SmallText style={{}}>返回直播间</SmallText>
               </TouchableOpacity>
               <T4 style={styles.titleCenter}>直播商品管理</T4>
-              <SmallText style={styles.titleRight}>重新组货</SmallText>
+              <TouchableOpacity
+                onPress={() => navigate('LiveGoodsManageAgain')}
+              >
+                <SmallText style={styles.titleRight}>重新组货</SmallText>
+              </TouchableOpacity>
             </View>
             <View style={styles.scrollWrapper}>
               <PagingList
@@ -184,9 +213,11 @@ const AnchorShopCard = (props: {
                     <AnchorRow
                       // data={livingGoods}
                       key={`anchorShopCard_${index}`}
-                      onPressBuy={onPressBuy}
-                      index={index}
+                      isChecked={item.isChecked}
+                      // index={index}
                       style={{borderBottomWidth: 1, borderColor: Colors.divider}}
+                      onPressCheck={() => checkGood(index)}
+                      onPressAddShop={() => onPressAddShop(item)}
                     />
                   )
                 }}
@@ -203,7 +234,7 @@ const AnchorShopCard = (props: {
               />
             </View>
             <View style={StyleSheet.flatten([styles.rowBetween, {backgroundColor: '#fff'}])}>
-              <View style={StyleSheet.flatten([styles.rowBetween, {flex: 1}])}>
+              <View style={StyleSheet.flatten([styles.rowBetween, {flex: 1, paddingHorizontal: pad}])}>
                 <CheckBox
                   label="全选"
                   isChecked={isCheckedAll}
@@ -212,12 +243,21 @@ const AnchorShopCard = (props: {
                 />
                 <View style={styles.textWrapper}>
                   <SmallText style={styles.summaryText}>共</SmallText>
-                  <T3 color="theme" style={StyleSheet.flatten([styles.summaryText, {lineHeight: scale(20)}])}>2</T3>
+                  <T3 color="theme" style={StyleSheet.flatten([styles.summaryText, {lineHeight: scale(20)}])}>{checkedList.length || 0}</T3>
                   <SmallText style={styles.summaryText}>件商品</SmallText>
                 </View>
               </View>
               
-              <TouchableOpacity onPress={onPressSubmit} style={styles.submit}>
+              <TouchableOpacity
+                disabled={!canSubmit}
+                onPress={onPressSubmit}
+                style={StyleSheet.flatten([
+                  styles.submit,
+                  {
+                    backgroundColor: canSubmit ? Colors.basicColor : Colors.darkGrey
+                  }
+                ])}
+              >
                 <T4 color="white">上架</T4>
               </TouchableOpacity>
             </View>
@@ -271,7 +311,6 @@ const styles = StyleSheet.create({
     paddingVertical: pad,
   },
   pagingListWrapper: {
-    paddingHorizontal: pad,
     backgroundColor: Colors.bgColor,
   },
   scrollWrapper: {
@@ -285,7 +324,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: pad
   },
   textWrapper: {
     flexDirection: 'row',

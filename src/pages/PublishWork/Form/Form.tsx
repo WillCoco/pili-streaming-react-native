@@ -31,9 +31,6 @@ export default function Form(props: any) {
           onChangeText={(text) => props.inputContent(text)}
         />
       </View>
-      <View style={styles.imagePicker}>
-        
-      </View>
     </View>
   )
 }
@@ -71,8 +68,5 @@ const styles = StyleSheet.create({
   textareaInput: {
     fontSize: pxToDp(28),
     lineHeight: pxToDp(36)
-  },
-  imagePicker: {
-    
   }
 })

@@ -9,7 +9,13 @@ export default function WorkCard(props: { workInfo: any }) {
   const navigation = useNavigation()
 
   const toFoundInfo = () => {
-    navigation.push('FoundInfo', { id: workInfo.worksId })
+    const params = {
+      id: workInfo.worksId,
+      width: workInfo.imageWidth,
+      height: workInfo.imageHeight
+    }
+
+    navigation.push('FoundInfo', params)
   }
 
   return (

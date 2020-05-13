@@ -9,8 +9,9 @@ import {
   StyleSheet,
   StyleProp,
   LayoutAnimation,
+  BackHandler,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux'
 import LiveIntro from '../LiveIntro';
 import LivingBottomBlock from '../LivingBottomBlock';
@@ -23,8 +24,9 @@ import Mask from '../../components/Mask';
 import AnchorShopCard from '../../components/LivingShopCard/AnchorShopCard';
 import withPage from '../../components/HOCs/withPage';
 import {pad} from '../../constants/Layout';
-import { joinGroup, quitGroup, createGroup, dismissGroup, updateGroupProfile, getGroupProfile } from '../../actions/im';
+import { createGroup, dismissGroup, updateGroupProfile, sendRoomMessage } from '../../actions/im';
 import Toast from 'react-native-tiny-toast';
+import { MessageType } from '../../reducers/im';
 
 const {window} = L;
 
@@ -184,6 +186,23 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
     setShopCardVisible(visiable)
   }
 
+  /**
+   * 处理android返回
+  */
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+          closeLive()
+          return true;
+      };
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
+
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
       <LivePusher 
@@ -200,8 +219,16 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
           onPressShopBag={() => shopCardAnim(true)}
           onPressBubble={onPressBubble}
           onPressShare={() =>alert('余组货')}
-          onPressFaceBeauty={() => {}}
-          onPressFilter={() =>alert('美颜')}
+          onPressFaceBeauty={() => {
+            requestAnimationFrame(() => {
+              dispatch(sendRoomMessage({text: '下单了2件', type: MessageType.order}))
+            })
+          }}
+          onPressFilter={() => {
+            requestAnimationFrame(() => {
+              dispatch(sendRoomMessage({text: '关注了主播', type: MessageType.follow}))
+            })
+          }}
         />
         <TouchableOpacity onPress={switchCamera} style={StyleSheet.flatten([styles.camera, {top: props.safeTop + (pad * 2)}])}>
           <Iconchangecamera size={24} />

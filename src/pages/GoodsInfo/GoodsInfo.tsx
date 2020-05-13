@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { View, ScrollView, Dimensions, StyleSheet, Platform, Text, ImageBackground } from 'react-native'
-import { useRoute, useNavigation } from '@react-navigation/native'
+import { useRoute, useNavigation, useIsFocused } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import HTML from 'react-native-render-html'
 import Toast from 'react-native-tiny-toast'
@@ -14,6 +14,7 @@ import ActivityBar from './ActivityBar/ActivityBar'
 import FooterBar from './FooterBar/FooterBar'
 import GoodsSku from './GoodsSku/GoodsSku'
 import Coupon from './Coupon/Coupon'
+import ShareBar from './ShareBar/ShareBar'
 
 import { apiGoodInfo, apiGetUnclaimedCoupons, apiAddCart, apiGoodsIsLike } from '../../service/api'
 import { Colors } from '../../constants/Theme'
@@ -21,10 +22,14 @@ import { strDiscode } from '../../utils/discodeRichText'
 import pxToDp from '../../utils/px2dp'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
+let timer: any
+
 function GoodsInfo(props: any) {
   const route = useRoute()
   const navigation = useNavigation()
+  const isFocused = useIsFocused()
   const { isLogin } = props
+  const { id: goodsId, shareUserId } = route.params
   const [isLoadingComplete, setIsLoadingComplete] = useState(false)
   const [swiperList, setSwiperList] = useState([])
   const [goodsInfo, setGoodsInfo] = useState({})
@@ -35,8 +40,14 @@ function GoodsInfo(props: any) {
   const [curSkuInfo, setCurSkuInfo] = useState({})  // 当前选中规格的详细信息
   const [showGoodsSku, setShowGoodsSku] = useState(false)
   const [showCoupon, setShowCoupon] = useState(false)
+  const [showShareBar, setShowShareBar] = useState(false)
   const [buttonType, setButtonType] = useState('')  // 商品规格操作面板购买按钮文字
   const [soldOut, setSoldOut] = useState(false)
+  const [countDownInfo, setCountDownInfo] = useState({
+    hours: 0,
+    min: 0,
+    sec: 0
+  })
   let [goodsNum, setGoodsNum] = useState(1)
   const [couponList, setCouponList] = useState([])
   const goodsInfoRef = useRef()
@@ -57,6 +68,10 @@ function GoodsInfo(props: any) {
     getGoodsInfo()
   }, [])
 
+  useEffect(() => {
+    if (!isFocused) clearInterval(timer)
+  }, [isFocused])
+
   /**
    * 加载商品详情
    */
@@ -64,7 +79,7 @@ function GoodsInfo(props: any) {
     let loading = Toast.showLoading('')
 
     apiGoodInfo({
-      goods_id: route.params.id
+      goods_id: goodsId
     }).then((res: any) => {
       console.log('商品详情', res)
       Toast.hide(loading)
@@ -82,6 +97,24 @@ function GoodsInfo(props: any) {
 
       if (res.is_sale || res.is_snap_up) {
         setGoodsType(res.is_sale ? 'sale' : 'seckill')
+
+        if (res.is_snap_up) {
+          const curHour = new Date().getHours()
+          let seckillCountdown: number
+
+          if (curHour >= 20) {  // 当天 0 点之前
+            seckillCountdown = new Date().setHours(23, 59, 59, 999) + 1 - new Date().getTime()
+          } else if (curHour >= 0 && curHour < 10) {  // 当天 0 点到 10 点之间
+            seckillCountdown = new Date().setHours(10, 0, 0, 0) - new Date().getTime()
+          } else {
+            seckillCountdown = new Date().setHours(20, 0, 0, 0) - new Date().getTime()
+          }
+
+          timer = setInterval(() => {
+            seckillCountdown -= 1000
+            countDown(seckillCountdown)
+          }, 1000)
+        }
       }
 
       initGoodsSku(res.sku)  // 初始化商品规格信息
@@ -91,6 +124,36 @@ function GoodsInfo(props: any) {
 
       if (isLogin) getGoodsCoupon(res.goods_id)
     })
+  }
+
+  /**
+   * 倒计时
+   */
+  const countDown = (seckillCountdown: number) => {
+    let diff = seckillCountdown / 1000
+
+    if (diff <= 0) {
+      return false
+    }
+
+    const time = {
+      hours: 0,
+      min: 0,
+      sec: 0
+    }
+
+    if (diff >= 3600) {
+      time.hours = Math.floor(diff / 3600)
+      diff -= time.hours * 3600
+    }
+    if (diff >= 60) {
+      time.min = Math.floor(diff / 60)
+      diff -= time.min * 60
+    }
+
+    time.sec = diff
+
+    setCountDownInfo(time)
   }
 
   /**
@@ -175,13 +238,6 @@ function GoodsInfo(props: any) {
   }
 
   /**
-   * 关闭商品规格操作面板
-   */
-  const hideGoodsSkuActionSheet = () => {
-    setShowGoodsSku(false)
-  }
-
-  /**
    * 显示优惠券操作面板
    */
   const showCouponActionSheet = () => {
@@ -196,13 +252,6 @@ function GoodsInfo(props: any) {
     } else {
       navigation.push('Login')
     }
-  }
-
-  /**
-   * 隐藏优惠券操作面板
-   */
-  const hideCouponActionSheet = () => {
-    setShowCoupon(false)
   }
 
   /**
@@ -226,7 +275,7 @@ function GoodsInfo(props: any) {
    */
   const nextAction = () => {
     if (!isLogin) {
-      hideGoodsSkuActionSheet()
+      setShowGoodsSku(false)
       navigation.push('Login')
       return
     }
@@ -236,7 +285,7 @@ function GoodsInfo(props: any) {
     } else {
       createOrder()
     }
-    hideGoodsSkuActionSheet()
+    setShowGoodsSku(false)
   }
 
   /**
@@ -282,7 +331,7 @@ function GoodsInfo(props: any) {
       }]
     }]
 
-    navigation.push('CreateOrder', { tempOrderList })
+    navigation.push('CreateOrder', { tempOrderList, shareUserId })
   }
 
   /**
@@ -326,15 +375,19 @@ function GoodsInfo(props: any) {
 
   if (isLoadingComplete) {
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
           {/* 轮播图 */}
           <Swiper swiperList={swiperList} />
           {
-            !!goodsType && <ActivityBar type={goodsType} goodsInfo={goodsInfo} />
+            !!goodsType && <ActivityBar type={goodsType} goodsInfo={goodsInfo} countDownInfo={countDownInfo} />
           }
           {/* 商品信息 */}
-          <GoodsCard goodsInfo={goodsInfo} showCouponActionSheet={showCouponActionSheet} />
+          <GoodsCard
+            goodsInfo={goodsInfo}
+            showCouponActionSheet={showCouponActionSheet}
+            showShareBar={() => setShowShareBar(true)}
+          />
           {/* 平台优势 */}
           <Advantage />
           {/* 店铺信息 */}
@@ -352,6 +405,7 @@ function GoodsInfo(props: any) {
           goodsInfo={goodsInfo}
           showGoodsSkuActionSheet={(type: string) => showGoodsSkuActionSheet(type)}
           toggleStarGoods={toggleStarGoods}
+          shareUserId={shareUserId}
         />
         {/* 商品属性弹窗 */}
         <ActionSheet isShow={showGoodsSku}>
@@ -365,7 +419,7 @@ function GoodsInfo(props: any) {
             minusCount={minusCount}
             addCount={addCount}
             nextAction={nextAction}
-            hideGoodsSkuActionSheet={hideGoodsSkuActionSheet}
+            hideGoodsSkuActionSheet={() => setShowGoodsSku(false)}
           />
         </ActionSheet>
 
@@ -374,15 +428,17 @@ function GoodsInfo(props: any) {
           <Coupon
             couponList={couponList}
             goodsInfo={goodsInfo}
-            hideCouponActionSheet={hideCouponActionSheet}
+            hideCouponActionSheet={() => setShowCoupon(false)}
             getGoodsCoupon={() => getGoodsCoupon(goodsInfo.goods_id)}
           />
         </ActionSheet>
 
         {/* 分享弹窗 */}
-        {/* <ActionSheet isShow={isShow} close={close}>
-        <Text style={{ height: 500, backgroundColor: '#f0f' }}>sdfs</Text>
-      </ActionSheet> */}
+        <ActionSheet isShow={showShareBar}>
+          <ShareBar
+            hideShareBar={() => setShowShareBar(false)}
+          />
+        </ActionSheet>
       </View>
     )
   }
@@ -422,5 +478,8 @@ const styles = StyleSheet.create({
     borderRadius: pxToDp(40),
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  shareBar: {
+    height: pxToDp(350)
   }
 })

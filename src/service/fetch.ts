@@ -1,4 +1,5 @@
 import configStore from '../store'
+import { UPLOAD_URL } from './api'
 
 const { store } = configStore()
 
@@ -12,6 +13,7 @@ const getParam = (data: { [s: string]: unknown; } | ArrayLike<unknown>) => {
 let headers = {
   'Accept': 'application/json',
   'Content-Type': 'application/json',
+  'platform': 'app',
   'authentication': ''
 }
 
@@ -36,6 +38,7 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
       return r2 && JSON.parse(r2)
     })
     .then((result: { data: any; }) => {
+      console.log('get resulyt', result)
       if (onlyData) {
         resolve(result.data)
       } else (
@@ -65,6 +68,7 @@ export const post = (path: RequestInfo, data: any, onlyData: boolean = true) => 
       return JSON.parse(r2)
     })
     .then((result: { data: unknown; }) => {
+      console.log('post result', result)
       if (onlyData) {
         resolve(result.data)
       } else (
@@ -78,14 +82,14 @@ export const post = (path: RequestInfo, data: any, onlyData: boolean = true) => 
 /**
  * 上传
  */
-interface fileType {
-  uri: string,
-  name: string,
-  type: string,
+export interface File {
+  size: number,
+  fileType: string,
+  unit: string,
 }
-export const upload = (path: RequestInfo, files: Array<fileType>) => {
+export const upload = (path: RequestInfo, files: Array<File>) => {
   let formData = new FormData();
-  files.forEach((file: fileType) => {
+  files.forEach((file: File) => {
     const f: any = {uri: file.uri, name: file.name, type: file.type}
     formData.append('file', f);
   })
