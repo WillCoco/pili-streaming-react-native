@@ -9,7 +9,7 @@
  * @Last Modified time: 2020/5/13
  **/
 // import * as React from 'react';
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,

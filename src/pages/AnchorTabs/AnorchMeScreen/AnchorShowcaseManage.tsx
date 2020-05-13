@@ -93,7 +93,7 @@ const AnchorShowcaseManage = () =>  {
       return newData;
     })
   };
-  
+
   /**
    * 上移
    */

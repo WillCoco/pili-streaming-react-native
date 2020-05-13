@@ -324,6 +324,9 @@ const images : {
   get unCheckBeAgent() {
     return require('../agent-image/unCheck.png')
   },
+  get anchorMicrophone() {
+      return require('./anchorMicrophone.png')
+  }
 }
 
 export default images;
