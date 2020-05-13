@@ -17,9 +17,10 @@ import {Colors} from '../../../constants/Theme';
 import {vw} from '../../../utils/metric';
 import {getGroupList} from '../../../actions/im';
 import {useDispatch} from 'react-redux';
+import {apiMyAttentionList} from '../../../service/api';
+import {useSelector} from 'react-redux';
 
 interface LiveBannerProps {
-  // bannerList?: any[],
   style?: StyleProp<any>,
   imageStyle?: StyleProp<any>,
 }
@@ -27,6 +28,7 @@ interface LiveBannerProps {
 const LiveBanner = (props: LiveBannerProps) : any =>  {
 
   const dispatch = useDispatch();
+  const userId = useSelector(state => state?.userData?.userInfo?.userId)
 
   const renderItem = (d) => {
     return (
@@ -36,12 +38,23 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
     )
   }
 
+  // const onRefresh = async () => {
+  //   const result = await dispatch(getGroupList());
+  //   console.log(result, 'result')
+  //   return Promise.resolve({
+  //     result: [1]
+  //   })
+  // };
+
   const onRefresh = async () => {
-    const result = await dispatch(getGroupList());
-    console.log(result, 'result')
-    return Promise.resolve({
-      result: [111,222,1,1,1,1,1]
+    await apiMyAttentionList({
+      pageNo: 1,
+      pageSize: 10,
+      userId
+    }).then(res => {
+      return Promise.resolve(res?.records)
     })
+    
   };
 
   const onEndReached = () => {};

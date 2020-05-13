@@ -14,9 +14,25 @@ import images from '../../../assets/images/index';
 import {vw, vh} from '../../../utils/metric';
 import {pad} from '../../../constants/Layout';
 import {LinearGradient} from 'expo-linear-gradient';
+import {apiAnchorHomePage} from '../../../service/api';
+import {setAnchorInfo} from '../../../actions/anchor';
+import {useDispatch, useSelector} from 'react-redux';
 
 const PublishScreen = (props: any) =>  {
   const {navigate, reset} = useNavigation();
+  const dispatch = useDispatch();
+  const anchorInfo = useSelector(state => state?.anchorData?.anchorInfo) || {}
+  const userId = useSelector(state => state?.userData?.userInfo?.userId)
+
+  /**
+   * 获取主播详情
+   */
+  React.useEffect(() => {
+    apiAnchorHomePage({userId})
+      .then(res => {
+        dispatch(setAnchorInfo(res))
+      })
+  }, [])
 
   /**
    * tab的返回到 我的 
@@ -41,9 +57,9 @@ const PublishScreen = (props: any) =>  {
           }}
         />
       <NavBar leftTheme="light" title="" style={styles.navWrapper} onLeftPress={onBackPress} />
-      <Avatar size={65} style={{marginTop: props.safeTop + vh(8)}} />
-      <T1 style={styles.nameText}>主播昵称</T1>
-      <SmallText style={styles.followText}>{0}粉丝</SmallText>
+      <Avatar size={65} style={{marginTop: props.safeTop + vh(8)}} source={anchorInfo.logo && {uri: anchorInfo.logo} || images.userAvatar}/>
+      <T1 style={styles.nameText}>{anchorInfo.name || '主播昵称'}</T1>
+      <SmallText style={styles.followText}>{anchorInfo.favouriteAmount || 0}粉丝</SmallText>
       <View style={styles.entranceWrapper}>
         <TouchableOpacity
           style={styles.entranceImgWrapper}

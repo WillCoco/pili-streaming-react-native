@@ -14,6 +14,7 @@ import {PrimaryText} from 'react-native-normalization-text';
 import Iconarrowright from '../Iconfont/Iconarrowright'
 import { StyleProp } from 'react-native';
 import { pad } from '../../constants/Layout';
+import { Colors } from '../../constants/Theme';
 
 interface ToolRowBasicProps {
   img: any,
@@ -39,7 +40,7 @@ const ToolRowBasic = (props: ToolRowBasicProps) =>  {
           <PrimaryText>{props.title}</PrimaryText>
         </View>
         <View style={StyleSheet.flatten([styles.rightContentWrapper, props.rightContentWrapperStyle])}>
-          {props.showRightText && <PrimaryText>{props.rightTitle}</PrimaryText>}
+          {props.showRightText && <PrimaryText style={{color: Colors.darkGrey}}>{props.rightTitle}</PrimaryText>}
           {props.showArrow && <Iconarrowright size={20} />}
         </View>
       </>

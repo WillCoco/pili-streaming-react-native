@@ -18,8 +18,6 @@ import images from '../../../assets/images';
 import ToolRow from '../../../components/ToolRow';
 import {pad} from '../../../constants/Layout';
 import {Colors} from '../../../constants/Theme';
-import {apiAnchorHomePage} from '../../../service/api';
-import {setAnchorInfo} from '../../../actions/anchor';
 import {useDispatch, useSelector} from 'react-redux';
 
 const ToolCell = (props: {
@@ -37,12 +35,11 @@ const ToolCell = (props: {
 
 const AnorchMeScreen = () =>  {
   const {navigate, reset} = useNavigation();
-  const dispatch = useDispatch();
-  const anchorInfo = useSelector(state => state?.anchorInfo)
+  const anchorInfo = useSelector(state => state?.anchorData?.anchorInfo) || {}
 
   const dataList = [
-    {img: images.anchorMyRecords, text: '我的直播', onPress: () => navigate('AnchorRecords')},
-    {img: images.anchorMyTrailer, text: '我的预告', onPress: () => navigate('AnchorTrailers')},
+    {img: images.anchorMyRecords, text: '我的直播', onPress: () => navigate('AnchorRecords'), showRightText: true, rightTitle: anchorInfo.liveAmount},
+    {img: images.anchorMyTrailer, text: '我的预告', onPress: () => navigate('AnchorTrailers'), showRightText: true, rightTitle: anchorInfo.advanceAmount},
     {img: images.anchorLiveAnalyze, text: '直播数据', onPress: () => navigate('LivesAnalyze')},
   ];
 
@@ -52,19 +49,6 @@ const AnorchMeScreen = () =>  {
     {img: images.anchorShop, text: '我的店铺', onPress: () => navigate('AnchorDetail')},
     {img: images.anchorBeAgent, text: '成为经纪人', onPress: () => navigate('BeAgent')}
   ];
-
-  /**
-   * 获取主播详情
-   */
-  React.useEffect(() => {
-    apiAnchorHomePage({anchorId: 709828778884333568})
-      .then(res => {
-        console.log(res, 321464164326)
-        // dispatch(setAnchorInfo(res))
-      })
-    return () => {
-    }
-  }, [])
 
   /**
    * tab的返回到 我的 
@@ -99,12 +83,12 @@ const AnorchMeScreen = () =>  {
       />
       <View style={styles.headerWrapper}>
         <Image style={styles.imgBg} source={images.anchorMeBg} resizeMode='stretch' />
-        <Avatar size={60} style={styles.avatar}  />
-        <SmallText color="white" style={styles.idText}>直播ID: {213}</SmallText>
+        <Avatar size={60} style={styles.avatar} source={anchorInfo.logo && {uri: anchorInfo.logo} || images.userAvatar} />
+        <SmallText color="white" style={styles.idText}>直播ID: {anchorInfo.anchorId}</SmallText>
       </View>
       <View style={styles.blockWrapper}>
-        <T4 style={styles.nickText}>用户昵称</T4>
-        <SmallText style={styles.followText}>{123213}粉丝</SmallText>
+        <T4 style={styles.nickText}>{anchorInfo.name || '主播昵称'}</T4>
+        <SmallText style={styles.followText}>{anchorInfo.favouriteAmount || 0}粉丝</SmallText>
         {
           dataList.map((row, index) => {
             return (
@@ -113,6 +97,8 @@ const AnorchMeScreen = () =>  {
                 title={row.text}
                 img={row.img}
                 onPress={row.onPress}
+                showRightText={row.showRightText}
+                rightTitle={row.rightTitle}
               />
             )
           })
@@ -138,6 +124,7 @@ const AnorchMeScreen = () =>  {
 };
 
 AnorchMeScreen.defaultProps = {
+
 };
 
 const styles = StyleSheet.create({

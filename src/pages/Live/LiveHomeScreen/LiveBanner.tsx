@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import images from '../../../assets/images';
+import {apiUserLiveBanner} from '../../../service/api';
 
 interface LiveBannerProps {
   // bannerList?: any[],
@@ -21,15 +22,25 @@ interface LiveBannerProps {
 }
 
 const LiveBanner = (props: LiveBannerProps) : React.ReactElement =>  {
-  const bannerList = [images.liveBanner];
+
+  const [bannerList, setBannerList] = React.useState([]);
+
+  React.useEffect(() => {
+    apiUserLiveBanner().then((res: any) => {
+      setBannerList(res)
+    })
+  }, [])
+
   return (
     <View
       style={StyleSheet.flatten([styles.wrapper, props.style])}
     >
-      <Swiper>
+      <Swiper
+        showsPagination={false} // FIXME:圆点不随着图切换
+      >
         {
           bannerList.map((banner, i) => {
-            const bannerSource = typeof banner === 'string' ? {uri: banner} : banner;
+            const bannerSource = typeof banner?.bimgobject === 'string' ? {uri: banner?.bimgobject} : banner?.bimgobject;
             return (
               <Image
                 key={`banner_${i}`}
