@@ -7,7 +7,7 @@ import pxToDp from '../../../utils/px2dp'
 
 function FansContent(props) {
   const navigation = useNavigation()
-  const { userInfo, isLogin } = props
+  const { userInfo = {}, isLogin } = props
 
   const toPublishedWork = () => {
     isLogin ? navigation.push('PublishedWork') : navigation.push('Login')

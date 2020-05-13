@@ -4,6 +4,7 @@ import { useNavigation, useIsFocused } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { setUserInfo } from '../../actions/user'
 import { apiGetUserData, apiGetOrderCount, apiGetIndexGoodsList } from '../../service/api'
+import withPage from '../../components/HOCs/withPage'
 
 import Header from './Header/Header'
 import OrdersContent from './OrdersContent/OrdersContent'
@@ -110,7 +111,7 @@ function Mine(props) {
 
 export default connect(
   (state: any) => state.userData
-)(Mine)
+)(withPage(Mine))
 
 const styles = StyleSheet.create({
   container: {
