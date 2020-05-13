@@ -286,6 +286,8 @@ PODS:
     - React
   - RNDeviceInfo (5.5.6):
     - React
+  - RNFS (2.16.6):
+    - React
   - RNGestureHandler (1.6.1):
     - React
   - RNReanimated (1.8.0):
@@ -366,6 +368,7 @@ DEPENDENCIES:
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+  - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -486,6 +489,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/datetimepicker"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -575,6 +580,7 @@ SPEC CHECKSUMS:
   RNCMaskedView: 71fc32d971f03b7f03d6ab6b86b730c4ee64f5b6
   RNDateTimePicker: 4bd49e09f91ca73d69119a9e1173b0d43b82f5e5
   RNDeviceInfo: 722dc13c269b9dbf305aa4b790d36731602e99b7
+  RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
   RNScreens: b5c0e1b2b04512919e78bd3898e144a157ce2363
@@ -595,6 +601,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: cb890c79c63885504ddc0efd7a7d01481760aca2
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 6c45c71867141f5e348dd06c9017c3162683b77e
+PODFILE CHECKSUM: 801c7e626fb714bf09507a4b576de1c1c33907c9
 
 COCOAPODS: 1.8.4
