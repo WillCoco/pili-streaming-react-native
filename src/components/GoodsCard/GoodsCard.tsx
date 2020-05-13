@@ -1,5 +1,14 @@
 import React from 'react'
-import { View, Text, Image, StyleSheet, PixelRatio, ImageBackground, TouchableWithoutFeedback } from 'react-native'
+import {
+  View,
+  Text,
+  Image,
+  Share,
+  StyleSheet,
+  PixelRatio,
+  ImageBackground,
+  TouchableWithoutFeedback
+} from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
 
@@ -11,13 +20,28 @@ function GoodsCard(props: any) {
   const { goodsInfo } = props
   const navigation = useNavigation()
 
-  const toShare = () => {
-    if (props.isLogin) {
-      console.log('share action')
+  const toShare = async () => {
+    if (!props.isLogin) {
+      navigation.push('Login')
       return
     }
 
-    navigation.push('Login')
+    try {
+      const result = await Share.share({
+        message: '分享'
+      })
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message)
+    }
   }
 
   return (

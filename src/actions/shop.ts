@@ -4,7 +4,7 @@
 import shopActionType from '../constants/Shop';
 import {Dispatch} from 'redux';
 import {sleep} from '../utils/tools';
-import api from '../service/api';
+import * as api from '../service/api';
 
 /* ----------- 店铺相关 ----------- */
 /**
@@ -105,8 +105,13 @@ export const updateShowcaseGoods = (showcaseGoods: any) => {
  */
 export const getPlatformBrands = () => {
   return async function(dispatch: Dispatch<any>, getState: any) {
-    // 请求
-    api.getCatBrandAll()
+    const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
+    api
+      .apiGetCatBrandAll(anchorId)
+      .then((r: any) => {
+        console.log(r, 222222222)
+      })
+      .catch();
     // mock
     await sleep(3000);
     const platformBrands = [1,2,3,4,5,6,7];

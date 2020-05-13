@@ -264,6 +264,8 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
       }
     })
 
+    // route.params.shareUserId
+
     let params = {
       cartIds,
       payType: 2,  //  支付方式

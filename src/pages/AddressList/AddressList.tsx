@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, PixelRatio, TouchableWithoutFeedback } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
-import { setChoosedAddr } from '../../actions/address'
+import { setChoosedAddr, setAddressList } from '../../actions/address'
 import { Ionicons } from '@expo/vector-icons'
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
+import { apiAddrList } from '../../service/api'
 
 function AddressList(props) {
   const navigation = useNavigation()
@@ -22,11 +23,24 @@ function AddressList(props) {
     headerBackTitleVisible: false
   })
 
+  useEffect(() => {
+    getAddressList()
+  }, [])
+
+  const getAddressList = () => {
+    apiAddrList().then((res: any) => {
+      console.log('获取收货地址列表', res)
+      if (!res.length) {
+        return
+      }
+      props.dispatch(setAddressList(res))
+    })
+  }
+
   /**
    * 添加新地址
    */
   const createNewAddress = () => {
-    console.log(111)
     navigation.push('CreateOrEditAddr', { type: 'create' })
   }
 
@@ -82,7 +96,6 @@ function AddressList(props) {
         />
         <Text style={styles.addBtnText}>添加新地址</Text>
       </TouchableOpacity>
-
     </View>
   )
 }

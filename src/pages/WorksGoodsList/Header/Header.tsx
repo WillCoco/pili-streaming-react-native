@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     paddingLeft: pxToDp(20),
-    flex: 1
+    flex: 1,
+    padding: 0
   }
 })

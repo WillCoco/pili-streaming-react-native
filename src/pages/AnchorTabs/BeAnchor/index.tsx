@@ -17,9 +17,11 @@ import {useSelector} from 'react-redux'
 import withPage from '../../../components/HOCs/withPage'
 import pxToDp from '../../../utils/px2dp'
 import BeAnchorRow from './BeAnchorRow'
+import {apiAddAnchorUser} from'../../../service/api'
 
 const BeAnchor = (props) =>  {
-  const beAnchorPrice = useSelector(state => state?.userData?.userInfo?.liveMoney) || 0 // 开通主播的价格
+  const beAnchorPrice = useSelector(state => state?.userData?.userInfo?.liveMoney) // 开通主播的价格
+  const userId = useSelector(state => state?.userData?.userInfo?.userId) || ''
 
   const anchorRights = [
     {title: '直播权限', text: '一键直播、简单卖货', source: require('../../../assets/be-anchor-image/bg0.png')},
@@ -33,7 +35,10 @@ const BeAnchor = (props) =>  {
    * 开通
    */
   const submit = () => {
-    alert(11)
+    apiAddAnchorUser({userId}).then(res => {
+      console.log(userId);
+      console.log(res, 4231532152);
+    })
   }
  
   return (
@@ -48,6 +53,7 @@ const BeAnchor = (props) =>  {
         {
           anchorRights.map((item, index) => {
             return <BeAnchorRow 
+              key={item.title}
               {...item}
             />
           })

@@ -1,3 +1,6 @@
+/**
+ * 通知、公共 暂时没有
+ */
 import React, { useState, useEffect } from 'react'
 import { View, 
   Text, 
@@ -17,6 +20,8 @@ import { pad } from '../../../constants/Layout'
 import images from '../../../assets/images'
 import MessageRow from './MessageRow'
 import PagingList from '../../../components/PagingList'
+import {apiGetUserChatList} from '../../../service/api'
+import {useDispatch} from 'react-redux'
 
 const mockList = [
   {
@@ -42,6 +47,7 @@ const mockList = [
 function Message(props) {
   const { navigate } = useNavigation()
   const route = useRoute()
+  const dispatch = useDispatch()
   const [pageNo, setPageNo] = useState(1)
   const pageSize = 20
   const tabList = ['通知', '公告']
@@ -74,8 +80,12 @@ function Message(props) {
   /**
    * 刷新
    */
-  const onRefresh = () => {
-    
+  const onRefresh = async () => {
+    // const result = await dispatch(apiGetUserChatList());
+    // console.log(result, 'result')
+    // return Promise.resolve({
+    //   result: [111,222,1,1,1,1,1]
+    // })
   }
 
   /**
@@ -110,10 +120,10 @@ function Message(props) {
           tabList.map((item: string, index: number) => {
             return (
               <PagingList
-                key={`tab-${index}`} tabLabel={item + `(${12})`}
+                key={`tab-${index}`} tabLabel={item + `(${0})`} // TODO:数字
                 // ref={c => plist.current = c}
-                size={14}
-                initListData={mockList}
+                size={10}
+                initListData={messageList}
                 renderItem={({item, index}: any) => {
                   console.log(item, 'itemmmmmmm')
                   return (
