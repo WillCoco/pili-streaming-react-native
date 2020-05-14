@@ -56,13 +56,12 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
     headers["authentication"] = userData.token;
   }
 
-  console.log('%cPath:', 'color: red; font-size: 20px; ', path)
-  console.log('%cParams:', 'color: red; font-size: 20px; ', data)
-
   if (data) {
     path = `${path}?${getParam(data)}`;
   }
   
+  console.log('%cPath:', 'color: red; font-size: 20px; ', path)
+  console.log('%cParams:', 'color: red; font-size: 20px; ', data)
   
   return new Promise((resolve, reject) => {
     fetch(path, {
@@ -85,9 +84,15 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
           store.dispatch(toggleLoginState(false));
           store.dispatch(setToke(""));
           store.dispatch(setUserInfo(initUserInfo));
+          // 这两个条件分支也需要修改Promise为完成状态 @hicks
+          resolve(result);
         } else {
           Toast.show(result.message);
+          // 这两个条件分支也需要修改Promise为完成状态 @hicks
+          resolve(result);
         }
+
+        console.log(result, 'resultresultresultresultresult')
       })
       .catch((error: any) => reject(error));
   });
@@ -103,6 +108,9 @@ export const post = (
   if (userData.token) {
     headers["authentication"] = userData.token;
   }
+
+  console.log('%cPath:', 'color: red; font-size: 20px; ', path)
+  console.log('%cParams:', 'color: red; font-size: 20px; ', data)
 
   return new Promise((resolve, reject) => {
     fetch(path, {
@@ -127,8 +135,12 @@ export const post = (
           store.dispatch(toggleLoginState(false));
           store.dispatch(setToke(""));
           store.dispatch(setUserInfo(initUserInfo));
+          // 这两个条件分支也需要修改Promise为完成状态 @hicks
+          resolve(result);
         } else {
+          // 这两个条件分支也需要修改Promise为完成状态 @hicks
           Toast.show(result.message);
+          resolve(result);
         }
       })
       .catch((error: any) => reject(error));
@@ -176,13 +188,11 @@ export interface UpdateParams {
 
 export const liveUpload = (path: RequestInfo, params: UpdateParams): any => {
   let formData = new FormData();
-  console.log(params, 'file')
+
   formData.append("fileType", params.fileType);
   formData.append("unit", params.unit);
   formData.append("size", params.size);
   formData.append("file", params.file as any);
-
-  console.log(formData, 'formDataformData')
 
   const headers = {
     // 'Content-Type': 'multipart/form-data',

@@ -5,6 +5,8 @@ import shopActionType from '../constants/Shop';
 import {Dispatch} from 'redux';
 import {sleep} from '../utils/tools';
 import * as api from '../service/api';
+import Toast from 'react-native-tiny-toast';
+import calcStrLength from '../utils/calcStrLength';
 
 /* ----------- 店铺相关 ----------- */
 /**
@@ -13,7 +15,6 @@ import * as api from '../service/api';
 export const getShopGoods = (shopGoods: any) => {
   return async function(dispatch: Dispatch<any>, getState: any) {
     // 请求更新
-api
 
     // 若成功去更新store
     dispatch(updateShopGoods(shopGoods));
@@ -104,23 +105,18 @@ export const updateShowcaseGoods = (showcaseGoods: any) => {
  * 获取平台分类品牌
  */
 export const getPlatformBrands = () => {
+  Toast.showLoading('');
   return async function(dispatch: Dispatch<any>, getState: any) {
     const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
-    api
-      .apiGetCatBrandAll(anchorId)
+    return api.apiGetCatBrandAll({anchorId})
       .then((r: any) => {
-        console.log(r, 222222222)
+        const platformBrands = r || [];
+        dispatch(updatePlatformBrand(platformBrands));
+        Toast.hide('');
       })
-      .catch();
-    // mock
-    await sleep(3000);
-    const platformBrands = [1,2,3,4,5,6,7];
-    console.log(platformBrands, 'platformBrands')
-
-    // 若成功去更新store
-    dispatch(updatePlatformBrand(platformBrands));
-
-    return Promise.resolve(platformBrands);
+      .catch(err => {
+        console.log(`getPlatformBrands error: ${err}`)
+      })
   }
 }
 
@@ -132,23 +128,45 @@ export const updatePlatformBrand = (platformBrands: any) => {
 }
 
 /**
- * 获取品牌商品
+ * 添加类型
  */
-export const getPlatformBrandsGoods = (brandId: string) => {
+export enum AddGoodsTargetType {
+  warehouseGoods, // 1.预组货添加商品
+  showcaseGoods,  // 2.橱窗添加商品
+}
+
+interface GetPlatformBrandsGoodsPrarms {
+  addType: AddGoodsTargetType, 
+  brandId: number, // 品牌id
+  pageNo: number,
+  pageSize: number,
+}
+
+export const getPlatformBrandsGoods = (params: GetPlatformBrandsGoodsPrarms) => {
   return async function(dispatch: Dispatch<any>, getState: any) {
     // 请求
-    // mock
-    await sleep(1000);
+    const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
+
+    api.apiGetBrandGoodsList({
+      ...params,
+      anchorId
+    })
+      .then(r => {
+        console.log(r, '1111111111')
+      })
+      .catch(err => {
+        console.log(`apiGetBrandGoodsList error: ${err}`)
+      })
     const goods = [1,2,3,4,5,6,7];
 
-    const {platformGoods = {}} = getState().shop || {};
+    // const {platformGoods = {}} = getState().shop || {};
 
-    const newPlatformGoods = {...platformGoods, [brandId]: goods}
+    // const newPlatformGoods = {...platformGoods, [brandId]: goods}
 
     // 若成功去更新store
-    dispatch(updateShopGoods(newPlatformGoods));
+    // dispatch(updateShopGoods(newPlatformGoods));
 
-    return Promise.resolve(newPlatformGoods);
+    // return Promise.resolve(newPlatformGoods);
   }
 }
 

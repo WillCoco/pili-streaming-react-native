@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: ROW_HEIGHT,
+    backgroundColor: '#fff'
     // paddingHorizontal: pad
   },
   contentWrapper: {

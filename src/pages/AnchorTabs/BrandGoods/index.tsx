@@ -7,19 +7,29 @@ import {
   StyleSheet,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
 import BrandGoodRow from './BrandGoodRow'
 import PagingList from '../../../components/PagingList';
 import NavBar from '../../../components/NavBar';
-import {Colors} from '../../../constants/Theme';
+import {getPlatformBrandsGoods, AddGoodsTargetType} from '../../../actions/shop';
 import {vw} from '../../../utils/metric';
 import {pad} from '../../../constants/Layout';
+import {Colors} from '../../../constants/Theme';
 import images from '../../../assets/images/index';
 
 const ROW_HEIGHT = 120;
 
+export interface BrandGoodsParams {
+  onPicked: () => any,
+  brandId: number,
+  type: AddGoodsTargetType, // 区分添加橱窗还是
+}
+
 const BrandGoods = () =>  {
   const {navigate, goBack} = useNavigation();
   const route = useRoute();
+  const dispatch = useDispatch();
+
   /**
    * 获取参数
    */
@@ -29,8 +39,8 @@ const BrandGoods = () =>  {
   const {
     onPicked,
     brandId,
-    // targetList
-  } = route.params || {};
+    type,
+  }: BrandGoodsParams = (route.params || {}) as BrandGoodsParams;
 
   /**
    * 获取品牌商品
@@ -43,9 +53,18 @@ const BrandGoods = () =>  {
     goBack();
   }
 
-  const onRefresh = () => Promise.resolve({
-    result: [1,1,1,1,]
-  });
+  const onRefresh = async () => {
+    const r = await dispatch(getPlatformBrandsGoods({
+      brandId,
+      addType: type,
+      pageSize: 20,
+      pageNo: 1,
+    }));
+    
+    return Promise.resolve({
+      result: [1,1,1,1,]
+    });
+  }
 
   const onEndReached = () => {};
   return (
@@ -64,6 +83,7 @@ const BrandGoods = () =>  {
             <BrandGoodRow
               onPress={onGoodPicked}
               isAdded={false} // 在目标列表中有没有
+              style={{paddingHorizontal: pad}}
             />
           )
         }}

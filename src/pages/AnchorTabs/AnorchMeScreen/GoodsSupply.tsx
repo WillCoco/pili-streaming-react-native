@@ -15,7 +15,7 @@ import {PrimaryText, SmallText, T4} from 'react-native-normalization-text';
 import Toast from 'react-native-tiny-toast';
 import {useNavigation} from '@react-navigation/native';
 import withPage from '../../../components/HOCs/withPage';
-import {vw} from '../../../utils/metric';
+import { vw, vh } from '../../../utils/metric';
 import {Colors} from '../../../constants/Theme';
 import { pad, radio } from '../../../constants/Layout';
 import NavBar from '../../../components/NavBar';
@@ -23,9 +23,10 @@ import GoodsCategoryScroll from '../../../components/GoodsCategoryScroll';
 import Empty from '../../../components/Empty';
 import GoodCheckBlock from '../../../components/GoodCheckBlock';
 import Iconcartlight from '../../../components/Iconfont/Iconcartlight';
-import {getPlatformBrands} from '../../../actions/shop';
+import {getPlatformBrands, AddGoodsTargetType} from '../../../actions/shop';
 import images from '../../../assets/images/index';
 
+const emptyList: [] = [];
 
 const GoodsSupply = (props: any) =>  {
   const {navigate, goBack} = useNavigation();
@@ -34,24 +35,21 @@ const GoodsSupply = (props: any) =>  {
   React.useEffect(() => {
     let loading: any;
     const getData = async () => {
-      loading = Toast.showLoading('');
-      await dispatch(getPlatformBrands());
-      Toast.hide(loading);
+      const a = await dispatch(getPlatformBrands());
     };
     getData();
 
     return () => {
-      Toast.hide(loading);
     }
   }, [])
 
-  const onPressBrand = () => {
+  const onPressBrand = (brandId: number | string) => {
     // 跳转
-    navigate('BrandGoods', {brandId: '1'})
+    navigate('BrandGoods', {brandId})
   }
 
   // 平台品牌
-  const platformBrands = useSelector(state => state?.shop?.platformBrands) || [];
+  const platformBrands = useSelector((state: any) => state?.shop?.platformBrands) || emptyList;
 
   /**
    * 选择的种类
@@ -63,10 +61,10 @@ const GoodsSupply = (props: any) =>  {
    */
   const brandsList = React.useMemo(() => {
     console.log(platformBrands, checkedCategory, 'brans')
-    return platformBrands[checkedCategory]?.brans || [1,2,3];
+    return platformBrands[checkedCategory]?.brandResList || [];
   }, [checkedCategory])
 
-  console.log(platformBrands, 'platformBrands')
+  console.log(brandsList, 'brandsList')
   return (
     <View style={styles.style}>
       <NavBar leftTheme="light" title="添加商品" titleStyle={styles.navTitle} style={styles.nav} />
@@ -80,18 +78,18 @@ const GoodsSupply = (props: any) =>  {
               />
               <View style={{flex: 1, marginTop: pad}}>
                 <FlatList
-                  data={[brandsList]}
+                  data={brandsList}
                   renderItem={({item}) => {
                     return (
-                      <TouchableOpacity style={styles.brandStyle} onPress={onPressBrand}>
+                      <TouchableOpacity style={styles.brandStyle} onPress={() => onPressBrand(item.brandId)}>
                         <View style={styles.imgWrapper}>
                           <Image
                             style={styles.img}
-                            source={props.good?.img || images.goodCover}
+                            source={!!props.good?.brandLogo? {uri: props.good?.brandLogo} : images.goodCover}
                             resizeMode="cover"
                           />
                         </View>
-                        <SmallText>{}品牌名称</SmallText>
+                        <SmallText>{item.brandName || '品牌名称'}</SmallText>
                       </TouchableOpacity>
                     )
                   }}
@@ -99,6 +97,7 @@ const GoodsSupply = (props: any) =>  {
                   numColumns={3}
                   columnWrapperStyle={{justifyContent: 'space-between'}}
                   style={{paddingRight: pad}}
+                  ListEmptyComponent={<Empty text="暂无商品" style={{marginTop: vh(5)}} />}
                 />
               </View>
             </View>
