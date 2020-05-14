@@ -16,9 +16,10 @@ const phonePattern = /^1[3456789]\d{9}$/
 export default function ApplyForAfterSales() {
   const route = useRoute()
   const navigation = useNavigation()
-  const [orderInfo] = useState(route.params)
+  const [orderInfo]: any = useState(route.params)
   const [reason, setReason] = useState('')
   const [tel, setTel] = useState('')
+  const [imageList, setImageList]: Array<any> = useState([])
   const [typeList, setTypeList] = useState([
     { value: '仅退款', type: 1, active: true },
     { value: '退货退款', type: 2, active: false },
@@ -35,8 +36,6 @@ export default function ApplyForAfterSales() {
     headerTintColor: Colors.whiteColor,
     headerBackTitleVisible: false
   })
-
-
 
   const submit = () => {
     const { goodsInfo } = orderInfo
@@ -56,7 +55,7 @@ export default function ApplyForAfterSales() {
     }
 
     const params = {
-      applyImgs: [],
+      applyImgs: imageList.splice(1, imageList.length - 1),
       applyReason: reason,
       goodsNum: goodsInfo.goodsNum,
       mobile: tel,
@@ -68,6 +67,14 @@ export default function ApplyForAfterSales() {
 
     apiCreateReturnOrder(params).then(res => {
       console.log(res, '申请退款')
+      if (res) {
+        Toast.showSuccess('已提交申请')
+        setTimeout(() => {
+          navigation.goBack()
+        }, 1000)
+      } else {
+        Toast.show('申请失败', { position: 0 })
+      }
     })
   }
 
@@ -78,7 +85,10 @@ export default function ApplyForAfterSales() {
       {/* 服务类型 */}
       <ServiceType typeList={typeList} setTypeList={(list: React.SetStateAction<{ type: string; active: boolean }[]>) => setTypeList(JSON.parse(JSON.stringify(list)))} />
       {/* 申请原因 */}
-      <Reason inputReason={(text: string) => setReason(text)} />
+      <Reason
+        inputReason={(text: string) => setReason(text)}
+        setImageList={(list: any) => setImageList(list)}
+      />
       {/* 联系电话 */}
       <Contact inputTel={(value: string) => setTel(value)} />
       {/* 退货说明 */}
