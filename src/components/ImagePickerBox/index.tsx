@@ -24,7 +24,7 @@ interface ImagePickerBoxProps {
   contentWrapper?: StyleProp<any>,
   placeholderText?: string,
   placeholderIcon?: any,
-  onPicked: (uri?: string) => any,
+  onPicked: (info?: any) => any,
   canClose?: boolean,
   initImg?: any, // 初始图
 }
@@ -33,14 +33,32 @@ const ImagePickerBox = (props: ImagePickerBoxProps) =>  {
   /**
    * 选择图片
    */
+  const getImgInfo = (uri: string) => {
+    const nameArr = uri.split('/');
+    const name = nameArr[nameArr.length - 1];
+    const typeArr = name.split('.');
+    const type = `image/${typeArr[typeArr.length - 1]}`;
+
+    return {
+      uri,
+      name,
+      type
+    }
+  }
+
+  /**
+   * 选择图片
+   */
   const [coverUri, setCoverUri]: Array<any> = React.useState(props.initImg);
   const pickCover = async () => {
     const r = await pickCameraRoll({mediaTypes: ImagePicker.MediaTypeOptions.Images});
 
+
     const {uri} = r || {};
     if (uri) {
+      const info = getImgInfo(uri);
       setCoverUri(uri)
-      props.onPicked(r);
+      props.onPicked(info);
     }
   };
 

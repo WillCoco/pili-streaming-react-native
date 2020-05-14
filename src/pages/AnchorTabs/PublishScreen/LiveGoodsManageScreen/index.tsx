@@ -21,7 +21,8 @@ import GoodCheckRow from './LiveGoodsManageRow';
 import NavBar from '../../../../components/NavBar';
 import ButtonRadius from '../../../../components/Buttons/ButtonRadius';
 import CheckBox from '../../../../components/CheckBox';
-import { Toast } from '@ant-design/react-native';
+import {startLive} from '../../../../actions/live';
+import Toast from 'react-native-tiny-toast';
 
 const emptyList: [] = [];
 const emptyObj: {} = {};
@@ -142,16 +143,26 @@ const LiveGoodsManage = (props: any) =>  {
   /**
    * 确认
    */
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!isVaildData()) {
       return;
     }
+    console.log(dataList, '选中要去直播卖的商品');
+    return;
+    Toast.showLoading('');
+    
 
     // 提交更改
-    console.log(dataList, '选中要去直播卖的商品');
+    const r = await dispatch(startLive({
+      goodsIdList: checkedList,
+    }))
 
-    // 跳转
-    navigate(nextNav);
+    Toast.hide('');
+
+    if (r) {
+      // 跳转
+      navigate(nextNav);
+    }
   }
 
   return (

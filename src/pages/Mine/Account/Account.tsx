@@ -9,7 +9,7 @@ import pxToDp from '../../../utils/px2dp'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
 function Account(props) {
-  const { userInfo, isLogin } = props
+  const { userInfo = {}, isLogin } = props
   const navigation = useNavigation()
 
   const toAccountInfo = () => {

@@ -2,17 +2,19 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, ScrollView, ImageBackground, Image, TouchableOpacity, PixelRatio } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
-import { apiGetOrderDetail, apiCancelOrder, apiReminderDeliverGoods, apiConfirmReceiveGoods, apiExtendReceiveGoods } from '../../service/api'
+import { apiGetOrderDetail, apiCancelOrder, apiReminderDeliverGoods, apiConfirmReceiveGoods, apiExtendReceiveGoods, apiQueryExpress } from '../../service/api'
 import pxToDp from '../../utils/px2dp'
 import Toast from 'react-native-tiny-toast'
 
 import GoodsCard from './GoodsCard/GoodsCard'
 import OrderCard from './OrderCard/OrderCard'
+import ExpressStepper from '../../components/ExpressStepper/ExpressStepper'
 
 export default function OrderDetail() {
   const id = useRoute().params.id
   const navigation = useNavigation()
   const [orderDetail, setOrderDetail] = useState({})
+  const [expressList, setExpressList] = useState([])
 
   navigation.setOptions({
     headerTitle: `订单详情`,
@@ -33,9 +35,13 @@ export default function OrderDetail() {
    * 获取订单详情
    */
   const getOrderDetail = () => {
-    apiGetOrderDetail({ orderId: id }).then(res => {
+    apiGetOrderDetail({ orderId: id }).then((res: any) => {
       console.log('订单详情', res)
       setOrderDetail(res)
+
+      if (res.deliveryNo && res.deliveryComCode) {
+        queryExpress(res.deliveryNo, res.deliveryComCode, res.receivedTel)
+      }
     })
   }
 
@@ -79,12 +85,17 @@ export default function OrderDetail() {
   /**
    * 查看物流
    */
-  const toViewExpress = () => {
+  const queryExpress = (shippingCode: string, invoiceNo: string, tel: string) => {
     const params = {
-      shippingCode: orderDetail.deliveryComCode,
-      invoiceNo: orderDetail.deliveryNo
+      shippingCode,
+      invoiceNo,
+      customerName: tel.substr(7)
     }
-    navigation.push('ExpressInfo', params)
+    
+    apiQueryExpress(params).then((res: any) => {
+      console.log('物流信息', res)
+      setExpressList(res.data.reverse())
+    })
   }
 
   /**
@@ -129,7 +140,7 @@ export default function OrderDetail() {
           }
         </Text>
         {
-          orderDetail.orderStatus !== 1 && <Text style={{
+          orderDetail.autoReceiveHours && <Text style={{
             fontSize: pxToDp(24),
             lineHeight: pxToDp(44),
             color: Colors.whiteColor
@@ -138,6 +149,11 @@ export default function OrderDetail() {
       </ImageBackground>
 
       {/* 物流信息 */}
+      {
+        orderDetail.deliveryNo && orderDetail.deliveryComCode && <ExpressStepper
+        expressList={expressList}
+      />
+      }
 
       {/* 商品信息 */}
       <GoodsCard detail={orderDetail} />
@@ -185,7 +201,6 @@ export default function OrderDetail() {
         orderDetail.orderStatus === 3 &&
         <View style={styles.btnGroup}>
           <Text style={[styles.btn, styles.greyBtn]} onPress={extendReceiveGoods}>延迟收货</Text>
-          <Text style={[styles.btn, styles.greyBtn]} onPress={toViewExpress}>查看物流</Text>
           <Text style={styles.btn} onPress={confirmTheGoods}>确认收货</Text>
         </View>
       }
