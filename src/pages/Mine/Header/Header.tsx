@@ -1,8 +1,16 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image, ImageBackground, PixelRatio, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  PixelRatio,
+  ImageBackground,
+  TouchableOpacity,
+  TouchableWithoutFeedback
+} from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
-import { Ionicons } from '@expo/vector-icons'
 import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'

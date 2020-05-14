@@ -84,6 +84,8 @@ const CreateLiveScreen = (props: any) =>  {
    * 上传文件
    */
   const onChangeCover = async (r: any) => {
+    console.log(r, '=======')
+
     const result = await api.apiLiveUploadFile({
       fileType: 'PICTURE',
       size: '2',

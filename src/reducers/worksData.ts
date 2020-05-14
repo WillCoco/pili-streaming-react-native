@@ -1,11 +1,15 @@
 import {
   GOODS_LIST,
-  ADDED_GOODS_LIST
+  ADDED_GOODS_LIST,
+  MEDIA_LIST
 } from '../constants/Works'
 
 const INITIAL_STATE = {
   goodsList: [],
-  addedGoodsList: []
+  addedGoodsList: [],
+  mediaList: [
+    { uri: require('../assets/order-image/add.png') }
+  ]
 }
 
 export default function worksData(state = INITIAL_STATE, action: any) {
@@ -14,6 +18,8 @@ export default function worksData(state = INITIAL_STATE, action: any) {
       return { ...state, goodsList: action.payload }
     case ADDED_GOODS_LIST:
       return { ...state, addedGoodsList: action.payload }
+    case MEDIA_LIST:
+      return { ...state, mediaList: action.payload }
     default:
       return state
   }
