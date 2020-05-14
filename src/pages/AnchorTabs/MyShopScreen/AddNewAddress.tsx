@@ -13,13 +13,15 @@ import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
 import withPage from '../../../components/HOCs/withPage'
 import NavBar from '../../../components/NavBar'
-import { apiEditAddr, apiAddrList } from '../../../service/api'
+import { apiEditAddr, apiAddrList, apiAuReturnedAddress } from '../../../service/api'
 import { setAddressList } from '../../../actions/address'
 import Iconarrowright from '../../../components/Iconfont/Iconarrowright'
+import { useSelector } from 'react-redux'
 
 function AddNewAddress(props) {
   const navigation = useNavigation()
   const route = useRoute()
+  const anchorId = useSelector(state => state?.anchorData?.anchorInfo?.anchorId)
   const [addressInfo] = useState(route?.params?.addressInfo || {})
   const [addrValue, setAddrValue] = useState([])  // 级联选择器对应的 code 数组
   const [userName, setUserName] = useState(addressInfo.consignee || '')
@@ -79,21 +81,25 @@ function AddNewAddress(props) {
    * 保存地址
    */
   const submit = () => {
+
     const params = {
-      city,
-      province,
-      district,
-      consignee: userName,
-      mobile: userTel,
-      address: addrDetail,
-      is_default: isDefault,
-      address_id: addressInfo.address_id
+      address: province + city + district + addrDetail,
+      anchorId,
+      id: route?.params?.type === 'edit' ? 123 : '', // 寄回地址主键id（添加-不传或传null，修改传id
+      linkTel: userTel,
+      name: userName, // 是否默认寄回地址（1-是，2-否）
+      status: isDefault
     }
+
+    console.log(params);
+    apiAuReturnedAddress(params).then(res => {
+      console.log(res);
+    })
 
     Toast.show('保存成功', {
       position: 0
     });
-    navigation.goBack();
+    // navigation.goBack();
 
     // apiEditAddr(params).then(res => {
     //   console.log('编辑地址', res)

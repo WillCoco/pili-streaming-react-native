@@ -28,6 +28,7 @@ import { pad } from '../../../constants/Layout';
 import { Colors } from '../../../constants/Theme';
 import pxToDp from '../../../utils/px2dp';
 import { apiGetLiveList } from '../../../service/api'
+import { connect } from 'react-redux'
 
 
 const RecordsCard = (props: {
@@ -223,8 +224,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withPage(AnchorRecords, {
-  statusBarOptions: {
-    barStyle: 'dark-content',
-  }
-});
+export default connect(
+    (state: any) => state.anchorData
+)(withPage(AnchorRecords, {
+    statusBarOptions: {
+        barStyle: 'dark-content',
+    }})
+);

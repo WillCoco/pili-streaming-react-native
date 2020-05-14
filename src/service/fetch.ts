@@ -20,14 +20,20 @@ let headers = {
 export const get = (path: any, data?: any, onlyData: boolean = true) => {
   const { userData } = store.getState()
 
+  console.log('%cToken:', 'color: red; font-size: 20px; ', userData.token)
+
   if (userData.token) {
     headers['authentication'] = userData.token
   }
 
+  console.log('%cPath:', 'color: red; font-size: 20px; ', path)
+  console.log('%cParams:', 'color: red; font-size: 20px; ', data)
+
   if (data) {
     path = `${path}?${getParam(data)}`
   }
-
+  
+  
   return new Promise((resolve, reject) => {
     fetch(path, {
       headers
@@ -38,7 +44,7 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
       return r2 && JSON.parse(r2)
     })
     .then((result: { data: any; }) => {
-      console.log('get resulyt', result)
+      console.log('%cGet Result:', 'color: red; font-size: 20px; ', result)
       if (onlyData) {
         resolve(result.data)
       } else (
@@ -49,7 +55,7 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
   })
 };
 
-export const post = (path: RequestInfo, data: any, onlyData: boolean = true) => {
+export const post = (path: RequestInfo, data?: any, onlyData: boolean = true) => {
   const { userData } = store.getState()
 
   if (userData.token) {
@@ -68,7 +74,7 @@ export const post = (path: RequestInfo, data: any, onlyData: boolean = true) => 
       return JSON.parse(r2)
     })
     .then((result: { data: unknown; }) => {
-      console.log('post result', result)
+      console.log('%cPost Result:', 'color: red; font-size: 20px; ', result)
       if (onlyData) {
         resolve(result.data)
       } else (
