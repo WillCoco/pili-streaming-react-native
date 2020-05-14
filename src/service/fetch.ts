@@ -62,6 +62,9 @@ export const post = (path: RequestInfo, data?: any, onlyData: boolean = true) =>
     headers['authentication'] = userData.token
   }
 
+  console.log('%cPath:', 'color: red; font-size: 20px; ', path)
+  console.log('%cParams:', 'color: red; font-size: 20px; ', data)
+
   return new Promise((resolve, reject) => {
     fetch(path, {
       method: 'POST',

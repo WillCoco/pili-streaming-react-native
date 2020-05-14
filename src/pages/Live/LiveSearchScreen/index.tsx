@@ -1,13 +1,12 @@
 /**
  * 直播首页
  */
-import * as React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   FlatList,
-  PanResponder,
   SafeAreaView,
 } from 'react-native';
 import LiveHomeTabs from './LiveHomeTabs';
@@ -17,6 +16,9 @@ import LiveSummaryBlock from '../../../components/LiveSummaryBlock';
 import {pad} from '../../../constants/Layout';
 import {useNavigation} from '@react-navigation/native';
 import SearchBar from '../../../components/SearchBar/SearchBar';
+import {apiSearchLiveStreamList} from '../../../service/api';
+import Empty from '../../../components/Empty';
+import images from '../../../assets/images';
 import '../../../actions/im';
 
 const LiveHomeScreen = (props: any) : React.ReactElement =>  {
@@ -24,13 +26,13 @@ const LiveHomeScreen = (props: any) : React.ReactElement =>  {
   const [data] = React.useState(['1', '2'])
   const navgation = useNavigation();
 
-  const searchBarProps = {
-    isPlaceHolder: false,
-    hasSearchKey: false,
-  }
-
   navgation.setOptions({
-    headerTitle: () => <SearchBar {...searchBarProps} />,
+    headerTitle: () => <SearchBar
+      hasSearchKey={false}
+      isPlaceHolder={false}
+      inputSearchKey={(text: string) => setSearchKey(text)}
+      toSearch={(value: string) => toSearch(value)}
+    />,
     headerStyle: {
       backgroundColor: Colors.basicColor,
       elevation: 0,  // 去除安卓状态栏底部阴影
@@ -40,14 +42,50 @@ const LiveHomeScreen = (props: any) : React.ReactElement =>  {
     headerBackTitleVisible: false
   })
 
+  const pageSize = 20
+  const [searchKey, setSearchKey] = useState('')
+  const [sortValue, setSortValue] = useState('sort')
+  const [isEmpty, setIsEmpty] = useState(false)
+  const [emptySearchKey, setEmptySearchKey] = useState('')
+  const [livingRoomList, setLivingRoomList] = useState([])
+  let [pageNo, setPageNo] = useState(1)
+
+  /**
+   * 搜索
+   * @param placeholderSearchKey 搜索占位符
+   */
+  const toSearch = (placeholderSearchKey: string) => {
+    const params = {
+      pageSize,
+      pageNo: 1,
+      searchName: searchKey
+    }
+
+    apiSearchLiveStreamList(params).then((res: any) => {
+      console.log('直播搜索', res)
+      setIsEmpty(!res.count)
+      if (!res.count) {
+        setEmptySearchKey(searchKey)
+        return
+      }
+
+      setLivingRoomList(res.list)
+    })
+  }
+
   /**
    * 列表尾部
    */
   const ListFooterComponent = () => {
     return (
-      <View style={styles.listFooterWrapper}>
-        <Text>没有更多啦~</Text>
-      </View>
+      livingRoomList.length 
+        && 
+        (
+          <View style={styles.listFooterWrapper}>
+            <Text>没有更多啦~</Text>
+          </View>
+        )
+        || <Text></Text>
     );
   }
 
@@ -55,25 +93,28 @@ const LiveHomeScreen = (props: any) : React.ReactElement =>  {
     <SafeAreaView
       style={StyleSheet.flatten([styles.wrapper])}
     >
-      {/* <View style={{marginTop: props.safeTop}}>
-        <Text>搜索组件</Text>
-      </View> */}
       {/* <View style={StyleSheet.flatten([styles.contentWrapper, {marginTop: props.safeTop}])}> */}
       <View style={StyleSheet.flatten([styles.contentWrapper])}>
         <FlatList
           refreshing
-          data={data}
+          data={livingRoomList}
           initialNumToRender={props.initialNumToRender}
           //item显示的布局
           renderItem={(d) => <LiveSummaryBlock {...d} />}
           // 空布局
-          ListEmptyComponent={() => <Text>空</Text>}
+          ListEmptyComponent={
+            <Empty 
+              img={images.emptySearch}
+              text='对不起，没有找到你想要找的直播间，换一个关键词试试！'
+              textStyle={{width: '70%', textAlign: 'center'}}
+            />
+          }
           ListFooterComponent={ListFooterComponent}
           keyExtractor={(item: any, index: number) => 'index' + index + item}
           numColumns={2}
           columnWrapperStyle={styles.columnWrapperStyle}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={props.contentContainerStyle}
+          contentContainerStyle={StyleSheet.flatten([props.contentContainerStyle, {flex: 1}])}
         />
       </View>
     </SafeAreaView>
@@ -103,7 +144,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: pad
   },
   columnWrapperStyle: {
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   }
 });
 

@@ -23,11 +23,12 @@ import {pad} from '../../../constants/Layout';
 import images from '../../../assets/images/index';
 import Empty from '../../../components/Empty/index';
 import {getBankCards} from '../../../actions/asset';
+import withPage from '../../../components/HOCs/withPage';
 
 const ROW_HEIGHT = 120;
 
 const defaultCards: [] = [];
-const CardBag = () =>  {
+const CardBag = (props: any) =>  {
   const {navigate, goBack, replace} = useNavigation();
   const route = useRoute();
   const dispatch = useDispatch();
@@ -87,7 +88,7 @@ const CardBag = () =>  {
         )
       }
       <TouchableOpacity onPress={() => navigate('AddBankCard')} style={styles.footer}>
-        <ImageBackground source={images.addBankButton} style={styles.addButton}>
+        <ImageBackground source={images.addBankButton} style={StyleSheet.flatten([styles.addButton, {marginBottom: props.safeBottom}])}>
           <Image source={images.addBankCardIcon} style={styles.addIcon} />
           <PrimaryText >添加银行卡</PrimaryText>
         </ImageBackground>
@@ -135,4 +136,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CardBag;
+export default withPage(CardBag);
