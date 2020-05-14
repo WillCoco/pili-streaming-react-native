@@ -20,6 +20,7 @@ import NavBar from '../../../components/NavBar';
 import { pad, radio, radioLarge } from '../../../constants/Layout';
 import {Colors} from '../../../constants/Theme';
 import {isIOS, isAndroid} from '../../../constants/DeviceInfo';
+import {releaseTeaser} from '../../../actions/live';
 import * as api from '../../../service/api';
 import Toast from 'react-native-tiny-toast';
 
@@ -32,7 +33,7 @@ const CreateTraserScreen = () =>  {
    * 选择图片
    */
   const [cover1, setCover1]: Array<any> = React.useState();
-  const [cover2Uri, setCover2Uri]: Array<any> = React.useState();
+  const [cover2, setCover2]: Array<any> = React.useState();
 
   /**
    * 选择视频
@@ -59,7 +60,7 @@ const CreateTraserScreen = () =>  {
 
   console.log(liveTimeStamp, 'liveTimeStampliveTimeStampliveTimeStamp')
 
-  const onPickedTime = (type: string, time: string) => {
+  const onPickedTime = (time: string, type?: string) => {
 
     if (isAndroid()) {
       if (type === PickTimeMode.date) {
@@ -73,8 +74,16 @@ const CreateTraserScreen = () =>  {
         const t = new Date(liveTime.current.join(' '))
         liveTimeStamp.current = t.getTime && t.getTime();
       }
+    } else {
+      const t = new Date(time)
+      liveTimeStamp.current = t.getTime && t.getTime();
+
+      console.log(t, liveTimeStamp.current, time,)
     }
 
+    if (liveTimeStamp.current < Date.now()) {
+      Toast.show('请选择合适的时间');
+    }
     // todo: ios
   }
 
@@ -118,11 +127,10 @@ const CreateTraserScreen = () =>  {
    * 提交前审核 
    */
   const isDataVaild = (): boolean => {
-    console.log(cover1, '123123')
-    if (!cover1) {
-      Toast.show('请选择封面图');
-      return false;
-    }
+    // if (!cover1) {
+    //   Toast.show('请选择封面图');
+    //   return false;
+    // }
 
     if (!liveTimeStamp.current) {
       Toast.show('请选择开播时间');
@@ -132,9 +140,15 @@ const CreateTraserScreen = () =>  {
     // 20s
     if (video) {
       if (video.duration > (0.2 * 60 * 1000)) {
-      Toast.show('所选视频太长');
-      return false;
+        Toast.show('所选视频太长');
+        return false;
       }
+    }
+
+    alert(liveTimeStamp.current)
+    if (liveTimeStamp.current < Date.now()) {
+      Toast.show('请选择合适的时间');
+      return false;
     }
 
     Toast.show('请填写标题');
@@ -149,45 +163,64 @@ const CreateTraserScreen = () =>  {
    * 提交 
    */
   const onSubmitPress = async () => {
-    if (!isDataVaild()) {
-      return;
-    }
-    Toast.showLoading('');
+    // if (!isDataVaild()) {
+    //   return;
+    // }
+    // Toast.showLoading('');
 
     // 上传封面
     const coverUpload = api.apiLiveUploadFile({
       fileType: 'PICTURE',
-      size: '2',
+      size: '10',
       unit: 'M',
       file: cover1,
     });
 
     // 上传视频
-    const videoUpload = api.apiLiveUploadFile({
-      fileType: 'VIDEO',
-      size: '2',
-      unit: 'M',
-      file: video,
-    });
+    let videoUpload;
+    if (video) {
+      videoUpload = api.apiLiveUploadFile({
+        fileType: 'VIDEO',
+        size: '100',
+        unit: 'M',
+        file: video,
+      });
+    }
 
+    console.log('ssssss')
+    console.log(liveTimeStamp.current, 'liveTimeStamp.current')
+    return
     const {data: coverResult, message: coverMessage} = (await coverUpload) || {};
     const {data: videoResult, message: videoMessage} = (await videoUpload) || {};
 
-    Toast.hide('');
-
-    console.log(coverResult, videoResult, videoMessage, 'videoResultvideoResult');
+    console.log(coverResult,  'videoResultvideoResult');
 
     if (!coverResult) {
+      Toast.hide('');
       Toast.show(coverMessage || '上传封面失败')
       return;
     }
 
-    if (!videoResult) {
+    if (video && !videoResult) {
+      Toast.hide('');
       Toast.show(videoMessage || '上传视频失败')
       return;
     }
 
+    // console.log(1)
+
     // const cover = result?.data;
+
+    
+
+    await dispatch(releaseTeaser({
+      title,
+      smallPic: coverResult,
+      advance: videoResult,
+      // bigPic: cover2?.url,
+      liveTime: liveTimeStamp.current,
+    }));
+    Toast.hide('');
 
     Toast.show('发布成功')
     goBack();
@@ -210,7 +243,7 @@ const CreateTraserScreen = () =>  {
           onPicked={onPickedVideo}
         />
         <SmallText style={styles.vedioDescText}>时长: 20s内</SmallText>
-        <SmallText style={styles.vedioDescText}>大小: 2M内</SmallText>
+        <SmallText style={styles.vedioDescText}>大小: 20M内</SmallText>
         <SmallText style={styles.vedioDescText}>建议：化妆小视频（加速版），室内换衣（加速版），室外造型秀（视觉冲击）等等</SmallText>
       </View>
       <View style={StyleSheet.flatten([styles.divider])} />

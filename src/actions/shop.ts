@@ -7,6 +7,7 @@ import {sleep} from '../utils/tools';
 import * as api from '../service/api';
 import Toast from 'react-native-tiny-toast';
 import calcStrLength from '../utils/calcStrLength';
+import {safeStringify} from '../utils/saftyFn';
 
 /* ----------- 店铺相关 ----------- */
 /**
@@ -131,7 +132,7 @@ export const updatePlatformBrand = (platformBrands: any) => {
  * 添加类型
  */
 export enum AddGoodsTargetType {
-  warehouseGoods, // 1.预组货添加商品
+  warehouseGoods = 1, // 1.预组货添加商品
   showcaseGoods,  // 2.橱窗添加商品
 }
 
@@ -147,26 +148,19 @@ export const getPlatformBrandsGoods = (params: GetPlatformBrandsGoodsPrarms) => 
     // 请求
     const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
 
-    api.apiGetBrandGoodsList({
+    return api.apiGetBrandGoodsList({
       ...params,
       anchorId
     })
-      .then(r => {
-        console.log(r, '1111111111')
+      .then((r: any) => {
+        const {records} = r || {}
+
+        return Promise.resolve(records || []);
       })
       .catch(err => {
         console.log(`apiGetBrandGoodsList error: ${err}`)
+        return Promise.resolve([]);
       })
-    const goods = [1,2,3,4,5,6,7];
-
-    // const {platformGoods = {}} = getState().shop || {};
-
-    // const newPlatformGoods = {...platformGoods, [brandId]: goods}
-
-    // 若成功去更新store
-    // dispatch(updateShopGoods(newPlatformGoods));
-
-    // return Promise.resolve(newPlatformGoods);
   }
 }
 
@@ -185,6 +179,25 @@ export const updatePersonalGoods = (personalGoods: any) => {
 }
 
 /* ----------- 预组货相关 ----------- */
+
+/**
+ * 添加预组货仓库商品
+ */
+interface AddGoods2WareHouseParams {
+  goodsIdList: Array<string>
+}
+export const addGoods2WareHouse = (params: AddGoods2WareHouseParams) => {
+  return async function(dispatch: Dispatch<any>, getState: any) {
+    const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
+
+    api.apiAddGroupGoods({
+      goodsIdList: safeStringify(params.goodsIdList),
+      anchorId
+    })
+
+  }
+}
+
 /**
  * 更新预组货仓库商品
  */

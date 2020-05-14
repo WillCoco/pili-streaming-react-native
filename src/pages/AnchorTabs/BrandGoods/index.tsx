@@ -8,19 +8,20 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
-import BrandGoodRow from './BrandGoodRow'
+import BrandGoodRow, {ROW_HEIGHT} from './BrandGoodRow'
 import PagingList from '../../../components/PagingList';
 import NavBar from '../../../components/NavBar';
 import {getPlatformBrandsGoods, AddGoodsTargetType} from '../../../actions/shop';
 import {vw} from '../../../utils/metric';
 import {pad} from '../../../constants/Layout';
 import {Colors} from '../../../constants/Theme';
+import {brandGoodAdapter} from '../../../utils/dataAdapters';
 import images from '../../../assets/images/index';
 
-const ROW_HEIGHT = 120;
+const PAGE_SIZE = 14;
 
 export interface BrandGoodsParams {
-  onPicked: () => any,
+  onPicked: (goodsList: Array<any>) => any,
   brandId: number,
   type: AddGoodsTargetType, // 区分添加橱窗还是
 }
@@ -45,28 +46,32 @@ const BrandGoods = () =>  {
   /**
    * 获取品牌商品
    */
-
-  const onGoodPicked = () => {
-    // 执行挑选的目标事件
-
-    // 返回
-    goBack();
-  }
-
   const onRefresh = async () => {
-    const r = await dispatch(getPlatformBrandsGoods({
+    const result = await dispatch(getPlatformBrandsGoods({
       brandId,
       addType: type,
-      pageSize: 20,
+      pageSize: PAGE_SIZE,
       pageNo: 1,
     }));
-    
-    return Promise.resolve({
-      result: [1,1,1,1,]
-    });
+
+    console.log(result, 'result')
+
+    return Promise.resolve({result});
   }
 
-  const onEndReached = () => {};
+  const onEndReached = async (pageNo: number, pageSize: number) => {
+    const result = await dispatch(getPlatformBrandsGoods({
+      brandId,
+      addType: type,
+      pageSize,
+      pageNo,
+    }));
+
+    console.log(result, 'result')
+
+    return Promise.resolve({result});
+  };
+
   return (
     <View style={styles.style}>
       <NavBar
@@ -76,13 +81,17 @@ const BrandGoods = () =>  {
         style={styles.nav}
       />
       <PagingList
-        size={14}
+        size={PAGE_SIZE}
         // initListData={warehouseGoods}
         renderItem={({item, index}) => {
+          console.log(item, 'itemssss')
           return (
             <BrandGoodRow
-              onPress={onGoodPicked}
-              isAdded={false} // 在目标列表中有没有
+              data={item}
+              dataAdapter={(item: any) => {
+                return brandGoodAdapter(item);
+              }}
+              onPress={onPicked}
               style={{paddingHorizontal: pad}}
             />
           )
@@ -92,8 +101,8 @@ const BrandGoods = () =>  {
         )}
         onRefresh={onRefresh}
         onEndReached={onEndReached}
-        keyExtractor={(item, index) => 'index' + index + item}
-        initialNumToRender={14}
+        keyExtractor={(item: any, index: number) => 'index' + index + item}
+        initialNumToRender={PAGE_SIZE}
         numColumns={1}
         // columnWrapperStyle={{justifyContent: 'space-between'}}
         // contentContainerStyle={styles.pagingListWrapper}

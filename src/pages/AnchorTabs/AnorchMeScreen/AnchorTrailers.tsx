@@ -64,7 +64,7 @@ const AnchorTrailers = () =>  {
       img: images.liveCover,
       title: '我就知道你想看杨迪和薇娅互黑薇娅互黑薇娅互黑薇娅',
       liveTime: '开播时间：2020年1月13日19:00'
-    }
+    },
   ];
 
   /**

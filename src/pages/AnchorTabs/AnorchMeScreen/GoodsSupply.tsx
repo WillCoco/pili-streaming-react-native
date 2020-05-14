@@ -13,7 +13,7 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import {PrimaryText, SmallText, T4} from 'react-native-normalization-text';
 import Toast from 'react-native-tiny-toast';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import withPage from '../../../components/HOCs/withPage';
 import { vw, vh } from '../../../utils/metric';
 import {Colors} from '../../../constants/Theme';
@@ -31,6 +31,15 @@ const emptyList: [] = [];
 const GoodsSupply = (props: any) =>  {
   const {navigate, goBack} = useNavigation();
   const dispatch = useDispatch();
+  const route = useRoute();
+
+  const {
+    type,
+    onPicked,
+  }: {
+    type: AddGoodsTargetType,
+    onPicked: (good: any) => any,
+  } = (route.params || {}) as {type: AddGoodsTargetType, onPicked: (good: any) => any,};
 
   React.useEffect(() => {
     let loading: any;
@@ -45,7 +54,7 @@ const GoodsSupply = (props: any) =>  {
 
   const onPressBrand = (brandId: number | string) => {
     // 跳转
-    navigate('BrandGoods', {brandId})
+    navigate('BrandGoods', {brandId, type, onPicked})
   }
 
   // 平台品牌

@@ -15,7 +15,7 @@ import Toast from 'react-native-tiny-toast';
 import {useNavigation} from '@react-navigation/native';
 import withPage from '../../../components/HOCs/withPage';
 import PagingList from '../../../components/PagingList';
-import {vw} from '../../../utils/metric';
+import { vw, vh } from '../../../utils/metric';
 import {Colors} from '../../../constants/Theme';
 import { pad, radio } from '../../../constants/Layout';
 import NavBar from '../../../components/NavBar';
@@ -30,10 +30,16 @@ import images from '../../../assets/images/index';
 
 interface BrandGoodRowProps {
   data: any,
-  dataAdapter: (d: any) => any,
+  dataAdapter: (d: any) => {
+    img: any,
+    title: string,
+    discountPrice: string,
+    pirce: string,
+    profit: string,
+    isAdded: boolean,
+  },
   imgStyle: StyleProp<any>,
   style: StyleProp<any>,
-  onPressRemove: (d: any) => any,
   onPress: (d: any) => any,
   disabled?: boolean,
   isAdded: boolean, // 是否已经添加
@@ -45,7 +51,7 @@ const BrandGoodRow = (props: BrandGoodRowProps) =>  {
   const data = (props.dataAdapter ? props.dataAdapter(props.data) : props.data) || {};
 
   /**
-   * 点击整行,选择商品
+   * 点击添加
    */
   const onPress= () => {
     props.onPress && props.onPress(props.data);
@@ -57,20 +63,20 @@ const BrandGoodRow = (props: BrandGoodRowProps) =>  {
       // onPress={props.onPressRow}
       style={StyleSheet.flatten([styles.style, props.style])}
     >
-      <Image source={data.img || images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
+      <Image source={data.img ? {uri: data.img} : images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
       <View style={styles.contentWrapper}>
         <View style={styles.titleWrapper}>
           <PrimaryText numberOfLines={2} style={{flex: 1, marginRight: pad * 2}}>{data.title}</PrimaryText>
         </View>
-        <ShareProfit profit={111} style={{flex: -1}} />
-        <DiscountPrice discountPrice={120} price={110} />
+        <ShareProfit profit={data.profit} style={{flex: -1}} />
+        <DiscountPrice discountPrice={data.discountPrice} price={data.price} />
       </View>
       <ButtonRadius
         size={24}
-        disabled={props.isAdded}
-        text={!props.isAdded ? props.actionText : '已添加'}
-        onPress={props.onPress}
-        style={StyleSheet.flatten([styles.button, {backgroundColor: !props.isAdded ? Colors.basicColor : Colors.lightGrey}])}
+        disabled={data.isAdded}
+        text={!data.isAdded ? props.actionText : '已添加'}
+        onPress={onPress}
+        style={StyleSheet.flatten([styles.button, {backgroundColor: !data.isAdded ? Colors.basicColor : Colors.lightGrey}])}
       />
     </View>
   )
@@ -84,14 +90,14 @@ BrandGoodRow.defaultProps = {
   actionText: '添加'
 };
 
-const ROW_HEIGHT = 120;
+export const ROW_HEIGHT = 120;
 const styles = StyleSheet.create({
   style: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     height: ROW_HEIGHT,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
     // paddingHorizontal: pad
   },
   contentWrapper: {

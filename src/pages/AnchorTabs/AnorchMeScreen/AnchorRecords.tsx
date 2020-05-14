@@ -2,7 +2,14 @@
  * 直播记录
  * AnchorRecords
  */
-import * as React from 'react';
+/**
+ * @Author: lyh
+ * @Date: 2020/5/13
+ * @Last Modified by: lyh
+ * @Last Modified time: 2020/5/13
+ **/
+// import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -20,6 +27,8 @@ import images from '../../../assets/images';
 import { pad } from '../../../constants/Layout';
 import { Colors } from '../../../constants/Theme';
 import pxToDp from '../../../utils/px2dp';
+import { apiGetLiveList } from '../../../service/api'
+import { connect } from 'react-redux'
 
 
 const RecordsCard = (props: {
@@ -64,28 +73,36 @@ const RecordsCard = (props: {
   )
 }
 const AnchorRecords = () => {
-  const liveList = [
-    {
-      cover: images.watchLiveCover,
-      title: '我就知道你想看杨迪和薇娅互黑薇娅',
-      watch: 123,
-      goodsNum: 123,
-      soldNum: 123,
-      addfans: 123,
-      liveTime: '2020.04.25'
-    },
-    {
-      cover: images.watchLiveCover,
-      title: '我就知道你想看杨迪和薇娅互黑薇娅',
-      watch: 345,
-      goodsNum: 345,
-      soldNum: 345,
-      addfans: 345,
-      liveTime: '2020.04.25'
-    }
-  ];
+  // const liveList = [
+  //   {
+  //     cover: images.watchLiveCover,
+  //     title: '我就知道你想看杨迪和薇娅互黑薇娅',
+  //     watch: 123,
+  //     goodsNum: 123,
+  //     soldNum: 123,
+  //     addfans: 123,
+  //     liveTime: '2020.04.25'
+  //   },
+  //   {
+  //     cover: images.watchLiveCover,
+  //     title: '我就知道你想看杨迪和薇娅互黑薇娅',
+  //     watch: 345,
+  //     goodsNum: 345,
+  //     soldNum: 345,
+  //     addfans: 345,
+  //     liveTime: '2020.04.25'
+  //   }
+  // ];
+
+  const [liveList, setLiveList] = useState(null);
 
   const { navigate } = useNavigation();
+
+  useEffect(() => {
+      apiGetLiveList({anchorId: 709828778884333568}).then(res => {
+          console.log(res, 'sync get liveList')
+      })
+  });
 
   /**
    * 点击分享按钮
@@ -105,7 +122,7 @@ const AnchorRecords = () => {
       <NavBar title="我的直播" />
       <ScrollView style={styles.myLivePage}>
         {
-          liveList.map((item, index) => {
+            liveList && liveList.map((item, index) => {
             return (
               <RecordsCard
                 key={`_${index}`}
@@ -207,8 +224,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withPage(AnchorRecords, {
-  statusBarOptions: {
-    backgroundColor: 'red'
-  }
-});
+export default connect(
+    (state: any) => state.anchorData
+)(withPage(AnchorRecords, {
+    statusBarOptions: {
+        barStyle: 'dark-content',
+    }})
+);
