@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import Toast from 'react-native-tiny-toast';
 import {useSelector, useDispatch} from 'react-redux';
 import {PrimaryText, SmallText} from 'react-native-normalization-text';
 import {useNavigation} from '@react-navigation/native';
@@ -18,7 +19,7 @@ import {Colors} from '../../../constants/Theme';
 import images from '../../../assets/images/index';
 import usePermissions from '../../../hooks/usePermissions';
 import { pad } from '../../../constants/Layout';
-import { Toast } from '@ant-design/react-native';
+import {updateLiveConfig} from '../../../actions/live';
 import * as api from '../../../service/api';
 
 const CreateLiveScreen = (props: any) =>  {
@@ -29,6 +30,8 @@ const CreateLiveScreen = (props: any) =>  {
    * 直播设置
    */
   const liveConfig = useSelector((state: any) => state?.live?.liveConfig)
+
+
   console.log(liveConfig, 'liveConfig')
 
   const isValidData = (): boolean => {
@@ -46,7 +49,6 @@ const CreateLiveScreen = (props: any) =>  {
   }
 
   const onNextPress = () => {
-    // 存直播配置
     if (!isValidData()) {
       return;
     }
@@ -72,17 +74,30 @@ const CreateLiveScreen = (props: any) =>  {
   // }
 
   /**
+   * 修改标题
+   */
+  const onChangeTitle = async (title?: string) => {
+    dispatch(updateLiveConfig({title}))
+  }
+
+  /**
    * 上传文件
    */
   const onChangeCover = async (r: any) => {
-    const result = await api.liveUploadFile([{
-      fileType: r.type,
-      size: 1024 * 2,
-      unit: r.uri
-    }]);
+    console.log(r, '=======')
 
-    if (result) {
-      // Toast.show('')
+    const result = await api.apiLiveUploadFile({
+      fileType: 'PICTURE',
+      size: '2',
+      unit: 'M',
+      file: r,
+    });
+
+    console.log(result, 'resultresultresult')
+    const cover = result?.data;
+    if (cover) {
+      // 存直播配置
+      dispatch(updateLiveConfig({cover}))
     }
   }
 
@@ -93,7 +108,10 @@ const CreateLiveScreen = (props: any) =>  {
       />
       <View style={styles.contentWrapper}>
         <View style={StyleSheet.flatten([styles.liveReadyCardWrapper, {marginTop: props.safeTop + 80}])}>
-          <LiveReadyCard onChangeCover={onChangeCover} />
+          <LiveReadyCard
+            onChangeCover={onChangeCover}
+            onChangeTitle={onChangeTitle}
+          />
         </View>
         <View style={styles.functionBtnWrapper}>
           <TouchableOpacity>

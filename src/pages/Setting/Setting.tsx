@@ -33,32 +33,7 @@ function Setting(props: any) {
       console.log('退出', res)
       props.dispatch(toggleLoginState(false))
       props.dispatch(setToke(''))
-      props.dispatch(setUserInfo({
-        accountMoney: 0,
-        anchorCount: 0,
-        bgc: '',
-        card: 0,
-        collectionCount: 0,
-        consumeMoney: 0,
-        fansCount: 0,
-        frozenMoney: 0,
-        hasSettle: 0,
-        inviteCode: '',
-        likeContent: 0,
-        lookCount: 0,
-        needMoney: 0,
-        nextLevel: '',
-        nickName: '',
-        publishCount: 0,
-        quanPinMoney: 0,
-        saveMoney: 0,
-        storeFollow: 0,
-        totalProfit: 0,
-        userAvatar: '',
-        userId: '',
-        userLevel: '',
-        willSettle: 0,
-      }))
+      props.dispatch(setUserInfo({}))
       Toast.showSuccess('已退出登录')
 
       setTimeout(() => {

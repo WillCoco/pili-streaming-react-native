@@ -4,6 +4,8 @@ import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import * as ImagePicker from 'expo-image-picker'
 import { Ionicons } from '@expo/vector-icons'
+import Toast from 'react-native-tiny-toast'
+import { apiLiveUploadFile } from '../../../service/api'
 
 export default function Reason(props) {
   const [imageList, setImageList] = useState([
@@ -13,17 +15,21 @@ export default function Reason(props) {
   const chooseImage = async (index: number) => {
     if (index) return
 
+    if (imageList.length === 10) {
+      Toast.show('最多上传9张图片', { position: 0 })
+      return
+    }
+
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
       })
 
       if (result.cancelled) return
 
-      setImageList([...imageList, ...[result]])
+      upLoadImage(result.uri)
     } catch (error) {
       console.log(error)
     }
@@ -32,6 +38,37 @@ export default function Reason(props) {
   const delImage = (index: number) => {
     imageList.splice(index, 1)
     setImageList(JSON.parse(JSON.stringify(imageList)))
+    props.setImageList(JSON.parse(JSON.stringify(imageList)))
+  }
+
+  const upLoadImage = (imgUri: string) => {
+    apiLiveUploadFile({
+      fileType: 'PICTURE',
+      size: '2',
+      unit: 'M',
+      file: getImageInfo(imgUri),
+    }).then((res: any) => {
+      console.log(res)
+      if (res.code === 200) {
+        setImageList([...imageList, ...[res.data]])
+        props.setImageList([...imageList, ...[res.data]])
+      } else {
+        Toast.show(res.data)
+      }
+    })
+  }
+
+  const getImageInfo = (uri: string) => {
+    const nameArr = uri.split('/');
+    const name = nameArr[nameArr.length - 1];
+    const typeArr = name.split('.');
+    const type = `image/${typeArr[typeArr.length - 1]}`;
+
+    return {
+      uri,
+      name,
+      type
+    }
   }
 
   return (

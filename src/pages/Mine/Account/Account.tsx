@@ -9,7 +9,7 @@ import pxToDp from '../../../utils/px2dp'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
 function Account(props) {
-  const { userInfo, isLogin } = props
+  const { userInfo = {}, isLogin } = props
   const navigation = useNavigation()
 
   const toAccountInfo = () => {
@@ -27,14 +27,14 @@ function Account(props) {
           <Image source={require('../../../assets/mine-image/img_yifanxian.png')} style={styles.icon} />
           <View style={styles.accountDetail}>
             <Text style={styles.text}>已返金额</Text>
-            <Text style={styles.price}>¥{formatSinglePrice(userInfo.hasSettle)}</Text>
+            <Text style={styles.price}>¥{formatSinglePrice(userInfo.hasSettle || 0)}</Text>
           </View>
         </View>
         <View style={styles.accountItem}>
           <Image source={require('../../../assets/mine-image/img_daifanxian.png')} style={styles.icon} />
           <View style={styles.accountDetail}>
             <Text style={styles.text}>待返金额</Text>
-            <Text style={styles.price}>¥{formatSinglePrice(userInfo.willSettle)}</Text>
+            <Text style={styles.price}>¥{formatSinglePrice(userInfo.willSettle || 0)}</Text>
           </View>
         </View>
       </View>

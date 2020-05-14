@@ -4,31 +4,21 @@
 import * as React from 'react';
 import {
   View,
-  Image,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
-  Permission
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import { pad, radioLarge } from '../../constants/Layout';
-import {PrimaryText, SmallText} from 'react-native-normalization-text';
-import images from '../../assets/images';
 import ImagePickerBox from '../../components/ImagePickerBox';
-import {updateLiveConfig} from '../../actions/live';
 
 const LiveReadyCard = (props: {
   onChangeCover: (cover?: string) => any,
+  onChangeTitle: (title?: string) => any,
 }) =>  {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   
   React.useEffect(() => {
   }, [])
-
-  /**
-   * 封面
-   */
-  const liveCover = useSelector((state: any) => state?.live?.liveConfig?.cover)
 
   /**
    * 标题
@@ -40,12 +30,11 @@ const LiveReadyCard = (props: {
    */
   // 标题
   const onChangeTitle = (title?: string) => {
-    dispatch(updateLiveConfig({title}))
+    props.onChangeTitle(title)
   }
 
   // 封面
-  const onChangeCover = (cover?: string): any => {
-    dispatch(updateLiveConfig({cover}))
+  const onChangeCover = (cover?: any): any => {
     props.onChangeCover(cover)
   }
 

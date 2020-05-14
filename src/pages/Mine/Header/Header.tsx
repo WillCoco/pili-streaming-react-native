@@ -1,8 +1,16 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image, ImageBackground, PixelRatio, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  PixelRatio,
+  ImageBackground,
+  TouchableOpacity,
+  TouchableWithoutFeedback
+} from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
-import { Ionicons } from '@expo/vector-icons'
 import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
@@ -76,19 +84,34 @@ function Header(props: { userData: { userInfo: any; isLogin: any }; publicData: 
         <View style={styles.userInfo}>
           {
             isLogin
-              ? <Image source={{ uri: userInfo.userAvatar }} style={styles.avatar} />
+              ? <Image source={{ uri: userInfo?.userAvatar }} style={styles.avatar} />
               : <Image source={require('../../../assets/mine-image/default_avatar.png')} style={styles.avatar} />
           }
           <View>
-            <Text style={styles.userName}>{isLogin ? userInfo.nickName : '立即登录'}</Text>
+            <Text style={styles.userName}>{isLogin ? userInfo?.nickName : '立即登录'}</Text>
             {
               isLogin && <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={[styles.userLevel, styles.userLevelBgc]}>{userInfo.userLevel}</Text>
-                <Text style={styles.userLevel}>缺失</Text>
-                <View style={[styles.userLevel, { flexDirection: 'row', alignItems: 'center' }]}>
-                  <Text style={{ fontSize: pxToDp(20), color: Colors.whiteColor }}>缺失</Text>
-                  <Ionicons name='ios-play' color={Colors.whiteColor} />
-                </View>
+                {
+                  userInfo.userLevel && userInfo.userLevel.map((item: any, index: number) => {
+                    return (
+                      <Text
+                        key={`user-${index}`}
+                        style={[styles.userLevel, !index && styles.userLevelBgc]}
+                      >{
+                          item === '1'
+                            ? '圈品会员'
+                            : item === '2'
+                              ? '主播'
+                              : item === '3'
+                                ? '初级经纪人'
+                                : item === '4'
+                                  ? '中级经纪人'
+                                  : '高级经纪人'
+                        }
+                      </Text>
+                    )
+                  })
+                }
               </View>
             }
           </View>
@@ -100,28 +123,28 @@ function Header(props: { userData: { userInfo: any; isLogin: any }; publicData: 
 
         <TouchableWithoutFeedback onPress={toCollectGoods}>
           <View style={styles.otherInfoItem}>
-            <Text style={styles.count}>{userInfo.collectionCount}</Text>
+            <Text style={styles.count}>{userInfo?.collectionCount || 0}</Text>
             <Text style={styles.text}>商品收藏</Text>
           </View>
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback onPress={toMyFocusBrand}>
           <View style={styles.otherInfoItem}>
-            <Text style={styles.count}>{userInfo.storeFollow}</Text>
+            <Text style={styles.count}>{userInfo?.storeFollow || 0}</Text>
             <Text style={styles.text}>店铺关注</Text>
           </View>
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback onPress={toLikeContent}>
           <View style={styles.otherInfoItem}>
-            <Text style={styles.count}>{userInfo.likeContent}</Text>
+            <Text style={styles.count}>{userInfo?.likeContent || 0}</Text>
             <Text style={styles.text}>喜欢的内容</Text>
           </View>
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback onPress={toCoupon}>
           <View style={styles.otherInfoItem}>
-            <Text style={styles.count}>{userInfo.card}</Text>
+            <Text style={styles.count}>{userInfo?.card || 0}</Text>
             <Text style={styles.text}>优惠券</Text>
           </View>
         </TouchableWithoutFeedback>
@@ -134,17 +157,19 @@ function Header(props: { userData: { userInfo: any; isLogin: any }; publicData: 
         style={styles.vipCard}
       >
         <View style={{ flex: 1, flexDirection: 'row' }}>
-          <Image
-            source={require('../../../assets/mine-image/level.png')}
-            style={styles.levelIcon}
-          />
-          <Text style={[styles.leveltext, styles.vipLevel]}>圈品会员</Text>
+          {
+            isLogin && <Image
+              source={require('../../../assets/mine-image/level.png')}
+              style={styles.levelIcon}
+            />
+          }
+          <Text style={[styles.leveltext, styles.vipLevel]}>{isLogin ? '圈品会员' : '游客'}</Text>
         </View>
         <View style={{ flex: 1, alignSelf: 'center' }}>
           <Text style={styles.leveltext}>累计已省:</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ fontSize: pxToDp(24), color: Colors.yellowColor }}>¥</Text>
-            <Text style={[styles.leveltext, styles.savePrice]}>{formatSinglePrice(userInfo.saveMoney)}</Text>
+            <Text style={[styles.leveltext, styles.savePrice]}>{formatSinglePrice(userInfo?.saveMoney || 0)}</Text>
           </View>
         </View>
 

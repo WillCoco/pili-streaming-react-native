@@ -1,22 +1,23 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
-import { upload } from '../../service/fetch'
+import { apiPublishWorks } from '../../service/api'
+import { setAddedGoodsList } from '../../actions/works'
 
 import Form from './Form/Form'
 import ImagePicker from './ImagePicker/ImagePicker'
 import GoodsList from './GoodsList/GoodsList'
+import Toast from 'react-native-tiny-toast'
 
 function PublishWork(props: any) {
   const navigation = useNavigation()
   const route = useRoute()
-  // const pageType = route.params.type === 'video' ? '视频' : '图片'
+  const { addedGoodsList, mediaList } = props
   const { type: pageType } = route.params
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
-  const [mediaList, setMediaList] = useState([])
 
   navigation.setOptions({
     headerTitle: `发布${pageType === 'video' ? '视频' : '图片'}`,
@@ -33,12 +34,49 @@ function PublishWork(props: any) {
    * 发表
    */
   const publish = () => {
-    const currentList = mediaList.splice(1, mediaList.length - 1)
+    const filesUrl = mediaList.splice(1, mediaList.length - 1)
 
-    console.log(currentList)
+    if (!title || !content) {
+      Toast.show('标题和内容不能为空', { position: 0 })
+      return
+    }
 
-    upload(currentList).then((res: any) => {
-      console.log('上传文件', res)
+    let findGoodsInfoList:
+      {
+        goodsTitle: any
+        goodsPictures: any
+        goodsCurPrice: any;
+        goodsOriPrice: any;
+        goodsId: any
+      }[] = []
+
+    addedGoodsList.forEach((item: any, index: number) => {
+      findGoodsInfoList[index] = {
+        goodsTitle: addedGoodsList[index].goods_name,
+        goodsPictures: addedGoodsList[index].original_img,
+        goodsCurPrice: addedGoodsList[index].shop_price,
+        goodsOriPrice: addedGoodsList[index].market_price,
+        goodsId: addedGoodsList[index].goods_id
+      }
+    })
+
+    const params = {
+      content,
+      filesUrl,
+      findGoodsInfoList,
+      title,
+      worksType: pageType === 'video' ? 'VIDEO' : 'PICTURE'
+    }
+
+    apiPublishWorks(params).then(res => {
+      console.log('发表作品', res)
+      if (res === '请求成功') {
+        Toast.showSuccess('已发布')
+        props.dispatch(setAddedGoodsList([]))
+        setTimeout(() => {
+          navigation.goBack()
+        }, 1000)
+      }
     })
   }
 
@@ -50,7 +88,6 @@ function PublishWork(props: any) {
       />
       <ImagePicker
         pageType={pageType}
-        setMediaList={(list: Array<any>) => setMediaList(list)}
       />
       <GoodsList
         publish={publish}

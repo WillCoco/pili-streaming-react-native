@@ -331,6 +331,9 @@ const images : {
   // 搜索为空
   get emptySearch() {
     return require('../images/img_empty-like.png')
+  },
+  get anchorMicrophone() {
+      return require('./anchorMicrophone.png')
   }
 }
 
