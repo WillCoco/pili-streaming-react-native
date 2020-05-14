@@ -4,33 +4,6 @@ import { toggleLoginState, setToke, setUserInfo } from "../actions/user";
 
 const { store } = configStore();
 
-const initUserInfo = {
-  accountMoney: 0,
-  anchorCount: 0,
-  bgc: "",
-  card: 0,
-  collectionCount: 0,
-  consumeMoney: 0,
-  fansCount: 0,
-  frozenMoney: 0,
-  hasSettle: 0,
-  inviteCode: "",
-  likeContent: 0,
-  lookCount: 0,
-  needMoney: 0,
-  nextLevel: "",
-  nickName: "",
-  publishCount: 0,
-  quanPinMoney: 0,
-  saveMoney: 0,
-  storeFollow: 0,
-  totalProfit: 0,
-  userAvatar: "",
-  userId: "",
-  userLevel: [],
-  willSettle: 0,
-};
-
 // get请求 拼接参数
 const getParam = (data: { [s: string]: unknown } | ArrayLike<unknown>) => {
   return Object.entries(data)
@@ -84,7 +57,7 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
           Toast.show("用户信息过期，请重新登录", { position: 0 });
           store.dispatch(toggleLoginState(false));
           store.dispatch(setToke(""));
-          store.dispatch(setUserInfo(initUserInfo));
+          store.dispatch(setUserInfo({}));
         } else {
           Toast.show(result.message);
         }
@@ -126,7 +99,7 @@ export const post = (
           Toast.show("用户信息过期，请重新登录", { position: 0 });
           store.dispatch(toggleLoginState(false));
           store.dispatch(setToke(""));
-          store.dispatch(setUserInfo(initUserInfo));
+          store.dispatch(setUserInfo({}));
         } else {
           Toast.show(result.message);
         }
