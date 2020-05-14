@@ -52,7 +52,7 @@ const INITIAL_STATE = {
     totalProfit: 0,
     userAvatar: '',
     userId: '',
-    userLevel: '',
+    userLevel: [],
     willSettle: 0,
   }
 }

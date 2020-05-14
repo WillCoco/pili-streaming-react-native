@@ -27,7 +27,7 @@ export default function OrdersContent(props) {
             <Image source={require('../../../assets/mine-image/icon_daifukuan.png')} style={styles.orderIcon} />
             <Text style={styles.orderText}>待付款</Text>
             {
-              !!orderCount.notPayingCount && <Text style={styles.badge}>{orderCount.notPayingCount}</Text>
+              !!orderCount.notPayingCount && <Text style={styles.badge}>{orderCount?.notPayingCount || 0}</Text>
             }
           </View>
         </TouchableWithoutFeedback>
@@ -37,7 +37,7 @@ export default function OrdersContent(props) {
             <Image source={require('../../../assets/mine-image/icon_daifahuo.png')} style={styles.orderIcon} />
             <Text style={styles.orderText}>待发货</Text>
             {
-              !!orderCount.notDeliverCount && <Text style={styles.badge}>{orderCount.notDeliverCount}</Text>
+              !!orderCount.notDeliverCount && <Text style={styles.badge}>{orderCount?.notDeliverCount || 0}</Text>
             }
           </View>
         </TouchableWithoutFeedback>
@@ -47,7 +47,7 @@ export default function OrdersContent(props) {
             <Image source={require('../../../assets/mine-image/icon_daishouhuo.png')} style={styles.orderIcon} />
             <Text style={styles.orderText}>待收货</Text>
             {
-              !!orderCount.notReceivingCount && <Text style={styles.badge}>{orderCount.notReceivingCount}</Text>
+              !!orderCount.notReceivingCount && <Text style={styles.badge}>{orderCount?.notReceivingCount || 0}</Text>
             }
           </View>
         </TouchableWithoutFeedback>
@@ -57,7 +57,7 @@ export default function OrdersContent(props) {
             <Image source={require('../../../assets/mine-image/icon_wancheng.png')} style={styles.orderIcon} />
             <Text style={styles.orderText}>已完成</Text>
             {
-              !!orderCount.receivedCount && <Text style={styles.badge}>{orderCount.receivedCount}</Text>
+              !!orderCount.receivedCount && <Text style={styles.badge}>{orderCount?.receivedCount || 0}</Text>
             }
           </View>
         </TouchableWithoutFeedback>
@@ -67,7 +67,7 @@ export default function OrdersContent(props) {
             <Image source={require('../../../assets/mine-image/icon_tuikuan.png')} style={styles.orderIcon} />
             <Text style={styles.orderText}>退款/售后</Text>
             {
-              !!orderCount.afterSalesCount && <Text style={styles.badge}>{orderCount.afterSalesCount}</Text>
+              !!orderCount.afterSalesCount && <Text style={styles.badge}>{orderCount?.afterSalesCount || 0}</Text>
             }
           </View>
         </TouchableWithoutFeedback>

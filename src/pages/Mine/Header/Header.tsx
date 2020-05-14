@@ -83,12 +83,27 @@ function Header(props: { userData: { userInfo: any; isLogin: any }; publicData: 
             <Text style={styles.userName}>{isLogin ? userInfo?.nickName : '立即登录'}</Text>
             {
               isLogin && <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={[styles.userLevel, styles.userLevelBgc]}>{userInfo?.userLevel}</Text>
-                <Text style={styles.userLevel}>缺失</Text>
-                <View style={[styles.userLevel, { flexDirection: 'row', alignItems: 'center' }]}>
-                  <Text style={{ fontSize: pxToDp(20), color: Colors.whiteColor }}>缺失</Text>
-                  <Ionicons name='ios-play' color={Colors.whiteColor} />
-                </View>
+                {
+                  userInfo.userLevel && userInfo.userLevel.map((item: any, index: number) => {
+                    return (
+                      <Text
+                        key={`user-${index}`}
+                        style={[styles.userLevel, !index && styles.userLevelBgc]}
+                      >{
+                          item === '1'
+                            ? '圈品会员'
+                            : item === '2'
+                              ? '主播'
+                              : item === '3'
+                                ? '初级经纪人'
+                                : item === '4'
+                                  ? '中级经纪人'
+                                  : '高级经纪人'
+                        }
+                      </Text>
+                    )
+                  })
+                }
               </View>
             }
           </View>

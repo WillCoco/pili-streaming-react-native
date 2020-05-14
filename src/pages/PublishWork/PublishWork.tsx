@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
 import { upload } from '../../service/fetch'
+import { UPLOAD_URL } from '../../service/api'
 
 import Form from './Form/Form'
 import ImagePicker from './ImagePicker/ImagePicker'
@@ -12,7 +13,6 @@ import GoodsList from './GoodsList/GoodsList'
 function PublishWork(props: any) {
   const navigation = useNavigation()
   const route = useRoute()
-  // const pageType = route.params.type === 'video' ? '视频' : '图片'
   const { type: pageType } = route.params
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
@@ -35,11 +35,10 @@ function PublishWork(props: any) {
   const publish = () => {
     const currentList = mediaList.splice(1, mediaList.length - 1)
 
-    console.log(currentList)
-
-    upload(currentList).then((res: any) => {
-      console.log('上传文件', res)
-    })
+    upload(UPLOAD_URL, currentList)
+    // .then((res: any) => {
+    //   console.log('上传文件', res)
+    // })
   }
 
   return (

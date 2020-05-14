@@ -34,16 +34,14 @@ export default function OrderList() {
   })
 
   useEffect(() => {
-    if (isFocused) {
-      indexRef.current = route.params.index
+    indexRef.current = route.params.index
 
-      if (indexRef.current === 5) {
-        getReturnOrderList()
-      } else {
-        getOrderList(indexRef.current)
-      }
+    if (indexRef.current === 5) {
+      getReturnOrderList()
+    } else {
+      getOrderList(indexRef.current)
     }
-  }, [isFocused])
+  }, [])
 
   /**
    * 切换 TAB
