@@ -97,7 +97,7 @@ export const apiGetUserData = () => get(`${HOST_JAVA}/user/getUserInfo`)
 // 发现模块 => 新视界获取作品
 export const apiGetWorks = (data: any) => post(`${HOST_JAVA}/find/getWorks`, data)
 // 获取发现详情
-export const apiGetWorksDetailInfo = (data: any) => post(`${HOST_JAVA}/find/getWorksDetailInfo`, data)
+export const apiGetWorksDetailInfo = async (data: any) => post(`${HOST_JAVA}/find/getWorksDetailInfo`, data).then(r => console.log(r, 'rrrrrr'))
 // 查询优惠金额 （预生成订单）
 export const apiGetSellerDiscount = (data: any) => post(`${HOST_JAVA}/order/getSellerDiscount`, data) 
 // 发布作品
@@ -189,7 +189,7 @@ export const apiAddAnchorUser = (data: any) => get(`${HOST_JAVA}/anchor/addAncho
 // 主播添加商品到主播店铺
 export const apiAddAnchorGoods = (data: any) => post(`${HOST_JAVA}/anchor/addAnchorGoods`, data)
 // 主播添加商品到主播预组货
-export const apiAddGroupGoods = (data: any) => post(`${HOST_JAVA}/anchor/addGroupGoods`, data)
+export const apiAddGroupGoods = (data: any) => get(`${HOST_JAVA}/anchor/addGroupGoods`, data)
 // 开播后确认是否存在直播封面
 export const apiAffirmCover = (data: any) => post(`${HOST_JAVA}/anchor/affirmCover`, data)
 // 直播重新组货
@@ -207,7 +207,7 @@ export const apiGetAdvanceList = (data: any) => post(`${HOST_JAVA}/anchor/getAdv
 // 主播预组货(店铺)添加商品品牌商品列表
 export const apiGetBrandGoodsList = (data: any) => post(`${HOST_JAVA}/anchor/getBrandGoodsList`, data)
 // 主播添加预组货分类品牌数据
-export const apiGetCatBrandAll = (data: any) => get(`${HOST_JAVA}/anchor/getCatBrandAll`, data, false)
+export const apiGetCatBrandAll = (data: any) => get(`${HOST_JAVA}/anchor/getCatBrandAll`, data)
 // 主播预组货(店铺)商品列表
 export const apiGetGroupGoods = (data: any) => post(`${HOST_JAVA}/anchor/getGroupGoods`, data)
 // 主播直播数据列表
@@ -260,3 +260,4 @@ export const apiShoppingBag = (data: any) => get(`${HOST_JAVA}/userLive/shopping
 export const apiUserLiveBanner = () => post(`${HOST_JAVA}/userLive/userLiveBanner`)
 // 上传用户头像本地base64
 export const apiUploadFile = (data: any) => post(`${HOST_JAVA}/user/uploadFile`, data)
+

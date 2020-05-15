@@ -9,11 +9,9 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {PrimaryText, SmallText, scale} from 'react-native-normalization-text';
-import DateTimePicker1 from '@react-native-community/datetimepicker';
-import dayjs from 'dayjs';
 import withPage from '../../../components/HOCs/withPage';
 import ImagePickerBox from '../../../components/ImagePickerBox';
 import VedioPickerBox from '../../../components/VedioPickerBox';
@@ -22,22 +20,25 @@ import NavBar from '../../../components/NavBar';
 import { pad, radio, radioLarge } from '../../../constants/Layout';
 import {Colors} from '../../../constants/Theme';
 import {isIOS, isAndroid} from '../../../constants/DeviceInfo';
-import {vw} from '../../../utils/metric';
-import { Toast } from '@ant-design/react-native';
+import {releaseTeaser} from '../../../actions/live';
+import * as api from '../../../service/api';
+import Toast from 'react-native-tiny-toast';
 
 const CreateTraserScreen = () =>  {
   const {goBack} = useNavigation();
 
+  const dispatch = useDispatch();
+
   /**
    * 选择图片
    */
-  const [cover1Uri, setCover1Uri]: Array<any> = React.useState();
-  const [cover2Uri, setCover2Uri]: Array<any> = React.useState();
+  const [cover1, setCover1]: Array<any> = React.useState();
+  const [cover2, setCover2]: Array<any> = React.useState();
 
   /**
    * 选择视频
    */
-  const [vedioUri, setVedioUri]: Array<any> = React.useState();
+  const [video, setVideo]: Array<any> = React.useState();
 
   /**
    * 直播时间
@@ -59,8 +60,7 @@ const CreateTraserScreen = () =>  {
 
   console.log(liveTimeStamp, 'liveTimeStampliveTimeStampliveTimeStamp')
 
-  const onPickedTime = (type: string, time: string) => {
-    console.log(type, time, 123123)
+  const onPickedTime = (time: string, type?: string) => {
 
     if (isAndroid()) {
       if (type === PickTimeMode.date) {
@@ -74,24 +74,83 @@ const CreateTraserScreen = () =>  {
         const t = new Date(liveTime.current.join(' '))
         liveTimeStamp.current = t.getTime && t.getTime();
       }
+    } else {
+      const t = new Date(time)
+      liveTimeStamp.current = t.getTime && t.getTime();
+
+      console.log(t, liveTimeStamp.current, time,)
     }
 
+    if (liveTimeStamp.current < Date.now()) {
+      Toast.show('请选择合适的时间');
+    }
     // todo: ios
+  }
+
+  /**
+   * 选择封面图1
+   */
+  const onPickedCover1 = (cover: any) => {
+    console.log(cover, '22223okkdkkkk')
+    setCover1(cover);
+  }
+
+
+ /**
+   * 选择视频
+   */
+  const onPickedVideo = (video: any) => {
+    isValidVideo(video);
+    setVideo(video);
+  }
+
+  const isValidVideo = (video: any) => {
+    if (!video) {
+      Toast.show('视频选择失败');
+      return false;
+    }
+    
+    if (!video.uri) {
+      Toast.show('视频选择失败');
+      return false;
+    }
+
+    if (video.duration && video.duration > 20 * 1000) {
+      Toast.show('所选视频太长');
+      return false;
+    }
+
+    return true;
   }
 
   /**
    * 提交前审核 
    */
   const isDataVaild = (): boolean => {
-    console.log(title, '123123')
-    if (!cover1Uri) {
-      Toast.show('请选择封面图');
-      return false;
-    }
+    // if (!cover1) {
+    //   Toast.show('请选择封面图');
+    //   return false;
+    // }
+
     if (!liveTimeStamp.current) {
       Toast.show('请选择开播时间');
       return false;
     }
+
+    // 20s
+    if (video) {
+      if (video.duration > (0.2 * 60 * 1000)) {
+        Toast.show('所选视频太长');
+        return false;
+      }
+    }
+
+    alert(liveTimeStamp.current)
+    if (liveTimeStamp.current < Date.now()) {
+      Toast.show('请选择合适的时间');
+      return false;
+    }
+
     Toast.show('请填写标题');
     if (!title) {
       return false;
@@ -103,10 +162,65 @@ const CreateTraserScreen = () =>  {
   /**
    * 提交 
    */
-  const onSubmitPress = () => {
-    if (!isDataVaild()) {
+  const onSubmitPress = async () => {
+    // if (!isDataVaild()) {
+    //   return;
+    // }
+    // Toast.showLoading('');
+
+    // 上传封面
+    const coverUpload = api.apiLiveUploadFile({
+      fileType: 'PICTURE',
+      size: '10',
+      unit: 'M',
+      file: cover1,
+    });
+
+    // 上传视频
+    let videoUpload;
+    if (video) {
+      videoUpload = api.apiLiveUploadFile({
+        fileType: 'VIDEO',
+        size: '100',
+        unit: 'M',
+        file: video,
+      });
+    }
+
+    console.log('ssssss')
+    console.log(liveTimeStamp.current, 'liveTimeStamp.current')
+    return
+    const {data: coverResult, message: coverMessage} = (await coverUpload) || {};
+    const {data: videoResult, message: videoMessage} = (await videoUpload) || {};
+
+    console.log(coverResult,  'videoResultvideoResult');
+
+    if (!coverResult) {
+      Toast.hide('');
+      Toast.show(coverMessage || '上传封面失败')
       return;
     }
+
+    if (video && !videoResult) {
+      Toast.hide('');
+      Toast.show(videoMessage || '上传视频失败')
+      return;
+    }
+
+    // console.log(1)
+
+    // const cover = result?.data;
+
+    
+
+    await dispatch(releaseTeaser({
+      title,
+      smallPic: coverResult,
+      advance: videoResult,
+      // bigPic: cover2?.url,
+      liveTime: liveTimeStamp.current,
+    }));
+    Toast.hide('');
 
     Toast.show('发布成功')
     goBack();
@@ -120,21 +234,16 @@ const CreateTraserScreen = () =>  {
         <View style={styles.row}>
           <ImagePickerBox
             placeholderText="封面图1"
-            onPicked={(v) => setCover1Uri(v)}
+            onPicked={onPickedCover1}
             style={{marginRight: pad}}
           />
-          {/* <ImagePickerBox
-            placeholderText="封面图2"
-            onPicked={(v) => setCover2Uri(v)}
-            style={{flex: 1}}
-          /> */}
         </View>
         <PrimaryText style={styles.title}>预告片(可选)</PrimaryText>
         <VedioPickerBox
-          onPicked={setVedioUri}
+          onPicked={onPickedVideo}
         />
         <SmallText style={styles.vedioDescText}>时长: 20s内</SmallText>
-        <SmallText style={styles.vedioDescText}>大小: 2M内</SmallText>
+        <SmallText style={styles.vedioDescText}>大小: 20M内</SmallText>
         <SmallText style={styles.vedioDescText}>建议：化妆小视频（加速版），室内换衣（加速版），室外造型秀（视觉冲击）等等</SmallText>
       </View>
       <View style={StyleSheet.flatten([styles.divider])} />

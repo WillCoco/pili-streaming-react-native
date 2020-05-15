@@ -24,7 +24,7 @@ interface ImagePickerBoxProps {
   dateWrapperStyle?: StyleProp<any>,
   timeWrapper?: StyleProp<any>,
   timeWrapperStyle?: StyleProp<any>,
-  onPicked: (type: PickTimeMode, time?: string) => undefined,
+  onPicked: (time?: string, type?: PickTimeMode) => undefined,
 }
 
 export enum PickTimeMode {
@@ -90,12 +90,12 @@ const ImagePickerBox = (props: ImagePickerBoxProps) =>  {
     if (e.type === 'set') {
       if (datePickerMode === PickTimeMode.date) {
         setDate(e.nativeEvent.timestamp)
-        props.onPicked(PickTimeMode.date, formatDate(e.nativeEvent.timestamp, {Y: '.', M: '.'}));
+        props.onPicked(formatDate(e.nativeEvent.timestamp, {Y: '.', M: '.'}), PickTimeMode.date);
         return;
       }
       setHour(e.nativeEvent.timestamp)
       console.log(e.nativeEvent.timestamp, 111)
-      props.onPicked(PickTimeMode.time, formatTime(e.nativeEvent.timestamp, {h: ':'}));
+      props.onPicked(formatTime(e.nativeEvent.timestamp, {h: ':'}), PickTimeMode.time);
     }
   }, [dateTime, hourTime, datePickerMode])
 

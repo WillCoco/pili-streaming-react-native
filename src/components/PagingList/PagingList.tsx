@@ -16,14 +16,18 @@ import {vw} from '../../utils/metric';
 import Empty from '../../components/Empty';
 
 interface PageListProps {
+  numColumns?: number,
   initPage?: number,
+  initialNumToRender?: number,
   ListFooterComponent?: any,
   data: Array<any>,
   initListData?: Array<any>,
   setData?: (d: any) => Array<any> | undefined,
   size: number,
   isInitGetData?: boolean,
-  renderItem: (data?: any) => JSX.Element
+  renderItem: (data?: any) => JSX.Element,
+  onRefresh: () => Promise<any> | undefined | null,
+  onEndReached: (page: number, size: number) => Promise<any> | undefined | null,
 }
 
 const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
@@ -62,7 +66,7 @@ const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
     }
     setNoMore(false);
     setEmpty(false);
-    page.current = 0;
+    page.current = props.initPage;
     const {result, code} = (await props.onRefresh(page, size)) || {};
     setIsRefreshing(false);
     console.log(result, '====');
@@ -85,7 +89,11 @@ const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
   const onEndReached = async () => {
     setIsLoading(true);
     page.current++;
-    const {result, code} = await props.onEndReached(page, size) || {};
+
+    if (page.current === props.initPage) {
+      return;
+    }
+    const {result, code} = await props.onEndReached(page.current, size) || {};
 
     if (!result || result.length === 0) {
       page.current--;
@@ -203,11 +211,12 @@ PagingList.defaultProps = {
   isInitGetData: true, // 加载组件先获取一次数据
   renderItem: () => <PrimaryText>请指定renderItem</PrimaryText>,
   size: 10,
-  initPage: 0,
+  initPage: 1,
   onRefresh: () => undefined,
   onEndReached: () => undefined,
-  initialNumToRender: undefined,
+  initialNumToRender: 10,
   showItemSeparator: false,
+  numColumns: 1
 };
 
 export default PagingList;

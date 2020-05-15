@@ -23,10 +23,11 @@ interface GoodsCategoryScrollProps {
 const GoodsCategoryScroll = (props: GoodsCategoryScrollProps) => {
   const [focusedIndex, setFocusedIndex] = React.useState(0)
 
-  const onPress = (i: number) => {
+  const onPress = (id: number, i: number) => {
     setFocusedIndex(i);
     props.onChecked(i);
   }
+
 
   return (
     <View style={StyleSheet.flatten([styles.style, props.style])}>
@@ -37,13 +38,14 @@ const GoodsCategoryScroll = (props: GoodsCategoryScrollProps) => {
       >
         {
           props.data.map((d, i) => {
+            const brand = d || {};
             return (
               <GoodsCategoryCell
                 key={`category_${i}`}
-                quantity={d.q}
-                title={d.t}
+                // quantity={brand.quantity}
+                title={brand.categoryName}
                 isChecked={focusedIndex === i}
-                onPress={() => onPress(i)}
+                onPress={() => onPress(brand.categoryId, i)}
                 style={{
                   borderTopWidth: i === 0 ? StyleSheet.hairlineWidth : 0,
                   borderBottomWidth: StyleSheet.hairlineWidth,

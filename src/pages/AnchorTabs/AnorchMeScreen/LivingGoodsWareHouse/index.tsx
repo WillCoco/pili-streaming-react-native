@@ -21,9 +21,9 @@ import {pad, radio} from '../../../../constants/Layout';
 import NavBar from '../../../../components/NavBar';
 import WarehouseRow from './WarehouseRow';
 import CheckBox from '../../../../components/CheckBox';
+import {AddGoodsTargetType, addGoods2WareHouse} from '../../../../actions/shop';
 
 const ROW_HEIGHT = 120;
-
 const emptyList: [] = [];
 
 const LivingGoodsWareHouse = (props: any) =>  {
@@ -188,6 +188,20 @@ const LivingGoodsWareHouse = (props: any) =>  {
   /**
    * 添加店铺选中
    */
+  console.log(checkedList, 'checkedListcheckedListcheckedList')
+
+  const addGoods = (data: any) => {
+    const goodsList = Array.isArray(data) ? data : [data];
+    const goodsIdList = goodsList.map((d: any) => d.goodsId);
+    console.log(goodsIdList, 'goodsIdListgoodsIdListgoodsIdList')
+    if (goodsIdList && goodsIdList.length > 0) {
+      dispatch(addGoods2WareHouse({goodsIdList}))
+    }
+  }
+
+  /**
+   * 添加店铺选中
+   */
   const onPressAddChecked = (index) => {
     alert('添加、删除店铺选中' + index + canAddShopList)
   }
@@ -201,7 +215,13 @@ const LivingGoodsWareHouse = (props: any) =>  {
         style={styles.nav}
         right={
           () => (
-            <TouchableOpacity onPress={() => navigate('GoodsSupply')} style={styles.navRight}>
+            <TouchableOpacity
+              onPress={() => navigate('GoodsSupply', {
+                type: AddGoodsTargetType.warehouseGoods,
+                onPicked: addGoods,
+              })}
+              style={styles.navRight}
+            >
               <SmallText color="white" style={{}}>添加商品</SmallText>
             </TouchableOpacity>
           )
@@ -213,7 +233,6 @@ const LivingGoodsWareHouse = (props: any) =>  {
           size={14}
           // initListData={warehouseGoods}
           renderItem={({item, index}: any) => {
-            console.log(item, 'itemmmmmmm')
             return (
               <WarehouseRow
                 isChecked={item.isChecked}

@@ -21,6 +21,8 @@ import {pad} from '../../constants/Layout';
 // import {vw} from '../../utils/metric';
 // import {Colors} from '../../constants/Theme';
 import FollowButton from '../../components/FollowButton';
+import {apiAttentionAnchor} from '../../service/api';
+import Toast from 'react-native-tiny-toast'
 
 export type msgList = any[] | undefined;
 export type onMsgListResponse = (v: boolean) => any;
@@ -55,10 +57,22 @@ const LiveIntro = (props: LiveMsgProps) =>  {
   }
 
   /**
-   * 取消/关注
+   * 取消/关注 
    */
   const onFollowPress = (isFollow: boolean) => {
     console.log(isFollow, 'isFollow')
+
+    const params = {
+      anchorId: props?.anchorId,
+      attentionType: "1", // 1：关注；2：取关
+      userId: props?.userId
+    }
+
+    apiAttentionAnchor(params).then(res => {
+      // TODO:
+
+    })
+    Toast.show('关注/取消关注成功')
   }
 
   return (
