@@ -1,5 +1,5 @@
 
-import { get, post, upload, liveUpload, File, uploadWorkMedia } from './fetch'
+import { get, post, liveUpload, File, uploadWorkMedia } from './fetch'
 
 // const HOST_PHP = __DEV__ ? 'https://php.quanpinrtmp.com' : ''
 // const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''

@@ -108,7 +108,6 @@ return new Promise((resolve, reject) => {
       }
     })
     .catch((error: any) => {
-      console.log(error, '31231231231')
       reject(error)
     });
 });
