@@ -4,12 +4,15 @@ import { toggleLoginState, setToke, setUserInfo } from "../actions/user";
 const { store } = configStore();
 import { sleep } from '../utils/tools';
 
-const timeout = async (ms: number, path: string) => {
+const timeout = async (ms: number, path: string | RequestInfo): Promise<any> => {
   await sleep(ms);
   return {timeout: path};
 }
 
+const TIMEOUT = 20 * 1000; // 普通接口超时时间
+const UPLOAD_TIMEOUT = 2 * 60 * 1000; // 上传超时时间
 
+// toRemove
 // store.dispatch(setToke("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI5NTk3MTA4NyIsImV4cCI6MTYyMDg5OTI5NCwidXVpZCI6IjlkMjAyN2EzYzY3ZDRjMGE5ZTk0NjgyZjI4MWU5YTg0IiwiaWF0IjoxNTg5MzYzMjk0fQ.N2bAajPgPfCuJRyNs0n2LabiSfAWZLD2epbhk-VFscM"));
 
 // get请求 拼接参数
@@ -44,11 +47,11 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
   console.log('%cPath:', 'color: red; font-size: 20px; ', path)
   console.log('%cParams:', 'color: red; font-size: 20px; ', data)
   
-  const f = fetch(path, {headers})
+  const fn = fetch(path, {headers})
 
-  const ff = Promise.race([f,timeout(20000, path)]);
+  const raceTimeout = Promise.race([fn, timeout(TIMEOUT, path)]);
 
-  return ff.then(async (response: any) => {
+  return raceTimeout.then(async (response: any) => {
     if (response.timeout) {
       Toast.show('连接超时')
       return;
@@ -71,6 +74,7 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
       store.dispatch(toggleLoginState(false));
       store.dispatch(setToke(""));
       store.dispatch(setUserInfo({}));
+      // 这两个条件分支也需要修改Promise为完成状态 @hicks
       Promise.resolve(result);
     } else {
       Toast.show(result.message);
@@ -97,13 +101,22 @@ export const post = (
   console.log('%cPath:', 'color: red; font-size: 20px; ', path)
   console.log('%cParams:', 'color: red; font-size: 20px; ', data)
 
-  return new Promise((resolve, reject) => {
-    fetch(path, {
-      method: "POST",
-      headers,
-      body: JSON.stringify(data),
-    })
-      .then(async (response: { text: () => any; status: number }) => {
+  const fn = fetch(path, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(data),
+  });
+
+  const raceTimeout = Promise.race([fn, timeout(TIMEOUT, path)]);
+
+  return raceTimeout
+      .then(async (response: { text: () => any; status: number } | any) => {
+        if (response.timeout) {
+          console.warn(`连接超时: ${response.timeout}`)
+          Toast.show('连接超时')
+          return;
+        }
+
         if (response.status !== 200) {
           Toast.show("网络错误", { position: 0 });
           return;
@@ -116,22 +129,24 @@ export const post = (
         console.log('%cresult:', 'color: red; font-size: 20px; ', result)
 
         if (result.code === 200) {
-          onlyData ? resolve(result.data) : resolve(result);
+          return onlyData ? Promise.resolve(result.data) : Promise.resolve(result);
         } else if (result.code === 203 || result.code === 204) {
           Toast.show("用户信息过期，请重新登录", { position: 0 });
           store.dispatch(toggleLoginState(false));
           store.dispatch(setToke(""));
           store.dispatch(setUserInfo({}));
           // 这两个条件分支也需要修改Promise为完成状态 @hicks
-          resolve(result);
+          Promise.resolve(result);
         } else {
           // 这两个条件分支也需要修改Promise为完成状态 @hicks
           Toast.show(result.message);
-          resolve(result);
+          Promise.resolve(result);
         }
       })
-      .catch((error: any) => reject(error));
-  });
+      // 这里reject的,外部调用没有catch的,肯定报错(未捕获的错误)  @hicks
+      .catch((error: any) => {
+        return Promise.reject(error)
+      });
 };
 
 /**
@@ -169,14 +184,16 @@ export const liveUpload = (path: RequestInfo, params: UpdateParams): any => {
     headers['authentication'] = userData.token
   }
 
-  return new Promise((resolve, reject) => {
-    fetch(path, {
-      method: 'POST',
-      headers,
-      body: formData
-    })
-    .then((response: { json: () => any; }) => response.json())
-    .then((result: { data: any; }) => resolve(result))
-    .catch((error: any) => console.error(error))
+  const fn = fetch(path, {
+    method: 'POST',
+    headers,
+    body: formData
   })
+
+  const raceTimeout = Promise.race([fn, timeout(UPLOAD_TIMEOUT, path)]);
+  
+  return raceTimeout
+    .then((response: { json: () => any; }) => response.json())
+    .then((result: { data: any; }) => Promise.resolve(result))
+    .catch((error: any) => console.error(error))
 }

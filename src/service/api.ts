@@ -99,7 +99,7 @@ export const apiGetUserData = () => get(`${HOST_JAVA}/user/getUserInfo`)
 // 发现模块 => 新视界获取作品
 export const apiGetWorks = (data: any) => post(`${HOST_JAVA}/find/getWorks`, data)
 // 获取发现详情
-export const apiGetWorksDetailInfo = (data: any) => post(`${HOST_JAVA}/find/getWorksDetailInfo`, data)
+export const apiGetWorksDetailInfo = async (data: any) => post(`${HOST_JAVA}/find/getWorksDetailInfo`, data).then(r => console.log(r, 'rrrrrr'))
 // 查询优惠金额 （预生成订单）
 export const apiGetSellerDiscount = (data: any) => post(`${HOST_JAVA}/order/getSellerDiscount`, data) 
 // 发布作品
@@ -256,3 +256,4 @@ export const apiShoppingBag = (data: any) => get(`${HOST_JAVA}/userLive/shopping
 export const apiUserLiveBanner = () => post(`${HOST_JAVA}/userLive/userLiveBanner`)
 // 上传用户头像本地base64
 export const apiUploadFile = (data: any) => post(`${HOST_JAVA}/user/uploadFile`, data)
+

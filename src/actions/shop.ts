@@ -204,4 +204,3 @@ export const addGoods2WareHouse = (params: AddGoods2WareHouseParams) => {
 export const updateWarehouseGoods = (warehouseGoods: any) => {
   return {type: shopActionType.UPDATE_WAREHOUSE_GOODS, payload: {warehouseGoods}};
 }
-
