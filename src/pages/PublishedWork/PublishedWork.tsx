@@ -36,7 +36,7 @@ export default function PublishedWork() {
       pageSize
     }).then((res: any) => {
       console.log('我的作品', res)
-      if (res.totalCount) {
+      if (res && res.totalCount) {
         const totalPage = res.totalCount / pageSize
         hasMoreRef.current = pageNoRef.current < totalPage
         setWorkList(JSON.parse(JSON.stringify(res.worksInfoList)))

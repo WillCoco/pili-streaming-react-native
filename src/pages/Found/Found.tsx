@@ -12,6 +12,7 @@ import {
 import { useNavigation, useIsFocused } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { apiGetWorks } from '../../service/api'
+import { post } from '../../service/fetch'
 
 import waterFall from '../../utils/waterFall'
 import pxToDp from '../../utils/px2dp'
@@ -48,7 +49,7 @@ function Found(props: any) {
    * 加载发现数据
    * @param isPullDown 是否是下拉刷新
    */
-  const getFoundList = (isPullDown: boolean) => {
+  const getFoundList = async (isPullDown: boolean) => {
     const params = {
       page: pageNoRef.current,
       pageSize: pageSize,
@@ -72,6 +73,8 @@ function Found(props: any) {
       hasMoreRef.current = pageNoRef.current < totalPage
       setWorkList(isPullDown ? waterFall(res.worksInfoList).items : tempList)
       setMaxHeight(isPullDown ? waterFall(res.worksInfoList).maxHeight : maxH)
+    }).catch(err => {
+      console.log(err, '232222')
     })
   }
 

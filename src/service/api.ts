@@ -1,5 +1,5 @@
 
-import { get, post, upload, liveUpload, File } from './fetch'
+import { get, post, upload, liveUpload, File, uploadWorkMedia } from './fetch'
 
 // const HOST_PHP = __DEV__ ? 'https://php.quanpinrtmp.com' : ''
 // const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''
@@ -72,8 +72,6 @@ export const apiAddGoods = () => get(`${HOST_PHP}/mobile/goods/addGoods`)
 export const apiSearchAddGoods = (data: any) => get(`${HOST_PHP}/mobile/goods/addGoods`, data)
 // 首页搜索
 export const apiSearch = (data: any) => get(`${HOST_PHP}/mobile/Goods/getGoodsList`, data)
-// 查看物流
-export const apiQueryExpress = (data: any) => get(`${HOST_JAVA}/order/queryExpress`, data)
 // 我的收藏
 export const apiGetEnshrine = (data: any) => get(`${HOST_PHP}/mobile/goods/getEnshrine`, data)
 // 我关注的店铺
@@ -172,6 +170,12 @@ export const apiDecryptData = (data: any) => post(`${HOST_JAVA}/miniApp/decryptD
 export const apiRegister = (data: any) => post(`${HOST_JAVA}/user/register`, data)
 // 退出
 export const apiLogout = (data: any) => get(`${HOST_JAVA}/user/logout`, data)
+// 查看物流
+export const apiQueryExpress = (data: any) => get(`${HOST_JAVA}/order/queryExpress`, data)
+// 分享生成图片
+export const apiCreatePoster = (data: any) => get(`${HOST_JAVA}/userLive/userGoodsShare`, data)
+// 发布作品 上传文件
+export const apiWorkUpload = (data: any) => uploadWorkMedia(`${HOST_JAVA}/find/uploadFile`, data)
 
 // 杉德支付
 export const apiSandCreateOrder = (data: any) => post(`${SHANDE_HOST_JAVA}/sandpay/createOrder`, data, false)

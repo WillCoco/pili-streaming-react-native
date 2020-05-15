@@ -50,7 +50,7 @@ function GoodsInfo(props: any) {
   })
   let [goodsNum, setGoodsNum] = useState(1)
   const [couponList, setCouponList] = useState([])
-  const goodsInfoRef = useRef()
+  const goodsInfoRef: any = useRef()
 
   navigation.setOptions({
     headerTitle: '',
@@ -437,6 +437,8 @@ function GoodsInfo(props: any) {
         <ActionSheet isShow={showShareBar}>
           <ShareBar
             hideShareBar={() => setShowShareBar(false)}
+            userId={props.userInfo.userId}
+            goodsId={goodsId}
           />
         </ActionSheet>
       </View>

@@ -5,9 +5,11 @@ import { AntDesign } from '@expo/vector-icons'
 import { Colors } from '../../../constants/Theme'
 import * as WeChat from 'react-native-wechat-lib'
 import * as FileSystem from 'expo-file-system'
+import { apiCreatePoster } from '../../../service/api'
 
 export default function ShareBar(props: any) {
   const [progress, setProgress] = useState(0)
+  const { goodsId, userId } = props
 
   /**
    * 分享到微信
@@ -44,8 +46,17 @@ export default function ShareBar(props: any) {
    * 生成空间海报
    */
   const createPoster = () => {
-    // "http://qpsc-1256479324.cos.ap-shanghai.myqcloud.com/goods/d0b26116d671bf8509ad9281af8eb72e.jpg"
-    downLoad()
+    const params = {
+      goodsId,
+      userId
+    }
+
+    console.log(params)
+
+    apiCreatePoster(params).then((res: any) => {
+      console.log('生成海报', res)
+    })
+    // downLoad()
   }
 
   const downLoad = async () => {
