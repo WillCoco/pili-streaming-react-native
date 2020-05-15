@@ -9,7 +9,7 @@
  * @Last Modified time: 2020/5/13
  **/
 // import * as React from 'react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -28,7 +28,8 @@ import { pad } from '../../../constants/Layout';
 import { Colors } from '../../../constants/Theme';
 import pxToDp from '../../../utils/px2dp';
 import { apiGetLiveList } from '../../../service/api'
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import PagingList from '../../../components/PagingList';
 
 
 const RecordsCard = (props: {
@@ -72,37 +73,62 @@ const RecordsCard = (props: {
     </View>
   )
 }
-const AnchorRecords = () => {
-  // const liveList = [
-  //   {
-  //     cover: images.watchLiveCover,
-  //     title: '我就知道你想看杨迪和薇娅互黑薇娅',
-  //     watch: 123,
-  //     goodsNum: 123,
-  //     soldNum: 123,
-  //     addfans: 123,
-  //     liveTime: '2020.04.25'
-  //   },
-  //   {
-  //     cover: images.watchLiveCover,
-  //     title: '我就知道你想看杨迪和薇娅互黑薇娅',
-  //     watch: 345,
-  //     goodsNum: 345,
-  //     soldNum: 345,
-  //     addfans: 345,
-  //     liveTime: '2020.04.25'
-  //   }
-  // ];
+const AnchorRecords = (props) => {
 
-  const [liveList, setLiveList] = useState(null);
+  const {anchorInfo = {}} = props;
+  const [liveList, setLiveList] = useState([]);
+  const [pageNo, setPageNo] = useState(1);
 
   const { navigate } = useNavigation();
 
   useEffect(() => {
-      apiGetLiveList({anchorId: 709828778884333568}).then(res => {
-          console.log(res, 'sync get liveList')
+      // const a = [];
+      // [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].forEach(() => {
+      //     a.push( {
+      //         cover: images.watchLiveCover,
+      //         title: '我就知道你想看杨迪和薇娅互黑薇娅',
+      //         watch: 123,
+      //         goodsNum: 123,
+      //         soldNum: 123,
+      //         addfans: 123,
+      //         liveTime: '2020.04.25'
+      //     })
+      // })
+      // setLiveList(a)
+      // console.log(liveList, '99999')
+      // getLiveListFn()
+  }, []);
+
+  /**
+   * 获取直播列表
+   */
+  const getLiveListFn = (page, size) => {
+      const {anchorId} = anchorInfo;
+      const params = {
+          anchorId,
+          pageNo:page.current,
+          pageSize: size
+      };
+      console.log(params, 'params')
+      apiGetLiveList(params).then(res => {
+          console.log(liveList, 'sync get liveList')
+          setLiveList(liveList.concat(res.records))
       })
-  });
+  };
+
+  /**
+   * 下拉刷新
+   * */
+  const onRefresh = (page, size) => {
+      getLiveListFn(page, size)
+  };
+
+  /**
+   * 上拉刷新
+   */
+  const onEndReached = (page, size) => {
+      getLiveListFn(page, size);
+  };
 
   /**
    * 点击分享按钮
@@ -117,30 +143,36 @@ const AnchorRecords = () => {
   const onDownloadPress = () => {
     alert('下载直播回放')
   };
+
   return (
     <View style={styles.style}>
-      <NavBar title="我的直播" />
-      <ScrollView style={styles.myLivePage}>
-        {
-            liveList && liveList.map((item, index) => {
-            return (
-              <RecordsCard
-                key={`_${index}`}
-                cover={item.cover}
-                title={item.title}
-                watch={item.watch}
-                goodsNum={item.goodsNum}
-                soldNum={item.soldNum}
-                addfans={item.addfans}
-                liveTime={item.liveTime}
-                onPress={() => navigate('LivingRoomScreen')}
-                onSharePress={onSharePress}
-                onDownloadPress={onDownloadPress}
-              />
-            )
-          })
-        }
-      </ScrollView>
+        <NavBar title="我的直播" />
+        <PagingList
+            size={10}
+            data={liveList}
+            setData={setLiveList}
+            initListData={liveList}
+            renderItem={({item, index}) => {
+                return (
+                    <RecordsCard
+                        key={`_${index}`}
+                        cover={item.cover}
+                        title={item.title}
+                        watch={item.watch}
+                        goodsNum={item.goodsNum}
+                        soldNum={item.soldNum}
+                        addfans={item.addfans}
+                        liveTime={item.liveTime}
+                        onPress={() => navigate('LivingRoomScreen')}
+                        onSharePress={onSharePress}
+                        onDownloadPress={onDownloadPress}
+                    />
+                )
+            }}
+            onRefresh={onRefresh}
+            onEndReached={onEndReached}
+            initialNumToRender={10}>
+        </PagingList>
     </View>
   )
 };

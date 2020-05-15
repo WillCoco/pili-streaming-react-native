@@ -61,7 +61,7 @@ const AnchorShowcaseManage = () =>  {
   }, [])
 
   const dispatch = useDispatch();
-  const [data, setData]: Array<any> = React.useState(goodsList);
+  const [data, setData]: Array<any> = React.useState(goodsList || []);
 
   /**
    * 渲染行
@@ -112,7 +112,9 @@ const AnchorShowcaseManage = () =>  {
    */
   const onRemovePress = (index: number, item: any) => {
     setData((data: Array<any>) => {
+        console.log(data, '删除')
       const newData = [...data];
+        alert(index)
       newData.splice(index, 1);
       return newData;
     })
@@ -129,14 +131,14 @@ const AnchorShowcaseManage = () =>  {
    * 是否空
    */
   const isEmpty = !goodsList || goodsList.length === 0;
-
+  console.log(data, 'dataaa')
   return (
     <View style={styles.style}>
       <NavBar title="店铺商品管理" leftTheme="light" titleStyle={{color: '#fff'}} style={{backgroundColor: Colors.basicColor}} />
       {
         !isEmpty ? <Empty text="暂无商品" /> : (
           <DraggableFlatList
-            data={[1,2,3,4]||data}
+            data={data}
             renderItem={renderItem}
             keyExtractor={(item, index) => `draggable-item-${index}`}
             onDragEnd={({ data }) => setData(data)}

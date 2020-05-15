@@ -49,7 +49,7 @@ export const apiSelectGoodsList = (data: any) => get(`${HOST_PHP}/mobile/index/a
 // 好物详情
 export const apiSelectGoodsInfo = (data: any) => get(`${HOST_PHP}/mobile/index/jxhwInfoOne`, data)
 // 喜欢 || 取消喜欢 好物
-export const apiGoodsIsLike = (data: any) => get(`${HOST_PHP}/mobile/goods/goodsLike`, data) 
+export const apiGoodsIsLike = (data: any) => get(`${HOST_PHP}/mobile/goods/goodsLike`, data)
 // 添加地址
 export const apiAddAddr = (data: any) => post(`${HOST_PHP}/mobile/user_address/add_address`, data)
 // 地址列表
@@ -101,7 +101,7 @@ export const apiGetWorks = (data: any) => post(`${HOST_JAVA}/find/getWorks`, dat
 // 获取发现详情
 export const apiGetWorksDetailInfo = (data: any) => post(`${HOST_JAVA}/find/getWorksDetailInfo`, data)
 // 查询优惠金额 （预生成订单）
-export const apiGetSellerDiscount = (data: any) => post(`${HOST_JAVA}/order/getSellerDiscount`, data) 
+export const apiGetSellerDiscount = (data: any) => post(`${HOST_JAVA}/order/getSellerDiscount`, data)
 // 发布作品
 export const apiPublishWorks = (data: any) => post(`${HOST_JAVA}/find/publishWorks`, data)
 // 关注/取消关注作品
@@ -209,7 +209,7 @@ export const apiGetGroupGoods = (data: any) => post(`${HOST_JAVA}/anchor/getGrou
 // 主播直播数据列表
 export const apiGetLiveDataList = (data: any) => post(`${HOST_JAVA}/anchor/getLiveDataList`, data)
 // 我的直播列表
-export const apiGetLiveList = (data: any) => post(`${HOST_JAVA}/anchor/getLiveList`, data)
+export const apiGetLiveList = (data: any) => get(`${HOST_JAVA}/anchor/getLiveList`, data)
 // 分页查询寄回地址列表
 export const apiGetReturnAddressList = (data: any) => post(`${HOST_JAVA}/anchor/getReturnAddressList`, data)
 // 主播消息通知列表

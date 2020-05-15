@@ -85,6 +85,7 @@ export const getShowcaseGoods = () => {
     const showcaseGoods = [1,2,3,4,5,6,7];
     console.log(showcaseGoods, 'showcaseGoods')
 
+
     // 若成功去更新store
     dispatch(updateShowcaseGoods(showcaseGoods));
 

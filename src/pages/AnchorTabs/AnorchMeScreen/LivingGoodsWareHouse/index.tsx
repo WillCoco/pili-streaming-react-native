@@ -21,6 +21,8 @@ import {pad, radio} from '../../../../constants/Layout';
 import NavBar from '../../../../components/NavBar';
 import WarehouseRow from './WarehouseRow';
 import CheckBox from '../../../../components/CheckBox';
+import {apiGetGroupGoods} from '../../../../service/api';
+import {connect} from 'react-redux';
 
 const ROW_HEIGHT = 120;
 
@@ -29,8 +31,10 @@ const emptyList: [] = [];
 const LivingGoodsWareHouse = (props: any) =>  {
   const {navigate, goBack} = useNavigation();
   const dispatch = useDispatch();
+  const {anchorInfo = {}} = props;
 
-  /**
+
+    /**
    * 原始数据
    */
   const [dataList, setDataList]: [Array<any>, any] = React.useState(emptyList);
@@ -91,15 +95,24 @@ const LivingGoodsWareHouse = (props: any) =>  {
     // };
     // getData();
 
-    return () => {
-      Toast.hide('');
-    }
+    // return () => {
+    //   Toast.hide('');
+    // }
   }, [])
 
   /**
    * 刷新
    */
-  const onRefresh = () => {
+  const onRefresh = (page, size) => {
+      // const {anchorId} = anchorInfo;
+      // apiGetGroupGoods({
+      //     anchorId: anchorId,
+      //     pageNo: page,
+      //     pageSize: size,
+      //     selType: 1
+      // }).then(res => {
+      //     console.log(res, 'sync goods')
+      // });
     const d = [{id: 1, canAdd: true},{id: 2}, {id: 3}];
     const r = Promise.resolve({result: dataFormat(d, dataList)});
     return r;
@@ -109,7 +122,7 @@ const LivingGoodsWareHouse = (props: any) =>  {
    * 更多
    */
   const onEndReached = () => {
-    
+
   }
 
   /**
@@ -293,9 +306,11 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withPage(LivingGoodsWareHouse, {
+export default connect(
+    (state: any) => state.anchorData
+)(withPage(LivingGoodsWareHouse, {
   statusBarOptions: {
     barStyle: 'light-content',
     backgroundColor: 'transparent',
   }
-});
+}));
