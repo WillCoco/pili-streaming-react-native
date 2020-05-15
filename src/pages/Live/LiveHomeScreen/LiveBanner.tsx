@@ -10,10 +10,12 @@ import {
   PanResponder,
   Image,
   StyleProp,
+  TouchableOpacity,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import images from '../../../assets/images';
 import {apiUserLiveBanner} from '../../../service/api';
+import {useNavigation} from '@react-navigation/native';
 
 interface LiveBannerProps {
   // bannerList?: any[],
@@ -24,6 +26,7 @@ interface LiveBannerProps {
 const LiveBanner = (props: LiveBannerProps) : React.ReactElement =>  {
 
   const [bannerList, setBannerList] = React.useState([]);
+  const {navigate} = useNavigation();
 
   React.useEffect(() => {
     apiUserLiveBanner().then((res: any) => {
@@ -36,19 +39,21 @@ const LiveBanner = (props: LiveBannerProps) : React.ReactElement =>  {
       style={StyleSheet.flatten([styles.wrapper, props.style])}
     >
       <Swiper
-        showsPagination={false} // FIXME:圆点不随着图切换
+        autoplay={true}
       >
         {
-          bannerList.map((banner, i) => {
+          bannerList.map((banner: any, i) => {
             const bannerSource = typeof banner?.bimgobject === 'string' ? {uri: banner?.bimgobject} : banner?.bimgobject;
             return (
-              <Image
-                key={`banner_${i}`}
-                source={bannerSource}
-                resizeMode="cover"
-                resizeMethod="resize"
-                style={StyleSheet.flatten([styles.image, props.imageStyle])}
-              />
+              <TouchableOpacity  onPress={() => navigate('LivingRoomScreen', {liveId: banner?.extend})}>
+                <Image
+                  key={`banner_${i}`}
+                  source={bannerSource}
+                  resizeMode="cover"
+                  resizeMethod="resize"
+                  style={StyleSheet.flatten([styles.image, props.imageStyle])}
+                />
+              </TouchableOpacity>
             )
           })
         }

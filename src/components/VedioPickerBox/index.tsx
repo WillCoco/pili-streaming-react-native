@@ -17,29 +17,51 @@ import Iconvideo from '../../components/Iconfont/Iconvideo';
 import {Colors} from '../../constants/Theme';
 import { radio, pad } from '../../constants/Layout';
 
-interface ImagePickerBoxProps {
+interface VideoPickerBoxProps {
   style?: StyleProp<any>,
   imgStyle?: StyleProp<any>,
   placeholderText?: string,
   placeholderIcon?: any,
-  onPicked: (uri: string) => undefined,
+  onPicked: (info: any) => undefined,
 }
 
-const ImagePickerBox = React.forwardRef((props: ImagePickerBoxProps, ref: any) =>  {
+const VideoPickerBox = React.forwardRef((props: VideoPickerBoxProps, ref: any) =>  {
   /**
    * 选择
    */
   const [vedioUri, setVedioUri]: Array<any> = React.useState();
-  const pickCover = async () => {
-    const uri = await pickCameraRoll({mediaTypes: ImagePicker.MediaTypeOptions.Videos});
-    if (uri) {
-      setVedioUri(uri)
-      props.onPicked(uri);
+
+  /**
+   * 
+   */
+  const getVideoInfo = (video: any) => {
+    const {uri, duration} = video || {};
+    const nameArr = uri.split('/');
+    const name = nameArr[nameArr.length - 1];
+    const typeArr = name.split('.');
+    const type = `video/${typeArr[typeArr.length - 1]}`;
+
+    return {
+      uri,
+      name,
+      type,
+      duration,
+    }
+  }
+
+  const pick = async () => {
+    const video = await pickCameraRoll({mediaTypes: ImagePicker.MediaTypeOptions.Videos});
+    console.log(video, 'vvvvvvvv')
+    if (video) {
+      const info = getVideoInfo(video);
+
+      setVedioUri(video.uri)
+      props.onPicked(info);
     }
   };
 
   return (
-    <TouchableOpacity style={StyleSheet.flatten([styles.style, props.style])} onPress={pickCover}>
+    <TouchableOpacity style={StyleSheet.flatten([styles.style, props.style])} onPress={pick}>
       {
         vedioUri ? (
           <Video source={{uri: vedioUri}}   // Can be a URL or a local file.
@@ -60,7 +82,7 @@ const ImagePickerBox = React.forwardRef((props: ImagePickerBoxProps, ref: any) =
   )
 });
 
-ImagePickerBox.defaultProps = {
+VideoPickerBox.defaultProps = {
   placeholderText: '预告视频'
 };
 
@@ -85,4 +107,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ImagePickerBox;
+export default VideoPickerBox;

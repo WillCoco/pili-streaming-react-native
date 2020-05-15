@@ -1,7 +1,8 @@
 import {Dispatch} from 'redux';
 import liveActionType from '../constants/Live';
 import {LiveConfig} from '../reducers/live';
-import api from '../service/api';
+import * as api from '../service/api';
+import Toast from 'react-native-tiny-toast';
 
 /**
  * 更新直播参数
@@ -27,7 +28,7 @@ interface startLiveParams {
 export const startLive = (params: startLiveParams) => {
   return async function(dispatch: Dispatch, getState: any) {
     const {cover, title} = getState().live?.liveConfig || {};
-    const anchorId = getState().live?.liveConfig || {};
+    const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
     return await api.apiStartLive({
       anchorId,
       goodsIdList: params.goodsIdList,
@@ -74,6 +75,43 @@ export const updateFaceBeauty = (camera: 'front' | 'back') => {
       return;
     }
     dispatch(updatePusherConfig({...pusherConfig, camera}))
+  }
+}
+
+/**
+ * 发布预告
+ */
+interface ReleaseTeaserParams {
+  advance?: string, // 预告片
+  bigPic?: string,
+  smallPic: string,
+  liveTime: number,
+  title: string
+}
+export const releaseTeaser = (params: ReleaseTeaserParams) => {
+  return async function(dispatch: Dispatch, getState: any) {
+    const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
+
+    const opts: any = {
+      anchorId,
+      smallPic: params.smallPic,
+      liveTime: params.liveTime,
+      title: params.title,
+    };
+
+    if (params.advance) {opts.advance = params.advance};
+    if (params.bigPic) {opts.advance = params.bigPic};
+
+    console.log(opts, 'optsoptsopts')
+    return api.apiReleaseNotice(opts)
+    .then(r => {
+      console.log(r, 11111111)
+      Toast.hide('');
+    })
+    .catch((error: any) => {
+      Toast.hide('');
+      console.log(`releaseTeaser error: ${error}`)
+    })
   }
 }
 

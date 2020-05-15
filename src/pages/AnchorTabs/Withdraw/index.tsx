@@ -26,8 +26,9 @@ import { sleep } from '../../../utils/tools';
 import FormRow from '../../../components/FormRow';
 import CountDown from '../../../components/CountDown';
 import Mask from '../../../components/Mask';
+import withPage from '../../../components/HOCs/withPage';
 
-const Withdraw = () =>  {
+const Withdraw = (props: any) =>  {
   const {navigate, goBack, replace} = useNavigation();
   const route = useRoute();
   const dispatch = useDispatch();
@@ -129,7 +130,7 @@ const Withdraw = () =>  {
      
       <ButtonRadius
         text="提交"
-        style={styles.button}
+        style={StyleSheet.flatten([styles.button, {marginBottom: props.safeBottom}])}
         onPress={onSumbit}
       />
     </View>
@@ -155,8 +156,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: vw(80),
-    marginBottom: pad
   },
 });
 
-export default Withdraw;
+export default withPage(Withdraw);

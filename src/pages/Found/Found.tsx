@@ -57,6 +57,8 @@ function Found(props: any) {
 
     apiGetWorks(params).then((res: any) => {
       console.log('发现数据', res)
+      if (!res.worksInfoList) return
+
       res.worksInfoList.forEach((item: any) => {
         item.imageWidth = item.worksMoreInfo.imageWidth
         item.imageHeight = item.worksMoreInfo.imageHeight

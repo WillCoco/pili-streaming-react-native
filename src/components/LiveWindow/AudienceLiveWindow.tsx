@@ -27,6 +27,8 @@ import { MediaType } from "../../liveTypes";
 import AudienceShopCard from "../../components/LivingShopCard/AudienceShopCard";
 import { vw, vh } from "../../utils/metric";
 import { PrimaryText } from "react-native-normalization-text";
+import { apiEnterLive } from '../../service/api';
+import withPage from '../../components/HOCs/withPage';
 
 const { window } = L;
 
@@ -46,6 +48,27 @@ const LiveWindow = (props: LiveWindowProps): any => {
 
   // 直播结束
   const isLiveOver = useSelector((state) => state?.im?.isLiveOver);
+
+  // 用户id
+  const userId = useSelector(state => state?.userData?.userInfo?.userId) || '';
+
+  // 主播信息
+  const [anchorInfo, setAnchorInfo]: [any, any] = React.useState({})
+
+  /**
+   * 进入直播间，获取拉流地址 TODO:
+   */
+  React.useEffect(() => {
+    const params = {
+      liveId: route?.params?.liveId,
+      userId
+    }
+
+    apiEnterLive(params).then(res => {
+      console.log(res);
+      setAnchorInfo(res);
+    })
+  }, []);
 
   /**
    * 播放类型
@@ -186,7 +209,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
-      <Image style={styles.imgBg} source={images.livingbg} resizeMode="cover" />
+      <Image style={styles.imgBg} source={anchorInfo?.anchorLogo && {uri: anchorInfo?.anchorLogo} || images.livingbg} resizeMode="cover" />
       {playerComponent}
       <View style={styles.livingBottomBlock}>
         <LivingBottomBlock.Audience onPressShopBag={() => shopCardAnim(true)} />
@@ -195,9 +218,11 @@ const LiveWindow = (props: LiveWindowProps): any => {
       {!!noticeBubbleText ? <NoticeBubble text={noticeBubbleText} /> : null}
       <LiveIntro
         showFollowButton
-        anchorId={1}
-        liveTitle="湖南卫视直播间"
+        anchorId={1} // TODO:
+        liveTitle={anchorInfo?.anchorName || '直播间'}
         liveSubTitle={`123214`}
+        userId={userId}
+        isFollow={anchorInfo?.isAttention} // 是否关注(0:没关注；1：关注)
       />
 
       <TouchableOpacity
@@ -253,4 +278,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LiveWindow;
+export default withPage(LiveWindow);

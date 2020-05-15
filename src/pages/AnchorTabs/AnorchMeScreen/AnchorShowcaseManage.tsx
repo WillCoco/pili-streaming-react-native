@@ -23,7 +23,7 @@ import ScrollableTab from '../../../components/ScrollableTab';
 import { vw, vh } from '../../../utils/metric';
 import Empty from '../../../components/Empty';
 import PagingList from '../../../components/PagingList';
-import {getShowcaseGoods} from '../../../actions/shop';
+import { getShowcaseGoods, AddGoodsTargetType } from '../../../actions/shop';
 import Toast from 'react-native-tiny-toast'
 
 const exampleData = [...Array(5)].map((d, index) => ({
@@ -159,7 +159,7 @@ const AnchorShowcaseManage = () =>  {
           text="添加商品"
           textStyle={styles.addText}
           style={styles.addBtn}
-          onPress={() => navigate('GoodsSupply')}
+          onPress={() => navigate('GoodsSupply', {type: AddGoodsTargetType.showcaseGoods})}
         />
         <ButtonRadius
           text="提交保存"

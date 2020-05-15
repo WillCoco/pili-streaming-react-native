@@ -22,23 +22,23 @@ function FansContent(props) {
 
       <TouchableWithoutFeedback onPress={toPublishedWork}>
         <View style={styles.item}>
-          <Text style={styles.count}>{userInfo.publishCount}</Text>
+          <Text style={styles.count}>{userInfo?.publishCount || 0}</Text>
           <Text style={styles.text}>发布</Text>
         </View>
       </TouchableWithoutFeedback>
 
       <View style={styles.item}>
-        <Text style={styles.count}>{userInfo.fansCount}</Text>
+        <Text style={styles.count}>{userInfo?.fansCount || 0}</Text>
         <Text style={styles.text}>粉丝</Text>
       </View>
       <View style={styles.item}>
-        <Text style={styles.count}>{userInfo.lookCount}</Text>
+        <Text style={styles.count}>{userInfo?.lookCount || 0}</Text>
         <Text style={styles.text}>浏览</Text>
       </View>
 
       <TouchableWithoutFeedback onPress={toFocusedAnchor}>
         <View style={styles.item}>
-          <Text style={styles.count}>{userInfo.anchorCount}</Text>
+          <Text style={styles.count}>{userInfo?.anchorCount || 0}</Text>
           <Text style={styles.text}>关注主播</Text>
         </View>
       </TouchableWithoutFeedback>
