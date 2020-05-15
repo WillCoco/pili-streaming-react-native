@@ -4,7 +4,6 @@
 import React from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TextInput,
   StyleProp,
@@ -35,9 +34,7 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
   /**
    * 根据类型去定义LiveWindow的播放类型(直播、回放、预告)
    */
-  // const type: PlayerType = PlayerType.living;
-  const type: MediaType = MediaType.record;
-  // const type: playerType = props.liveInfo?.type;
+  const type: MediaType = props.liveInfo?.liveStatus;
   let liveTypeEle;
   switch (+type) {
     case MediaType.living:
@@ -89,11 +86,11 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
   return (
     <TouchableOpacity
       style={StyleSheet.flatten([styles.wrapper, props.style])}
-      onPress={() => navigate('LivingRoomScreen')}
+      onPress={() => navigate('LivingRoomScreen', {liveId: props.liveInfo?.liveId})}
     >
       <Image
         source={
-          props.liveInfo?.img ? {uri: props.liveInfo?.img} : {
+          props.liveInfo?.livePic ? {uri: props.liveInfo?.livePic} : {
             uri: 'https://goss.veer.com/creative/vcg/veer/800water/veer-302989341.jpg'
           }
         }
@@ -101,7 +98,7 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
       />
       <View style={styles.liveTitleWrapper}>
         {liveTypeEle}
-        <TinyText color="white">{props.liveInfo?.audienceQty || '0'}</TinyText>
+        <TinyText color="white">{props.liveInfo?.viewsNum || '0'}</TinyText>
       </View>
       <View style={styles.titleWrapper}>
         <PrimaryText
@@ -109,19 +106,19 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
           numberOfLines={2}
           ellipsizeMode="tail"
         >
-          {props.liveInfo?.title || '标题标标题标标题标标题标标题标标题标标题标标题标标题标标题标标题标标题标'}
+          {props.liveInfo?.liveTitle || '直播标题'}
         </PrimaryText>
       </View>
       
       <TouchableOpacity style={styles.bottomBar} onPress={() => navigate('AnchorDetail')}>
         <View style={styles.anorchInfoWrapper}>
-          <Avatar size={scale(20)} style={{marginRight: pad / 2}} />
+          <Avatar size={scale(20)} style={{marginRight: pad / 2}} source={props.liveInfo?.anchorLogo}/>
           <SmallText
             numberOfLines={1}
             ellipsizeMode="tail"
             style={{width: scale(50)}}
           >
-            {props.liveInfo?.name || '主播昵称'}
+            {props.liveInfo?.anchorName || '主播昵称'}
           </SmallText>
         </View>
         <View style={styles.hotWrapper}>
@@ -134,7 +131,7 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
             numberOfLines={1}
             ellipsizeMode="tail"
             style={styles.hotText}>
-              9.1w
+              {props.liveInfo?.likeSum || 0}
           </SmallText>
         </View>
       </TouchableOpacity>
