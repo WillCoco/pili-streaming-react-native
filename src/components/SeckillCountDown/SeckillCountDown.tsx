@@ -7,6 +7,7 @@ import { Colors } from '../../constants/Theme'
 let timer: any
 
 export default function SeckillCountDown() {
+  const isFocused = useIsFocused()
   const [countDownInfo, setCountDownInfo] = useState({
     hours: 0,
     min: 0,
@@ -14,10 +15,12 @@ export default function SeckillCountDown() {
   })
 
   useEffect(() => {
-    setCountDown()
+    
   }, [])
 
-  // console.log(useIsFocused(), 'sdsfsdfdsf')
+  useEffect(() => {
+    isFocused ? setCountDown() : clearInterval(timer)
+  }, [isFocused])
 
   /**
    * 设置秒杀倒计时

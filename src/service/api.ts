@@ -5,7 +5,7 @@ import { get, post, liveUpload, File, uploadWorkMedia } from './fetch'
 // const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''
 
 const HOST_PHP = __DEV__ ? 'http://129.211.138.215' : ''
-const HOST_JAVA = __DEV__ ? 'http://129.211.138.215:7000' : ''
+const HOST_JAVA = __DEV__ ? 'http://129.211.138.215:2333' : ''
 const SHANDE_HOST_JAVA = __DEV__ ? 'http://129.211.104.84:7001' : ''
 
 // http://129.211.138.215/

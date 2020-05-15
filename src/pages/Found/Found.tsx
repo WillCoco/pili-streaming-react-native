@@ -12,7 +12,6 @@ import {
 import { useNavigation, useIsFocused } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { apiGetWorks } from '../../service/api'
-import { post } from '../../service/fetch'
 
 import waterFall from '../../utils/waterFall'
 import pxToDp from '../../utils/px2dp'
@@ -38,7 +37,6 @@ function Found(props: any) {
 
   useEffect(() => {
     getFoundList(false)
-    console.log(pageNoRef)
   }, [])
 
   useEffect(() => {

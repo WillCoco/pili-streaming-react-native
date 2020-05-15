@@ -4,6 +4,8 @@ import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
+import SeckillCountDown from '../../../components/SeckillCountDown/SeckillCountDown'
+
 export default function ActivityBar(props: {
   type: string,
   goodsInfo: any,
@@ -11,8 +13,14 @@ export default function ActivityBar(props: {
 }) {
   const { type, goodsInfo, countDownInfo } = props
 
-  const containerBgi = type === 'sale' ? require('../../../assets/goods-image/sale_bgi.png') : require('../../../assets/goods-image/seckill_bgi.png')
-  const saleText = type === 'sale' ? require('../../../assets/goods-image/sale_text.png') : require('../../../assets/goods-image/seckill_text.png')
+  const containerBgi =
+    type === 'sale'
+      ? require('../../../assets/goods-image/sale_bgi.png')
+      : require('../../../assets/goods-image/seckill_bgi.png')
+  const saleText =
+    type === 'sale'
+      ? require('../../../assets/goods-image/sale_text.png')
+      : require('../../../assets/goods-image/seckill_text.png')
 
   return (
     <ImageBackground style={styles.container} source={containerBgi}>
@@ -33,13 +41,7 @@ export default function ActivityBar(props: {
           </View>
           : <View style={{ marginRight: pxToDp(40) }}>
             <Text style={styles.seckillText}>距离结束仅剩：</Text>
-            <View style={styles.countDonw}>
-              <Text style={styles.time}>{(countDownInfo.hours + '').padStart(2, '0')}</Text>
-              <Text style={{ marginLeft: pxToDp(3), marginRight: pxToDp(3) }}>:</Text>
-              <Text style={styles.time}>{(countDownInfo.min + '').padStart(2, '0')}</Text>
-              <Text style={{ marginLeft: pxToDp(3), marginRight: pxToDp(3) }}>:</Text>
-              <Text style={styles.time}>{(~~countDownInfo.sec + '').padStart(2, '0')}</Text>
-            </View>
+            <SeckillCountDown />
           </View>
       }
     </ImageBackground>
