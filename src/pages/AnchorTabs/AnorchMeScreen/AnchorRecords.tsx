@@ -17,8 +17,10 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  PixelRatio
+  PixelRatio,
+  PermissionsAndroid
 } from 'react-native';
+import CameraRoll from "@react-native-community/cameraroll";
 import { PrimaryText, SmallText, T1 } from 'react-native-normalization-text';
 import { useNavigation } from '@react-navigation/native';
 import withPage from '../../../components/HOCs/withPage';
@@ -30,7 +32,9 @@ import pxToDp from '../../../utils/px2dp';
 import { apiGetLiveList } from '../../../service/api'
 import { connect } from 'react-redux';
 import PagingList from '../../../components/PagingList';
-
+import share from '../../../utils/share';
+// import usePermissions from '../../../hooks/usePermissions';
+// import RNFS from 'react-native-fs'
 
 const RecordsCard = (props: {
   cover: any,
@@ -75,6 +79,13 @@ const RecordsCard = (props: {
 }
 const AnchorRecords = (props) => {
 
+  /*
+  * 获取可写权限
+  * */
+  // const isPermissionGranted = usePermissions([
+  //     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+  // ]);
+
   const {anchorInfo = {}} = props;
   const [liveList, setLiveList] = useState([]);
   const [pageNo, setPageNo] = useState(1);
@@ -82,20 +93,19 @@ const AnchorRecords = (props) => {
   const { navigate } = useNavigation();
 
   useEffect(() => {
-      // const a = [];
-      // [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].forEach(() => {
-      //     a.push( {
-      //         cover: images.watchLiveCover,
-      //         title: '我就知道你想看杨迪和薇娅互黑薇娅',
-      //         watch: 123,
-      //         goodsNum: 123,
-      //         soldNum: 123,
-      //         addfans: 123,
-      //         liveTime: '2020.04.25'
-      //     })
-      // })
-      // setLiveList(a)
-      // console.log(liveList, '99999')
+      const a = [];
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].forEach(() => {
+          a.push( {
+              cover: images.watchLiveCover,
+              title: '我就知道你想看杨迪和薇娅互黑薇娅',
+              watch: 123,
+              goodsNum: 123,
+              soldNum: 123,
+              addfans: 123,
+              liveTime: '2020.04.25'
+          })
+      })
+      setLiveList(a)
       // getLiveListFn()
   }, []);
 
@@ -120,28 +130,44 @@ const AnchorRecords = (props) => {
    * 下拉刷新
    * */
   const onRefresh = (page, size) => {
-      getLiveListFn(page, size)
+      // getLiveListFn(page, size)
   };
 
   /**
    * 上拉刷新
    */
   const onEndReached = (page, size) => {
-      getLiveListFn(page, size);
+      // getLiveListFn(page, size);
   };
 
   /**
    * 点击分享按钮
    */
   const onSharePress = () => {
-    alert('分享直播回放')
+    //   share()
   };
 
   /**
    * 点击下载按钮
    */
   const onDownloadPress = () => {
-    alert('下载直播回放')
+      // const saveImageUrl = 'https://gslb.miaopai.com/stream/9Q5ADAp2v5NHtQIeQT7t461VkNPxvC2T.mp4?vend=miaopai&';
+      // const storeLocation = `${RNFS.DocumentDirectoryPath}`;
+      // let pathName = `${((Math.random() * 1000) | 0)}` + ".mp4"
+      // let downloadDest = `${storeLocation}/${pathName}`;
+      // const ret = RNFS.downloadFile({fromUrl:saveImageUrl,toFile:downloadDest});
+      // ret.promise.then(res => {
+      //     if(res && res.statusCode === 200){
+      //         if(isPermissionGranted) {
+      //             var promise = CameraRoll.saveToCameraRoll("file://" + downloadDest);
+      //             promise.then(function(result) {
+      //                 console.log("图片已保存至相册")
+      //             }).catch(function(error) {
+      //                 console.log(error,"保存失败")
+      //             })
+      //         }
+      //     }
+      // })
   };
 
   return (
@@ -152,6 +178,7 @@ const AnchorRecords = (props) => {
             data={liveList}
             setData={setLiveList}
             initListData={liveList}
+            isInitGetData={false}
             renderItem={({item, index}) => {
                 return (
                     <RecordsCard
