@@ -5,7 +5,7 @@ import { get, post, upload, liveUpload, File } from './fetch'
 // const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''
 
 const HOST_PHP = __DEV__ ? 'http://129.211.138.215' : ''
-const HOST_JAVA = __DEV__ ? 'http://129.211.138.215:7000' : ''
+const HOST_JAVA = __DEV__ ? 'http://129.211.138.215:2333' : ''
 const SHANDE_HOST_JAVA = __DEV__ ? 'http://129.211.104.84:7001' : ''
 
 // http://129.211.138.215/
@@ -257,3 +257,16 @@ export const apiUserLiveBanner = () => post(`${HOST_JAVA}/userLive/userLiveBanne
 // 上传用户头像本地base64
 export const apiUploadFile = (data: any) => post(`${HOST_JAVA}/user/uploadFile`, data)
 
+/**
+ * 资产相关的接口 ==============================================================
+ */
+// 绑定银行卡
+export const apiBindingBankCard = (data: any) => post(`${HOST_JAVA}/assets/bindingBankCard`, data, false)
+// 查询用户账单列表
+export const apiGetUserAssetsRecords = (data: any) => post(`${HOST_JAVA}/assets/getUserAssetsRecords`, data)
+// 查询用户资产信息
+export const apiGetUserAssetsStatistics = () => get(`${HOST_JAVA}/assets/getUserAssetsStatistics`)
+// 查询用户银行卡列表
+export const apiGetUserBankCards = () => get(`${HOST_JAVA}/assets/getUserBankCards`)
+// 发起提现申请
+export const apiWithdraw = (data: any) => post(`${HOST_JAVA}/assets/withdraw`, data)

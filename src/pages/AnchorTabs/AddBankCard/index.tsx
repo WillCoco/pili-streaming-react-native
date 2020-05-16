@@ -19,31 +19,54 @@ import {Colors} from '../../../constants/Theme';
 import {vw} from '../../../utils/metric';
 import {pad} from '../../../constants/Layout';
 import {addBankCard} from '../../../actions/asset';
-import FormRow from '../../../components/FormRow'
+import FormRow from '../../../components/FormRow';
+import withPage from '../../../components/HOCs/withPage';
+import {apiBindingBankCard} from '../../../service/api';
+import Mask from '../../../components/Mask';
 
 const ROW_HEIGHT = 120;
 
 const defaultCards: [] = [];
-const AddBankCard = () =>  {
+const AddBankCard = (props: any) =>  {
   const {navigate, goBack} = useNavigation();
   const route = useRoute();
   const dispatch = useDispatch();
   const [name, setName] = React.useState('');
   const [cardNum, setCardNum] = React.useState('');
+  let [maskList, maskDispatch] = React.useContext(Mask.context);
 
   /**
    * 提交绑定
    */
   const onSumbit = async () => {
-    Toast.showLoading('');
-    const success = await dispatch(addBankCard());
-    Toast.hide('')
-    Toast.show('添加成功', {
-      position: 0
-    })
-    if (success) {
-      goBack();
+    // Toast.showLoading('');
+    // const success = await dispatch(addBankCard());
+    // Toast.hide('')
+    // Toast.show('添加成功', {
+    //   position: 0
+    // })
+    // if (success) {
+    //   goBack();
+    // }
+    const params = {
+      bankAccountNo: '1234',
     }
+
+    apiBindingBankCard(params).then(res => {
+      // console.log(res, 423155231);
+      // TODO:
+      maskDispatch({
+      type: Mask.Actions.PUSH,
+      payload: {
+        type: Mask.ContentTypes.Normal,
+        data: {
+          text: '为了您的资金安全，请先前往实名认证！',
+          title: '提示',
+          rightBtnText: '去实名认证',
+          onPressRight: () => {alert(421)}
+        }
+      }});
+    })
   };
 
   return (
@@ -57,6 +80,7 @@ const AddBankCard = () =>  {
       <View style={styles.contentWrapper}>
         <FormRow 
           title={'姓名:'}
+          placeholder={'请输入真实姓名'}
           value={name}
           onChangeText={setName}
           bottomDivider
@@ -67,11 +91,11 @@ const AddBankCard = () =>  {
           value={cardNum}
           onChangeText={setCardNum}
         />
-        <PrimaryText style={styles.tip}>为了资金安全，请填写*大勇名下单银行卡</PrimaryText>
+        <PrimaryText style={styles.tip}>为了资金安全，请填写{'*大勇'}名下单银行卡</PrimaryText>
       </View>
       <ButtonRadius
         text="提交"
-        style={styles.button}
+        style={StyleSheet.flatten([styles.button, {marginBottom: props.safeBottom}])}
         onPress={onSumbit}
       />
     </View>
@@ -102,8 +126,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: vw(80),
-    marginBottom: pad
   },
 });
 
-export default AddBankCard;
+export default withPage(AddBankCard);

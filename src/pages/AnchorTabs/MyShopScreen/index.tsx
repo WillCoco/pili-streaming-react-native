@@ -23,6 +23,7 @@ import ToolRow from '../../../components/ToolRow';
 import Badge from '../../../components/Badge';
 import {pad} from '../../../constants/Layout';
 import {Colors} from '../../../constants/Theme';
+import {apiGetUserAssetsStatistics} from '../../../service/api';
 
 const ToolCell = (props: {
   text: string,
@@ -40,7 +41,15 @@ const ToolCell = (props: {
 }
 
 const MyShopScreen = (props) =>  {
-  const {navigate, reset} = useNavigation();
+  const {navigate, reset, goBack} = useNavigation();
+  const [assetsInfo, setAssetsInfo] = React.useState({})
+
+  React.useEffect(() => {
+    apiGetUserAssetsStatistics().then(res => {
+      console.log(res);
+      setAssetsInfo(res);
+    })
+  }, []);
 
   /**
    * 店铺资金
@@ -77,10 +86,12 @@ const MyShopScreen = (props) =>  {
    * tab的返回到 我的 
    */
   const onBackPress = () => {
-    reset({
-      index: 0,
-      routes: [{ name: 'Root', params: {initialRoute: '我的'}}],
-    });
+    // reset({
+    //   index: 0,
+    //   routes: [{ name: 'Root', params: {initialRoute: '我的'}}],
+    // });
+
+    navigate('我的')
   }
 
   /**
@@ -104,7 +115,7 @@ const MyShopScreen = (props) =>  {
         <Image style={styles.imgBg} source={images.anchorShopBg} resizeMode="stretch" />
         <View style={StyleSheet.flatten([styles.shopAssetWrapper, {marginTop: props.safeTop + (pad * 5)}])}>
           <T4 color="white" style={styles.title}>店铺资金</T4>
-          <SmallText color="white">保证金: {213}元</SmallText>
+          <SmallText color="white">保证金: {0}元</SmallText>
         </View>
 
         <View style={styles.assetContentWrapper}>
@@ -121,7 +132,7 @@ const MyShopScreen = (props) =>  {
                   imgStyle={{height: 40, width: 40}}
                   textStyle={{color: '#fff', marginTop: 6}}
                 >
-                  <PrimaryText color="white" style={{marginTop: 2}}>¥{123.00}</PrimaryText>
+                  <PrimaryText color="white" style={{marginTop: 2}}>¥{0.00}</PrimaryText>
                 </ImageText>
               )
             })
@@ -142,15 +153,15 @@ const MyShopScreen = (props) =>  {
           <T4 style={styles.title}>订单统计</T4>
           <View style={StyleSheet.flatten([styles.row, styles.contentWrapper])}>
             <View style={styles.orderCellWrapper}>
-              <T3>3</T3>
+              <T3>0</T3>
               <SmallText color="grey">今日新增订单</SmallText>
             </View>
             <View style={styles.orderCellWrapper}>
-              <T3>2</T3>
+              <T3>0</T3>
               <SmallText color="grey">本月新增订单</SmallText>
             </View>
             <View style={styles.orderCellWrapper}>
-              <T3>1</T3>
+              <T3>0</T3>
               <SmallText color="grey">历史总订单</SmallText>
             </View>
           </View>
@@ -172,7 +183,7 @@ const MyShopScreen = (props) =>  {
                   <ImageText
                     key={`orderTypes_${index}`}
                     showBadge
-                    quantity={100}
+                    quantity={0}
                     text={row.text}
                     img={row.img}
                     onPress={row.onPress}

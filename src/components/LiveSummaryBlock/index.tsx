@@ -86,7 +86,14 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
   return (
     <TouchableOpacity
       style={StyleSheet.flatten([styles.wrapper, props.style])}
-      onPress={() => navigate('LivingRoomScreen', {liveId: props.liveInfo?.liveId})}
+      onPress={() => 
+        navigate(
+          'LivingRoomScreen', 
+          {
+            liveId: props.liveInfo?.liveId, 
+          }
+        )
+      }
     >
       <Image
         source={

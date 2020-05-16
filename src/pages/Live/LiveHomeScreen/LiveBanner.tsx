@@ -10,7 +10,7 @@ import {
   PanResponder,
   Image,
   StyleProp,
-  TouchableOpacity,
+  TouchableHighlight,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import images from '../../../assets/images';
@@ -45,7 +45,10 @@ const LiveBanner = (props: LiveBannerProps) : React.ReactElement =>  {
           bannerList.map((banner: any, i) => {
             const bannerSource = typeof banner?.bimgobject === 'string' ? {uri: banner?.bimgobject} : banner?.bimgobject;
             return (
-              <TouchableOpacity  onPress={() => navigate('LivingRoomScreen', {liveId: banner?.extend})}>
+              <TouchableHighlight 
+                key={`banner_${i}`}
+                onPress={() => navigate('LivingRoomScreen', {liveId: banner?.extend})}
+              >
                 <Image
                   key={`banner_${i}`}
                   source={bannerSource}
@@ -53,7 +56,7 @@ const LiveBanner = (props: LiveBannerProps) : React.ReactElement =>  {
                   resizeMethod="resize"
                   style={StyleSheet.flatten([styles.image, props.imageStyle])}
                 />
-              </TouchableOpacity>
+              </TouchableHighlight>
             )
           })
         }

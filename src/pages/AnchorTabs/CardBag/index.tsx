@@ -24,6 +24,7 @@ import images from '../../../assets/images/index';
 import Empty from '../../../components/Empty/index';
 import {getBankCards} from '../../../actions/asset';
 import withPage from '../../../components/HOCs/withPage';
+import {apiGetUserBankCards} from '../../../service/api';
 
 const ROW_HEIGHT = 120;
 
@@ -48,7 +49,10 @@ const CardBag = (props: any) =>  {
    * 
    */
   React.useEffect(() => {
-    dispatch(getBankCards());
+    // dispatch(getBankCards());
+    apiGetUserBankCards().then(res => {
+      console.log(res);
+    })
   }, [])
 
   /**

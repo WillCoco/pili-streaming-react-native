@@ -31,18 +31,16 @@ export default function MessageRow(props: MessageProps) {
   }, [])
 
   return (
-    <TouchableOpacity>
-      <View style={styles.style}>
-        <Avatar source={props.avatarSource || images.defaultMessageAvatar} style={styles.avatar} />
-        <View style={{flex: 1}}>
-          <View style={styles.contentWrapper}>
-            <T4>{props.title}</T4>
-            <SmallText style={{color: Colors.lightBlack}}>{props.time}</SmallText>
-          </View>
-          <PrimaryText style={{paddingVertical: pad}}>{props.content}</PrimaryText>
+    <View style={styles.style}>
+      <Avatar source={props.avatarSource || images.defaultMessageAvatar} style={styles.avatar} />
+      <View style={{flex: 1}}>
+        <View style={styles.contentWrapper}>
+          <T4>{props.title}</T4>
+          <SmallText style={{color: Colors.lightBlack}}>{props.time}</SmallText>
         </View>
+        <PrimaryText style={{paddingVertical: pad}}>{props.content}</PrimaryText>
       </View>
-    </TouchableOpacity>
+    </View>
   )
 }
 
@@ -55,6 +53,8 @@ const styles = StyleSheet.create({
   },
   avatar: {
     paddingRight: pad,
+    paddingTop: pad,
+    justifyContent: "flex-start",
   },
   contentWrapper: {
     flex: 1,

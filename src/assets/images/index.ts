@@ -333,7 +333,11 @@ const images : {
     return require('../images/img_empty-like.png')
   },
   get anchorMicrophone() {
-      return require('./anchorMicrophone.png')
+    return require('./anchorMicrophone.png')
+  },
+  // 关注主播空图
+  get emptyAttention() {
+    return require('../images/img_empty_attention.png')
   }
 }
 

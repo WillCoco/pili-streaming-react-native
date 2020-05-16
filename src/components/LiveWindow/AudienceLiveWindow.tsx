@@ -59,15 +59,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
    * 进入直播间，获取拉流地址 TODO:
    */
   React.useEffect(() => {
-    const params = {
-      liveId: route?.params?.liveId,
-      userId
-    }
-
-    apiEnterLive(params).then(res => {
-      console.log(res);
-      setAnchorInfo(res);
-    })
+    
   }, []);
 
   /**
@@ -147,7 +139,15 @@ const LiveWindow = (props: LiveWindowProps): any => {
    *
    */
   React.useEffect(() => {
-    dispatch(joinGroup())
+    const params = {
+      liveId: route?.params?.liveId,
+      userId
+    }
+
+    apiEnterLive(params).then(res => { // TODO:加loading
+      setAnchorInfo(res);
+
+      dispatch(joinGroup({groupID: res?.groupId}))
       .then((success?: boolean) => {
         setIsIMJoinSecceed(!!success);
       })
@@ -156,6 +156,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
         // 找不到指定群组 显示结束
         setIsIMJoinSecceed(false);
       });
+    })
 
     return () => {
       // player.current?.stop(); // 返回时停止
@@ -212,15 +213,18 @@ const LiveWindow = (props: LiveWindowProps): any => {
       <Image style={styles.imgBg} source={anchorInfo?.anchorLogo && {uri: anchorInfo?.anchorLogo} || images.livingbg} resizeMode="cover" />
       {playerComponent}
       <View style={styles.livingBottomBlock}>
-        <LivingBottomBlock.Audience onPressShopBag={() => shopCardAnim(true)} />
+        <LivingBottomBlock.Audience 
+          likeQuantity={anchorInfo?.likeSum}
+          onPressShopBag={() => shopCardAnim(true)} 
+        />
       </View>
 
       {!!noticeBubbleText ? <NoticeBubble text={noticeBubbleText} /> : null}
       <LiveIntro
         showFollowButton
-        anchorId={1} // TODO:
+        anchorId={anchorInfo?.anchorId}
         liveTitle={anchorInfo?.anchorName || '直播间'}
-        liveSubTitle={`123214`}
+        liveSubTitle={`${anchorInfo?.watchNum || 0}观看`}
         userId={userId}
         isFollow={anchorInfo?.isAttention} // 是否关注(0:没关注；1：关注)
       />

@@ -51,9 +51,10 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
   /**
    * 进入页面获取数据
    */
-  React.useEffect(() => {
-    getDataList('2')
-  }, [])
+  // React.useEffect(() => {
+  //   getDataList('1')
+  //   getDataList('2')
+  // }, [])
 
   const renderItem = (d) => {
     return (
@@ -66,31 +67,31 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
   /**
    * 获取关注/精选列表
    */
-  const getDataList = (type: string) => {
-    apiGetLiveStreamList({ // 直播类型不能为空（1：精选；2：关注
-      liveType: type,
-      page: 1,
-      pageSize: 10,
-      userId
-    }).then(res => {
-      if (type === '2') {
-        setFollowList(res?.records)
-      } else {
-        setSelectlist(res?.records)
-      }
-    })
-  }
+  // const getDataList = (type: string) => {
+  //   apiGetLiveStreamList({ // 直播类型不能为空（1：精选；2：关注
+  //     liveType: type,
+  //     page: 1,
+  //     pageSize: 10,
+  //     userId
+  //   }).then(res => {
+  //     if (type === '2') {
+  //       setFollowList(res?.records)
+  //     } else {
+  //       setSelectlist(res?.records)
+  //     }
+  //   })
+  // }
 
   /**
    * 切换tab
    */
   const changeTab = (e) => {
     console.log(e.i);
-    if (e.i === 0) { // 关注
-      getDataList('2')
-    } else {
-      getDataList('1')
-    }
+    // if (e.i === 0) { // 关注
+    //   getDataList('2')
+    // } else {
+    //   getDataList('1')
+    // }
   }
 
   /**
@@ -106,9 +107,7 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
     }).then(res => {
       return res?.records
     })
-    return Promise.resolve({
-      result: mockList
-    });
+    
     return Promise.resolve({result})
   };
 
@@ -147,7 +146,7 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
         <PagingList
           tabLabel="关注"
           size={10}
-          initListData={followList}
+          // initListData={followList}
           //item显示的布局
           renderItem={(renderItem)}
           //下拉刷新相关
@@ -165,7 +164,7 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
         <PagingList
           tabLabel="精选"
           size={10}
-          initListData={selectList}
+          // initListData={selectList}
           //item显示的布局
           renderItem={renderItem}
           //下拉刷新相关
