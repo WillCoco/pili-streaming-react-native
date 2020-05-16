@@ -4,19 +4,15 @@
 import * as React from 'react';
 import {
   View,
-  Image,
   StyleProp,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import {SmallText, PrimaryText} from 'react-native-normalization-text';
+import {PrimaryText} from 'react-native-normalization-text';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import dayjs from 'dayjs';
-import pickCameraRoll from '../../utils/pickCameraRoll';
-import Iconadd from '../../components/Iconfont/Iconadd';
 import {Colors} from '../../constants/Theme';
 import {pad} from '../../constants/Layout';
-import {isIOS, isAndroid} from '../../constants/DeviceInfo';
 
 interface ImagePickerBoxProps {
   style?: StyleProp<any>,

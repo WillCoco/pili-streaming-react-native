@@ -82,7 +82,7 @@ LiveGoodsManageRow.defaultProps = {
   }
 };
 
-const ROW_HEIGHT = 120;
+export const ROW_HEIGHT = 120;
 const styles = StyleSheet.create({
   style: {
     flex: 1,

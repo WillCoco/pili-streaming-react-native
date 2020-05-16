@@ -19,12 +19,15 @@ import DateTimePicker, {PickTimeMode} from '../../../components/DateTimePicker';
 import NavBar from '../../../components/NavBar';
 import { pad, radio, radioLarge } from '../../../constants/Layout';
 import {Colors} from '../../../constants/Theme';
-import {isIOS, isAndroid} from '../../../constants/DeviceInfo';
+import { isIOS, isAndroid } from '../../../constants/DeviceInfo';
 import {releaseTeaser} from '../../../actions/live';
 import * as api from '../../../service/api';
 import Toast from 'react-native-tiny-toast';
 
-const CreateTraserScreen = () =>  {
+const CreateTraserScreen = (props: {
+  safeTop: number,
+  safeBottom: number,
+}) =>  {
   const {goBack} = useNavigation();
 
   const dispatch = useDispatch();
@@ -61,7 +64,6 @@ const CreateTraserScreen = () =>  {
   console.log(liveTimeStamp, 'liveTimeStampliveTimeStampliveTimeStamp')
 
   const onPickedTime = (time: string, type?: string) => {
-
     if (isAndroid()) {
       if (type === PickTimeMode.date) {
         liveTime.current[0] = time;
@@ -73,6 +75,8 @@ const CreateTraserScreen = () =>  {
       if (liveTime.current[0] && liveTime.current[1]) {
         const t = new Date(liveTime.current.join(' '))
         liveTimeStamp.current = t.getTime && t.getTime();
+
+        console.log(liveTimeStamp.current, 'liveTimeStamp.currentliveTimeStamp.current')
       }
     } else {
       const t = new Date(time)
@@ -91,7 +95,7 @@ const CreateTraserScreen = () =>  {
    * 选择封面图1
    */
   const onPickedCover1 = (cover: any) => {
-    console.log(cover, '22223okkdkkkk')
+    // console.log(cover, '22223okkdkkkk')
     setCover1(cover);
   }
 
@@ -100,7 +104,9 @@ const CreateTraserScreen = () =>  {
    * 选择视频
    */
   const onPickedVideo = (video: any) => {
-    isValidVideo(video);
+    if (!!video) {
+      isValidVideo(video);
+    }
     setVideo(video);
   }
 
@@ -127,10 +133,10 @@ const CreateTraserScreen = () =>  {
    * 提交前审核 
    */
   const isDataVaild = (): boolean => {
-    // if (!cover1) {
-    //   Toast.show('请选择封面图');
-    //   return false;
-    // }
+    if (!cover1) {
+      Toast.show('请选择封面图');
+      return false;
+    }
 
     if (!liveTimeStamp.current) {
       Toast.show('请选择开播时间');
@@ -145,14 +151,13 @@ const CreateTraserScreen = () =>  {
       }
     }
 
-    alert(liveTimeStamp.current)
     if (liveTimeStamp.current < Date.now()) {
       Toast.show('请选择合适的时间');
       return false;
     }
 
-    Toast.show('请填写标题');
     if (!title) {
+      Toast.show('请填写标题');
       return false;
     }
 
@@ -163,9 +168,9 @@ const CreateTraserScreen = () =>  {
    * 提交 
    */
   const onSubmitPress = async () => {
-    // if (!isDataVaild()) {
-    //   return;
-    // }
+    if (!isDataVaild()) {
+      return;
+    }
     // Toast.showLoading('');
 
     // 上传封面
@@ -187,13 +192,10 @@ const CreateTraserScreen = () =>  {
       });
     }
 
-    console.log('ssssss')
-    console.log(liveTimeStamp.current, 'liveTimeStamp.current')
-    return
     const {data: coverResult, message: coverMessage} = (await coverUpload) || {};
     const {data: videoResult, message: videoMessage} = (await videoUpload) || {};
 
-    console.log(coverResult,  'videoResultvideoResult');
+    // console.log(coverResult,  'videoResultvideoResult');
 
     if (!coverResult) {
       Toast.hide('');
@@ -211,13 +213,11 @@ const CreateTraserScreen = () =>  {
 
     // const cover = result?.data;
 
-    
-
     await dispatch(releaseTeaser({
       title,
       smallPic: coverResult,
       advance: videoResult,
-      // bigPic: cover2?.url,
+      bigPic: coverResult,
       liveTime: liveTimeStamp.current,
     }));
     Toast.hide('');
@@ -238,6 +238,13 @@ const CreateTraserScreen = () =>  {
             style={{marginRight: pad}}
           />
         </View>
+        {/* <View style={styles.row}>
+          <ImagePickerBox
+            placeholderText="封面图2"
+            onPicked={onPickedCover2}
+            style={{marginRight: pad}}
+          />
+        </View> */}
         <PrimaryText style={styles.title}>预告片(可选)</PrimaryText>
         <VedioPickerBox
           onPicked={onPickedVideo}
@@ -277,7 +284,13 @@ const CreateTraserScreen = () =>  {
           style={styles.contentInput}
         />
       </View>
-      <TouchableOpacity style={styles.btnWrapper} onPress={onSubmitPress}>
+      <TouchableOpacity
+        style={StyleSheet.flatten([
+          styles.btnWrapper,
+          {height: 48, marginBottom: props.safeBottom}
+        ])}
+        onPress={onSubmitPress}
+      >
         <PrimaryText color="white">发布预告</PrimaryText>
       </TouchableOpacity>
     </ScrollView>
@@ -332,7 +345,6 @@ const styles = StyleSheet.create({
     width: 120,
   },
   btnWrapper: {
-    height: 48,
     backgroundColor: Colors.basicColor,
     justifyContent: 'center',
     alignItems: 'center',

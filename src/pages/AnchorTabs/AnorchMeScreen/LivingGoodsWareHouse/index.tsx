@@ -21,20 +21,20 @@ import {pad, radio} from '../../../../constants/Layout';
 import NavBar from '../../../../components/NavBar';
 import WarehouseRow from './WarehouseRow';
 import CheckBox from '../../../../components/CheckBox';
-import {apiGetGroupGoods} from '../../../../service/api';
-import {connect} from 'react-redux';
-import {AddGoodsTargetType, addGoods2WareHouse} from '../../../../actions/shop';
+import {AddGoodsTargetType, addGoods2WareHouse, getWareHouseGoods} from '../../../../actions/shop';
+import {brandGoodAdapter} from '../../../../utils/dataAdapters';
 
 const ROW_HEIGHT = 120;
 const emptyList: [] = [];
+const PAGE_SIZE = 14;
+const INIT_PAGE_NO = 1;
+
 
 const LivingGoodsWareHouse = (props: any) =>  {
   const {navigate, goBack} = useNavigation();
   const dispatch = useDispatch();
-  const {anchorInfo = {}} = props;
 
-
-    /**
+  /**
    * 原始数据
    */
   const [dataList, setDataList]: [Array<any>, any] = React.useState(emptyList);
@@ -64,6 +64,9 @@ const LivingGoodsWareHouse = (props: any) =>  {
    * 现在是否全选
    */
   const isCheckedAll = React.useMemo(() => {
+    if (!dataList || !dataList.length) {
+      return false;
+    }
     return !dataList.find(o => (!o.isChecked)) // todo: 标识
   }, [dataList]);
 
@@ -95,34 +98,40 @@ const LivingGoodsWareHouse = (props: any) =>  {
     // };
     // getData();
 
-    // return () => {
-    //   Toast.hide('');
-    // }
+    return () => {
+      Toast.hide('');
+    }
   }, [])
 
   /**
    * 刷新
    */
-  const onRefresh = (page, size) => {
-      // const {anchorId} = anchorInfo;
-      // apiGetGroupGoods({
-      //     anchorId: anchorId,
-      //     pageNo: page,
-      //     pageSize: size,
-      //     selType: 1
-      // }).then(res => {
-      //     console.log(res, 'sync goods')
-      // });
-    const d = [{id: 1, canAdd: true},{id: 2}, {id: 3}];
-    const r = Promise.resolve({result: dataFormat(d, dataList)});
-    return r;
+  const onRefresh = async () => {
+    const warehouseGoods: any = await dispatch(getWareHouseGoods({
+      pageNo: INIT_PAGE_NO,
+      pageSize: PAGE_SIZE,
+      selType: AddGoodsTargetType.warehouseGoods
+    })) || emptyList;
+
+    console.log(warehouseGoods, 'warehouseGoods')
+
+    return Promise.resolve({result: dataFormat(warehouseGoods, dataList)});
   }
 
   /**
    * 更多
    */
-  const onEndReached = () => {
+  const onEndReached = async (pageNo: number, pageSize: number) => {
+    const goods: any = await dispatch(getWareHouseGoods({
+      pageSize,
+      pageNo,
+      selType: AddGoodsTargetType.warehouseGoods
+    }));
 
+    console.log(goods, '更多');
+    const result = Promise.resolve({result: dataFormat(goods, dataList)});
+
+    return result;
   }
 
   /**
@@ -199,16 +208,36 @@ const LivingGoodsWareHouse = (props: any) =>  {
   }
 
   /**
-   * 添加店铺选中
+   * 添加/取消添加 修改数据
    */
-  console.log(checkedList, 'checkedListcheckedListcheckedList')
+  const addOrRemoveFormat = (list: Array<any>, isAdd: boolean) => {
+    if (!list || !list.map) {
+      return list;
+    };
 
-  const addGoods = (data: any) => {
-    const goodsList = Array.isArray(data) ? data : [data];
-    const goodsIdList = goodsList.map((d: any) => d.goodsId);
-    console.log(goodsIdList, 'goodsIdListgoodsIdListgoodsIdList')
-    if (goodsIdList && goodsIdList.length > 0) {
-      dispatch(addGoods2WareHouse({goodsIdList}))
+    return list.map((good) => {
+      const safeGood = good || {};
+      return {...safeGood, isExist: isAdd ? 1 : 2}
+    })
+  };
+
+  /**
+   * 平台商品添加到预组货
+   */
+  // console.log(checkedList, 'checkedListcheckedListcheckedList')
+
+  const addGoods = async (brandGoods: Array<any>, data: any) => {
+    const goodNeed2Add = Array.isArray(data) ? data : [data];
+    const goodIdsNeed2Add = goodNeed2Add.map((d: any) => d.goodsId);
+    // console.log(goodIdsNeed2Add, 'goodsIdListgoodsIdListgoodsIdList')
+    if (goodIdsNeed2Add && goodIdsNeed2Add.length > 0) {
+      const addedList = await dispatch(addGoods2WareHouse({
+        brandGoods,
+        goodIdsNeed2Add
+      }));
+
+      // 返回添加完后的
+      return addedList;
     }
   }
 
@@ -249,6 +278,10 @@ const LivingGoodsWareHouse = (props: any) =>  {
             return (
               <WarehouseRow
                 isChecked={item.isChecked}
+                dataAdapter={() => {
+                  // console.log(brandGoodAdapter(item), 'itemitemitemitem')
+                  return brandGoodAdapter(item)
+                }}
                 onPressCheck={() => {checkGood(index)}}
                 onPressRemove={() => {onPressRemove(index)}}
                 onPressAddShop={() => {alert(1)}}
@@ -325,11 +358,9 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(
-    (state: any) => state.anchorData
-)(withPage(LivingGoodsWareHouse, {
+export default withPage(LivingGoodsWareHouse, {
   statusBarOptions: {
     barStyle: 'light-content',
     backgroundColor: 'transparent',
   }
-}));
+});
