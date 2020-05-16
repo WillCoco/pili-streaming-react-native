@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
 import { apiPublishWorks } from '../../service/api'
-import { setAddedGoodsList } from '../../actions/works'
+import { setAddedGoodsList, setMediaList } from '../../actions/works'
 
 import Form from './Form/Form'
 import ImagePicker from './ImagePicker/ImagePicker'
@@ -14,6 +14,7 @@ import Toast from 'react-native-tiny-toast'
 function PublishWork(props: any) {
   const navigation = useNavigation()
   const route = useRoute()
+  const isFocused = useIsFocused()
   const { addedGoodsList, mediaList } = props
   const { type: pageType } = route.params
   const [title, setTitle] = useState('')
@@ -29,6 +30,16 @@ function PublishWork(props: any) {
     headerTintColor: Colors.whiteColor,
     headerBackTitleVisible: false
   })
+
+  useEffect(() => {
+    const initWorkData = () => {
+      props.dispatch(setAddedGoodsList([]))
+      props.dispatch(setMediaList([
+        { uri: require('../../assets/order-image/add.png') }
+      ]))
+    }
+    return initWorkData
+  }, [])
 
   /**
    * 发表
@@ -73,6 +84,9 @@ function PublishWork(props: any) {
       if (res === '请求成功') {
         Toast.showSuccess('已发布')
         props.dispatch(setAddedGoodsList([]))
+        props.dispatch(setMediaList([
+          { uri: require('../../assets/order-image/add.png') }
+        ]))
         setTimeout(() => {
           navigation.goBack()
         }, 1000)

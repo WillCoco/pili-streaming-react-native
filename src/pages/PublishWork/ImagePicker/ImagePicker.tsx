@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, ImageBackground, TouchableOpacity, Text } from 'react-native'
 import pxToDp from '../../../utils/px2dp'
 import { connect } from 'react-redux'
 import { Colors } from '../../../constants/Theme'
 import * as ImagePicker from 'expo-image-picker'
 import { Ionicons } from '@expo/vector-icons'
 import Toast from 'react-native-tiny-toast'
-import { apiLiveUploadFile } from '../../../service/api'
+import { apiLiveUploadFile, apiWorkUpload } from '../../../service/api'
 import { setMediaList } from '../../../actions/works'
 
 function ImgPicker(props: any) {
@@ -48,15 +48,16 @@ function ImgPicker(props: any) {
   }
 
   const upLoadImage = (imgUri: string) => {
-    apiLiveUploadFile({
+    apiWorkUpload({
       fileType: pageType === 'video' ? 'VIDEO' : 'PICTURE',
-      size: pageType === 'video' ? '20' : '2',
-      unit: 'M',
       file: getImageInfo(imgUri),
     }).then((res: any) => {
       console.log(res)
       if (res.code === 200) {
-        props.dispatch(setMediaList([...mediaList, ...[res.data]]))
+        let imgFullPath = res.data.worksUrl
+        let imgPath = imgFullPath.substr(0, imgFullPath.lastIndexOf('&', imgFullPath.lastIndexOf('&') - 1))
+
+        props.dispatch(setMediaList([...mediaList, ...[imgPath]]))
       } else {
         Toast.show(res.data)
       }

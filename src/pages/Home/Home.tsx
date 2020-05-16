@@ -34,8 +34,7 @@ import GoodsCardRow from '../../components/GoodsCardRow/GoodsCardRow'
 import CardTitle from '../../components/CardTitle/CardTitle'
 import withPage from '../../components/HOCs/withPage'
 import checkIsBottom from '../../utils/checkIsBottom'
-
-let timer: any  // 定时器
+import SeckillCountDown from '../../components/SeckillCountDown/SeckillCountDown'
 
 function Home(props: HomeProps) {
   const navigation = useNavigation()
@@ -49,11 +48,6 @@ function Home(props: HomeProps) {
   const [timeQuantum, setTimeQuantum] = useState('')
   const [recommendGoodsList, setRecommendGoodsList] = useState([])
   const [isComplete, setIsComplete] = useState(false)
-  const [countDownInfo, setCountDownInfo] = useState({
-    hours: 0,
-    min: 0,
-    sec: 0
-  })
   const [countDownList, setCountDownList] = useState([
     { timeQuantum: '10:00', state: '' },
     { timeQuantum: '14:00', state: '' },
@@ -66,7 +60,6 @@ function Home(props: HomeProps) {
       initData(false)
       setCountDown()
     } else {
-      clearInterval(timer)
       pageNoRef.current = 1
       setRecommendGoodsList([])
     }
@@ -149,7 +142,7 @@ function Home(props: HomeProps) {
   }
 
   /**
-   * 设置秒杀倒计时
+   * 设置秒杀状态
    */
   const setCountDown = () => {
     const curHour = new Date().getHours()
@@ -176,48 +169,6 @@ function Home(props: HomeProps) {
         { timeQuantum: '20:00', state: '即将开始' }
       ])
     }
-
-    let seckillCountdown: number
-
-    if (curHour >= 20) {  // 当天 0 点之前
-      seckillCountdown = new Date().setHours(23, 59, 59, 999) + 1 - new Date().getTime()
-    } else if (curHour >= 0 && curHour < 10) {  // 当天 0 点到 10 点之间
-      seckillCountdown = new Date().setHours(10, 0, 0, 0) - new Date().getTime()
-    } else {
-      seckillCountdown = new Date().setHours(20, 0, 0, 0) - new Date().getTime()
-    }
-
-    timer = setInterval(() => {
-      seckillCountdown -= 1000
-      countDown(seckillCountdown)
-    }, 1000)
-  }
-
-  const countDown = (seckillCountdown: number) => {
-    let diff = seckillCountdown / 1000
-
-    if (diff <= 0) {
-      return false
-    }
-
-    const time = {
-      hours: 0,
-      min: 0,
-      sec: 0
-    }
-
-    if (diff >= 3600) {
-      time.hours = Math.floor(diff / 3600)
-      diff -= time.hours * 3600
-    }
-    if (diff >= 60) {
-      time.min = Math.floor(diff / 60)
-      diff -= time.min * 60
-    }
-
-    time.sec = diff
-
-    setCountDownInfo(time)
   }
 
   /**
@@ -362,13 +313,7 @@ function Home(props: HomeProps) {
                       <ImageBackground source={require('../../assets/home-image/seckill_bg.png')} style={styles.seckillHeader}>
                         <View style={styles.seckillText}>
                           <Image source={require('../../assets/home-image/seckill_text.png')} style={styles.seckillTextImg} resizeMode='contain' />
-                          <View style={styles.countDown}>
-                            <Text style={styles.time}>{(countDownInfo.hours + '').padStart(2, '0')}</Text>
-                            <Text style={styles.colon}>:</Text>
-                            <Text style={styles.time}>{(countDownInfo.min + '').padStart(2, '0')}</Text>
-                            <Text style={styles.colon}>:</Text>
-                            <Text style={styles.time}>{(~~countDownInfo.sec + '').padStart(2, '0')}</Text>
-                          </View>
+                          <SeckillCountDown />
                         </View>
                         <View style={styles.seckillSubTitle}>
                           <Text style={styles.seckillSubTitleText} onPress={toSeckillPage}>更多</Text>

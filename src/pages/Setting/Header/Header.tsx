@@ -43,7 +43,6 @@ function Header(props: { dispatch?: any; userInfo?: any }) {
 
       let suffixIndex = (result.uri).lastIndexOf('.')
       imgSuffix = result.uri.substring(suffixIndex + 1)
-      console.log(imgSuffix)
 
       RNFS.readFile(result.uri, 'base64').then(res => {
         const tempImgPath = `data:image/${imgSuffix === 'jpg' ? 'jpeg' : imgSuffix};base64,${res}`
@@ -62,8 +61,6 @@ function Header(props: { dispatch?: any; userInfo?: any }) {
    * 更新用户信息
    */
   const updateUserInfo = async () => {
-    console.log(nickName)
-
     if (!nickName) {
       Toast.show('昵称不能为空')
       return

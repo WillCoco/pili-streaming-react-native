@@ -142,100 +142,100 @@ export default function App(props: { skipLoadingScreen: any; }) {
   } else {
     return (
       <MaskProvider>
-      <AntdProvider>
-      <Provider store={store}>
-        <PersistGate
-          loading={null}
-          persistor={persistor}
-        >
-          <View style={{flex: 1}}>
-            {
-              Platform.OS !== 'ios' && <StatusBar barStyle='light-content' translucent={true} backgroundColor='transparent' />
-            }
-            <NavigationContainer>
-              <Stack.Navigator>
-                <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
-                <Stack.Screen name='Root' component={Root} />
-                <Stack.Screen name='HomeSearch' component={HomeSearch} />
-                <Stack.Screen name='FoundSearch' component={FoundSearch} />
-                <Stack.Screen name='Brand' component={Brand} />
-                <Stack.Screen name='BrandShop' component={BrandShop} />
-                <Stack.Screen name='GoodsInfo' component={GoodsInfo} />
-                <Stack.Screen name='Classify' component={Classify} />
-                <Stack.Screen name='Belt' component={Belt} />
-                <Stack.Screen name='Sale' component={Sale} />
-                <Stack.Screen name='Login' component={Login} />
-                <Stack.Screen name='SelectGoods' component={SelectGoods} />
-                <Stack.Screen name='SelectGoodsInfo' component={SelectGoodsInfo} />
-                <Stack.Screen name='OrderList' component={OrderList} />
-                <Stack.Screen name='AccountInfo' component={AccountInfo} />
-                <Stack.Screen name='CollectGoods' component={CollectGoods} />
-                <Stack.Screen name='LikeContent'component={LikeContent} />
-                <Stack.Screen name='Coupon' component={Coupon} />
-                <Stack.Screen name='PublishedWork' component={PublishedWork} />
-                <Stack.Screen name='FocusedAnchor' component={FocusedAnchor} />
-                <Stack.Screen name='OrderDetail' component={OrderDetail} />
-                <Stack.Screen name='ExpressInfo' component={ExpressInfo} />
-                <Stack.Screen name='ApplyForAfterSales'component={ApplyForAfterSales} />
-                <Stack.Screen name='AfterSaleDetail' component={AfterSaleDetail} />
-                <Stack.Screen name='CreateOrder' component={CreateOrder} />
-                <Stack.Screen name='CreateOrEditAddr' component={CreateOrEditAddr} />
+        <AntdProvider>
+          <Provider store={store}>
+            <PersistGate
+              loading={null}
+              persistor={persistor}
+            >
+              <View style={{ flex: 1 }}>
+                {
+                  Platform.OS !== 'ios' && <StatusBar barStyle='light-content' translucent={true} backgroundColor='transparent' />
+                }
+                <NavigationContainer>
+                  <Stack.Navigator>
+                    {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
+                    <Stack.Screen name='Root' component={Root} />
+                    <Stack.Screen name='HomeSearch' component={HomeSearch} />
+                    <Stack.Screen name='FoundSearch' component={FoundSearch} />
+                    <Stack.Screen name='Brand' component={Brand} />
+                    <Stack.Screen name='BrandShop' component={BrandShop} />
+                    <Stack.Screen name='GoodsInfo' component={GoodsInfo} />
+                    <Stack.Screen name='Classify' component={Classify} />
+                    <Stack.Screen name='Belt' component={Belt} />
+                    <Stack.Screen name='Sale' component={Sale} />
+                    <Stack.Screen name='Login' component={Login} />
+                    <Stack.Screen name='SelectGoods' component={SelectGoods} />
+                    <Stack.Screen name='SelectGoodsInfo' component={SelectGoodsInfo} />
+                    <Stack.Screen name='OrderList' component={OrderList} />
+                    <Stack.Screen name='AccountInfo' component={AccountInfo} />
+                    <Stack.Screen name='CollectGoods' component={CollectGoods} />
+                    <Stack.Screen name='LikeContent' component={LikeContent} />
+                    <Stack.Screen name='Coupon' component={Coupon} />
+                    <Stack.Screen name='PublishedWork' component={PublishedWork} />
+                    <Stack.Screen name='FocusedAnchor' component={FocusedAnchor} />
+                    <Stack.Screen name='OrderDetail' component={OrderDetail} />
+                    <Stack.Screen name='ExpressInfo' component={ExpressInfo} />
+                    <Stack.Screen name='ApplyForAfterSales' component={ApplyForAfterSales} />
+                    <Stack.Screen name='AfterSaleDetail' component={AfterSaleDetail} />
+                    <Stack.Screen name='CreateOrder' component={CreateOrder} />
+                    <Stack.Screen name='CreateOrEditAddr' component={CreateOrEditAddr} />
 
-                <Stack.Screen name='BeAnchor' component={BeAnchor} options={{ headerShown: false }} />
-                <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
-                <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false }} />
-                <Stack.Screen name='LiveSearchScreen' component={LiveSearch} />
-                {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
-                <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{headerShown: false}} />
-                <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} options={{headerShown: false}} />
-                <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{headerShown: false}} />
-                <Stack.Screen name='LiveGoodsManage' component={LiveGoodsManage} options={{headerShown: false}} />
-                <Stack.Screen name='LiveGoodsManageAgain' component={LiveGoodsManage} options={{headerShown: false}} />
-                <Stack.Screen name='AnorchLivingRoomScreen' component={AnorchLivingRoom} options={{headerShown: false, gestureEnabled: false}} />
-                <Stack.Screen name='AnchorTrailers' component={AnchorTrailers} options={{headerShown: false}} />
-                <Stack.Screen name='AnchorRecords' component={AnchorRecords} options={{headerShown: false}} />
-                <Stack.Screen name='LivesAnalyze' component={LivesAnalyze} options={{headerShown: false}} />
-                <Stack.Screen name='LivingGoodsWareHouse' component={LivingGoodsWareHouse} options={{headerShown: false}} />
-                <Stack.Screen name='AnchorShowcaseManage' component={AnchorShowcaseManage} options={{headerShown: false}} />
-                <Stack.Screen name='BeAgent' component={BeAgent} options={{headerShown: false}} />
-                <Stack.Screen name='BeAgentAgreement' component={BeAgentAgreement} />
-                <Stack.Screen name='ShopAgreement' component={ShopAgreement} options={{headerShown: false}} />
-                <Stack.Screen name='ShopAddressManage' component={ShopAddressManage} options={{headerShown: false}} />
-                <Stack.Screen name='GoodsManage' component={GoodsManage} options={{headerShown: false}} />
-                <Stack.Screen name='GoodEdit' component={GoodEdit} options={{headerShown: false}} />
-                <Stack.Screen name='AssetManage' component={AssetManage} options={{headerShown: false}} />
-                <Stack.Screen name='AnchroBill' component={AnchroBill} options={{headerShown: false}} />
-                <Stack.Screen name='ActivityWebView' component={ActivityWebView} />
-                <Stack.Screen name='AddressList' component={AddressList} />
-                <Stack.Screen name='AnchorDetailScreen' component={AnchorDetail} options={{headerShown: false}} />
-                <Stack.Screen name='Setting' component={Setting} />
-                <Stack.Screen name='AboutUs' component={AboutUs} />
-                <Stack.Screen name='Tenants' component={Tenants} />
-                <Stack.Screen name='ServiceAgreement' component={ServiceAgreement} />
-                <Stack.Screen name='FoundInfo' component={FoundInfo} />
-                <Stack.Screen name='PublishWork' component={PublishWork} />
-                <Stack.Screen name='WorksGoodsList' component={WorksGoodsList} />
-                <Stack.Screen name='AddNewAddress' component={AddNewAddress} options={{headerShown: false}} />
-                <Stack.Screen name='GoodsSupply' component={GoodsSupply} options={{headerShown: false}} />
-                <Stack.Screen name='BrandGoods' component={BrandGoods} options={{headerShown: false,}} />
-                <Stack.Screen name='AnchorAgreement' component={AnchorAgreement} options={{headerShown: false}} />
-                <Stack.Screen name='AnchorLivingEnd' component={AnchorLivingEndScreen} options={{headerShown: false, gestureEnabled: false}} />
-                <Stack.Screen name='BankCardBag' component={BankCardBag} options={{headerShown: false}} />
-                <Stack.Screen name='AddBankCard' component={AddBankCard} options={{headerShown: false}} />
-                <Stack.Screen name='Withdraw' component={Withdraw} options={{headerShown: false}} />
-                <Stack.Screen name='Message' component={Message} options={{headerShown: false}} />
-                <Stack.Screen name='RealName' component={RealName} options={{headerShown: false}} />
-                <Stack.Screen name='PrivacyPolicy' component={PrivacyPolicy} />
-                <Stack.Screen name='PayWebView' component={PayWebView} />
-                <Stack.Screen name='Service' component={Service} />
-                <Stack.Screen name='GoodsCart' component={GoodsCart} />
-                <Stack.Screen name='Result' component={Result} />
-              </Stack.Navigator>
-            </NavigationContainer>
-          </View>
-        </PersistGate>
-      </Provider>
-      </AntdProvider>
+                    <Stack.Screen name='BeAnchor' component={BeAnchor} options={{ headerShown: false }} />
+                    <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
+                    <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false }} />
+                    <Stack.Screen name='LiveSearchScreen' component={LiveSearch} />
+                    <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{ headerShown: false }} />
+                    <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{ headerShown: false }} />
+                    <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} options={{ headerShown: false }} />
+                    <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{ headerShown: false }} />
+                    <Stack.Screen name='LiveGoodsManage' component={LiveGoodsManage} options={{ headerShown: false }} />
+                    <Stack.Screen name='LiveGoodsManageAgain' component={LiveGoodsManage} options={{ headerShown: false }} />
+                    <Stack.Screen name='AnorchLivingRoomScreen' component={AnorchLivingRoom} options={{ headerShown: false, gestureEnabled: false }} />
+                    <Stack.Screen name='AnchorTrailers' component={AnchorTrailers} options={{ headerShown: false }} />
+                    <Stack.Screen name='AnchorRecords' component={AnchorRecords} options={{ headerShown: false }} />
+                    <Stack.Screen name='LivesAnalyze' component={LivesAnalyze} options={{ headerShown: false }} />
+                    <Stack.Screen name='LivingGoodsWareHouse' component={LivingGoodsWareHouse} options={{ headerShown: false }} />
+                    <Stack.Screen name='AnchorShowcaseManage' component={AnchorShowcaseManage} options={{ headerShown: false }} />
+                    <Stack.Screen name='BeAgent' component={BeAgent} options={{ headerShown: false }} />
+                    <Stack.Screen name='BeAgentAgreement' component={BeAgentAgreement} />
+                    <Stack.Screen name='ShopAgreement' component={ShopAgreement} options={{ headerShown: false }} />
+                    <Stack.Screen name='ShopAddressManage' component={ShopAddressManage} options={{ headerShown: false }} />
+                    <Stack.Screen name='GoodsManage' component={GoodsManage} options={{ headerShown: false }} />
+                    <Stack.Screen name='GoodEdit' component={GoodEdit} options={{ headerShown: false }} />
+                    <Stack.Screen name='AssetManage' component={AssetManage} options={{ headerShown: false }} />
+                    <Stack.Screen name='AnchroBill' component={AnchroBill} options={{ headerShown: false }} />
+                    <Stack.Screen name='ActivityWebView' component={ActivityWebView} />
+                    <Stack.Screen name='AddressList' component={AddressList} />
+                    <Stack.Screen name='AnchorDetailScreen' component={AnchorDetail} options={{ headerShown: false }} />
+                    <Stack.Screen name='Setting' component={Setting} />
+                    <Stack.Screen name='AboutUs' component={AboutUs} />
+                    <Stack.Screen name='Tenants' component={Tenants} />
+                    <Stack.Screen name='ServiceAgreement' component={ServiceAgreement} />
+                    <Stack.Screen name='FoundInfo' component={FoundInfo} />
+                    <Stack.Screen name='PublishWork' component={PublishWork} />
+                    <Stack.Screen name='WorksGoodsList' component={WorksGoodsList} />
+                    <Stack.Screen name='AddNewAddress' component={AddNewAddress} options={{ headerShown: false }} />
+                    <Stack.Screen name='GoodsSupply' component={GoodsSupply} options={{ headerShown: false }} />
+                    <Stack.Screen name='BrandGoods' component={BrandGoods} options={{ headerShown: false }} />
+                    <Stack.Screen name='AnchorAgreement' component={AnchorAgreement} options={{ headerShown: false }} />
+                    <Stack.Screen name='AnchorLivingEnd' component={AnchorLivingEndScreen} options={{ headerShown: false, gestureEnabled: false }} />
+                    <Stack.Screen name='BankCardBag' component={BankCardBag} options={{ headerShown: false }} />
+                    <Stack.Screen name='AddBankCard' component={AddBankCard} options={{ headerShown: false }} />
+                    <Stack.Screen name='Withdraw' component={Withdraw} options={{ headerShown: false }} />
+                    <Stack.Screen name='Message' component={Message} options={{ headerShown: false }} />
+                    <Stack.Screen name='RealName' component={RealName} options={{ headerShown: false }} />
+                    <Stack.Screen name='PrivacyPolicy' component={PrivacyPolicy} />
+                    <Stack.Screen name='PayWebView' component={PayWebView} />
+                    <Stack.Screen name='Service' component={Service} />
+                    <Stack.Screen name='GoodsCart' component={GoodsCart} />
+                    <Stack.Screen name='Result' component={Result} />
+                  </Stack.Navigator>
+                </NavigationContainer>
+              </View>
+            </PersistGate>
+          </Provider>
+        </AntdProvider>
       </MaskProvider>
     )
   }
