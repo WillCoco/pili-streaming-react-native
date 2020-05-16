@@ -5,7 +5,7 @@ import { get, post, upload, liveUpload, File } from './fetch'
 // const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''
 
 const HOST_PHP = __DEV__ ? 'http://129.211.138.215' : ''
-const HOST_JAVA = __DEV__ ? 'http://129.211.138.215:7000' : ''
+const HOST_JAVA = __DEV__ ? 'http://129.211.138.215:2333' : ''
 const SHANDE_HOST_JAVA = __DEV__ ? 'http://129.211.104.84:7001' : ''
 
 // http://129.211.138.215/
@@ -183,13 +183,13 @@ export const apiSandCreateOrder = (data: any) => post(`${SHANDE_HOST_JAVA}/sandp
 // 成为主播
 export const apiAddAnchorUser = (data: any) => get(`${HOST_JAVA}/anchor/addAnchorUser`, data, false)
 // 主播添加商品到主播店铺
-export const apiAddAnchorGoods = (data: any) => post(`${HOST_JAVA}/anchor/addAnchorGoods`, data)
+export const apiAddAnchorGoods = (data: any) => post(`${HOST_JAVA}/anchor/addAnchorGoods`, data, false)
 // 主播添加商品到主播预组货
-export const apiAddGroupGoods = (data: any) => get(`${HOST_JAVA}/anchor/addGroupGoods`, data)
+export const apiAddGroupGoods = (data: any) => post(`${HOST_JAVA}/anchor/addGroupGoods`, data, false)
 // 开播后确认是否存在直播封面
-export const apiAffirmCover = (data: any) => post(`${HOST_JAVA}/anchor/affirmCover`, data)
+export const apiAffirmCover = (data: any) => post(`${HOST_JAVA}/anchor/affirmCover`, data, false)
 // 直播重新组货
-export const apiAnewAddLiveGoods = (data: any) => post(`${HOST_JAVA}/anchor/anewAddLiveGoods`, data)
+export const apiAnewAddLiveGoods = (data: any) => post(`${HOST_JAVA}/anchor/anewAddLiveGoods`, data, false)
 // 新增或修改寄回地址
 export const apiAuReturnedAddress = (data: any) => post(`${HOST_JAVA}/anchor/auReturnedAddress`, data)
 // 主播删除预组货商品

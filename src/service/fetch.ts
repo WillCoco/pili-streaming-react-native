@@ -52,6 +52,7 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
   const raceTimeout = Promise.race([fn, timeout(TIMEOUT, path)]);
 
   return raceTimeout.then(async (response: any) => {
+    console.log('response,', response)
     if (response.timeout) {
       Toast.show('连接超时')
       return;
@@ -66,7 +67,6 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
     return r2 && JSON.parse(r2);
   })
   .then((result: { data: any; code: number; message: string }) => {
-    console.log('result,', result)
     if (result.code === 200) {
       return onlyData ? Promise.resolve(result.data) : Promise.resolve(result);
     } else if (result.code === 203 || result.code === 204) {
@@ -84,8 +84,8 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
 
     console.log(result, 'resultresultresultresultresult')
   })
-  .catch((error: any) => Promise.reject(error));
-  };
+  // .catch((error: any) => Promise.reject(error));
+};
 
 export const post = (
   path: RequestInfo,
@@ -144,9 +144,9 @@ export const post = (
         }
       })
       // 这里reject的,外部调用没有catch的,肯定报错(未捕获的错误)  @hicks
-      .catch((error: any) => {
-        return Promise.reject(error)
-      });
+      // .catch((error: any) => {
+      //   return Promise.reject(error)
+      // });
 };
 
 /**

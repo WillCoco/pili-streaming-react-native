@@ -129,7 +129,7 @@ export const updatePlatformBrand = (platformBrands: any) => {
 }
 
 /**
- * 添加类型
+ * 获取品牌下商品
  */
 export enum AddGoodsTargetType {
   warehouseGoods = 1, // 1.预组货添加商品
@@ -153,7 +153,9 @@ export const getPlatformBrandsGoods = (params: GetPlatformBrandsGoodsPrarms) => 
       anchorId
     })
       .then((r: any) => {
-        const {records} = r || {}
+        const {records} = r || {};
+        console.log(records, 'recordsrecordsrecords')
+        // dispatch(updatePlatformGoods(records || []));
 
         return Promise.resolve(records || []);
       })
@@ -182,21 +184,123 @@ export const updatePersonalGoods = (personalGoods: any) => {
 
 /**
  * 添加预组货仓库商品
+ * @returns 
  */
 interface AddGoods2WareHouseParams {
-  goodsIdList: Array<string>
+  brandGoods: Array<any>, // 品牌商品
+  goodIdsNeed2Add: Array<string>, // 待添加的ids
 }
 export const addGoods2WareHouse = (params: AddGoods2WareHouseParams) => {
   return async function(dispatch: Dispatch<any>, getState: any) {
     const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
 
-    api.apiAddGroupGoods({
-      goodsIdList: safeStringify(params.goodsIdList),
+    const goodsIdList = params.goodIdsNeed2Add || [];
+    return api.apiAddGroupGoods({
+      goodsIdList,
       anchorId
     })
+    .then(r => {
+      const isSucceed = r && r.code === 200 && r.success;
+      
+      if (isSucceed) {
 
+        console.log(goodsIdList, 'goodsIdListgoodsIdList')
+
+        const newPlatformGoods = changeIsExit(
+          params.brandGoods,
+          (platformGood) => goodsIdList.indexOf(platformGood.goodsId) !== -1,
+          true,
+        );
+        console.log(newPlatformGoods, 'newPlatformGoods')
+
+        return Promise.resolve(newPlatformGoods)
+      }
+    })
+    .catch(err => {
+      console.log(`addGoods2WareHouse error: ${err}`)
+      return Promise.resolve(false);
+    })
   }
 }
+
+/**
+ * 获取预组货仓库商品
+ */
+interface GetGoods2WareHouseParams {
+  "pageNo": number,
+  "pageSize": number,
+  "selType": AddGoodsTargetType
+}
+export const getWareHouseGoods = (params: GetGoods2WareHouseParams) => {
+  return async function(dispatch: Dispatch<any>, getState: any): Promise<any> {
+    const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
+    return api.apiGetGroupGoods({
+      ...params,
+      anchorId
+    })
+      .then(r => {
+        const {records} = r || {};
+        return Promise.resolve(records || []);
+      })
+      .catch(err => {
+        console.log(`getWareHouseGoods error: ${err}`)
+        return Promise.resolve([]);
+      })
+  }
+}
+
+/**
+ * 单选 选中/取消 预组货仓库商品
+ * // todo: 改成id判断
+ */
+export const checkWarehouseGoods = (index: number) => {
+  return async function(dispatch: Dispatch<any>, getState: any): Promise<any> {
+    const warehouseGoods = getState()?.shop?.warehouseGoods || [];
+    const newWarehouseGoods = [...warehouseGoods];
+
+    if (newWarehouseGoods[index]) {
+      newWarehouseGoods[index].isChecked = !newWarehouseGoods[index].isChecked
+    }
+
+    
+    dispatch(updateWarehouseGoods(newWarehouseGoods));
+  }
+}
+
+/**
+ * 全选/取消 预组货仓库商品
+ */
+export const checkAllWarehouseGoods = (isChecked: boolean) => {
+  return async function(dispatch: Dispatch<any>, getState: any): Promise<any> {
+    const warehouseGoods = getState()?.shop?.warehouseGoods || [];
+    const newWarehouseGoods = warehouseGoods.map((good: any) => {
+      return {
+        ...good,
+        isChecked
+      }
+    });
+    
+    dispatch(updateWarehouseGoods(newWarehouseGoods));
+  }
+}
+
+/**
+ * 添加成功 修改isExited字段
+ */
+// export const isExitedHandler = (isChecked: boolean) => {
+//   return async function(dispatch: Dispatch<any>, getState: any): Promise<any> {
+
+//     const warehouseGoods = getState()?.shop?.warehouseGoods || [];
+//     const newWarehouseGoods = warehouseGoods.map((good: any) => {
+//       return {
+//         ...good,
+//         isChecked
+//       }
+//     });
+    
+//     dispatch(updateWarehouseGoods(newWarehouseGoods));
+//   }
+// }
 
 /**
  * 更新预组货仓库商品
@@ -204,3 +308,64 @@ export const addGoods2WareHouse = (params: AddGoods2WareHouseParams) => {
 export const updateWarehouseGoods = (warehouseGoods: any) => {
   return {type: shopActionType.UPDATE_WAREHOUSE_GOODS, payload: {warehouseGoods}};
 }
+
+
+// tools
+/**
+ * 加工原数据
+ * 加上isChecked字段
+ * @params: {Array} dataList - 预组货列表原数据
+ * @params: {Array} checkList - 本地操作选择的
+ */
+const dataFormat = (dataList: Array<any>, checkList?: Array<any>) => {
+  // 本地选择过之后刷新, format数据
+  if (checkList) {
+    const checked = checkList.filter(c => c.isChecked)
+    const result: Array<any> = [];
+
+    dataList.forEach(d => {
+      const matchedGood = checked.find(o => (o.id === d.id && !!o.id)) // todo: 标识
+      if (matchedGood) {
+        result.push({...d, isChecked: matchedGood.isChecked})
+      } else {
+        result.push(d)
+      }
+    })
+
+    return result;
+  }
+
+  // 本地没有选择过, format数据默认未选中
+  return dataList.map((d: any) => {
+    return {
+      ...d,
+      isChecked: false
+    }
+  });
+}
+
+/**
+ * 修改是否添加
+ * @param list
+ * @param isMatch
+ * @param isAdd
+ */
+const changeIsExit = (list: Array<any>, isMatch: (v: any) => boolean, isAdd?: boolean) => {
+  if (!list || !list.map) {
+    return list;
+  };
+
+  console.log(list, 'llisttttt')
+  return list.map((good) => {
+    const safeGood = good || {};
+    console.log(safeGood, 'safeGood')
+    console.log(list, 'list')
+    console.log(isMatch(safeGood), 'isMatch(safeGood)')
+    if (isMatch(safeGood)) {
+      return {...safeGood, isExist: isAdd ? 1 : 2}
+    }
+
+    return good
+  })
+}
+

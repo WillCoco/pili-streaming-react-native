@@ -20,6 +20,6 @@ export const brandGoodAdapter = (good: any) => {
     discountPrice: formatSinglePrice(good.shopPrice),
     pirce: formatSinglePrice(good.marketPrice),
     profit: formatSinglePrice(good.rebate),
-    isAdded: good.isExist === 1
+    isAdded: good.isExist === 1, // 1 存在, 2 不存在
   }
 }

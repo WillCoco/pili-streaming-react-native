@@ -88,6 +88,7 @@ interface ReleaseTeaserParams {
   liveTime: number,
   title: string
 }
+
 export const releaseTeaser = (params: ReleaseTeaserParams) => {
   return async function(dispatch: Dispatch, getState: any) {
     const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
@@ -100,7 +101,7 @@ export const releaseTeaser = (params: ReleaseTeaserParams) => {
     };
 
     if (params.advance) {opts.advance = params.advance};
-    if (params.bigPic) {opts.advance = params.bigPic};
+    if (params.bigPic) {opts.bigPic = params.bigPic};
 
     console.log(opts, 'optsoptsopts')
     return api.apiReleaseNotice(opts)

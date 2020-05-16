@@ -22,7 +22,14 @@ import {Colors} from '../../../../constants/Theme';
 
 interface WarehouseRowProps {
   data: any,
-  dataAdapter: (d: any) => any,
+  dataAdapter: (d: any) => {
+    img: any,
+    title: string,
+    discountPrice: string,
+    pirce: string,
+    profit: string,
+    isAdded: boolean,
+  },
   imgStyle: StyleProp<any>,
   style: StyleProp<any>,
   isChecked: boolean,
@@ -45,7 +52,7 @@ const WarehouseRow = (props: WarehouseRowProps) =>  {
         onPress={props.onPressCheck}
         style={{height: '100%', paddingHorizontal: pad}}
       />
-      <Image source={data.img || images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
+      <Image source={data.img ? {uri: data.img} : images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
       <View style={styles.contentWrapper}>
         <View style={styles.titleWrapper}>
           <PrimaryText numberOfLines={2} style={{flex: 1, marginRight: pad * 2}}>{data.title}</PrimaryText>
@@ -53,9 +60,9 @@ const WarehouseRow = (props: WarehouseRowProps) =>  {
             <Iconremove />
           </TouchableOpacity>
         </View>
-        <ShareProfit profit={111} style={{flex: -1}} />
+        <ShareProfit profit={data.profit} style={{flex: -1}} />
           <View style={styles.rowBetween}>
-            <DiscountPrice discountPrice={120} price={110} />
+            <DiscountPrice discountPrice={data.discountPrice} price={data.pirce} />
             <ButtonRadius
               text={btnText}
               size={20}

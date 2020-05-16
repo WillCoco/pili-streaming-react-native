@@ -188,9 +188,9 @@ export function login(params?: {
         // }
 
         // 手动
-        setTimeout(() => {
-          dispatch(getGroupList())
-        }, 3000)
+        // setTimeout(() => {
+        //   dispatch(getGroupList())
+        // }, 3000)
 
       })
       .catch(function(imError: any) {

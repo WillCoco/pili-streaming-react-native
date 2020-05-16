@@ -16,13 +16,14 @@ import pickCameraRoll from '../../utils/pickCameraRoll';
 import Iconvideo from '../../components/Iconfont/Iconvideo';
 import {Colors} from '../../constants/Theme';
 import { radio, pad } from '../../constants/Layout';
+import Iconclosebg from '../../components/Iconfont/Iconclosebg';
 
 interface VideoPickerBoxProps {
   style?: StyleProp<any>,
   imgStyle?: StyleProp<any>,
   placeholderText?: string,
   placeholderIcon?: any,
-  onPicked: (info: any) => undefined,
+  onPicked: (info?: any) => undefined,
 }
 
 const VideoPickerBox = React.forwardRef((props: VideoPickerBoxProps, ref: any) =>  {
@@ -49,34 +50,51 @@ const VideoPickerBox = React.forwardRef((props: VideoPickerBoxProps, ref: any) =
     }
   }
 
+  /**
+   * 选择视频
+   */
   const pick = async () => {
     const video = await pickCameraRoll({mediaTypes: ImagePicker.MediaTypeOptions.Videos});
     console.log(video, 'vvvvvvvv')
     if (video) {
       const info = getVideoInfo(video);
-
       setVedioUri(video.uri)
       props.onPicked(info);
     }
+  };
+
+  /**
+   * 取消选择
+   */
+  const cancel = async () => {
+    setVedioUri()
+    props.onPicked();
   };
 
   return (
     <TouchableOpacity style={StyleSheet.flatten([styles.style, props.style])} onPress={pick}>
       {
         vedioUri ? (
-          <Video source={{uri: vedioUri}}   // Can be a URL or a local file.
-              paused
-              ref={ref}                                        // Store reference
-              // onBuffer={this.onBuffer}                // Callback when remote video is buffering
-              // onError={this.videoError}               // Callback when video cannot be loaded
-              style={styles.img}
-            />
+          <Video
+            source={{uri: vedioUri}}   // Can be a URL or a local file.
+            paused
+            ref={ref}                                        // Store reference
+            // onBuffer={this.onBuffer}                // Callback when remote video is buffering
+            // onError={this.videoError}               // Callback when video cannot be loaded
+            style={styles.img}
+          />
         ) : (
           <>
             {props.placeholderIcon || <Iconvideo size={24} style={styles.icon} />}
             <SmallText style={styles.placeholderText}>{props.placeholderText}</SmallText>
           </>
         )
+      }
+      {
+        vedioUri ?
+        <TouchableOpacity style={styles.close} onPress={cancel}>
+          <Iconclosebg size={24} />
+        </TouchableOpacity> : null
       }
     </TouchableOpacity>
   )
@@ -93,7 +111,7 @@ const styles = StyleSheet.create({
     borderRadius: radio,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: pad,
+    // padding: pad,
   },
   icon: {
     marginBottom: 20
@@ -104,6 +122,12 @@ const styles = StyleSheet.create({
   },
   placeholderText: {
     color: Colors.lightGrey
+  },
+  close: {
+    position: 'absolute',
+    padding: 5,
+    top: -16,
+    right: -12,
   }
 });
 
