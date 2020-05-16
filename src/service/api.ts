@@ -8,8 +8,6 @@ const HOST_PHP = __DEV__ ? 'http://129.211.138.215' : ''
 const HOST_JAVA = __DEV__ ? 'http://129.211.138.215:2333' : ''
 const SHANDE_HOST_JAVA = __DEV__ ? 'http://129.211.104.84:7001' : ''
 
-// http://129.211.138.215/
-
 // 文件上传路径 ==================================================================
 export const UPLOAD_URL = `${HOST_JAVA}/find/uploadFile`
 
@@ -97,7 +95,7 @@ export const apiGetUserData = () => get(`${HOST_JAVA}/user/getUserInfo`)
 // 发现模块 => 新视界获取作品
 export const apiGetWorks = (data: any) => post(`${HOST_JAVA}/find/getWorks`, data)
 // 获取发现详情
-export const apiGetWorksDetailInfo = async (data: any) => post(`${HOST_JAVA}/find/getWorksDetailInfo`, data).then(r => console.log(r, 'rrrrrr'))
+export const apiGetWorksDetailInfo = async (data: any) => post(`${HOST_JAVA}/find/getWorksDetailInfo`, data)
 // 查询优惠金额 （预生成订单）
 export const apiGetSellerDiscount = (data: any) => post(`${HOST_JAVA}/order/getSellerDiscount`, data) 
 // 发布作品
@@ -173,7 +171,7 @@ export const apiLogout = (data: any) => get(`${HOST_JAVA}/user/logout`, data)
 // 查看物流
 export const apiQueryExpress = (data: any) => get(`${HOST_JAVA}/order/queryExpress`, data)
 // 分享生成图片
-export const apiCreatePoster = (data: any) => get(`${HOST_JAVA}/userLive/userGoodsShare`, data)
+export const apiCreatePoster = (data: any) => get(`${HOST_JAVA}/userShare/userGoodShare`, data)
 // 发布作品 上传文件
 export const apiWorkUpload = (data: any) => uploadWorkMedia(`${HOST_JAVA}/find/uploadFile`, data)
 

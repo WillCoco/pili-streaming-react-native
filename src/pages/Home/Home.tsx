@@ -35,11 +35,13 @@ import CardTitle from '../../components/CardTitle/CardTitle'
 import withPage from '../../components/HOCs/withPage'
 import checkIsBottom from '../../utils/checkIsBottom'
 import SeckillCountDown from '../../components/SeckillCountDown/SeckillCountDown'
+import SearchBar from '../../components/SearchBar/SearchBar'
 
 function Home(props: HomeProps) {
   const navigation = useNavigation()
   const isFocused = useIsFocused()
-  let { swiperList, activityList, selectedGoodsInfo, seckillList } = props
+  let { swiperList, activityList, selectedGoodsInfo, seckillList } = props.homeData
+  const { statusBarHeight } = props.publicData
   let pageNoRef = useRef(1)
   let hasMoreRef = useRef(true)
   const [categoryList, setCategoryList] = useState([{ name: '首页' }])
@@ -209,156 +211,165 @@ function Home(props: HomeProps) {
   if (!isComplete) return <></>
 
   return (
-    <ScrollableTabView
-      initialPage={0}
-      tabBarUnderlineStyle={{ backgroundColor: Colors.whiteColor }}
-      tabBarActiveTextColor={Colors.whiteColor}
-      tabBarInactiveTextColor={Colors.whiteColor}
-      tabBarBackgroundColor={Colors.basicColor}
-      renderTabBar={() => <ScrollableTabBar
-        style={{
-          borderWidth: 0,
-          height: pxToDp(80)
-        }}
-      />}
-      onChangeTab={(e) => changeTab(e)}
-    >
-      {
-        categoryList.map((item, index) => {
-          return (
-            <ScrollView
-              tabLabel={item.name}
-              key={`tab-${index}`}
-              showsVerticalScrollIndicator={false}
-              onMomentumScrollEnd={(e) => onReachBottom(e)}
-              refreshControl={
-                <RefreshControl
-                  refreshing={loading}
-                  onRefresh={onPullDownRefresh}
-                />
-              }
-            >
-              {
-                index
-                  ? <>
-                    {/* 品牌精选 */}
-                    <View style={styles.brandList}>
-                      <CardTitle title='品牌精选' />
-                      <View style={styles.brandsContainer}>
-                        {
-                          categoryData.list && categoryData.list.map((item: any, index: number) => {
-                            return (
-                              <TouchableWithoutFeedback key={`brand-${index}`} onPress={() => toBrandShop(item.brand_id)}>
-                                <View style={[styles.brandItem, !!((index + 1) % 4) && { marginRight: pxToDp(60) }]}>
-                                  <Image source={{ uri: item.logo }} style={styles.brandLogo} />
-                                  <Text style={styles.brandName}>{item.name}</Text>
-                                </View>
-                              </TouchableWithoutFeedback>
+    <>
+      <View style={{ paddingTop: statusBarHeight, backgroundColor: Colors.basicColor, alignItems: 'center' }}>
+        <SearchBar
+          hasSearchKey={true}
+          isPlaceHolder={true}
+          toSearchPage={() => navigation.push('HomeSearch')}
+        />
+      </View>
+      <ScrollableTabView
+        initialPage={0}
+        tabBarUnderlineStyle={{ backgroundColor: Colors.whiteColor }}
+        tabBarActiveTextColor={Colors.whiteColor}
+        tabBarInactiveTextColor={Colors.whiteColor}
+        tabBarBackgroundColor={Colors.basicColor}
+        renderTabBar={() => <ScrollableTabBar
+          style={{
+            borderWidth: 0,
+            height: pxToDp(80)
+          }}
+        />}
+        onChangeTab={(e) => changeTab(e)}
+      >
+        {
+          categoryList.map((item, index) => {
+            return (
+              <ScrollView
+                tabLabel={item.name}
+                key={`tab-${index}`}
+                showsVerticalScrollIndicator={false}
+                onMomentumScrollEnd={(e) => onReachBottom(e)}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={loading}
+                    onRefresh={onPullDownRefresh}
+                  />
+                }
+              >
+                {
+                  index
+                    ? <>
+                      {/* 品牌精选 */}
+                      <View style={styles.brandList}>
+                        <CardTitle title='品牌精选' />
+                        <View style={styles.brandsContainer}>
+                          {
+                            categoryData.list && categoryData.list.map((item: any, index: number) => {
+                              return (
+                                <TouchableWithoutFeedback key={`brand-${index}`} onPress={() => toBrandShop(item.brand_id)}>
+                                  <View style={[styles.brandItem, !!((index + 1) % 4) && { marginRight: pxToDp(60) }]}>
+                                    <Image source={{ uri: item.logo }} style={styles.brandLogo} />
+                                    <Text style={styles.brandName}>{item.name}</Text>
+                                  </View>
+                                </TouchableWithoutFeedback>
 
-                            )
-                          })
-                        }
+                              )
+                            })
+                          }
+                        </View>
                       </View>
-                    </View>
-                    {/* 圈品热卖 */}
-                    <View style={styles.recommendGoodsList}>
-                      <CardTitle title='圈品热卖' />
-                      <View style={styles.recommendGoodsListContainer}>
-                        {
-                          categoryData.shopGoods && categoryData.shopGoods.map((item: any, index: any) => <GoodsCard key={`recommend-${index}`}
-                            style={{ marginBottom: pxToDp(20) }} goodsInfo={item} tapGoodsCard={(id: number) => toGoodsInfo(id)} />)
-                        }
+                      {/* 圈品热卖 */}
+                      <View style={styles.recommendGoodsList}>
+                        <CardTitle title='圈品热卖' />
+                        <View style={styles.recommendGoodsListContainer}>
+                          {
+                            categoryData.shopGoods && categoryData.shopGoods.map((item: any, index: any) => <GoodsCard key={`recommend-${index}`}
+                              style={{ marginBottom: pxToDp(20) }} goodsInfo={item} tapGoodsCard={(id: number) => toGoodsInfo(id)} />)
+                          }
+                        </View>
                       </View>
-                    </View>
-                  </>
-                  : <>
-                    {/* 顶部轮播图 */}
-                    <ImageBackground
-                      resizeMode='stretch'
-                      source={require('../../assets/home-image/banner_bg.png')}
-                      style={styles.swiperContainer}
-                    >
-                      <HomeSwiper
-                        swiperList={swiperList}
-                        swiperStyle={styles.swiper}
-                        tapSwiper={(id: number) => toGoodsInfo(id)}
-                      />
-                    </ImageBackground>
-                    {/* 导航栏 */}
-                    <HomeNav />
-                    {/* 活动轮播 */}
-                    <View style={styles.activityContainer}>
-                      <HomeSwiper
-                        showDots={false}
-                        swiperList={activityList}
-                        swiperStyle={styles.activity}
-                        tapSwiper={(url: string) => toActivityWebView(url)}
-                      />
-                    </View>
-                    {/* 精选话题 */}
-                    <View style={styles.selectedGoods}>
-                      <CardTitle title='精选话题' subTitle={selectedGoodsInfo.subTitle} nextAction={toSelectedGoods} />
-                      <ScrollView
-                        horizontal={true}
-                        style={styles.selectedGoodsList}
-                        showsHorizontalScrollIndicator={false}
+                    </>
+                    : <>
+                      {/* 顶部轮播图 */}
+                      <ImageBackground
+                        resizeMode='stretch'
+                        source={require('../../assets/home-image/banner_bg.png')}
+                        style={styles.swiperContainer}
                       >
-                        {
-                          selectedGoodsInfo.goodsList && selectedGoodsInfo.goodsList.map((item: any, index: any) => <GoodsCard style={{ marginRight: pxToDp(10) }} key={`selected-${index}`} goodsInfo={item} tapGoodsCard={(id: number) => toSelectedGoodsInfo(id)} />)
-                        }
-                      </ScrollView>
-                    </View>
-                    {/* 限时秒杀 */}
-                    <View style={styles.seckill}>
-                      <ImageBackground source={require('../../assets/home-image/seckill_bg.png')} style={styles.seckillHeader}>
-                        <View style={styles.seckillText}>
-                          <Image source={require('../../assets/home-image/seckill_text.png')} style={styles.seckillTextImg} resizeMode='contain' />
-                          <SeckillCountDown />
-                        </View>
-                        <View style={styles.seckillSubTitle}>
-                          <Text style={styles.seckillSubTitleText} onPress={toSeckillPage}>更多</Text>
-                          <Ionicons
-                            size={20}
-                            name='ios-arrow-forward'
-                            color={Colors.whiteColor}
-                          />
-                        </View>
+                        <HomeSwiper
+                          swiperList={swiperList}
+                          swiperStyle={styles.swiper}
+                          tapSwiper={(id: number) => toGoodsInfo(id)}
+                        />
                       </ImageBackground>
-                      <View style={styles.countDonwList}>
-                        {
-                          countDownList.map((item, index) => {
-                            return (
-                              <View style={styles.countDownItem} key={`time-${index}`}>
-                                <Text style={[styles.countDownTime, timeQuantum === item.timeQuantum && styles.countDownActiveTime]}>{item.timeQuantum}</Text>
-                                <Text style={[styles.countDownState, timeQuantum === item.timeQuantum && styles.countDownActiveState]}>{item.state}</Text>
-                              </View>
-                            )
-                          })
-                        }
+                      {/* 导航栏 */}
+                      <HomeNav />
+                      {/* 活动轮播 */}
+                      <View style={styles.activityContainer}>
+                        <HomeSwiper
+                          showDots={false}
+                          swiperList={activityList}
+                          swiperStyle={styles.activity}
+                          tapSwiper={(url: string) => toActivityWebView(url)}
+                        />
                       </View>
-                      <View style={styles.seckillGoodsList}>
-                        {
-                          seckillList && seckillList.map((item: any, index: number) => <GoodsCardRow style={index && { marginTop: pxToDp(10) }} key={`goods-${index}`} goodsInfo={item} />)
-                        }
+                      {/* 精选话题 */}
+                      <View style={styles.selectedGoods}>
+                        <CardTitle title='精选话题' subTitle={selectedGoodsInfo.subTitle} nextAction={toSelectedGoods} />
+                        <ScrollView
+                          horizontal={true}
+                          style={styles.selectedGoodsList}
+                          showsHorizontalScrollIndicator={false}
+                        >
+                          {
+                            selectedGoodsInfo.goodsList && selectedGoodsInfo.goodsList.map((item: any, index: any) => <GoodsCard style={{ marginRight: pxToDp(10) }} key={`selected-${index}`} goodsInfo={item} tapGoodsCard={(id: number) => toSelectedGoodsInfo(id)} />)
+                          }
+                        </ScrollView>
                       </View>
-                    </View>
-                    {/* 圈重点 */}
-                    <View style={styles.recommendGoodsList}>
-                      <CardTitle title='圈重点' />
-                      <View style={styles.recommendGoodsListContainer}>
-                        {
-                          recommendGoodsList.map((item: any, index: any) => <GoodsCard key={`recommend-${index}`}
-                            style={{ marginBottom: pxToDp(20) }} goodsInfo={item} tapGoodsCard={(id: number) => toGoodsInfo(id)} />)
-                        }
+                      {/* 限时秒杀 */}
+                      <View style={styles.seckill}>
+                        <ImageBackground source={require('../../assets/home-image/seckill_bg.png')} style={styles.seckillHeader}>
+                          <View style={styles.seckillText}>
+                            <Image source={require('../../assets/home-image/seckill_text.png')} style={styles.seckillTextImg} resizeMode='contain' />
+                            <SeckillCountDown />
+                          </View>
+                          <View style={styles.seckillSubTitle}>
+                            <Text style={styles.seckillSubTitleText} onPress={toSeckillPage}>更多</Text>
+                            <Ionicons
+                              size={20}
+                              name='ios-arrow-forward'
+                              color={Colors.whiteColor}
+                            />
+                          </View>
+                        </ImageBackground>
+                        <View style={styles.countDonwList}>
+                          {
+                            countDownList.map((item, index) => {
+                              return (
+                                <View style={styles.countDownItem} key={`time-${index}`}>
+                                  <Text style={[styles.countDownTime, timeQuantum === item.timeQuantum && styles.countDownActiveTime]}>{item.timeQuantum}</Text>
+                                  <Text style={[styles.countDownState, timeQuantum === item.timeQuantum && styles.countDownActiveState]}>{item.state}</Text>
+                                </View>
+                              )
+                            })
+                          }
+                        </View>
+                        <View style={styles.seckillGoodsList}>
+                          {
+                            seckillList && seckillList.map((item: any, index: number) => <GoodsCardRow style={index && { marginTop: pxToDp(10) }} key={`goods-${index}`} goodsInfo={item} />)
+                          }
+                        </View>
                       </View>
-                    </View>
-                  </>
-              }
-            </ScrollView>
-          )
-        })
-      }
-    </ScrollableTabView>
+                      {/* 圈重点 */}
+                      <View style={styles.recommendGoodsList}>
+                        <CardTitle title='圈重点' />
+                        <View style={styles.recommendGoodsListContainer}>
+                          {
+                            recommendGoodsList.map((item: any, index: any) => <GoodsCard key={`recommend-${index}`}
+                              style={{ marginBottom: pxToDp(20) }} goodsInfo={item} tapGoodsCard={(id: number) => toGoodsInfo(id)} />)
+                          }
+                        </View>
+                      </View>
+                    </>
+                }
+              </ScrollView>
+            )
+          })
+        }
+      </ScrollableTabView>
+    </>
   )
 }
 
@@ -527,7 +538,7 @@ const styles = StyleSheet.create({
 })
 
 export default connect(
-  (state: any) => state.homeData
+  (state: any) => state
 )(withPage(Home))
 
 interface HomeProps {
@@ -536,4 +547,6 @@ interface HomeProps {
   activityList?: any
   selectedGoodsInfo?: any
   seckillList?: any
+  homeData?: any
+  publicData?: any
 }
