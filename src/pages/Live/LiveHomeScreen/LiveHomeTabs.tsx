@@ -102,13 +102,13 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
     const result = await apiGetLiveStreamList({
       liveType: type,
       page: 1,
-      pageSize: 10,
+      pageSize: 20,
       userId
     }).then(res => {
       return res?.records
     })
     return Promise.resolve({
-      result: mockList
+      result: result
     });
     return Promise.resolve({result})
   };
@@ -147,7 +147,7 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
       >
         <PagingList
           tabLabel="关注"
-          size={10}
+          size={20}
           initListData={followList}
           //item显示的布局
           renderItem={(renderItem)}

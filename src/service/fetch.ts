@@ -12,7 +12,7 @@ const timeout = async (
   return { timeout: path };
 };
 
-const TIMEOUT = 100 * 1000; // 普通接口超时时间
+const TIMEOUT = 20 * 1000; // 普通接口超时时间
 const UPLOAD_TIMEOUT = 2 * 60 * 1000; // 上传超时时间
 
 // toRemove
@@ -56,20 +56,23 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
 
   return raceTimeout
     .then(async (response: any) => {
-      // if (response.status !== 200) {
-      //   Toast.show("网络错误", { position: 0 });
-      //   return;
-      // }
+      console.log(response, '=======')
+
+      if (response.timeout) {
+        Toast.show("连接超时");
+        return;
+      }
+
+      if (response.status !== 200) {
+        Toast.show("网络错误", { position: 0 });
+        return;
+      }
       const r1 = await response.text();
       const r2 = r1.trim && r1.trim();
       return r2 && JSON.parse(r2);
     })
-    .then((result: { data: any; code: number; message: string } | any) => {
-      if (result.timeout) {
-        Toast.show("连接超时");
-        return;
-      }
-      console.log("result,", result);
+    .then((result: { data: any; code: number; message: string }) => {
+      console.log("%cresult:", "color: red; font-size: 20px; ", result);
       if (result.code === 200) {
         return onlyData
           ? Promise.resolve(result.data)
@@ -86,8 +89,6 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
         // 这两个条件分支也需要修改Promise为完成状态 @hicks
         Promise.resolve(result);
       }
-
-      console.log(result, "resultresultresultresultresult");
     })
     .catch((error: any) => Promise.reject(error));
 };
@@ -116,7 +117,18 @@ export const post = (
 
   return (
     raceTimeout
-      .then(async (response: { text: () => any; status: number }) => {
+      .then(async (response: { text: () => any; status: number } | any) => {
+        if (response.timeout) {
+          console.warn(`连接超时: ${response.timeout}`);
+          Toast.show("连接超时");
+          return;
+        }
+
+        if (response.status !== 200) {
+          Toast.show("网络错误", { position: 0 });
+          return;
+        }
+
         const r1 = await response.text();
         const r2 = r1.trim && r1.trim();
         return r2 && JSON.parse(r2);

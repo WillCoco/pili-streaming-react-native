@@ -4,6 +4,7 @@ import {LiveConfig} from '../reducers/live';
 import * as api from '../service/api';
 import {isSucceed} from '../utils/fetchTools';
 import Toast from 'react-native-tiny-toast';
+import {getUniqueId} from 'react-native-device-info';
 
 /**
  * 更新直播参数
@@ -34,7 +35,8 @@ export const startLive = (params: startLiveParams) => {
       anchorId,
       goodsIdList: params.goodsIdList,
       title,
-      smallPic: cover
+      smallPic: cover,
+      ownerId: getUniqueId(),
     })
     .then((r: any) => {
       console.log(r, 'startLive111');

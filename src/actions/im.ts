@@ -1,5 +1,6 @@
 import {getUniqueId} from 'react-native-device-info';
 import imActionType from '../constants/im';
+import liveActionType from '../constants/Live';
 import timModlue from '../helpers/tim'; //LibGenerateTestUserSig
 import {
   Dispatch,
@@ -75,6 +76,11 @@ function handleCustomMsg(message: any) {
       extension
     }
 
+    // 更新观看次数
+    if (type === MessageType.enter) {
+      store.dispatch(addLivingWatchNum());
+    }
+
     dispatch(updateMessage2Store(newRoomMessage))
   }
 }
@@ -106,8 +112,6 @@ function handleRoomInfoMsg(message: any) {
       const {memberNum} = message?.payload || {};
       // 更新群人数
       store.dispatch(updateRoomMemberNum(memberNum));
-      // 更新进入次数
-      store.dispatch(addLivingWatchNum());
     } else if (operationType === TIM.TYPES.GRP_TIP_MBR_QUIT) {
       // 退群
       const {memberNum} = message?.payload || {};
@@ -423,7 +427,7 @@ interface updateGroupProfileParams {
 export const updateGroupProfile = (params: updateGroupProfileParams) => {
   return async function(dispatch: Dispatch<any>, getState: any) {
     const options: any = {
-      groupID: params.groupID || getState()?.im?.room?.groupID,
+      groupID: params.groupID || getState()?.live?.livingInfo?.groupId,
     }
     if (params.name != undefined) {options.name = params.name};
     if (params.muteAllMembers != undefined) {options.name = params.muteAllMembers};
@@ -709,8 +713,8 @@ export function popScrollMessage() {
  */
 export function addLivingWatchNum() {
   return function(dispatch: Dispatch<any>, getState: any) {
-    let watchNum = getState()?.live?.watchNum || 0;
-    dispatch({type: imActionType.UPDATE_ROOM_MEMBER_NUM, payload: {watchNum: watchNum++}})
+    let watchNum = getState()?.live?.livingInfo?.watchNum || 0;
+    dispatch({type: liveActionType.UPDATE_LIVING_INFO, payload: {livingInfo: {watchNum: ++watchNum}}})
   }
 }
 

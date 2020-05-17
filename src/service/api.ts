@@ -10,8 +10,6 @@ const HOST_PHP = __DEV__ ? 'http://129.211.138.215' : ''
 const HOST_JAVA = __DEV__ ? 'http://129.211.138.215:2333' : ''
 const SHANDE_HOST_JAVA = __DEV__ ? 'http://129.211.104.84:7001' : ''
 
-// http://129.211.138.215/
-
 // 文件上传路径 ==================================================================
 export const UPLOAD_URL = `${HOST_JAVA}/find/uploadFile`
 
@@ -175,7 +173,7 @@ export const apiLogout = (data: any) => get(`${HOST_JAVA}/user/logout`, data)
 // 查看物流
 export const apiQueryExpress = (data: any) => get(`${HOST_JAVA}/order/queryExpress`, data)
 // 分享生成图片
-export const apiCreatePoster = (data: any) => get(`${HOST_JAVA}/userLive/userGoodsShare`, data)
+export const apiCreatePoster = (data: any) => get(`${HOST_JAVA}/userShare/userGoodShare`, data)
 // 发布作品 上传文件
 export const apiWorkUpload = (data: any) => uploadWorkMedia(`${HOST_JAVA}/find/uploadFile`, data)
 
@@ -250,7 +248,7 @@ export const apiAnchorParticular = (data: any) => get(`${HOST_JAVA}/userLive/anc
 // 关注/取关主播
 export const apiAttentionAnchor = (data: any) => post(`${HOST_JAVA}/userLive/attentionAnchor`, data)
 // 点击进入直播间
-export const apiEnterLive = (data: any) => get(`${HOST_JAVA}/userLive/enterLive`, data)
+export const apiEnterLive = (data: any) => get1(`${HOST_JAVA}/userLive/enterLive`, data)
 // 获取精选/关注直播列表
 export const apiGetLiveStreamList = (data: any) => post(`${HOST_JAVA}/userLive/getLiveStreamList`, data)
 // 直播间点亮红心

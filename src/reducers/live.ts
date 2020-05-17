@@ -12,6 +12,11 @@ export interface LiveConfig {
   // 滤镜
 }
 
+export enum AttentionTypes {
+  isAttention = '0',
+  notAttention = '1',
+}
+
 interface InitStateTypes {
   // 直播配置
   liveConfig: LiveConfig,
@@ -26,6 +31,10 @@ interface InitStateTypes {
     anchorName: string, //
     pushUrl?: string, // 推流地址
     pullUrl?: string, // 观看地址
+    isAttention?: AttentionTypes, // 是否关注
+    likeSum?: boolean, // 是
+    bigPic?: string, // 
+    liveGoodsNum?: string, // 直播商品数量
   }
 }
 
@@ -57,7 +66,7 @@ export default function live(state = INITIAL_STATE, action: any) {
     case liveActionTypes.UPDATE_PUSHER_CONFIG:
       return {...state, pusherConfig: {...state.pusherConfig, ...action.payload.pusherConfig}};
     case liveActionTypes.UPDATE_LIVING_INFO:
-      return {...state, livingInfo: action.payload.livingInfo};
+      return {...state, livingInfo: {...state.livingInfo, ...action.payload.livingInfo}};
     default:
       return state;
   }

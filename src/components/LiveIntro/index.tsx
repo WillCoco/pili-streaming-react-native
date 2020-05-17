@@ -52,7 +52,7 @@ const LiveIntro = (props: LiveMsgProps) =>  {
     return state?.live?.livingInfo || EMPTY_OBJ
   })
 
-  // console.log(livingInfo, 'livingInfo')
+  console.log(livingInfo, 'livingInfo')
   
   /**
    * 前往主播详情
@@ -110,7 +110,7 @@ const LiveIntro = (props: LiveMsgProps) =>  {
       {
         props.showFollowButton && (
           <FollowButton 
-            isFollow={!props.isFollow}
+            isFollow={livingInfo.isAttention == '1'}
             onPress={onFollowPress}
             // style={{marginLeft: pad}}
           />
