@@ -16,8 +16,6 @@ console.log(store, 'store')
 
 tim.on(TIM.EVENT.MESSAGE_RECEIVED, onMessageReceived);
 
-const TEST_ROOM = "@TGS#aQNQWYNGH";
-
 function onMessageReceived(event: any) {
   // 收到推送的单聊、群聊、群提示、群系统通知的新消息，可通过遍历 event.data 获取消息列表数据并渲染到页面
   // event.name - TIM.EVENT.MESSAGE_RECEIVED
@@ -106,10 +104,14 @@ function handleRoomInfoMsg(message: any) {
     } else if (operationType === TIM.TYPES.GRP_TIP_MBR_JOIN) {
       // 加群
       const {memberNum} = message?.payload || {};
+      // 更新群人数
       store.dispatch(updateRoomMemberNum(memberNum));
+      // 更新进入次数
+      store.dispatch(addLivingWatchNum());
     } else if (operationType === TIM.TYPES.GRP_TIP_MBR_QUIT) {
       // 退群
       const {memberNum} = message?.payload || {};
+      // 更新群人数
       store.dispatch(updateRoomMemberNum(memberNum));
     }
   }
@@ -216,6 +218,7 @@ export const logout = () => {
 
 /**
  * 创建房间(需要包含直播和回放类型的)
+ * 现走服务端创建
  */
 export const createGroup = (params: {
   roomName: string
@@ -259,8 +262,9 @@ export const createGroup = (params: {
 
 /**
  * 解散房间
+ * 现调用关闭接口时服务端解散
  */
-export const dismissGroup = (id: string) => {
+export const dismissGroup = (id?: string) => {
   return function(dispatch: Dispatch<any>, getState: any) {
     const groupID = id || getState().im?.room?.groupID;
 
@@ -283,14 +287,13 @@ export const dismissGroup = (id: string) => {
 /**
  * 进入房间
  */
-export const joinGroup = (params: {
-  groupID: string,
-}): any => {
-
+export const joinGroup = (
+  params: {groupID: string,},
+  options: {shoudSendMsg?: boolean,} = {shoudSendMsg: true}
+): any => {
   return async function (dispatch: Dispatch<any>): Promise<boolean> {
-
     return tim.joinGroup({
-      groupID: params?.groupID || TEST_ROOM,
+      groupID: params?.groupID,
       type: TIM.TYPES.GRP_AVCHATROOM
     })
       .then((r: any) => {
@@ -305,7 +308,9 @@ export const joinGroup = (params: {
             dispatch(updateRoom(r?.data?.group));
 
             // 发送进入消息
-            dispatch(sendRoomMessage({text: '进入直播间', type: MessageType.enter}));
+            if (options.shoudSendMsg) {
+              dispatch(sendRoomMessage({text: '进入直播间', type: MessageType.enter}));
+            }
             return Promise.resolve(true);
           case TIM.TYPES.JOIN_STATUS_ALREADY_IN_GROUP: // 已经在群中
             dispatch(updateRoom({groupID: params.groupID}));
@@ -368,7 +373,7 @@ export const sendRoomMessage = (msgInfo: SendMessageParams) => {
 
     const groupID = getState()?.im?.room?.groupID;
     let message = tim.createCustomMessage({
-      to: TEST_ROOM || msgInfo.to || groupID,
+      to: msgInfo.to || groupID,
       conversationType: TIM.TYPES.CONV_GROUP,
       // 消息优先级，用于群聊（v2.4.2起支持）。如果某个群的消息超过了频率限制，后台会优先下发高优先级的消息，详细请参考：https://cloud.tencent.com/document/product/269/3663#.E6.B6.88.E6.81.AF.E4.BC.98.E5.85.88.E7.BA.A7.E4.B8.8E.E9.A2.91.E7.8E.87.E6.8E.A7.E5.88.B6)
       // 支持的枚举值：TIM.TYPES.MSG_PRIORITY_HIGH, TIM.TYPES.MSG_PRIORITY_NORMAL（默认）, TIM.TYPES.MSG_PRIORITY_LOW, TIM.TYPES.MSG_PRIORITY_LOWEST
@@ -485,8 +490,9 @@ function makeMsg({type, text}: {
 }) {
   return function(dispatch: Dispatch<any>, getState: any): RoomMessage {
     const userId = getUniqueId();
-    const userName = getState().userData?.userName;
-    const userAvatar = getState().userData?.userAvatar;
+    const userInfo = getState().userData?.userInfo;
+    const userName = userInfo?.nickName;
+    const userAvatar = userInfo?.userAvatar;
     const dataString = JSON.stringify({
       text,
       userName: userName || '游客',
@@ -695,6 +701,16 @@ export function popScrollMessage() {
     console.log(orderMessages, 'orderMessages')
 
     dispatch(updateScrollMessage(newRoomMessages));
+  }
+}
+
+/**
+ * 更新房间观看次数
+ */
+export function addLivingWatchNum() {
+  return function(dispatch: Dispatch<any>, getState: any) {
+    let watchNum = getState()?.live?.watchNum || 0;
+    dispatch({type: imActionType.UPDATE_ROOM_MEMBER_NUM, payload: {watchNum: watchNum++}})
   }
 }
 

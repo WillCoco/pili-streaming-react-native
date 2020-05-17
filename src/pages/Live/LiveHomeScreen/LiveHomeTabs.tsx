@@ -79,6 +79,7 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
         setSelectlist(res?.records)
       }
     })
+    .catch(console.warn)
   }
 
   /**

@@ -2,6 +2,7 @@ import {Dispatch} from 'redux';
 import liveActionType from '../constants/Live';
 import {LiveConfig} from '../reducers/live';
 import * as api from '../service/api';
+import {isSucceed} from '../utils/fetchTools';
 import Toast from 'react-native-tiny-toast';
 
 /**
@@ -29,11 +30,24 @@ export const startLive = (params: startLiveParams) => {
   return async function(dispatch: Dispatch, getState: any) {
     const {cover, title} = getState().live?.liveConfig || {};
     const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
-    return await api.apiStartLive({
+    return api.apiStartLive({
       anchorId,
       goodsIdList: params.goodsIdList,
       title,
       smallPic: cover
+    })
+    .then((r: any) => {
+      console.log(r, 'startLive111');
+
+      if (isSucceed(r)) {
+        console.log(r, 'startLive');
+        return Promise.resolve(r?.data);
+      }
+      return Promise.resolve(false);
+    })
+    .catch((error: any) => {
+      console.log(`startLive error: ${startLive}`)
+      return Promise.resolve(false);
     });
   }
 }
@@ -88,7 +102,6 @@ interface ReleaseTeaserParams {
   liveTime: number,
   title: string
 }
-
 export const releaseTeaser = (params: ReleaseTeaserParams) => {
   return async function(dispatch: Dispatch, getState: any) {
     const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
@@ -105,13 +118,99 @@ export const releaseTeaser = (params: ReleaseTeaserParams) => {
 
     console.log(opts, 'optsoptsopts')
     return api.apiReleaseNotice(opts)
-    .then(r => {
-      console.log(r, 11111111)
-      Toast.hide('');
+    .then((r: any) => {
+      console.log(r, 123123123123);
+      return Promise.resolve(isSucceed(r));
     })
     .catch((error: any) => {
-      Toast.hide('');
       console.log(`releaseTeaser error: ${error}`)
+      return Promise.resolve(false);
+    })
+  }
+}
+
+/**
+ * 是否在直播
+ */
+export const isWorkLiveNow = () => {
+  return async function(dispatch: Dispatch, getState: any): Promise<any> {
+    const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
+
+    return api.apiIsWorkLiveNow({anchorId})
+    .then((r: any) => {
+      console.log(r, '是否在直播')
+      if (isSucceed(r)) {
+        return Promise.resolve(r?.data);
+      }
+      return Promise.resolve(false);
+    })
+    .catch((error: any) => {
+      console.log(`isWorkLiveNow error: ${error}`)
+      return Promise.resolve();
+    })
+  }
+}
+
+
+/**
+ * 关闭直播
+ */
+enum CloseType {
+  keepRecord = 1,
+  dontKeepRecord,
+}
+interface CloseLiveParams {
+  liveId: string,
+  type?: CloseType,
+}
+export const closeLive = (params: CloseLiveParams) => {
+  return async function(dispatch: Dispatch, getState: any) {
+    const defaultType = 1; // 1 保存回放, 2 不保存
+    return api.apiCloseLive({type: defaultType, ...params})
+    .then((r: any) => {
+      console.log(r, 'closeLive')
+      if (isSucceed(r)) {
+        return Promise.resolve(r?.data?.liveId);
+      }
+      return Promise.resolve(false);
+    })
+    .catch((error: any) => {
+      console.log(`isWorkLiveNow error: ${error}`)
+      return Promise.resolve();
+    })
+  }
+}
+
+/**
+ * 去直播
+ */
+interface anchorToLiveParams {
+  liveId: string,
+}
+export const anchorToLive = (params: anchorToLiveParams) => {
+  return async function(dispatch: Dispatch, getState: any) {
+    const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
+
+    return api.apiAnchorToLive({...params, anchorId})
+    .then((r: any) => {
+      console.log(r, 'anchorToLive')
+      
+      if (isSucceed(r)) {
+        // 更新推流地址
+        const livingInfo = r?.data;
+        // dispatch(updatePusherConfig({outputUrl: pushUrl}));
+
+        // 更新初始观看人数、头像、昵称、推流地址等
+        if (livingInfo) {
+          dispatch(updateLivingInfo(livingInfo));
+        }
+
+        return Promise.resolve(r?.data);
+      }
+      return Promise.resolve(false);
+    })
+    .catch((error: any) => {
+      console.log(`anchorToLive error: ${error}`)
     })
   }
 }
@@ -121,4 +220,11 @@ export const releaseTeaser = (params: ReleaseTeaserParams) => {
  */
 export const updatePusherConfig = (pusherConfig: any) => {
   return {type: liveActionType.UPDATE_PUSHER_CONFIG, payload: {pusherConfig}}
+}
+
+/**
+ * 更新直播
+ */
+export const updateLivingInfo = (livingInfo: any) => {
+  return {type: liveActionType.UPDATE_LIVING_INFO, payload: {livingInfo}}
 }

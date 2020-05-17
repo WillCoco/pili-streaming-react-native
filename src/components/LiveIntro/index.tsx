@@ -13,6 +13,8 @@ import {
   PanResponder,
   ImageSourcePropType
 } from 'react-native';
+import {Toast} from '@ant-design/react-native'
+import { useSelector } from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {PrimaryText, SmallText} from 'react-native-normalization-text';
 import Avatar from '../Avatar';
@@ -22,10 +24,12 @@ import {pad} from '../../constants/Layout';
 // import {Colors} from '../../constants/Theme';
 import FollowButton from '../../components/FollowButton';
 import {apiAttentionAnchor} from '../../service/api';
-import Toast from 'react-native-tiny-toast'
+import {shorNum} from '../../utils/numeric';
+
 
 export type msgList = any[] | undefined;
 export type onMsgListResponse = (v: boolean) => any;
+const EMPTY_OBJ = Object.freeze({});
 
 interface LiveMsgProps {
   anchorId: number,
@@ -43,17 +47,21 @@ interface LiveMsgProps {
 
 const LiveIntro = (props: LiveMsgProps) =>  {
   const {navigate} = useNavigation();
+
+  const livingInfo = useSelector((state: any) => {
+    return state?.live?.livingInfo || EMPTY_OBJ
+  })
+
+  // console.log(livingInfo, 'livingInfo')
   
   /**
    * 前往主播详情
    */
   const onPress = () => {
-    if (props.onPress) {
-      props.onPress(props.anchorId);
-      return;
+    if (livingInfo.anchorId) {
+      // 默认跳转主播详情
+      navigate('AnchorDetail', {anchorId: livingInfo.anchorId})
     }
-    // 默认跳转主播详情
-    navigate('AnchorDetail')
   }
 
   /**
@@ -81,7 +89,7 @@ const LiveIntro = (props: LiveMsgProps) =>  {
       onPress={onPress}
     >
       <Avatar
-        source={props.anchorAvatar}
+        source={livingInfo.anchorLogo ? {uri: livingInfo.anchorLogo} : undefined}
         size={40}
         style={{marginRight: 4}}
       />
@@ -90,13 +98,13 @@ const LiveIntro = (props: LiveMsgProps) =>  {
           style={styles.title}
           numberOfLines={1}
           ellipsizeMode="tail"
-        >{props.liveTitle}</SmallText>
+        >{livingInfo.anchorName}</SmallText>
         <SmallText
           numberOfLines={1}
           ellipsizeMode="tail"
           style={{color: '#ccc'}}
         >
-          {props.liveSubTitle}
+          {shorNum(livingInfo.watchNum) || 0} 观看
         </SmallText>
       </View>
       {

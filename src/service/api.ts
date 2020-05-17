@@ -1,5 +1,7 @@
 
-import { get, post, liveUpload, File, uploadWorkMedia } from './fetch'
+import { get, post, uploadWorkMedia } from './fetch'
+import { get1, post1, get2, post2, liveUpload } from './fetch/index'
+import { UpdateParams } from './fetch/fetchOrigin';
 
 // const HOST_PHP = __DEV__ ? 'https://php.quanpinrtmp.com' : ''
 // const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''
@@ -17,7 +19,7 @@ export const UPLOAD_URL = `${HOST_JAVA}/find/uploadFile`
  * PHP 接口 ==================================================================
  */
 // 获取首页数据
-export const apiGetIndexData = () => get(`${HOST_PHP}/mobile/index/index`)
+export const apiGetIndexData = () => get1(`${HOST_PHP}/mobile/index/index`)
 // 首页圈重点商品列表
 export const apiGetIndexGoodsList = (data: { pageNo: number; pageSize: number }) => get(`${HOST_PHP}/mobile/index/ajaxGetMore`, data)
 // 产业带
@@ -91,13 +93,13 @@ export const apiCheckIsInvite = () => get(`${HOST_JAVA}/miniApp/isInvite`)
 // 更新用户信息
 export const apiUpdateUserInfo = (data: any) => post(`${HOST_JAVA}/miniApp/updateUserInfo`, data)
 // 注册 & 登录
-export const apiLogin = (data: any) => post(`${HOST_JAVA}/user/appRegisterOrLogin`, data)
+export const apiLogin = (data: any) => post1(`${HOST_JAVA}/user/appRegisterOrLogin`, data)
 // 我的页面
 export const apiGetUserData = () => get(`${HOST_JAVA}/user/getUserInfo`)
 // 发现模块 => 新视界获取作品
 export const apiGetWorks = (data: any) => post(`${HOST_JAVA}/find/getWorks`, data)
 // 获取发现详情
-export const apiGetWorksDetailInfo = async (data: any) => post(`${HOST_JAVA}/find/getWorksDetailInfo`, data).then(r => console.log(r, 'rrrrrr'))
+export const apiGetWorksDetailInfo = async (data: any) => post(`${HOST_JAVA}/find/getWorksDetailInfo`, data)
 // 查询优惠金额 （预生成订单）
 export const apiGetSellerDiscount = (data: any) => post(`${HOST_JAVA}/order/getSellerDiscount`, data) 
 // 发布作品
@@ -185,15 +187,15 @@ export const apiSandCreateOrder = (data: any) => post(`${SHANDE_HOST_JAVA}/sandp
  * 主播相关接口 ==========================================================================================
  */
 // 成为主播
-export const apiAddAnchorUser = (data: any) => get(`${HOST_JAVA}/anchor/addAnchorUser`, data, false)
+export const apiAddAnchorUser = (data: any) => post2(`${HOST_JAVA}/anchor/addAnchorUser`, data)
 // 主播添加商品到主播店铺
-export const apiAddAnchorGoods = (data: any) => post(`${HOST_JAVA}/anchor/addAnchorGoods`, data, false)
+export const apiAddAnchorGoods = (data: any) => post2(`${HOST_JAVA}/anchor/addAnchorGoods`, data)
 // 主播添加商品到主播预组货
-export const apiAddGroupGoods = (data: any) => post(`${HOST_JAVA}/anchor/addGroupGoods`, data, false)
+export const apiAddGroupGoods = (data: any) => post2(`${HOST_JAVA}/anchor/addGroupGoods`, data)
 // 开播后确认是否存在直播封面
-export const apiAffirmCover = (data: any) => post(`${HOST_JAVA}/anchor/affirmCover`, data, false)
+export const apiAffirmCover = (data: any) => post2(`${HOST_JAVA}/anchor/affirmCover`, data)
 // 直播重新组货
-export const apiAnewAddLiveGoods = (data: any) => post(`${HOST_JAVA}/anchor/anewAddLiveGoods`, data, false)
+export const apiAnewAddLiveGoods = (data: any) => post2(`${HOST_JAVA}/anchor/anewAddLiveGoods`, data)
 // 新增或修改寄回地址
 export const apiAuReturnedAddress = (data: any) => post(`${HOST_JAVA}/anchor/auReturnedAddress`, data)
 // 主播删除预组货商品
@@ -221,18 +223,21 @@ export const apiGetUserChatList = (data: any) => post(`${HOST_JAVA}/anchor/getUs
 // 主播我的主页信息
 export const apiAnchorHomePage = (data: any) => get(`${HOST_JAVA}/anchor/HomePage`, data)
 // 直播上传文件
-export const apiLiveUploadFile = (file: File) => liveUpload(`${HOST_JAVA}/anchor/liveUploadFile`, file)
+export const apiLiveUploadFile = (file: UpdateParams) => liveUpload(`${HOST_JAVA}/anchor/liveUploadFile`, file)
 // 直播发布预告
-export const apiReleaseNotice= (data: any) => post(`${HOST_JAVA}/anchor/releaseNotice`, data)
+export const apiReleaseNotice= (data: any) => post2(`${HOST_JAVA}/anchor/releaseNotice`, data)
 // 直播间商品管理数据列表
-export const apiSelLiveGoods= (data: any) => post(`${HOST_JAVA}/anchor/selLiveGoods`, data)
+export const apiSelLiveGoods= (data: any) => post2(`${HOST_JAVA}/anchor/selLiveGoods`, data)
 // 准时开播页面展示数据
-export const apiSelStartLive= (data: any) => post(`${HOST_JAVA}/anchor/selStartLive`, data)
+export const apiSelStartLive= (data: any) => post2(`${HOST_JAVA}/anchor/selStartLive`, data)
 // 选择商品开始直播
-export const apiStartLive= (data: any) => post(`${HOST_JAVA}/anchor/startLive`, data)
+export const apiStartLive= (data: any) => post2(`${HOST_JAVA}/anchor/startLive`, data)
 // 结束直播
-export const apiCloseLive= (data: any) => post(`${HOST_JAVA}/anchor/closeLive`, data)
-
+export const apiCloseLive= (data: any) => get2(`${HOST_JAVA}/anchor/closeLive`, data)
+// 继续直播 (只进入)
+export const apiAnchorToLive= (data: any) => get2(`${HOST_JAVA}/anchor/anchorToLive`, data)
+// 是否在直播
+export const apiIsWorkLiveNow = (data: any) => get2(`${HOST_JAVA}/anchor/isWorkLiveNow`, data)
 
 
 /**
@@ -251,13 +256,14 @@ export const apiGetLiveStreamList = (data: any) => post(`${HOST_JAVA}/userLive/g
 // 直播间点亮红心
 export const apiLiveLike = (data: any) => get(`${HOST_JAVA}/userLive/liveLike`, data)
 // 我的关注列表
-export const apiMyAttentionList = (data: any) => get(`${HOST_JAVA}/userLive/myAttentionList`, data)
+export const apiMyAttentionList = (data: any) => get1(`${HOST_JAVA}/userLive/myAttentionList`, data)
 // 搜索直播列表
 export const apiSearchLiveStreamList = (data: any) => get(`${HOST_JAVA}/userLive/searchLiveStreamList`, data)
 // 直播间的购物袋
 export const apiShoppingBag = (data: any) => get(`${HOST_JAVA}/userLive/shoppingBag`, data)
 // 用户直播列表轮播图
-export const apiUserLiveBanner = () => post(`${HOST_JAVA}/userLive/userLiveBanner`)
+export const apiUserLiveBanner = () => post2(`${HOST_JAVA}/userLive/userLiveBanner`)
 // 上传用户头像本地base64
 export const apiUploadFile = (data: any) => post(`${HOST_JAVA}/user/uploadFile`, data)
+
 

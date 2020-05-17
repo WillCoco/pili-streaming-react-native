@@ -31,6 +31,7 @@ import { apiEnterLive } from '../../service/api';
 import withPage from '../../components/HOCs/withPage';
 
 const { window } = L;
+const EMPTY_OBJ = {};
 
 interface LiveWindowProps {
   style?: StyleProp<any>;
@@ -38,19 +39,33 @@ interface LiveWindowProps {
   safeTop: number;
 }
 
+interface LiveWindowParams {
+  liveId: string | number, // 直播id
+  groupId: string | number, // im群组
+  mediaType: MediaType, // 媒体类型
+  mediaSource: string, // 拉流地址、 video
+}
+
 const LiveWindow = (props: LiveWindowProps): any => {
   const { goBack, replace } = useNavigation();
   const dispatch = useDispatch();
-  const route = useRoute() || {};
+  const route = useRoute() || EMPTY_OBJ;
+
+  const {
+    liveId,
+    groupId,
+    mediaType,
+    mediaSource,
+  } : LiveWindowParams = (route.params || EMPTY_OBJ) as LiveWindowParams;
 
   // 房间信息
-  const room = useSelector((state) => state?.im?.room);
+  const room = useSelector((state: any) => state?.im?.room);
 
   // 直播结束
-  const isLiveOver = useSelector((state) => state?.im?.isLiveOver);
+  const isLiveOver = useSelector((state: any) => state?.im?.isLiveOver);
 
   // 用户id
-  const userId = useSelector(state => state?.userData?.userInfo?.userId) || '';
+  const userId = useSelector((state: any) => state?.userData?.userInfo?.userId) || '';
 
   // 主播信息
   const [anchorInfo, setAnchorInfo]: [any, any] = React.useState({})
@@ -60,7 +75,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
    */
   React.useEffect(() => {
     const params = {
-      liveId: route?.params?.liveId,
+      liveId,
       userId
     }
 
@@ -73,7 +88,6 @@ const LiveWindow = (props: LiveWindowProps): any => {
   /**
    * 播放类型
    */
-  const { mediaType } = route;
 
   const playerComponent = React.useMemo(() => {
     // 预告片
@@ -81,8 +95,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
       return (
         <Video
           source={{
-            uri:
-              "http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4",
+            uri: mediaSource,
           }} // Can be a URL or a local file.
           repeat
           fullscreen
@@ -101,7 +114,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
       <LivePuller
         ref={player}
         // inputUrl="rtmp://58.200.131.2:1935/livetv/hunantv"
-        inputUrl="rtmp://pili-live-rtmp.youzfx.cn/pili-yunshanbo/live1212641224414990336"
+        inputUrl={mediaSource}
         onStatus={onPlayerStatus}
         style={styles.video}
       />
@@ -147,7 +160,9 @@ const LiveWindow = (props: LiveWindowProps): any => {
    *
    */
   React.useEffect(() => {
-    dispatch(joinGroup())
+    dispatch(joinGroup({
+      groupID: groupId
+    }))
       .then((success?: boolean) => {
         setIsIMJoinSecceed(!!success);
       })

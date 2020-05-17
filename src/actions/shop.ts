@@ -316,15 +316,18 @@ export const updateWarehouseGoods = (warehouseGoods: any) => {
  * 加上isChecked字段
  * @params: {Array} dataList - 预组货列表原数据
  * @params: {Array} checkList - 本地操作选择的
+ * @params: {function} isMatchedGood - 是否匹配
  */
-const dataFormat = (dataList: Array<any>, checkList?: Array<any>) => {
+export const goodsCheckedFormat = (dataList: Array<any>, checkList?: Array<any>, isMatch?: (g?: any) => boolean) => {
   // 本地选择过之后刷新, format数据
   if (checkList) {
     const checked = checkList.filter(c => c.isChecked)
     const result: Array<any> = [];
 
     dataList.forEach(d => {
-      const matchedGood = checked.find(o => (o.id === d.id && !!o.id)) // todo: 标识
+      console.log(d, 'ddddd')
+      console.log(checked, 'checked')
+      const matchedGood = isMatch ? isMatch(d) : checked.find(o => (o.goodsId === d.goodsId && !!o.goodsId)) // todo: 标识
       if (matchedGood) {
         result.push({...d, isChecked: matchedGood.isChecked})
       } else {

@@ -56,20 +56,19 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
 
   return raceTimeout
     .then(async (response: any) => {
-      if (response.timeout) {
-        Toast.show("连接超时");
-        return;
-      }
-
-      if (response.status !== 200) {
-        Toast.show("网络错误", { position: 0 });
-        return;
-      }
+      // if (response.status !== 200) {
+      //   Toast.show("网络错误", { position: 0 });
+      //   return;
+      // }
       const r1 = await response.text();
       const r2 = r1.trim && r1.trim();
       return r2 && JSON.parse(r2);
     })
-    .then((result: { data: any; code: number; message: string }) => {
+    .then((result: { data: any; code: number; message: string } | any) => {
+      if (result.timeout) {
+        Toast.show("连接超时");
+        return;
+      }
       console.log("result,", result);
       if (result.code === 200) {
         return onlyData
@@ -117,25 +116,25 @@ export const post = (
 
   return (
     raceTimeout
-      .then(async (response: { text: () => any; status: number } | any) => {
-        if (response.timeout) {
-          console.warn(`连接超时: ${response.timeout}`);
-          Toast.show("连接超时");
-          return;
-        }
-
-        if (response.status !== 200) {
-          Toast.show("网络错误", { position: 0 });
-          return;
-        }
-
-        console.log(response, "=========");
+      .then(async (response: { text: () => any; status: number }) => {
         const r1 = await response.text();
         const r2 = r1.trim && r1.trim();
         return r2 && JSON.parse(r2);
       })
-      .then((result: { data: any; code: number; message: string }) => {
+      .then((result: { data: any; code: number; message: string } | any) => {
         console.log("%cresult:", "color: red; font-size: 20px; ", result);
+        if (result.timeout) {
+          console.warn(`连接超时: ${result.timeout}`);
+          Toast.show("连接超时");
+          return;
+        }
+
+        // if (result.status !== 200) {
+        //   Toast.show("网络错误", { position: 0 });
+        //   return;
+        // }
+
+        console.log(result, "=========");
 
         if (result.code === 200) {
           return onlyData
