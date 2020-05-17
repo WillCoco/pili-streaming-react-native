@@ -15,10 +15,6 @@ export default function SeckillCountDown() {
   })
 
   useEffect(() => {
-    
-  }, [])
-
-  useEffect(() => {
     isFocused ? setCountDown() : clearInterval(timer)
   }, [isFocused])
 

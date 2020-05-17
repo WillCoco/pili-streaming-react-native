@@ -357,6 +357,18 @@ function GoodsInfo(props: any) {
     })
   }
 
+  /**
+   * 分享
+   */
+  const toShare = () => {
+    if (!isLogin) {
+      navigation.push('Login')
+      return
+    }
+
+    setShowShareBar(true)
+  }
+
   if (soldOut) {
     return (
       <View style={styles.soldOutContainer}>
@@ -386,7 +398,7 @@ function GoodsInfo(props: any) {
           <GoodsCard
             goodsInfo={goodsInfo}
             showCouponActionSheet={showCouponActionSheet}
-            showShareBar={() => setShowShareBar(true)}
+            showShareBar={toShare}
           />
           {/* 平台优势 */}
           <Advantage />
