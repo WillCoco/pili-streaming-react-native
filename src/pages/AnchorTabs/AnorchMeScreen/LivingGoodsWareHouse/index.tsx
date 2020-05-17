@@ -9,9 +9,10 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import { Toast, portal } from '@ant-design/react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {PrimaryText, SmallText, T4, scale} from 'react-native-normalization-text';
-import Toast from 'react-native-tiny-toast';
+// import Toast from 'react-native-tiny-toast';
 import {useNavigation} from '@react-navigation/native';
 import withPage from '../../../../components/HOCs/withPage';
 import PagingList from '../../../../components/PagingList';
@@ -21,7 +22,14 @@ import {pad, radio} from '../../../../constants/Layout';
 import NavBar from '../../../../components/NavBar';
 import WarehouseRow from './WarehouseRow';
 import CheckBox from '../../../../components/CheckBox';
-import {AddGoodsTargetType, addGoods2WareHouse, getWareHouseGoods} from '../../../../actions/shop';
+import {
+    AddGoodsTargetType,
+    addGoods2WareHouse,
+    getWareHouseGoods,
+    delWareHouseGoods,
+    AddGroupHouseGoods,
+    DelGroupHouseGoods
+} from '../../../../actions/shop';
 import {brandGoodAdapter} from '../../../../utils/dataAdapters';
 
 const ROW_HEIGHT = 120;
@@ -43,7 +51,7 @@ const LivingGoodsWareHouse = (props: any) =>  {
    * 过滤出选中的, 且是未添加到店铺的
    */
   const canAddFilter = (list: Array<any>) => {
-    return list.filter(o => o.isChecked && o.canAdd) // todo: 字段修正
+    return list.filter(o => o.isChecked && o.isExist === 2) // todo: 字段修正
   }
 
   /**
@@ -97,10 +105,10 @@ const LivingGoodsWareHouse = (props: any) =>  {
     //   Toast.hide(loading);
     // };
     // getData();
-
-    return () => {
-      Toast.hide('');
-    }
+    //
+    // return () => {
+    //   Toast.hide('');
+    // }
   }, [])
 
   /**
@@ -154,7 +162,7 @@ const LivingGoodsWareHouse = (props: any) =>  {
           result.push(d)
         }
       })
-
+        console.log(result, 'result')
       return result;
     }
 
@@ -174,6 +182,7 @@ const LivingGoodsWareHouse = (props: any) =>  {
   const checkGood = (index: number) => {
     const newDataList = [...dataList];
     newDataList[index].isChecked = !newDataList[index].isChecked;
+    console.log(newDataList, '1234')
     setDataList(newDataList);
   }
 
@@ -196,16 +205,41 @@ const LivingGoodsWareHouse = (props: any) =>  {
   /**
    * 移除单个
    */
-  const onPressRemove = (index) => {
-    alert('移除选中' + index)
-  }
+  const onPressRemove = async (goodsId) => {
+      const t = Toast.loading('加载中')
+      const Bool: boolean = await dispatch(delWareHouseGoods({
+          goodsIdList: [goodsId]
+      }));
+      portal.remove(t);
+      if(Bool) {
+          Toast.success('删除成功');
+          // 过滤除删除的组货
+          const newDataList = dataList.filter(o => o.goodsId !== goodsId);
+          setDataList(newDataList)
+      };
+  };
 
   /**
    * 移除选中
    */
-  const onPressRemoveChecked = (index) => {
-    alert('移除选中' + index)
-  }
+  const onPressRemoveChecked = async () => {
+      const t = Toast.loading('加载中')
+      const goodsIdArr = [];
+      checkedList.forEach(item => {
+          goodsIdArr.push(item.goodsId)
+      });
+      const Bool: boolean = await dispatch(delWareHouseGoods({
+          goodsIdList: [...goodsIdArr]
+      }));
+      portal.remove(t);
+      if(Bool) {
+          Toast.success('删除成功');
+
+          // 过滤除删除的组货数组
+          const diffDataList = dataList.filter( o => !goodsIdArr.find(i => i === o.goodsId));
+          setDataList(diffDataList)
+      };
+  };
 
   /**
    * 添加/取消添加 修改数据
@@ -244,9 +278,55 @@ const LivingGoodsWareHouse = (props: any) =>  {
   /**
    * 添加店铺选中
    */
-  const onPressAddChecked = (index) => {
-    alert('添加、删除店铺选中' + index + canAddShopList)
+  const onPressAddChecked = async () => {
+      const t = Toast.loading('加载中')
+      const goodsIdArr = [];
+      checkedList.forEach(item => {
+          goodsIdArr.push(item.goodsId)
+      });
+      const Bool = await dispatch(AddGroupHouseGoods({
+          goodsIdList: [...goodsIdArr]
+      }));
+      portal.remove(t);
+      if(Bool) {
+          Toast.success('添加成功');
+
+          //  添加店铺
+          dataList.forEach(item => {
+               item.isExist = 1;
+          });
+          setDataList(dataList.concat([]));
+      };
   }
+
+  const onPressAddShop = async (goodsId) => {
+      const Bool = await dispatch(AddGroupHouseGoods({
+          goodsIdList: [goodsId]
+      }));
+
+      if(Bool) {
+          dataList.forEach(item => {
+              if(goodsId === item.goodsId) {
+                  item.isExist = item.isExist === 1 ? 2 : 1;
+              }
+          });
+          setDataList(dataList.concat([]));
+      }
+  };
+
+  const onPressDelShop = async (goodsId) => {
+      const Bool = await dispatch(DelGroupHouseGoods({
+          goodsIdList: [goodsId]
+      }));
+      if(Bool) {
+          dataList.forEach(item => {
+              if(goodsId === item.goodsId) {
+                  item.isExist = item.isExist === 1 ? 2 : 1;
+              }
+          });
+          setDataList(dataList.concat([]));
+      }
+  };
 
   return (
     <View style={styles.style}>
@@ -279,12 +359,13 @@ const LivingGoodsWareHouse = (props: any) =>  {
               <WarehouseRow
                 isChecked={item.isChecked}
                 dataAdapter={() => {
-                  // console.log(brandGoodAdapter(item), 'itemitemitemitem')
+                  console.log(brandGoodAdapter(item), 'itemitemitemitem')
                   return brandGoodAdapter(item)
                 }}
                 onPressCheck={() => {checkGood(index)}}
-                onPressRemove={() => {onPressRemove(index)}}
-                onPressAddShop={() => {alert(1)}}
+                onPressRemove={() => {onPressRemove(item.goodsId)}}
+                onPressAddShop={() => {onPressAddShop(item.goodsId)}}
+                onPressDelShop={() => {onPressDelShop(item.goodsId)}}
                 style={{marginBottom: 4}}
               />
             )

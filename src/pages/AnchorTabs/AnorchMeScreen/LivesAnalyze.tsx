@@ -7,7 +7,7 @@
  * @Last Modified by: lyh
  * @Last Modified time: 2020/5/13
  **/
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     View,
     StyleSheet,
@@ -17,13 +17,15 @@ import {
     TouchableOpacity,
     TouchableWithoutFeedback
 } from 'react-native';
-import {PrimaryText} from 'react-native-normalization-text';
+import {PrimaryText,scale} from 'react-native-normalization-text';
 import {useNavigation} from '@react-navigation/native';
 import withPage from '../../../components/HOCs/withPage';
 import { pad } from '../../../constants/Layout';
 import images from '../../../assets/images'
 import NavBar from '../../../components/NavBar';
-import pxToDp from '../../../utils/px2dp'
+import { connect } from 'react-redux';
+import { apiGetLiveDataList } from '../../../service/api';
+import {isIOS, isAndroid} from '../../../constants/DeviceInfo';
 
 const LiveInfoCard = (props: {}) => {
     return (
@@ -66,10 +68,28 @@ const LiveInfoCard = (props: {}) => {
     )
 };
 
-const LivesAnalyze = () =>  {
+const LivesAnalyze = (props) =>  {
+    const {anchorInfo = {}} = props;
+    console.log(anchorInfo, 'anchorInfo');
     const {goBack} = useNavigation();
 
-    const [liveInfoList, setLiveInfoList] = useState([{},{},{},{}])
+    const [liveInfoList, setLiveInfoList] = useState([{},{},{},{}]);
+
+    useEffect(() => {
+        getDataListFn()
+    }, []);
+
+    const getDataListFn = () => {
+        const {anchorId} = anchorInfo;
+        apiGetLiveDataList({
+            anchorId,
+            dateScope: '',
+            pageNo: 1,
+            pageSize: 10,
+        }).then(res => {
+            console.log(res, 'sync get DataList')
+        });
+    };
 
     return (
         <ImageBackground
@@ -87,7 +107,7 @@ const LivesAnalyze = () =>  {
                     <View style={[styles.style, {alignItems:'center'}]}>
                         <View >
                             <View style={styles.cardSty}>
-                                <PrimaryText>echarts图表</PrimaryText>
+                                {/*<PrimaryText>图表</PrimaryText>*/}
                             </View>
                         </View>
                         {
@@ -172,4 +192,6 @@ const styles = StyleSheet.create({
     }
 });
 
-export default withPage(LivesAnalyze);
+export default connect(
+    (state: any) => state.anchorData
+)(withPage(LivesAnalyze));
