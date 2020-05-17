@@ -189,7 +189,7 @@ export const apiAddAnchorUser = (data: any) => get(`${HOST_JAVA}/anchor/addAncho
 // 主播添加商品到主播店铺
 export const apiAddAnchorGoods = (data: any) => post(`${HOST_JAVA}/anchor/addAnchorGoods`, data, false)
 // 主播添加商品到主播预组货
-export const apiAddGroupGoods = (data: any) => post(`${HOST_JAVA}/anchor/addGroupGoods`, data, false)
+export const apiAddGroupGoods = (data: Any) => post(`${HOST_JAVA}/anchor/addGroupGoods`, data, false)
 // 开播后确认是否存在直播封面
 export const apiAffirmCover = (data: any) => post(`${HOST_JAVA}/anchor/affirmCover`, data, false)
 // 直播重新组货
@@ -232,6 +232,8 @@ export const apiSelStartLive= (data: any) => post(`${HOST_JAVA}/anchor/selStartL
 export const apiStartLive= (data: any) => post(`${HOST_JAVA}/anchor/startLive`, data)
 // 结束直播
 export const apiCloseLive= (data: any) => post(`${HOST_JAVA}/anchor/closeLive`, data)
+// 主播删除店铺商品
+export const apiDelAnchorGoods = (data: any) => post(`${HOST_JAVA}/anchor/delAnchorBrandGoods`, data)
 
 
 

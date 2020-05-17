@@ -138,7 +138,7 @@ export enum AddGoodsTargetType {
 }
 
 interface GetPlatformBrandsGoodsPrarms {
-  addType: AddGoodsTargetType, 
+  addType: AddGoodsTargetType,
   brandId: number, // 品牌id
   pageNo: number,
   pageSize: number,
@@ -185,7 +185,7 @@ export const updatePersonalGoods = (personalGoods: any) => {
 
 /**
  * 添加预组货仓库商品
- * @returns 
+ * @returns
  */
 interface AddGoods2WareHouseParams {
   brandGoods: Array<any>, // 品牌商品
@@ -194,6 +194,7 @@ interface AddGoods2WareHouseParams {
 export const addGoods2WareHouse = (params: AddGoods2WareHouseParams) => {
   return async function(dispatch: Dispatch<any>, getState: any) {
     const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
+      console.log(params, 'parmassss')
 
     const goodsIdList = params.goodIdsNeed2Add || [];
     return api.apiAddGroupGoods({
@@ -202,7 +203,7 @@ export const addGoods2WareHouse = (params: AddGoods2WareHouseParams) => {
     })
     .then(r => {
       const isSucceed = r && r.code === 200 && r.success;
-      
+
       if (isSucceed) {
 
         console.log(goodsIdList, 'goodsIdListgoodsIdList')
@@ -251,6 +252,77 @@ export const getWareHouseGoods = (params: GetGoods2WareHouseParams) => {
 }
 
 /**
+ * 删除预组货商品
+ */
+interface DelGoods2WareHouseParams {
+    "goodsIdList": Array,
+}
+export const delWareHouseGoods = (params: DelGoods2WareHouseParams) => {
+    return async function (dispatch: Dispatch<any>, getState: any): Promise<any> {
+        const anchorId = getState()?.anchorData?.anchorInfo?.anchorId;
+        return api.apiDelGroupGoods({
+            ...params,
+            anchorId
+        })
+            .then(r => {
+                return Promise.resolve(true);
+            })
+            .catch(err => {
+                console.log(`delWareHouseGoods error: ${err}`)
+                return Promise.resolve(false);
+            })
+    }
+};
+
+/**
+ * 预组货添加商品到橱窗
+ */
+interface AddGroup2WareHouseParams {
+    "goodsIdList": Array,
+}
+export const AddGroupHouseGoods = (params: AddGroup2WareHouseParams) => {
+    return async function (dispatch: Dispatch<any>, getState: any): Promise<any> {
+        const anchorId = getState()?.anchorData?.anchorInfo?.anchorId;
+        return api.apiAddAnchorGoods({
+            ...params,
+            anchorId
+        })
+            .then(r => {
+                return Promise.resolve(true);
+            })
+            .catch(err => {
+                console.log(`AddGroupHouseGoods error: ${err}`)
+                return Promise.resolve(false);
+            })
+    }
+};
+
+
+/**
+ * 预组货删除商品到橱窗
+ */
+interface DelGroup2WareHouseParams {
+    "goodsIdList": Array,
+}
+export const DelGroupHouseGoods = (params: DelGroup2WareHouseParams) => {
+    return async function (dispatch: Dispatch<any>, getState: any): Promise<any> {
+        const anchorId = getState()?.anchorData?.anchorInfo?.anchorId;
+        return api.apiDelAnchorGoods({
+            ...params,
+            anchorId
+        })
+            .then(r => {
+                return Promise.resolve(true);
+            })
+            .catch(err => {
+                console.log(`DelGroup2WareHouseParams error: ${err}`)
+                return Promise.resolve(false);
+            })
+    }
+};
+
+
+/**
  * 单选 选中/取消 预组货仓库商品
  * // todo: 改成id判断
  */
@@ -263,7 +335,7 @@ export const checkWarehouseGoods = (index: number) => {
       newWarehouseGoods[index].isChecked = !newWarehouseGoods[index].isChecked
     }
 
-    
+
     dispatch(updateWarehouseGoods(newWarehouseGoods));
   }
 }
@@ -280,7 +352,7 @@ export const checkAllWarehouseGoods = (isChecked: boolean) => {
         isChecked
       }
     });
-    
+
     dispatch(updateWarehouseGoods(newWarehouseGoods));
   }
 }
@@ -298,7 +370,7 @@ export const checkAllWarehouseGoods = (isChecked: boolean) => {
 //         isChecked
 //       }
 //     });
-    
+
 //     dispatch(updateWarehouseGoods(newWarehouseGoods));
 //   }
 // }
