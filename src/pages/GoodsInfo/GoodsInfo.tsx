@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { View, ScrollView, Dimensions, StyleSheet, Platform, Text, ImageBackground } from 'react-native'
+import { View, ScrollView, Dimensions, StyleSheet, Platform, Text, ImageBackground, Image } from 'react-native'
 import { useRoute, useNavigation, useIsFocused } from '@react-navigation/native'
 import { connect } from 'react-redux'
-import HTML from 'react-native-render-html'
+// import HTML from 'react-native-render-html'
+// import HTML from 'react-native-htmlview'
 import Toast from 'react-native-tiny-toast'
+import WebView from 'react-native-webview'
 
 import ActionSheet from '../../components/ActionSheet/ActionSheet'
 import Swiper from './Swiper/Swiper'
@@ -23,6 +25,27 @@ import pxToDp from '../../utils/px2dp'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 let timer: any
+
+// const BaseScript = `(function () {
+//                       var height = null;
+//                       function changeHeight() {
+//                         console.log('11111')
+//                         if (document.body.scrollHeight != height) {
+//                           height = document.body.scrollHeight;
+//                           if (window.postMessage) {
+//                             window.postMessage(JSON.stringify({
+//                               type: 'setHeight',
+//                               height: height,
+//                             }))
+//                           }
+//                         }
+//                       }
+//                       setTimeout(changeHeight, 300);
+//                   } ())`
+
+const BaseScript = `
+console.log(11)
+`
 
 function GoodsInfo(props: any) {
   const route = useRoute()
@@ -50,6 +73,7 @@ function GoodsInfo(props: any) {
   })
   let [goodsNum, setGoodsNum] = useState(1)
   const [couponList, setCouponList] = useState([])
+  const [webViewHeight, setWebViewHeight] = useState(0)
   const goodsInfoRef: any = useRef()
 
   navigation.setOptions({
@@ -92,7 +116,10 @@ function GoodsInfo(props: any) {
       goodsInfoRef.current = res
       setGoodsInfo(goodsInfoRef.current)
       setSwiperList(res.goods_images_list)
-      setGoodsContent(strDiscode(res.goods_content))
+      // setGoodsContent(strDiscode(res.goods_content))
+
+      let content = strDiscode(res.goods_content).replace(/\<img/gi, '<img style="width: 100%; height: auto"')
+      setGoodsContent(content)
 
 
       if (res.is_sale || res.is_snap_up) {
@@ -406,10 +433,41 @@ function GoodsInfo(props: any) {
           <BrandCard goodsInfo={goodsInfo} />
           {/* 商品详情 */}
           <View style={{ marginTop: pxToDp(10) }}>
-            <HTML
+            {/* <HTML
               html={goodsContent}
               imagesMaxWidth={Dimensions.get('window').width}
+            /> */}
+            {/* <HTML
+              value={goodsContent}
+              renderNode={(node, index, siblings, parent, defaultRenderer) => {
+                if (node.name == 'img') {
+                  const a = node.attribs;
+                  return (<Image resizeMode='cover' style={{ flex: 1, width: Dimensions.get('window').width }} source={{ uri: a.src }} />)
+                }
+              }}
+            /> */}
+            <WebView
+              injectedJavaScript={`console.log(111)`}
+              style={{
+                width: Dimensions.get('window').width,
+                height: 1000
+              }}
+              source={{ html: goodsContent }}
+              decelerationRate='normal'
+              onMessage={(event) => {
+                console.log(event, '====')
+                try {
+                  const action = JSON.parse(event.nativeEvent.data)
+                  if (action.type === 'setHeight' && action.height > 0) {
+                    setWebViewHeight(action.height)
+                  }
+                } catch (error) {
+                  // pass
+                  console.log(error)
+                }
+              }}
             />
+
           </View>
         </ScrollView>
         {/* 底部操作栏 */}

@@ -38,7 +38,6 @@ interface Options {
  * @param options 
  */
 export const get = (path: any, data?: any, options: Options = {}) => {
-  console.log(path, data, 1111000000)
   // 加token
   const { userData } = store.getState();
   if (userData.token) {
