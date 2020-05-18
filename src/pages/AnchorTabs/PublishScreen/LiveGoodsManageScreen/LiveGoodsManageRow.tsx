@@ -49,7 +49,7 @@ const LiveGoodsManageRow = (props: LiveGoodsManageRowProps) =>  {
         onPress={props.onPressCheck}
         style={{height: '100%', paddingHorizontal: pad}}
       />
-      <Image source={data.img || images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
+      <Image source={data.img ? {uri: data.img} : images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
       <View style={styles.contentWrapper}>
         <View style={styles.titleWrapper}>
           <PrimaryText numberOfLines={2} style={{flex: 1}}>{data.title}</PrimaryText>

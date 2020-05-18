@@ -67,20 +67,21 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
   /**
    * 获取关注/精选列表
    */
-  // const getDataList = (type: string) => {
-  //   apiGetLiveStreamList({ // 直播类型不能为空（1：精选；2：关注
-  //     liveType: type,
-  //     page: 1,
-  //     pageSize: 10,
-  //     userId
-  //   }).then(res => {
-  //     if (type === '2') {
-  //       setFollowList(res?.records)
-  //     } else {
-  //       setSelectlist(res?.records)
-  //     }
-  //   })
-  // }
+  const getDataList = (type: string) => {
+    apiGetLiveStreamList({ // 直播类型不能为空（1：精选；2：关注
+      liveType: type,
+      page: 1,
+      pageSize: 10,
+      userId
+    }).then(res => {
+      if (type === '2') {
+        setFollowList(res?.records)
+      } else {
+        setSelectlist(res?.records)
+      }
+    })
+    .catch(console.warn)
+  }
 
   /**
    * 切换tab
@@ -102,7 +103,7 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
     const result = await apiGetLiveStreamList({
       liveType: type,
       page: 1,
-      pageSize: 10,
+      pageSize: 20,
       userId
     }).then(res => {
       return res?.records
@@ -145,8 +146,9 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
       >
         <PagingList
           tabLabel="关注"
-          size={10}
           // initListData={followList}
+          size={20}
+          initListData={followList}
           //item显示的布局
           renderItem={(renderItem)}
           //下拉刷新相关

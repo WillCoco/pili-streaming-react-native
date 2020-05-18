@@ -30,8 +30,9 @@ const LiveBanner = (props: LiveBannerProps) : React.ReactElement =>  {
 
   React.useEffect(() => {
     apiUserLiveBanner().then((res: any) => {
-      setBannerList(res)
+      setBannerList(res?.data || [])
     })
+    .catch(console.warn)
   }, [])
 
   return (

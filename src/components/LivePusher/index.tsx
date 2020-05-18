@@ -57,14 +57,24 @@ const LivePusher = React.forwardRef((props: LivePusherProps, ref: any) : any => 
   /**
    * 推流配置
    */
-  const pusherConfig = useSelector(state => state?.live?.pusherConfig)
+  const pusherConfig = useSelector((state: any) => state?.live?.pusherConfig)
+
+  /**
+   * 直播间信息
+   */
+  const pushUrl = useSelector((state: any) => state?.live?.livingInfo?.pushUrl)
 
   console.log(pusherConfig, 'pusherConfig')
+
+  /**
+   * 加载推流的条件
+   */
+  const showPusher = isPermissionGranted && pushUrl
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
       {
-        isPermissionGranted ? (
+        showPusher ? (
           <NodeCameraView
             style={{width: '100%', height: '100%'}}
             ref={(c: any) => {
@@ -72,6 +82,7 @@ const LivePusher = React.forwardRef((props: LivePusherProps, ref: any) : any => 
               ref(c);
             }}
             {...pusherConfig}
+            outputUrl={pushUrl}
           />
         ) : null
       }

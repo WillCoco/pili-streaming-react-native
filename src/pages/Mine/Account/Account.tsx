@@ -17,23 +17,39 @@ function Account(props) {
       navigation.push('Login')
       return
     }
+
+    navigation.push('AssetManage')
   }
 
   return (
     <View style={styles.container}>
-      <CardTitle title='我的账户' subTitle='更多' nextAction={toAccountInfo} />
+      <CardTitle title='我的账户' subTitle='钱包' nextAction={toAccountInfo} />
       <View style={styles.accountInfo}>
-        <View style={styles.accountItem}>
+        <View style={[styles.accountItem, { marginBottom: pxToDp(60) }]}>
           <Image source={require('../../../assets/mine-image/img_yifanxian.png')} style={styles.icon} />
           <View style={styles.accountDetail}>
             <Text style={styles.text}>已返金额</Text>
             <Text style={styles.price}>¥{formatSinglePrice(userInfo.hasSettle || 0)}</Text>
           </View>
         </View>
+        <View style={[styles.accountItem, { marginBottom: pxToDp(60) }]}>
+          <Image source={require('../../../assets/mine-image/icon_yiti.png')} style={styles.icon} />
+          <View style={styles.accountDetail}>
+            <Text style={styles.text}>已提金额</Text>
+            <Text style={styles.price}>¥{formatSinglePrice(userInfo.willSettle || 0)}</Text>
+          </View>
+        </View>
         <View style={styles.accountItem}>
           <Image source={require('../../../assets/mine-image/img_daifanxian.png')} style={styles.icon} />
           <View style={styles.accountDetail}>
             <Text style={styles.text}>待返金额</Text>
+            <Text style={styles.price}>¥{formatSinglePrice(userInfo.willSettle || 0)}</Text>
+          </View>
+        </View>
+        <View style={styles.accountItem}>
+          <Image source={require('../../../assets/mine-image/icon_keti.png')} style={styles.icon} />
+          <View style={styles.accountDetail}>
+            <Text style={styles.text}>可提金额</Text>
             <Text style={styles.price}>¥{formatSinglePrice(userInfo.willSettle || 0)}</Text>
           </View>
         </View>
@@ -57,15 +73,16 @@ const styles = StyleSheet.create({
   },
   accountInfo: {
     flexDirection: 'row',
-    marginTop: pxToDp(40)
+    marginTop: pxToDp(40),
+    flexWrap: 'wrap'
   },
   icon: {
     width: pxToDp(80),
     height: pxToDp(80)
   },
   accountItem: {
-    flex: 1,
     paddingLeft: pxToDp(40),
+    width: '50%',
     flexDirection: 'row',
     alignItems: 'center'
   },

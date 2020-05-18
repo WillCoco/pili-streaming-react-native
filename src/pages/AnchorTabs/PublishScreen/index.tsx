@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import {T1, SmallText} from 'react-native-normalization-text';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import NavBar from '../../../components/NavBar';
 import withPage from '../../../components/HOCs/withPage';
 import Avatar from '../../../components/Avatar';
@@ -14,10 +14,13 @@ import images from '../../../assets/images/index';
 import {vw, vh} from '../../../utils/metric';
 import {pad} from '../../../constants/Layout';
 import {LinearGradient} from 'expo-linear-gradient';
-import {apiAnchorHomePage} from '../../../service/api';
+import { apiAnchorHomePage } from '../../../service/api';
 import {setAnchorInfo} from '../../../actions/anchor';
+import {isWorkLiveNow, closeLive, anchorToLive} from '../../../actions/live';
 import {useDispatch, useSelector} from 'react-redux';
 import Mask from '../../../components/Mask';
+import { isSucceed } from '../../../utils/fetchTools';
+import { Toast } from '@ant-design/react-native';
 
 const PublishScreen = (props: any) =>  {
   const [maskList, maskDispatch] = React.useContext(Mask.context);
@@ -52,8 +55,15 @@ const PublishScreen = (props: any) =>  {
    * 检测下有没有直播 
    * 可选关闭或者继续直播
    */
-  React.useEffect(() => {
-    if (false) {
+  const checkIsLiveNow = async () => {
+    const r: any = await dispatch(isWorkLiveNow());
+    if (!r) {
+      return
+    }
+
+    const {liveId, groupId} = r;
+
+    if (!!liveId) {
       maskDispatch({
         type: Mask.Actions.PUSH,
         payload: {
@@ -62,33 +72,47 @@ const PublishScreen = (props: any) =>  {
             title: '您有直播未正常关闭',
             text: '是否恢复上次直播',
             rightBtnText: '恢复直播',
-            onPressLeft: () => {
+            onPressLeft: async () => {
               // 关闭直播件
-
+              const type = 1; // 1 保存回放, 2 不保存
+              const r1: any = await dispatch(closeLive({liveId, type}));
+              navigate('AnchorLivingEnd', r1?.data);
               return true;
             },
             onPressRight: () => {
               // 继续去直播
-
+              const r2 = dispatch(anchorToLive({liveId}));
+              console.log(r2, 11111222223333)
+              navigate('AnorchLivingRoomScreen', {groupID: groupId, liveId});
               return true;
             },
           }
         }})
     }
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      checkIsLiveNow();
+    }, [])
+  );
+
+  React.useEffect(() => {
+    
   }, [])
 
   return (
     <View style={styles.style}>
       <LinearGradient
-          colors={['#FF321B', '#FF604E', '#fff']}
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0,
-          }}
-        />
+        colors={['#FF321B', '#FF604E', '#fff']}
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
+        }}
+      />
       <NavBar leftTheme="light" title="" style={styles.navWrapper} onLeftPress={onBackPress} />
       <Avatar size={65} style={{marginTop: props.safeTop + vh(8)}} source={anchorInfo.logo && {uri: anchorInfo.logo} || images.userAvatar}/>
       <T1 style={styles.nameText}>{anchorInfo.name || '主播昵称'}</T1>

@@ -30,21 +30,9 @@ function HomeSwiper(props: Props) {
     }
   }
 
-  // <Carousel
-  //   infinite={true}
-  //   autoplay={true}
-  //   autoplayInterval={3000}
-  //   dots={props.showDots}
-  //   style={[swiperStyle.swiper, props.swiperStyle]}
-  //   dotStyle={{ backgroundColor: Colors.lightGrey }}
-  //   dotActiveStyle={{ backgroundColor: Colors.whiteColor }}
-  //   afterChange={() => changSwiper()}
-  // >
-  // </Carousel>
-
   return (
     <Swiper
-      style={[swiperStyle.swiper, props.swiperStyle]}
+      style={props.swiperStyle}
       activeDotColor={Colors.whiteColor}
       autoplay
     >
@@ -66,9 +54,6 @@ function HomeSwiper(props: Props) {
 }
 
 const swiperStyle = StyleSheet.create({
-  swiper: {
-    // width: '100%'
-  },
   swiperImage: {
     width: '100%',
     height: '100%',

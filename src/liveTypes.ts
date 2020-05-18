@@ -19,9 +19,9 @@ export interface AnchorInfoProps extends UserInfoProps {
  * 播放类型
  */
 export enum MediaType {
-  living, // 直播
-  teaser, // 预告
-  record, // 回放
+  teaser = '1', // 预告
+  living = '2', // 直播
+  record = '3', // 回放
 }
 
 /**
