@@ -42,6 +42,13 @@ export const addBankCard = (info: any) => {
 }
 
 /**
+ * 更新当前银行卡
+ */
+export const updateCurBankCards = (curBankCard: Array<any>) => {
+  return {type: assetActionType.UPDATE_CUR_BANK_CARD, payload: {curBankCard}};
+}
+
+/**
  * 更新银行卡
  */
 export const updateBankCards = (bankCards: Array<any>) => {

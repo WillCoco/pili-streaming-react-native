@@ -27,6 +27,7 @@ import FormRow from '../../../components/FormRow';
 import CountDown from '../../../components/CountDown';
 import Mask from '../../../components/Mask';
 import withPage from '../../../components/HOCs/withPage';
+import {apiGetUserBankCards} from '../../../service/api';
 
 const Withdraw = (props: any) =>  {
   const {navigate, goBack, replace} = useNavigation();
@@ -36,12 +37,15 @@ const Withdraw = (props: any) =>  {
   const [verifyCode, setVerifyCode] =  React.useState('');
   const [countDownNum, setCountDownNum] = React.useState(0); // 倒计时
   let [maskList, maskDispatch] = React.useContext(Mask.context);
+  const [curBankCard, setCurBankCard] = React.useState({}); // 默认银行卡，没有则提示添加
 
   console.log(route.params?.card, '提现的银行卡')
 
   React.useEffect(() => {
     // setCurCard()
-    console.log(route.params)
+    apiGetUserBankCards().then(res => {
+      
+    })
   }, [])
 
   /**
@@ -93,12 +97,12 @@ const Withdraw = (props: any) =>  {
       <View style={styles.contentWrapper}>
         <ListItem
           title={
-            <T4 style={{marginBottom: pad}}>{card.name}</T4>
+            <T4 style={{marginBottom: pad}}>{card?.name}</T4>
           }
           subtitle={
-            <TinyText>尾号{card.cardNum.slice(-4)}储蓄卡</TinyText>
+            <TinyText>尾号{card?.cardNum.slice(-4)}储蓄卡</TinyText>
           }
-          leftAvatar={{ source: card.icon}}
+          leftAvatar={{ source: card?.icon}}
           chevron
           style={{marginBottom: pad}}
           onPress={() => replace('BankCardBag')}

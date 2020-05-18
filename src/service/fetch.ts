@@ -77,7 +77,7 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
         return onlyData
           ? Promise.resolve(result.data)
           : Promise.resolve(result);
-      } else if (result.code === 203 || result.code === 204) {
+      } else if (result?.code === 203 || result?.code === 204) {
         Toast.show("用户信息过期，请重新登录", { position: 0 });
         store.dispatch(toggleLoginState(false));
         store.dispatch(setToke(""));
@@ -95,7 +95,7 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
 
 export const post = (
   path: RequestInfo,
-  data: any,
+  data?: any,
   onlyData: boolean = true
 ) => {
   const { userData } = store.getState();
@@ -148,11 +148,11 @@ export const post = (
 
         console.log(result, "=========");
 
-        if (result.code === 200) {
+        if (result?.code === 200) {
           return onlyData
             ? Promise.resolve(result.data)
             : Promise.resolve(result);
-        } else if (result.code === 203 || result.code === 204) {
+        } else if (result?.code === 203 || result?.code === 204) {
           Toast.show("用户信息过期，请重新登录", { position: 0 });
           store.dispatch(toggleLoginState(false));
           store.dispatch(setToke(""));

@@ -269,16 +269,19 @@ const LiveWindow = (props: LiveWindowProps): any => {
       <Image style={styles.imgBg} source={anchorInfo?.anchorLogo && {uri: anchorInfo?.anchorLogo} || images.livingbg} resizeMode="cover" />
       {playerComponent}
       <View style={styles.livingBottomBlock}>
-        <LivingBottomBlock.Audience onPressShopBag={() => shopCardAnim(true)} />
+        <LivingBottomBlock.Audience 
+          likeQuantity={anchorInfo?.likeSum}
+          onPressShopBag={() => shopCardAnim(true)} 
+        />
       </View>
 
       {!!noticeBubbleText ? <NoticeBubble text={noticeBubbleText} /> : null}
       <LiveIntro
         showFollowButton
-        // anchorId={1} // TODO:
-        // liveTitle={anchorInfo?.anchorName || '直播间'}
-        // liveSubTitle={`123214`}
-        // userId={userId}
+        anchorId={anchorInfo?.anchorId}
+        liveTitle={anchorInfo?.anchorName || '直播间'}
+        liveSubTitle={`${anchorInfo?.watchNum || 0}观看`}
+        userId={userId}
         isFollow={anchorInfo?.isAttention} // 是否关注(0:没关注；1：关注)
       />
 

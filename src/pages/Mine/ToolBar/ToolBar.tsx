@@ -14,8 +14,7 @@ export default function ToolBar() {
     if (userRole.indexOf('2') > -1) { // 是主播，前往直播首页
       navigation.push('AnchorTabs')
     } else { // 不是主播，去开通
-      navigation.push('AnchorTabs')
-      // navigation.push('BeAnchor')
+      navigation.push('BeAnchor')
     }
   }
 

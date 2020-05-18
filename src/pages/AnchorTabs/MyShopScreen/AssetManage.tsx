@@ -19,27 +19,40 @@ import withPage from '../../../components/HOCs/withPage';
 import { Colors } from '../../../constants/Theme';
 import { pad } from '../../../constants/Layout';
 import images from '../../../assets/images/index';
+import {apiGetUserAssetsStatistics} from '../../../service/api';
 
 const AssetManage = (props: any) =>  {
   const {navigate, replace} = useNavigation();
+  const [assetsInfo, setAssetsInfo] = React.useState({})
 
   /**
    * 店铺资金
    */
   const assetTypes = [
-    {img: images.assetAvailable, text: '可提现金额'},
-    {img: images.assetHaveSettled, text: '已结算金额'},
-    {img: images.assetWaitForSettle, text: '待结算金额'},
+    {key: 'accountMoney', img: images.assetAvailable, text: '可提现金额'},
+    {key: 'willSettle', img: images.assetWaitForSettle, text: '待结算金额'},
+    {key: 'frozenMoney', img: images.assetFrozen, text: '冻结金额'},
   ];
 
   /**
    * 我的收入
    */
   const incomeTypes = [
-    {img: images.incomeLive, text: '直播收入'},
-    {img: images.incomeShop, text: '店铺收入'},
-    {img: images.incomeInvite, text: '邀请收入'},
+    {key: 'shareProfit', img: images.incomeShare, text: '分享收入'},
+    {key: 'inviteProfit', img: images.incomeInvite, text: '邀请收入'},
+    {key: 'shopProfit', img: images.incomeShop, text: '自购返现'},
+    {key: 'activeAward', img: images.incomeActive, text: '活动奖励'},
   ];
+
+  /**
+   * 获取用户资产
+   */
+  React.useEffect(() => {
+    apiGetUserAssetsStatistics().then(res => {
+      console.log(res);
+      setAssetsInfo(res);
+    })
+  }, []);
 
   const RenderRow = (props: {
     text: string,
@@ -86,7 +99,7 @@ const AssetManage = (props: any) =>  {
                   imgStyle={{height: 40, width: 40}}
                   textStyle={{color: '#fff', marginTop: 6}}
                 >
-                  <PrimaryText color="white" style={{marginTop: 2}}>¥{123.00}</PrimaryText>
+                  <PrimaryText color="white" style={{marginTop: 2}}>¥{assetsInfo[row.key]}</PrimaryText>
                 </ImageText>
               )
             })
@@ -96,7 +109,7 @@ const AssetManage = (props: any) =>  {
           text="提现"
           textStyle={{color: '#fff'}}
           style={styles.buttonStyle}
-          onPress={() => navigate('BankCardBag')}
+          onPress={() => navigate('Withdraw')}
         />
       </View>
       <View style={styles.contentWrapper}>
@@ -108,7 +121,7 @@ const AssetManage = (props: any) =>  {
                 key={`income_row_${index}`}
                 text={income.text}
                 img={income.img}
-                quantity={income.quantity || 1000100010}
+                quantity={assetsInfo[income.key] || 0}
                 style={{borderTopWidth: index !== 0 ? 1 : 0, borderColor: Colors.divider}}
               />
             )
