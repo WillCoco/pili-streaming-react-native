@@ -91,7 +91,6 @@ const styles = StyleSheet.create({
   },
   navTitle: {
     color: '#fff',
-    
   },
   contentWrapper: {
     flex: 1,

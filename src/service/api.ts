@@ -203,7 +203,7 @@ export const apiDelLivePlayback = (data: any) => post(`${HOST_JAVA}/anchor/delLi
 // 删除寄回地址
 export const apiDelReturnedAddress = (data: any) => post(`${HOST_JAVA}/anchor/delReturnedAddress`, data)
 // 我的预告列表
-export const apiGetAdvanceList = (data: any) => post(`${HOST_JAVA}/anchor/getAdvanceList`, data)
+export const apiGetAdvanceList = (data: any) => get2(`${HOST_JAVA}/anchor/getAdvanceList`, data)
 // 主播预组货(店铺)添加商品品牌商品列表
 export const apiGetBrandGoodsList = (data: any) => post(`${HOST_JAVA}/anchor/getBrandGoodsList`, data)
 // 主播添加预组货分类品牌数据

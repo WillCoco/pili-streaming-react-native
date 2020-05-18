@@ -11,13 +11,23 @@ import {
   TouchableOpacity
 } from 'react-native';
 import {PrimaryText, SmallText, T2} from 'react-native-normalization-text';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
 import LiveWindow from '../../../components/LiveWindow';
 import withPage from '../../../components/HOCs/withPage';
 import NavBar from '../../../components/NavBar';
+import PagingList from '../../../components/PagingList';
 import images from '../../../assets/images';
 import {pad} from '../../../constants/Layout';
 import {Colors} from '../../../constants/Theme';
+import {getAdvanceList} from '../../../actions/live';
 import pxToDp from '../../../utils/px2dp';
+import {EMPTY_OBJ} from '../../../constants/freeze';
+import { MediaType } from '../../../liveTypes';
+
+const ROW_HEIGHT = pxToDp(300);
+const INIT_PAGE_NO = 1;
+const PAGE_SIZE = 10;
 
 const TrailersCard = (props: {
   img: any,
@@ -26,9 +36,13 @@ const TrailersCard = (props: {
   liveTime: string,
   onSharePress: () => void,
   onRemindPress: () => void
+  onPress: () => void
 }) => {
   return (
-    <View style={{flexDirection: 'row', width: pxToDp(690), borderRadius: pxToDp(pad * 2), overflow: 'hidden', backgroundColor: Colors.whiteColor, marginLeft: pxToDp(pad * 3), marginTop: (pad * 3)}}>
+    <TouchableOpacity
+      style={{flexDirection: 'row', width: pxToDp(690), borderRadius: pxToDp(pad * 2), overflow: 'hidden', backgroundColor: Colors.whiteColor, marginLeft: pxToDp(pad * 3), marginTop: (pad * 3)}}
+      onPress={props.onPress}
+    >
       <Image source={props.img} style={styles.trailersCover} />
       <View style={styles.trailersDetail}>
         <PrimaryText color="emphasis" style={styles.liveTitle} numberOfLines={2}>{props.title}</PrimaryText>
@@ -47,11 +61,14 @@ const TrailersCard = (props: {
           <Text style={styles.punctuality}>准时开播</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
 const AnchorTrailers = () =>  {
+  const dispatch = useDispatch();
+  const {navigate} = useNavigation();
+
   const trailersList = [
     {
       remind: false,
@@ -87,10 +104,81 @@ const AnchorTrailers = () =>  {
     }
   }
 
+  /**
+   * 刷新
+   */
+  const onRefresh = async () => {
+    const trailersList: any = await dispatch(getAdvanceList({
+      pageNo: INIT_PAGE_NO,
+      pageSize: PAGE_SIZE,
+    })) || EMPTY_OBJ;
+
+    console.log(trailersList, 'trailersList')
+
+    return Promise.resolve({result: trailersList});
+  }
+
+  /**
+   * 更多
+   */
+  const onEndReached = async (pageNo: number, pageSize: number) => {
+    const trailersList: any = await dispatch(getAdvanceList({
+      pageSize,
+      pageNo,
+    }));
+
+    console.log(trailersList, '更多');
+    const result = Promise.resolve({result: trailersList});
+
+    return result;
+  }
+
   return (
     <View style={styles.style}>
-      <NavBar title="我的预告" />
-      <ScrollView style={styles.myTrailersPage}>
+      <NavBar
+        leftTheme="light"
+        title="我的预告"
+        titleStyle={styles.navTitle}
+        style={styles.nav}
+      />
+      <PagingList
+        size={14}
+        // initListData={warehouseGoods}
+        renderItem={({item, index}: any) => {
+          const {
+            smallPic,
+            title,
+            remind,
+            liveTime
+          } = item || EMPTY_OBJ;
+          return (
+            <TrailersCard
+              key={`_${index}`}
+              img={smallPic ? {uri: smallPic} : null} // todo预告默认
+              title={title}
+              remind={item.remind}
+              liveTime={liveTime}
+              onSharePress={onSharePress}
+              onRemindPress={() => onRemindPress(item.remind, index)}
+              onPress={() => navigate('LivingRoomScreen', {
+                mediaType: MediaType.teaser,
+                liveTime: new Date(liveTime).getTime()
+              })}
+            />
+          )
+        }}
+        getItemLayout={(data: any, index: number) => (
+          {length: ROW_HEIGHT, offset: ROW_HEIGHT * index, index}
+        )}
+        onRefresh={onRefresh}
+        onEndReached={onEndReached}
+        keyExtractor={(item: any, index: number) => 'index' + index + item}
+        initialNumToRender={14}
+        numColumns={1}
+        columnWrapperStyle={{justifyContent: 'space-between'}}
+        contentContainerStyle={styles.pagingListWrapper}
+      />
+      {/* <ScrollView style={styles.myTrailersPage}>
         {
           trailersList.map((item, index) => {
             return (
@@ -106,7 +194,7 @@ const AnchorTrailers = () =>  {
             )
           })
         }
-      </ScrollView>
+      </ScrollView> */}
     </View>
   )
 };
@@ -117,6 +205,12 @@ AnchorTrailers.defaultProps = {
 const styles = StyleSheet.create({
   style: {
     flex: 1,
+  },
+  nav: {
+    backgroundColor: Colors.basicColor,
+  },
+  navTitle: {
+    color: '#fff',
   },
   myTrailersPage: {
 
@@ -169,11 +263,12 @@ const styles = StyleSheet.create({
     lineHeight: pxToDp(62),
     textAlign: 'center',
     overflow: 'hidden'
-  }
+  },
+
 });
 
 export default withPage(AnchorTrailers, {
   statusBarOptions: {
-    backgroundColor: 'red'
+    backgroundColor: 'transparent'
   }
 });

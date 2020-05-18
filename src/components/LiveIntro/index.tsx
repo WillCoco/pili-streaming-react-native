@@ -42,6 +42,8 @@ interface LiveMsgProps {
   ref?: any,
   isFollow: boolean,
   safeTop: number,
+  name?: string,
+  watchNum?: number,
   showFollowButton?: boolean,
 }
 
@@ -83,6 +85,10 @@ const LiveIntro = (props: LiveMsgProps) =>  {
     Toast.show('关注/取消关注成功')
   }
 
+  const watchNum = props.watchNum || livingInfo.watchNum;
+  
+  const name = props.name || livingInfo.anchorName;
+
   return (
     <TouchableOpacity
       style={StyleSheet.flatten([styles.wrapper, props.style, {top: props.safeTop + pad}])}
@@ -98,13 +104,13 @@ const LiveIntro = (props: LiveMsgProps) =>  {
           style={styles.title}
           numberOfLines={1}
           ellipsizeMode="tail"
-        >{livingInfo.anchorName}</SmallText>
+        >{name}</SmallText>
         <SmallText
           numberOfLines={1}
           ellipsizeMode="tail"
           style={{color: '#ccc'}}
         >
-          {shorNum(livingInfo.watchNum) || 0} 观看
+          {shorNum(watchNum) || 0} 观看
         </SmallText>
       </View>
       {

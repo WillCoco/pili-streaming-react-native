@@ -16,6 +16,8 @@ import { Colors } from '../../../constants/Theme';
 import MaskContext from '../MaskContext';
 import {Actions} from '../reducer';
 import pxToDp from '../../../utils/px2dp';
+import images from '../../../assets/images';
+import Avatar from '../../Avatar';
 
 const WithAvatar = (props: {
   avatar: any,
@@ -47,8 +49,11 @@ const WithAvatar = (props: {
 
   return (
     <View style={styles.style}>
-      <Image source={props.avatar} style={styles.avatar}/>
-      <PrimaryText>{props.name}</PrimaryText>
+      <Avatar
+        source={props.avatar && {uri: props.avatar}}
+        size={66}
+      />
+      <T4 style={{marginTop: pad}}>{props.name}</T4>
       <View style={styles.btnsWrapper}>
         <ButtonRadius
           size={40}
@@ -91,10 +96,6 @@ const styles = StyleSheet.create({
     maxWidth: vw(40),
     marginTop: pad * 2
 
-  },
-  avatar: {
-    width: pxToDp(160),
-    height: pxToDp(160),
   },
   btnsWrapper: {
     flexDirection: 'row',

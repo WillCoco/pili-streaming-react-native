@@ -3,6 +3,7 @@ import liveActionType from '../constants/Live';
 import {LiveConfig} from '../reducers/live';
 import * as api from '../service/api';
 import {isSucceed} from '../utils/fetchTools';
+import {EMPTY_OBJ, EMPTY_ARR} from '../constants/freeze';
 import Toast from 'react-native-tiny-toast';
 import {getUniqueId} from 'react-native-device-info';
 
@@ -213,6 +214,33 @@ export const anchorToLive = (params: anchorToLiveParams) => {
     })
     .catch((error: any) => {
       console.log(`anchorToLive error: ${error}`)
+    })
+  }
+}
+
+/**
+ * 获取预告
+ */
+interface GetAdvanceListParams {
+  pageNo: number,
+  pageSize: number,
+}
+export const getAdvanceList = (params: GetAdvanceListParams) => {
+  return async function(dispatch: Dispatch, getState: any) {
+    const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
+
+    return api.apiGetAdvanceList({...params, anchorId})
+    .then((r: any) => {
+      console.log(r, '获取预告')
+      if (isSucceed(r)) {
+        const {records} = r?.data || EMPTY_OBJ;
+        return Promise.resolve(records || EMPTY_ARR);
+      }
+      return Promise.resolve(EMPTY_ARR);
+    })
+    .catch((error: any) => {
+      return Promise.resolve(EMPTY_ARR);
+      console.log(`getAdvanceList error: ${error}`)
     })
   }
 }

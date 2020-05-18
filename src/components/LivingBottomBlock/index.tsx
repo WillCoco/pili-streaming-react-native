@@ -1,10 +1,14 @@
 /**
  * 直播间底部bock业务组件
  */
-import AudienceBottomBlock from './AudienceBottomBlock';
-import AnchorBottomBlock from './AnchorBottomBlock';
+import Anchor from './AnchorBottomBlock';
+import Audience from './AudienceBottomBlock';
+import AudienceRecord from './AudienceRecordBottomBlock';
+import AudienceTraser from './AudienceTeaserBottomBlock';
 
 export default {
-  Anchor: AnchorBottomBlock,
-  Audience: AudienceBottomBlock
+  Anchor,
+  Audience,
+  AudienceRecord,
+  AudienceTraser,
 }

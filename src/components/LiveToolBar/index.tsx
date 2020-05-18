@@ -4,6 +4,13 @@
 // import withRole, {Role} from './withRole';
 import AnchorLiveToolBar from './AnchorLiveToolBar'
 import AudienceLiveToolBar from './AudienceLiveToolBar'
+import AudienceRecordToolBar from './AudienceRecordToolBar'
+import AudienceTeaserToolBar from './AudienceTeaserToolBar'
 
-export const Anchor: any = AnchorLiveToolBar;
-export const Audience: any = AudienceLiveToolBar;
+
+export {
+  AnchorLiveToolBar as Anchor,
+  AudienceLiveToolBar as Audience,
+  AudienceRecordToolBar,
+  AudienceTeaserToolBar,
+}

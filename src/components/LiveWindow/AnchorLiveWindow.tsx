@@ -236,7 +236,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       {/*  backgroundColor: 'rgba(0,0,0,0.01)' 修复摄像上层气泡边缘显示问题 */}
       <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.01)', zIndex: 1}}>
         <LiveIntro
-          liveTitle="湖南卫视直播间"
+          // liveTitle="湖南卫视直播间"
           // liveSubTitle={`123214`}
         />
         <LivingBottomBlock.Anchor

@@ -2,6 +2,7 @@
 
 import React from 'react';
 
+import Icontv from './Icontv';
 import Iconremove from './Iconremove';
 import Iconclosebg from './Iconclosebg';
 import Iconvideo from './Iconvideo';
@@ -16,6 +17,8 @@ import Iconbacklight from './Iconbacklight';
 
 const IconFont = ({ name, ...rest }) => {
   switch (name) {
+    case 'tv':
+      return <Icontv {...rest} />;
     case 'remove':
       return <Iconremove {...rest} />;
     case 'closebg':

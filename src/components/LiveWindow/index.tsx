@@ -1,10 +1,14 @@
 /**
  * 直播窗体
  */
-import AnchorLiveWindow from './AnchorLiveWindow';
-import AudienceLiveWindow from './AudienceLiveWindow';
+import Anchor from './AnchorLiveWindow';
+import Audience from './AudienceLiveWindow';
+import AudienceRecord from './AudienceRecordWindow';
+import AudienceTeaser from './AudienceTeaserWindow';
 
 export default {
-  Anchor: AnchorLiveWindow,
-  Audience: AudienceLiveWindow
+  Anchor,
+  Audience,
+  AudienceRecord,
+  AudienceTeaser
 }

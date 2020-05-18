@@ -13,6 +13,7 @@ import LiveMsg from '../LiveMsg';
 import {Anchor as AnchorLiveToolBar} from '../LiveToolBar';
 import MsgSlowOut from '../LiveMsg/MsgSlowOut';
 import {vh} from '../../utils/metric';
+import Mask from '../../components/Mask';
 import {pad} from '../../constants/Layout';
 import {RoomMessageType, MessageType} from '../../reducers/im';
 import {setGroupMemberMuteTime, getGroupMemberProfile} from '../../actions/im';
@@ -23,8 +24,8 @@ const emptyList: [] = [];
 
 const LivingRoomScreen = (props: any) : any =>  {
   const dispatch = useDispatch();
+  const [maskList, maskDispatch] = React.useContext(Mask.context);
   
-
   // 房间消息
   const roomMessages = useSelector((state: any) => state?.im?.roomMessages);
 
@@ -32,7 +33,8 @@ const LivingRoomScreen = (props: any) : any =>  {
   const orderMessages = useSelector((state: any) => (state?.im?.orderMessages || emptyList));
 
   // 房间信息
-  const room = useSelector((state: any) => state?.im?.room);
+  // const room = useSelector((state: any) => state?.im?.room);
+  const livingInfo = useSelector((state: any) => state?.live?.livingInfo);
 
   // 获取成员是否禁言
   const getUserSilent = async (userID: string) => {
@@ -91,26 +93,26 @@ const LivingRoomScreen = (props: any) : any =>  {
           const isSilent = await getUserSilent(userId);
 
           const title = isSilent ? '是否取消禁言' : '是否禁言'
-          Modal.alert(
-            title,
-            userName + ' ' + userId,
-            [
-              {
-                text: '取消',
-                style: 'cancel',
-              },
-              { text: '确定', onPress: () => {
-                const options: any = {userID: userId}
 
+          maskDispatch({
+            type: Mask.Actions.PUSH,
+            payload: {
+              type: Mask.ContentTypes.WithAvatar,
+              data: {
+                avatar: livingInfo.anchorLogo,
+                name: livingInfo.anchorName,
+                rightBtnText: title,
+                onPressRight: () => {
                 // 禁言或者取消禁言
+                const options: any = {userID: userId}
                 if (isSilent) {
                   options.muteTime = 0;
                 }
 
                 dispatch(setGroupMemberMuteTime(options))
-              }},
-            ]
-          )
+                }
+              }
+          }})
         }}
         // style={{maxHeight: 200, width: 200}}
       />

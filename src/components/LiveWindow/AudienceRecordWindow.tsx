@@ -1,6 +1,5 @@
 /**
- * 直播回放和预告容器
- * vedio
+ * 回放
  */
 import React from "react";
 import {
@@ -13,29 +12,29 @@ import {
   Keyboard,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import Video from "react-native-video";
+import VideoPlayer from '../VideoPlayer';
+// import VideoPlayer from 'react-native-video-controls';
 import { useDispatch, useSelector } from "react-redux";
-import NoticeBubble from "../../components/NoticeBubble";
 import LiveIntro from "../LiveIntro";
 import LivingBottomBlock from "../LivingBottomBlock";
-import LivePuller from "../LivePuller";
 import L from "../../constants/Layout";
-import Iconcloselight from "../../components/Iconfont/Iconcloselight";
+import Iconcloselight from "../Iconfont/Iconcloselight";
 import { pad } from "../../constants/Layout";
 import images from "../../assets/images";
-import { joinGroup, quitGroup } from "../../actions/im";
 import { MediaType } from "../../liveTypes";
-import AudienceShopCard from "../../components/LivingShopCard/AudienceShopCard";
+import AudienceShopCard from "../LivingShopCard/AudienceShopCard";
 import { vw, vh } from "../../utils/metric";
 import { PrimaryText } from "react-native-normalization-text";
 import { apiEnterLive } from '../../service/api';
 import { updateLivingInfo } from '../../actions/live';
-import withPage from '../../components/HOCs/withPage';
+import withPage from '../HOCs/withPage';
+import TrailerCountDown from '../TrailerCountDown';
+import { Colors } from '../../constants/Theme';
 
 const { window } = L;
 const EMPTY_OBJ = {};
 
-interface LiveWindowProps {
+interface LiveVideoProps {
   style?: StyleProp<any>;
   liveData?: any;
   safeTop: number;
@@ -44,16 +43,18 @@ interface LiveWindowProps {
 interface LiveWindowParams {
   liveId: string | number, // 直播id
   groupID: string, // im群组
+  mediaType: MediaType, // 媒体类型
+  // mediaSource: string, // 拉流地址、 video
 }
 
-const LiveWindow = (props: LiveWindowProps): any => {
+const LiveVideo = (props: LiveVideoProps): any => {
   const { goBack, replace } = useNavigation();
   const dispatch = useDispatch();
   const route = useRoute() || EMPTY_OBJ;
 
   const {
     liveId,
-    groupID,
+    mediaType,
   } : LiveWindowParams = (route.params || EMPTY_OBJ) as LiveWindowParams;
 
   // 房间信息
@@ -65,7 +66,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
   // 用户id
   const userId = useSelector((state: any) => state?.userData?.userInfo?.userId) || '';
 
-  const pullUrl = useSelector((state: any) => state?.live?.livingInfo?.pullUrl) || '';
+  const backUrl = useSelector((state: any) => state?.live?.livingInfo?.backRtmp) || '';
 
   // 主播信息
   const [anchorInfo, setAnchorInfo]: [any, any] = React.useState({})
@@ -103,14 +104,6 @@ const LiveWindow = (props: LiveWindowProps): any => {
   };
 
   /**
-   * im加群状态
-   */
-  const [isIMJoinSecceed, setIsIMJoinSecceed]: [
-    undefined | boolean,
-    any
-  ] = React.useState(undefined);
-
-  /**
    * 播放器示例
    */
   const player: { current: any } = React.createRef();
@@ -120,7 +113,6 @@ const LiveWindow = (props: LiveWindowProps): any => {
    */
   const closeLive = () => {
     // player.current?.stop(); // 停止播放器实例
-    dispatch(quitGroup()); // 退im群
     goBack();
   };
 
@@ -129,27 +121,11 @@ const LiveWindow = (props: LiveWindowProps): any => {
    */
   React.useEffect(() => {
     // 直播加群
-    dispatch(joinGroup({
-      groupID
-    }))
-      .then((success?: boolean) => {
-        setIsIMJoinSecceed(!!success);
-      })
-      .catch((err: any) => {
-        console.log(err, "err");
-        // 找不到指定群组 显示结束
-        setIsIMJoinSecceed(false);
-      });
-    
+  
     return () => {
       // player.current?.stop(); // 返回时停止
     };
   }, []);
-
-  /**
-   * 公告气泡
-   */
-  const noticeBubbleText = room?.notification;
 
   /**
    * 商品卡可见
@@ -184,32 +160,41 @@ const LiveWindow = (props: LiveWindowProps): any => {
     setShopCardVisible(visiable);
   };
 
-  console.log(isLiveOver, 'isLiveEnd')
-  // 直播结束
-  if (isLiveOver) {
-    replace('AnchorLivingEnd');
-    // return <PrimaryText>直播结束</PrimaryText>;
-  }
+  const bigPic = useSelector((state: any) => state?.live?.livingInfo) || '';
+
+  // bigPic返回不对
+  const bgUri = bigPic ? {uri: bigPic} : images.livingbg
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
-      <Image style={styles.imgBg} source={anchorInfo?.anchorLogo && {uri: anchorInfo?.anchorLogo} || images.livingbg} resizeMode="cover" />
-      <LivePuller
-        ref={player}
-        inputUrl={pullUrl}
-        onStatus={onPlayerStatus}
-        style={styles.video}
-      />
+      <Image style={styles.imgBg} source={images.livingbg} resizeMode="cover" />
+      {
+        backUrl ? (
+          <VideoPlayer
+            source={{uri: backUrl}} // Can be a URL or a local file.
+            repeat
+            fullscreen
+            disableBack
+            disableVolume
+            disableFullscreen
+            // disableSeekbar
+            resizeMode="cover"
+            style={styles.video}
+            // controlsWrapper={{marginBottom: 50}}
+            seekbarWrapper={{marginBottom: 65}}
+            seekColor={Colors.basicColor}
+            seekBallColor="#fff"
+            bottomControlGroupStyle={{marginBottom: 0, height: 24}}
+          />
+        ) : null
+      }
       <View style={styles.livingBottomBlock}>
-        <LivingBottomBlock.Audience onPressShopBag={() => shopCardAnim(true)} />
+        <LivingBottomBlock.AudienceVideo onPressShopBag={() => shopCardAnim(true)} />
       </View>
-
-      {!!noticeBubbleText ? <NoticeBubble text={noticeBubbleText} /> : null}
       <LiveIntro
         showFollowButton
         isFollow={anchorInfo?.isAttention} // 是否关注(0:没关注；1：关注)
       />
-
       <TouchableOpacity
         onPress={closeLive}
         style={StyleSheet.flatten([
@@ -219,7 +204,6 @@ const LiveWindow = (props: LiveWindowProps): any => {
       >
         <Iconcloselight size={24} />
       </TouchableOpacity>
-
       <AudienceShopCard
         visible={!!shopCardVisible}
         onPressClose={() => shopCardAnim(false)}
@@ -233,13 +217,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   livingBottomBlock: {
-    flex: 1,
+    flex: -1,
     position: "absolute",
-    top: 0,
+    height: 68,
     left: 0,
     bottom: 0,
     right: 0,
-    borderColor: "red",
   },
   scrollerWrapper: {},
   contentWrapper: {
@@ -263,4 +246,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withPage(LiveWindow);
+export default withPage(LiveVideo);

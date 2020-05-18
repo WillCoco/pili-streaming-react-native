@@ -183,7 +183,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
 
                     <Stack.Screen name='BeAnchor' component={BeAnchor} options={{ headerShown: false }} />
                     <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
-                    <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false }} />
+                    <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false, gestureEnabled: false }} />
                     <Stack.Screen name='LiveSearchScreen' component={LiveSearch} />
                     {/*<Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{ headerShown: false }} />*/}
                     <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{ headerShown: false }} />
