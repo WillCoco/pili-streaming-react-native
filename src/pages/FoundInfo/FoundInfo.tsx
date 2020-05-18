@@ -324,6 +324,7 @@ function FoundInfo(props: any) {
         onScroll={(e) => scrollPage(e)}
         scrollEventThrottle={200}
         style={styles.container}
+        showsVerticalScrollIndicator={false}
       >
         {
           worksInfo.worksType === 'PICTURE'

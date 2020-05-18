@@ -12,6 +12,7 @@ import {Audience as AudienceLiveToolBar} from '../LiveToolBar';
 import {pad} from '../../constants/Layout';
 import {sendRoomMessage} from '../../actions/im';
 import {RoomMessageType, MessageType} from '../../reducers/im';
+import {apiLiveLike} from '../../service/api';
 import Poller from '../../utils/poller';
 
 const BottomBlock = (props: any) : any =>  {
@@ -39,7 +40,14 @@ const BottomBlock = (props: any) : any =>  {
   const submitLike = React.useCallback((quantity: number) => {
     if (likeQuantity) {
       // 提交、返回新值
-      alert(likeQuantity)
+      // alert(likeQuantity)
+      const params = {
+        anchorId: props.anchorId,
+        likeNum: likeQuantity
+      }
+      apiLiveLike(params).then(res => {
+        // TODO:
+      })
     }
   }, [likeQuantity])
   
@@ -94,7 +102,7 @@ const BottomBlock = (props: any) : any =>  {
         // style={{maxHeight: 200, width: 200}}
       />
       <AudienceLiveToolBar
-        likeQuantity={likeQuantity}
+        likeQuantity={props.likeQuantity || 0}
         onPressShopBag={props.onPressShopBag}
         onSubmitEditing={sendMessage}
         onPressLike={onPressLike}

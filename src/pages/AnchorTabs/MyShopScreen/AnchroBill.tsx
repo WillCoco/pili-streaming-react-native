@@ -24,6 +24,8 @@ import Empty from '../../../components/Empty';
 import { vw, vh } from '../../../utils/metric';
 import { Feather } from '@expo/vector-icons';
 import pxToDp from '../../../utils/px2dp';
+import { apiGetUserAssetsRecords } from '../../../service/api';
+import PagingList from '../../../components/PagingList';
 
 const AnchroBill = props =>  {
 
@@ -33,6 +35,19 @@ const AnchroBill = props =>  {
   const [data, setData]: Array<any> = React.useState(billList);
   const [billDate, setBillDate]: any = React.useState(new Date());
 
+  React.useEffect(() => {
+    
+  }, []);
+
+  /**
+   * 获取账单数据
+   * @param param 
+   */
+  interface BillListParams {
+    pageNo: number
+    pageSize: number
+    searchTime: Date
+  }
 
   /**
    * 渲染行
@@ -54,10 +69,36 @@ const AnchroBill = props =>  {
   /**
    * 改变时间
    */
-  const onDatePicker = value => {
-    setBillDate(value)
+  const onDatePicker = (value: Date) => {
+    apiGetUserAssetsRecords({
+      pageNo: 0,
+      pageSize: 10,
+      searchTime: value
+    }).then(res => {
+      setData(res?.records)
+    })
+  }
 
-    // TODO: 根据时间拉取接口
+  /**
+   * 刷新
+   */
+  const onRefresh = async () => {
+    const result = await apiGetUserAssetsRecords({
+      pageNo: 0,
+      pageSize: 10,
+      searchTime: new Date()
+    }).then(res => {
+      return res?.records
+    })
+
+    return Promise.resolve({result})
+  }
+
+  /**
+   * 更多
+   */
+  const onEndReached = () => {
+    
   }
 
   return (
@@ -87,25 +128,35 @@ const AnchroBill = props =>  {
           </DatePicker>
         </View>
         <View style={styles.billContainer}>
-          {
-            !isEmpty ? <Empty text="暂无数据" /> : (
-              <DraggableFlatList
-                data={[1,2,3,4]||data}
-                renderItem={renderItem}
-                keyExtractor={(item, index) => `draggable-item-${index}`}
-                onDragEnd={({ data }) => setData(data)}
-                contentContainerStyle={styles.contentContainerStyle}
-                ListFooterComponent={() => {
-                  return (
-                    <SmallText color="grey" style={styles.footer}>没有更多啦~</SmallText>
-                  )
-                }}
-                getItemLayout={(data, index) => (
-                  {length: ROW_HEIGHT, offset: ROW_HEIGHT * index, index}
-                )}
-              />
-            )
-          }
+          
+          <PagingList
+            data={data}
+            // setData={setDataList}
+            size={10}
+            // initListData={warehouseGoods}
+            renderItem={({item, index}: any) => {
+              return (
+                <ListItem
+                  leftAvatar={{source: images.BOCIcon}}
+                  title={'提现'}
+                  subtitle={'2020.04.11  12:22'}
+                  subtitleStyle={{color: Colors.darkGrey, marginTop: pad}}
+                  rightTitle={'+12.90¥'}
+                  rightTitleStyle={{fontWeight: 'bold'}}
+                  bottomDivider
+                />
+              )
+            }}
+            getItemLayout={(data, index) => (
+              {length: ROW_HEIGHT, offset: ROW_HEIGHT * index, index}
+            )}
+            onRefresh={onRefresh}
+            onEndReached={onEndReached}
+            keyExtractor={(item, index) => 'index' + index + item}
+            initialNumToRender={14}
+            numColumns={1}
+            columnWrapperStyle={{justifyContent: 'space-between'}}
+          />
         </View>
       </View>
     </View>

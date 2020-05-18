@@ -51,9 +51,10 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
   /**
    * 进入页面获取数据
    */
-  React.useEffect(() => {
-    getDataList('2')
-  }, [])
+  // React.useEffect(() => {
+  //   getDataList('1')
+  //   getDataList('2')
+  // }, [])
 
   const renderItem = (d) => {
     return (
@@ -87,11 +88,11 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
    */
   const changeTab = (e) => {
     console.log(e.i);
-    if (e.i === 0) { // 关注
-      getDataList('2')
-    } else {
-      getDataList('1')
-    }
+    // if (e.i === 0) { // 关注
+    //   getDataList('2')
+    // } else {
+    //   getDataList('1')
+    // }
   }
 
   /**
@@ -107,9 +108,7 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
     }).then(res => {
       return res?.records
     })
-    return Promise.resolve({
-      result: result
-    });
+    
     return Promise.resolve({result})
   };
 
@@ -147,6 +146,7 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
       >
         <PagingList
           tabLabel="关注"
+          // initListData={followList}
           size={20}
           initListData={followList}
           //item显示的布局
@@ -166,7 +166,7 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
         <PagingList
           tabLabel="精选"
           size={10}
-          initListData={selectList}
+          // initListData={selectList}
           //item显示的布局
           renderItem={renderItem}
           //下拉刷新相关

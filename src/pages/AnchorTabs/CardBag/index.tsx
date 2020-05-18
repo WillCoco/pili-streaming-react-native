@@ -24,6 +24,8 @@ import images from '../../../assets/images/index';
 import Empty from '../../../components/Empty/index';
 import {getBankCards} from '../../../actions/asset';
 import withPage from '../../../components/HOCs/withPage';
+import {apiGetUserBankCards} from '../../../service/api';
+import {updateBankCards} from '../../../actions/asset';
 
 const ROW_HEIGHT = 120;
 
@@ -48,8 +50,11 @@ const CardBag = (props: any) =>  {
    * 
    */
   React.useEffect(() => {
-    dispatch(getBankCards());
-  }, [])
+    // dispatch(getBankCards());
+    apiGetUserBankCards().then(res => {
+      dispatch(updateBankCards(res));
+    })
+  }, []);
 
   /**
    * 跳转
@@ -80,6 +85,7 @@ const CardBag = (props: any) =>  {
                   <BandCardRow
                     key={`card_${index}`}
                     onPress={() => onPress(card)}
+                    data={card}
                   />
                 )
               })

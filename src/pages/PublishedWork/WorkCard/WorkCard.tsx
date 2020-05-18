@@ -9,7 +9,7 @@ export default function WorkCard(props) {
 
   return (
     <View style={styles.container}>
-      <ImageBackground source={{ uri: workInfo.worksMoreInfo.worksUrl }} style={styles.workImg} resizeMode='cover'>
+      <ImageBackground source={{ uri: workInfo.worksType === 'VIDEO' ? workInfo.worksMoreInfo.videoCover : workInfo.worksMoreInfo.worksUrl }} style={styles.workImg} resizeMode='cover'>
         {
           workInfo.worksType === 'VIDEO' && <Image source={require('../../../assets/works-image/play.png')} style={styles.playIcon} />
         }

@@ -43,10 +43,12 @@ const PublishScreen = (props: any) =>  {
    * tab的返回到 我的 
    */
   const onBackPress = () => {
-    reset({
-      index: 0,
-      routes: [{ name: 'Root', params: {initialRoute: '我的'}}],
-    });
+    // reset({
+    //   index: 0,
+    //   routes: [{ name: 'Root', params: {initialRoute: '我的'}}],
+    // });
+
+    navigate('我的')
   }
 
   /**

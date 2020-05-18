@@ -21,14 +21,14 @@ import images from '../../../assets/images'
 import MessageRow from './MessageRow'
 import PagingList from '../../../components/PagingList'
 import {apiGetUserChatList} from '../../../service/api'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 const mockList = [
   {
     avatarSource: images.messageDefaultAvatar,
     title: '开播提醒',
     time: '2020.12.12 12:21',
-    content: '根据直播预报，今天晚上20:00，您有直播任务需要完成，请注意。',
+    content: '根据直播预报，今天晚上20:00，。',
   },
   {
     avatarSource: images.messageDefaultAvatar,
@@ -40,7 +40,7 @@ const mockList = [
     avatarSource: images.messageDefaultAvatar,
     title: '开播提醒',
     time: '2020.12.12 12:22',
-    content: '根据直播预报，今天晚上20:00，您有直播任务需要完成，请注意。',
+    content: '根据直播预报，今天晚上20:00，您有直播任务需要完成，请注意。根据直播预报，今天晚上20:00，您有直播任务需要完成，请注意。根据直播预报，今天晚上20:00，您有直播任务需要完成，请注意。根据直播预报，今天晚上20:00，您有直播任务需要完成，请注意。根据直播预报，今天晚上20:00，您有直播任务需要完成，请注意。根据直播预报，今天晚上20:00，您有直播任务需要完成，请注意。根据直播预报，今天晚上20:00，您有直播任务需要完成，请注意。根据直播预报，今天晚上20:00，您有直播任务需要完成，请注意。根据直播预报，今天晚上20:00，您有直播任务需要完成，请注意。根据直播预报，今天晚上20:00，您有直播任务需要完成，请注意。',
   },
 ]
 
@@ -54,6 +54,7 @@ function Message(props) {
   const [messageList, setMessageList] = useState([]) // 通知
   const [noticeList, setNoticeList] = useState([]) // 公告
   const [activeIndex, setActiveIndex] = useState(0)
+  const anchorId = useSelector(state => state?.anchorData?.anchorInfo?.anchorData)
 
   /**
    * 全部标记已读
@@ -81,11 +82,17 @@ function Message(props) {
    * 刷新
    */
   const onRefresh = async () => {
-    // const result = await dispatch(apiGetUserChatList());
-    // console.log(result, 'result')
-    // return Promise.resolve({
-    //   result: [111,222,1,1,1,1,1]
-    // })
+    const params = {
+      anchorId,
+      pageNo: 1,
+      pageSize: 10,
+    }
+    const result = await apiGetUserChatList(params).then(res => {
+      return res?.records
+    })
+    return Promise.resolve({
+      result: mockList
+    })
   }
 
   /**
@@ -123,7 +130,7 @@ function Message(props) {
                 key={`tab-${index}`} tabLabel={item + `(${0})`} // TODO:数字
                 // ref={c => plist.current = c}
                 size={10}
-                initListData={messageList}
+                initListData={mockList}
                 renderItem={({item, index}: any) => {
                   console.log(item, 'itemmmmmmm')
                   return (
@@ -133,9 +140,9 @@ function Message(props) {
                     />
                   )
                 }}
-                getItemLayout={(data, index) => (
-                  {length: ROW_HEIGHT, offset: ROW_HEIGHT * index, index}
-                )}
+                // getItemLayout={(data, index) => (
+                //   {length: ROW_HEIGHT, offset: ROW_HEIGHT * index, index}
+                // )}
                 onRefresh={onRefresh}
                 onEndReached={onEndReached}
                 keyExtractor={(item, index) => 'index' + index + item}

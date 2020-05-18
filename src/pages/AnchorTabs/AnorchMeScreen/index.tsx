@@ -19,6 +19,8 @@ import ToolRow from '../../../components/ToolRow';
 import {pad} from '../../../constants/Layout';
 import {Colors} from '../../../constants/Theme';
 import {useDispatch, useSelector} from 'react-redux';
+import {apiAnchorHomePage} from '../../../service/api';
+import {setAnchorInfo} from '../../../actions/anchor';
 
 const ToolCell = (props: {
   text: string,
@@ -35,7 +37,9 @@ const ToolCell = (props: {
 
 const AnorchMeScreen = () =>  {
   const {navigate, reset} = useNavigation();
-  const anchorInfo = useSelector(state => state?.anchorData?.anchorInfo) || {}
+  const userId = useSelector(state => state?.userData?.userInfo?.userId)
+  const anchorInfo = useSelector(state => state?.anchorData?.anchorInfo) || {};
+  const dispatch = useDispatch();
 
   const dataList = [
     {img: images.anchorMyRecords, text: '我的直播', onPress: () => navigate('AnchorRecords'), showRightText: true, rightTitle: anchorInfo.liveAmount},
@@ -51,13 +55,25 @@ const AnorchMeScreen = () =>  {
   ];
 
   /**
+   * 获取主播详情
+   */
+  React.useEffect(() => {
+    apiAnchorHomePage({userId})
+      .then(res => {
+        dispatch(setAnchorInfo(res))
+      })
+  }, []);
+
+  /**
    * tab的返回到 我的 
    */
   const onBackPress = () => {
-    reset({
-      index: 0,
-      routes: [{ name: 'Root', params: {initialRoute: '我的'}}],
-    });
+    // reset({
+    //   index: 0,
+    //   routes: [{ name: 'Root', params: {initialRoute: '我的'}}],
+    // });
+
+    navigate('我的')
   }
 
   return (
