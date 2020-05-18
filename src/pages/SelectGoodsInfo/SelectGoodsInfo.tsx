@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
 import { Ionicons } from '@expo/vector-icons'
@@ -10,13 +10,12 @@ import GoodsCard from './GoodsCard/GoodsCard'
 import Swiper from './Swiper/Swiper'
 import pxToDp from '../../utils/px2dp'
 import formatSinglePrice from '../../utils/formatGoodsPrice'
-import { Flex } from '@ant-design/react-native'
 
 export default function SelectGoodsInfo() {
   const route = useRoute()
   const navigation = useNavigation()
   const [swiperList, setSwiperList] = useState([])
-  const [goodsInfo, setGoodsInfo] = useState({})
+  const [goodsInfo, setGoodsInfo]: any = useState({})
   const [goodsList, setGoodsList] = useState([])
 
   navigation.setOptions({
@@ -38,7 +37,7 @@ export default function SelectGoodsInfo() {
   const getSelectedInfo = () => {
     apiSelectGoodsInfo({
       goods_id: route.params.id
-    }).then(res => {
+    }).then((res: any) => {
       console.log('精选好物详情', res)
 
       setSwiperList(res.goods_img)
@@ -77,23 +76,19 @@ export default function SelectGoodsInfo() {
         </View>
       </ScrollView>
       <View style={styles.footerActionBar}>
-        <View style={styles.footerLeft}>
+        <TouchableOpacity style={styles.footerLeft}>
           <Ionicons
             size={20}
             name={goodsInfo.is_like ? 'ios-heart' : 'ios-heart-empty'}
             color={goodsInfo.is_like ? Colors.basicColor : Colors.lightGrey}
           />
-          <Text style={styles.likesCount}>{goodsInfo.people_like}人喜欢</Text>
-        </View>
-        <TouchableWithoutFeedback onPress={toGoodsInfo}>
-          <View style={styles.footerRight}>
-            <Text style={styles.goodsPrice}>¥{formatSinglePrice(goodsInfo.shop_price)}去看看</Text>
-          </View>
-        </TouchableWithoutFeedback>
-
+          <Text style={styles.likesCount}>{goodsInfo?.people_like || 0}人喜欢</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={toGoodsInfo} style={styles.footerRight}>
+          <Text style={styles.goodsPrice}>¥{formatSinglePrice(goodsInfo?.shop_price || 0)}去看看</Text>
+        </TouchableOpacity>
       </View>
     </View>
-
   )
 }
 

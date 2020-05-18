@@ -84,6 +84,20 @@ export default function SelectGoods() {
     }
   }
 
+  /**
+   * 更新商品列表
+   */
+  const updateGoodsList = (id: number) => {
+    goodsList.forEach((item: any) => {
+      if (item.goods_id === id) {
+        item.people_like = item.is_like ? item.people_like - 1 : item.people_like + 1
+        item.is_like = item.is_like ? 0 : 1
+      }
+    })
+
+    setGoodsList(JSON.parse(JSON.stringify(goodsList)))
+  }
+
   return (
     <ScrollableTabView
       initialPage={0}
@@ -105,7 +119,11 @@ export default function SelectGoods() {
               {
                 goodsList && goodsList.map((item: any, index: number) => {
                   return (
-                    <GoodsCard key={`goods-${index}`} goodsInfo={item} />
+                    <GoodsCard
+                      key={`goods-${index}`}
+                      goodsInfo={item}
+                      updateGoodsList={(id: number) => updateGoodsList(id)}
+                    />
                   )
                 })
               }

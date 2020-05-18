@@ -20,9 +20,10 @@ function WorksGoodsList(props: any) {
     getGoodsList()
   }, [])
 
-  const getGoodsList = () => {
-    console.log(addedGoodsList)
-    apiAddGoods().then((res: any) => {
+  const getGoodsList = (keywords: string = '') => {
+    apiAddGoods({
+      keywords
+    }).then((res: any) => {
       console.log('商品列表', res)
 
       if (addedGoodsList.length) {
@@ -47,7 +48,7 @@ function WorksGoodsList(props: any) {
 
   return (
     <View style={{ flex: 1 }}>
-      <Header />
+      <Header toSearch={(searchKey: string) => getGoodsList(searchKey)} />
       <ScrollView style={{ flex: 1 }}>
         {
           goodsList && goodsList.map((item: any, index: number) => {

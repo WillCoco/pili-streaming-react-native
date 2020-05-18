@@ -13,7 +13,7 @@ const { store } = configStore();
  */
 export const timeoutHandler = (promise: any) => {
   return promise.then((result: any) => {
-    console.log(result, 'timeoutHandler')
+    // console.log(result, 'timeoutHandler')
     if (result && result.timeout) {
       Toast.show("连接超时");
       return Promise.reject(result);
@@ -47,7 +47,7 @@ export const authInvalidHandler = (promise: Promise<any>) => {
  */
 export const restErrorHandler = (promise: any) => {
   return promise.then((result: any) => {
-    console.log(result, 'dataHandler')
+    // console.log(result, 'dataHandler')
     if (result && result.code !== 200 && result.code !== 203 && result.code !== 204) {
       Toast.show(result.message);
       return Promise.reject(result);
@@ -62,7 +62,7 @@ export const restErrorHandler = (promise: any) => {
  */
 export const dataFormatHandler = (promise: any) => {
   return promise.then((result: any) => {
-    console.log(result, 'dataHandler')
+    // console.log(result, 'dataHandler')
     if (result && result.code === 200) {
       return Promise.resolve(result.data);
     }

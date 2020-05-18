@@ -1,6 +1,6 @@
 import configStore from "../../store";
-import Toast from "react-native-tiny-toast";
-import { toggleLoginState, setToke, setUserInfo } from "../../actions/user";
+// import Toast from "react-native-tiny-toast";
+// import { toggleLoginState, setToke, setUserInfo } from "../../actions/user";
 const { store } = configStore();
 import { sleep } from "../../utils/tools";
 import {getParam} from "./getParams";
@@ -100,7 +100,7 @@ export const post = (path: RequestInfo, data: any, options: Options = {}) => {
 };
 
 /**
- * 直播上传接口
+ * 发表作品上传接口
  */
 export interface FileType {
   uri: string;
@@ -114,7 +114,6 @@ export const uploadWorkMedia = (
   options: Options = {}
 ): any => {
   let formData = new FormData();
-  console.log(params, "file");
   formData.append("fileType", params.fileType);
   formData.append("file", params.file as any);
 
@@ -143,7 +142,7 @@ export const uploadWorkMedia = (
 
 
 /**
- * 上传接口
+ * 直播上传接口
  */
 export interface UpdateParams {
   size: string;

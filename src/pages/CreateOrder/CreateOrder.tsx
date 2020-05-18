@@ -275,6 +275,7 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
 
     apiCreateOrder(params).then((res: any) => {
       Toast.hide(loading)
+      console.log('提交订单', res)
 
       if (res.code !== 200) {
         Toast.show('创建订单失败')
@@ -282,8 +283,6 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
       }
 
       let payURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
-
-      console.log('提交订单', res)
 
       for (let item in res.data) {
         console.log(item)
