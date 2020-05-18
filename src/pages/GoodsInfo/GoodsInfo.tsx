@@ -32,12 +32,12 @@ function GoodsInfo(props: any) {
   const { id: goodsId, shareUserId } = route.params
   const [isLoadingComplete, setIsLoadingComplete] = useState(false)
   const [swiperList, setSwiperList] = useState([])
-  const [goodsInfo, setGoodsInfo] = useState({})
+  const [goodsInfo, setGoodsInfo]: any = useState({})
   const [goodsType, setGoodsType] = useState('')
   const [goodsContent, setGoodsContent] = useState('')
   const [goodsSku, setGoodsSku] = useState([])  // 规格列表
   const [curSku, setCurSku] = useState('')  // 当前选中的规格
-  const [curSkuInfo, setCurSkuInfo] = useState({})  // 当前选中规格的详细信息
+  const [curSkuInfo, setCurSkuInfo]: any = useState({})  // 当前选中规格的详细信息
   const [showGoodsSku, setShowGoodsSku] = useState(false)
   const [showCoupon, setShowCoupon] = useState(false)
   const [showShareBar, setShowShareBar] = useState(false)
@@ -298,7 +298,7 @@ function GoodsInfo(props: any) {
       sku_id: curSkuInfo.id
     }
 
-    apiAddCart(params).then(res => {
+    apiAddCart(params).then((res: any) => {
       console.log('加入购物车', res)
 
       if (res === '添加成功') {
@@ -348,7 +348,7 @@ function GoodsInfo(props: any) {
     apiGoodsIsLike({
       goods_id,
       type: is_collect ? 0 : 1
-    }).then(res => {
+    }).then((res: any) => {
       console.log('收藏/取消收藏', res)
 
       goodsInfo.is_collect = is_collect ? 0 : 1

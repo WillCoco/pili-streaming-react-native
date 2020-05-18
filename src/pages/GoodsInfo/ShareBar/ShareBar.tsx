@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, Share, Platform, CameraRoll } from 'react-native'
-// import CameraRoll from 'react-native-cameraroll'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Share, Platform } from 'react-native'
+import CameraRoll from '@react-native-community/cameraroll'
 import RNFetchBlob from 'rn-fetch-blob'
 import RNFS from 'react-native-fs'
 import { connect } from 'react-redux'
@@ -11,8 +11,9 @@ import * as WeChat from 'react-native-wechat-lib'
 // import * as FileSystem from 'expo-file-system'
 import { apiCreatePoster, apiGetUserData } from '../../../service/api'
 import { setUserInfo } from '../../../actions/user'
+import Toast from 'react-native-tiny-toast'
 
-function ShareBar(props: any) {
+function ShareBar(props: { hideShareBar?: any; dispatch?: any; goodsId?: any; userId?: any }) {
   const [progress, setProgress] = useState(0)
   const { goodsId, userId } = props
 
@@ -27,7 +28,8 @@ function ShareBar(props: any) {
       thumbImageUrl: 'https://google.com/1.jpg',
       scene: 0
     }).then(res => {
-      console.log(res)
+      Toast.show('已保存至相册')
+      props.hideShareBar()
     }).catch(err => {
       console.log(err)
     })
@@ -72,17 +74,6 @@ function ShareBar(props: any) {
     })
   }
 
-  // const downLoad = (base64: string) => {
-  //   const dirs = RNFetchBlob.fs.dirs
-
-  //   let path = dirs.DCIMDir + "PATH/TO/FILE.png"
-
-  //   RNFetchBlob.fs.writeFile(path, base64, 'base64').then((result) => {
-  //     console.log("File has been saved to:" + result)
-  //   })
-  //   .catch(error => console.log(error))
-  // }
-
   const download = (base64Img: string, success: any, fail: any) => {
     console.log(base64Img)
 
@@ -96,45 +87,19 @@ function ShareBar(props: any) {
 
     // 报错了 先注释
     RNFetchBlob.fs.writeFile(downloadDest, imageData, 'base64').then(() => {
-      // try {
-      //   CameraRoll.saveToCameraRoll(downloadDest).then((res) => {
-      //     console.log('suc', res)
-      //     success && success()
-      //   }).catch((err) => {
-      //     console.log('fai', err)
-      //   })
-      // } catch (err) {
-      //   console.log('catch', err)
-      //   fail && fail()
-      // }
+      try {
+        CameraRoll.saveToCameraRoll(downloadDest).then((res) => {
+          console.log('suc', res)
+          success && success()
+        }).catch((err) => {
+          console.log('fai', err)
+        })
+      } catch (err) {
+        console.log('catch', err)
+        fail && fail()
+      }
     });
   }
-
-  // const downLoad = async () => {
-  //   const callback = (downloadProgress:
-  //     {
-  //       totalBytesWritten: number
-  //       totalBytesExpectedToWrite: number
-  //     }) => {
-  //     const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite
-  //     setProgress(progress)
-  //   }
-
-  //   const downloadResumable = FileSystem.createDownloadResumable(
-  //     'http://techslides.com/demos/sample-videos/small.mp4',
-  //     FileSystem.documentDirectory + 'small.mp4',
-  //     {},
-  //     callback
-  //   )
-
-  //   try {
-  //     const { uri } = await downloadResumable.downloadAsync();
-  //     console.log('Finished downloading to ', uri);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
-
 
   return (
     <View style={styles.container}>
