@@ -170,7 +170,7 @@ function CreateOrEditAddr(props: { dispatch: (arg0: { type: string; payload: any
             </Picker>
           </View>
 
-          <View style={[styles.formItem]}>
+          <View style={[styles.formItem, { borderBottomWidth: 0 }]}>
             <Text style={styles.formItemTitle}>详细地址</Text>
             <TextInput
               maxLength={40}

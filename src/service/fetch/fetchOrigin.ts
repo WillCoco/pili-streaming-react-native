@@ -58,7 +58,7 @@ export const get = (path: any, data?: any, options: Options = {}) => {
       const r1 = await response.text();
       const r2 = r1.trim && r1.trim();
       return r2 && JSON.parse(r2);
-    });
+    })
 
   // 超时
   const raceTimeout = Promise.race([fn, timeout(options.timeout || DEFAULT_TIMEOUT, path)]);

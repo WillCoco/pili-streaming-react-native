@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, Share, Platform } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Share, Platform, PermissionsAndroid } from 'react-native'
 import CameraRoll from '@react-native-community/cameraroll'
 import RNFetchBlob from 'rn-fetch-blob'
 import RNFS from 'react-native-fs'
@@ -67,7 +67,8 @@ function ShareBar(props: { hideShareBar?: any; dispatch?: any; goodsId?: any; us
 
     apiCreatePoster(params).then((res: any) => {
       download(res, () => {
-        console.log('success')
+        Toast.show('已保存至相册')
+        props.hideShareBar()
       }, () => {
         console.log('error')
       })
@@ -75,25 +76,37 @@ function ShareBar(props: { hideShareBar?: any; dispatch?: any; goodsId?: any; us
   }
 
   const download = (base64Img: string, success: any, fail: any) => {
-    console.log(base64Img)
-
     const dirs =
       Platform.OS === 'ios'
         ? RNFS.LibraryDirectoryPath
         : RNFS.ExternalDirectoryPath; // 外部文件，共享目录的绝对路径（仅限android）
     const downloadDest = `${dirs}/${((Math.random() * 10000000) | 0)}.png`;
-    // const imageDatas = base64Img.split('data:image/png;base64,');
     const imageData = base64Img;
 
     // 报错了 先注释
-    RNFetchBlob.fs.writeFile(downloadDest, imageData, 'base64').then(() => {
+    RNFetchBlob.fs.writeFile(downloadDest, imageData, 'base64').then(async () => {
       try {
-        CameraRoll.saveToCameraRoll(downloadDest).then((res) => {
-          console.log('suc', res)
-          success && success()
-        }).catch((err) => {
-          console.log('fai', err)
-        })
+        if (Platform.OS === 'ios') {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            {
+              title: "请求",
+              message: "允许存储文件到手机",
+              buttonNeutral: "稍后询问",
+              buttonNegative: "取消",
+              buttonPositive: "确认"
+            }
+          )
+
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            CameraRoll.saveToCameraRoll(downloadDest).then((res) => {
+              console.log('saveSuccess', res)
+              success && success()
+            }).catch((err) => {
+              Toast.show('保存失败')
+            })
+          }
+        }
       } catch (err) {
         console.log('catch', err)
         fail && fail()

@@ -36,7 +36,7 @@ function Account(props) {
           <Image source={require('../../../assets/mine-image/icon_yiti.png')} style={styles.icon} />
           <View style={styles.accountDetail}>
             <Text style={styles.text}>已提金额</Text>
-            <Text style={styles.price}>¥{formatSinglePrice(userInfo.willSettle || 0)}</Text>
+            <Text style={styles.price}>¥{formatSinglePrice(userInfo.hasWithdraw || 0)}</Text>
           </View>
         </View>
         <View style={styles.accountItem}>
@@ -50,7 +50,7 @@ function Account(props) {
           <Image source={require('../../../assets/mine-image/icon_keti.png')} style={styles.icon} />
           <View style={styles.accountDetail}>
             <Text style={styles.text}>可提金额</Text>
-            <Text style={styles.price}>¥{formatSinglePrice(userInfo.willSettle || 0)}</Text>
+            <Text style={styles.price}>¥{formatSinglePrice(userInfo.accountMoney || 0)}</Text>
           </View>
         </View>
       </View>

@@ -10,18 +10,20 @@ import Header from './Header/Header'
 import OrdersContent from './OrdersContent/OrdersContent'
 import FansContent from './FansContent/FansContent'
 import Account from './Account/Account'
-import Banner from './Banner/Banner'
+// import Banner from './Banner/Banner'
 import GoodsList from './GoodsList/GoodsList'
 import ToolBar from './ToolBar/ToolBar'
 import checkIsBottom from '../../utils/checkIsBottom'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
-function Mine(props) {
+function Mine(props: { dispatch?: any; isLogin?: any }) {
   const navigation = useNavigation()
   const pageSize = 20
   const { isLogin } = props
   const focused = useIsFocused()
   const [orderCount, setOrderCount] = useState({})
   const [goodsList, setGoodsList] = useState([])
+  const [isErr, setIsErr] = useState(false)
   let pageNoRef = useRef(1)
   let hasMoreRef = useRef(true)
 
@@ -32,7 +34,6 @@ function Mine(props) {
   useEffect(() => {
     if (focused) {
       getUserInfo()
-      getOrderCount()
     }
   }, [focused])
 
@@ -60,6 +61,10 @@ function Mine(props) {
     apiGetUserData().then((res: any) => {
       console.log('获取用户信息', res)
       props.dispatch(setUserInfo(res))
+      getOrderCount()  // 获取订单数量
+    }).catch((err: any) => {
+      console.log(err, 'errrrrr')
+      setIsErr(true)
     })
   }
 
@@ -83,6 +88,10 @@ function Mine(props) {
       pageNoRef.current += 1
       getGoodsList()
     }
+  }
+
+  if (isErr) {
+    return <NetWorkErr />
   }
 
   return (
