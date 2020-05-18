@@ -26,40 +26,49 @@ import NavBar from '../../../components/NavBar';
 import { connect } from 'react-redux';
 import { apiGetLiveDataList } from '../../../service/api';
 import {isIOS, isAndroid} from '../../../constants/DeviceInfo';
+import PagingList from '../../../components/PagingList';
 
-const LiveInfoCard = (props: {}) => {
+const LiveInfoCard = (props: {
+    addFavourite: number,
+    createTime: string,
+    likeSum: number,
+    liveDuration: string,
+    orderSum: number,
+    watchSum: number,
+    moneySum: number
+}) => {
     return (
         <View style={styles.card}>
             <View style={styles.infoTitle}>
                 <Image source={images.anchorMicrophone} style={styles.microphoneImg}></Image>
-                <PrimaryText style={styles.title}>1月10日直播</PrimaryText>
+                <PrimaryText style={styles.title}>{props.createTime}直播</PrimaryText>
             </View>
             <View style={styles.box}>
                 <View style={styles.tableItem}>
                     <View>
-                        <PrimaryText style={styles.contentTitle}>1h 34min</PrimaryText>
+                        <PrimaryText style={styles.contentTitle}>{props.liveDuration}</PrimaryText>
                         <PrimaryText style={styles.headTitle}>直播时长</PrimaryText>
                     </View>
                     <View>
-                        <PrimaryText style={styles.contentTitle}>99099</PrimaryText>
+                        <PrimaryText style={styles.contentTitle}>{props.addFavourite}</PrimaryText>
                         <PrimaryText style={styles.headTitle}>今日点赞数</PrimaryText>
                     </View>
                     <View>
-                        <PrimaryText style={styles.contentTitle}>40000</PrimaryText>
+                        <PrimaryText style={styles.contentTitle}>{props.likeSum}</PrimaryText>
                         <PrimaryText style={styles.headTitle}>观众总数</PrimaryText>
                     </View>
                 </View>
                 <View style={styles.tableItem}>
                     <View>
-                        <PrimaryText style={styles.contentTitle}>30000</PrimaryText>
+                        <PrimaryText style={styles.contentTitle}>{props.watchSum}</PrimaryText>
                         <PrimaryText style={styles.headTitle}>新增粉丝</PrimaryText>
                     </View>
                     <View>
-                        <PrimaryText style={styles.contentTitle}>900</PrimaryText>
+                        <PrimaryText style={styles.contentTitle}>{props.orderSum}</PrimaryText>
                         <PrimaryText style={styles.headTitle}>下单数量</PrimaryText>
                     </View>
                     <View>
-                        <PrimaryText style={styles.contentTitle}>10000</PrimaryText>
+                        <PrimaryText style={styles.contentTitle}>{props.moneySum}</PrimaryText>
                         <PrimaryText style={styles.headTitle}>成交金额</PrimaryText>
                     </View>
                 </View>
@@ -70,24 +79,35 @@ const LiveInfoCard = (props: {}) => {
 
 const LivesAnalyze = (props) =>  {
     const {anchorInfo = {}} = props;
-    console.log(anchorInfo, 'anchorInfo');
+
     const {goBack} = useNavigation();
 
-    const [liveInfoList, setLiveInfoList] = useState([{},{},{},{}]);
+    const [liveInfoList, setLiveInfoList] = useState([]);
 
     useEffect(() => {
         getDataListFn()
     }, []);
 
+    /*
+    * 上拉加载更多
+    * */
+    const onEndReached = () => {};
+
+    /*
+    *  获取直播数据
+    * */
     const getDataListFn = () => {
         const {anchorId} = anchorInfo;
         apiGetLiveDataList({
             anchorId,
-            dateScope: '',
+            dateScope: '2020-05',
             pageNo: 1,
             pageSize: 10,
         }).then(res => {
-            console.log(res, 'sync get DataList')
+            const {records = []} = res;
+            setLiveInfoList(records)
+        }).catch(err => {
+            console.log(err, 'error')
         });
     };
 
@@ -110,14 +130,27 @@ const LivesAnalyze = (props) =>  {
                                 {/*<PrimaryText>图表</PrimaryText>*/}
                             </View>
                         </View>
-                        {
-                            liveInfoList && liveInfoList.map((item,index) => {
+                        <PagingList
+                            size={10}
+                            data={liveInfoList}
+                            setData={setLiveInfoList}
+                            initListData={liveInfoList}
+                            renderItem={({item, index}) => {
                                 return (
                                     <LiveInfoCard
+                                        addFavourite={item.addFavourite}
+                                        createTime={item.createTime}
+                                        likeSum={item.likeSum}
+                                        moneySum={item.moneySum}
+                                        liveDuration={item.liveDuration}
+                                        orderSum={item.orderSum}
+                                        watchSum={item.watchSum}
                                         key={`_${index}`}/>
                                 )
-                            })
-                        }
+                            }}
+                            onEndReached={onEndReached}
+                            initialNumToRender={10}>
+                        </PagingList>
                     </View>
                 </ScrollView>
             </View>

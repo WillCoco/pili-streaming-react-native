@@ -12,6 +12,7 @@ import DefaultContent from './DefaultContent/DefaultContent'
 import CartItem from '../../components/CartItem/CartItem'
 import CartFooterAction from '../../components/CartFooterAction/CartFooterAction'
 import pxToDp from '../../utils/px2dp'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
 function Cart(props: any) {
   const { isLogin } = props.userData
@@ -19,7 +20,7 @@ function Cart(props: any) {
   const navigation = useNavigation()
   const [isEmpty, setIsEmpty] = useState(true)
   const [allCartGoodsInfo, setAllCartGoodsInfo] = useState({})
-
+  const [isErr, setIsErr] = useState(false)
   const { userData, cartData } = props
 
   useEffect(() => {
@@ -54,6 +55,8 @@ function Cart(props: any) {
         // 购物车为空
         setIsEmpty(true)
       }
+    }).catch((err: any) => {
+      setIsErr(true)
     })
   }
 
@@ -301,20 +304,14 @@ function Cart(props: any) {
       })
     })
 
-    apiChangeCart({ cartList: params }).then(res => console.log('购物车状态修改', res))
+    apiChangeCart({ cartList: params }).then((res: any) => console.log('购物车状态修改', res))
   }
 
-  if (!userData.isLogin) {
-    return (
-      <DefaultContent type='notLogin' nextAction={toLogin} />
-    )
-  }
+  if (!userData.isLogin) return <DefaultContent type='notLogin' nextAction={toLogin} />
 
-  if (isEmpty) {
-    return (
-      <DefaultContent type='empty' nextAction={toHome} />
-    )
-  }
+  if (isErr) return <NetWorkErr />
+
+  if (isEmpty) return <DefaultContent type='empty' nextAction={toHome} />
 
   return (
     <SafeAreaView style={{ height: '100%' }}>

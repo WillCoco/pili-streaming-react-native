@@ -14,9 +14,8 @@ export const getBankCards = () => {
     // 请求更新
     await sleep(1000);
     const bankCards = [{
-      name: '中国银行',
-      icon: '',
-      cardNum: '2134325'
+      bankName: '中国银行',
+      bankAccountNo: '8888'
     }]
 
     // 若成功去更新store
@@ -44,7 +43,7 @@ export const addBankCard = (info: any) => {
 /**
  * 更新当前银行卡
  */
-export const updateCurBankCards = (curBankCard: Array<any>) => {
+export const updateCurBankCards = (curBankCard: any) => {
   return {type: assetActionType.UPDATE_CUR_BANK_CARD, payload: {curBankCard}};
 }
 
@@ -53,4 +52,11 @@ export const updateCurBankCards = (curBankCard: Array<any>) => {
  */
 export const updateBankCards = (bankCards: Array<any>) => {
   return {type: assetActionType.UPDATE_BANK_CARD, payload: {bankCards}};
+}
+
+/**
+ * 主播资金管理
+ */
+export const setAnchorAssetsInfo = (anchorAssetsInfo: any) => {
+  return {type: assetActionType.SET_ANCHOR_ASSETS_INFO, payload: {anchorAssetsInfo}}
 }

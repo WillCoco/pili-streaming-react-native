@@ -23,6 +23,7 @@ import { Colors } from '../../constants/Theme'
 import { strDiscode } from '../../utils/discodeRichText'
 import pxToDp from '../../utils/px2dp'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
 let timer: any
 
@@ -66,14 +67,15 @@ function GoodsInfo(props: any) {
   const [showShareBar, setShowShareBar] = useState(false)
   const [buttonType, setButtonType] = useState('')  // 商品规格操作面板购买按钮文字
   const [soldOut, setSoldOut] = useState(false)
+  let [goodsNum, setGoodsNum] = useState(1)
+  const [couponList, setCouponList] = useState([])
+  const [isErr, setIsErr] = useState(false)
+  const [webViewHeight, setWebViewHeight] = useState(0)
   const [countDownInfo, setCountDownInfo] = useState({
     hours: 0,
     min: 0,
     sec: 0
   })
-  let [goodsNum, setGoodsNum] = useState(1)
-  const [couponList, setCouponList] = useState([])
-  const [webViewHeight, setWebViewHeight] = useState(0)
   const goodsInfoRef: any = useRef()
 
   navigation.setOptions({
@@ -150,6 +152,8 @@ function GoodsInfo(props: any) {
       setSoldOut(false)
 
       if (isLogin) getGoodsCoupon(res.goods_id)
+    }).catch((err: any) => {
+      setIsErr(true)
     })
   }
 
@@ -187,9 +191,11 @@ function GoodsInfo(props: any) {
    * 加载优惠券
    */
   const getGoodsCoupon = (id: number) => {
-    apiGetUnclaimedCoupons({ goodsId: id }).then(res => {
+    apiGetUnclaimedCoupons({ goodsId: id }).then((res: any) => {
       console.log('加载优惠券', res)
       setCouponList(JSON.parse(JSON.stringify(res)))
+    }).catch((err: any) => {
+      setIsErr(true)
     })
   }
 
@@ -394,6 +400,10 @@ function GoodsInfo(props: any) {
     }
 
     setShowShareBar(true)
+  }
+
+  if (isErr) {
+    return <NetWorkErr />
   }
 
   if (soldOut) {

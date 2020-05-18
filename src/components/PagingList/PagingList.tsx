@@ -150,7 +150,7 @@ const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
 
   // React.useEffect(() => {
   //   /**
-  //    * 暴露组件内部方法 
+  //    * 暴露组件内部方法
   //    */
   //   if (ref) {
   //     ref({

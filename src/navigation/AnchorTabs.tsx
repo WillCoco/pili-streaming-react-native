@@ -49,14 +49,15 @@ function BottomTabNavigator({ navigation, route }: any) {
           tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? images.tabLiveActive : images.tabLive} resizeMode="contain" />,
         }}
       />
-      <BottomTab.Screen
+      {/* 暂不开放 */}
+      {/* <BottomTab.Screen
         name="AnorchShop"
         component={MyShopScreen}
         options={{
           title: '店铺',
           tabBarIcon: ({ focused }) => <Image style={styles.tabBarImage} source={focused ? images.tabShopActive : images.tabShop} resizeMode="contain" />,
         }}
-      />
+      /> */}
       <BottomTab.Screen
         name="AnorchMe"
         component={AnorchMeScreen}

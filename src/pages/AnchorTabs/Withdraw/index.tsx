@@ -27,7 +27,10 @@ import FormRow from '../../../components/FormRow';
 import CountDown from '../../../components/CountDown';
 import Mask from '../../../components/Mask';
 import withPage from '../../../components/HOCs/withPage';
-import {apiGetUserBankCards} from '../../../service/api';
+import {apiGetUserBankCards, apiWithdraw} from '../../../service/api';
+import pxToDp from '../../../utils/px2dp';
+import images from '../../../assets/images';
+import {updateCurBankCards} from '../../../actions/asset';
 
 const Withdraw = (props: any) =>  {
   const {navigate, goBack, replace} = useNavigation();
@@ -35,18 +38,20 @@ const Withdraw = (props: any) =>  {
   const dispatch = useDispatch();
   const [withdrawNum, setWithdrawNum] = React.useState('');
   const [verifyCode, setVerifyCode] =  React.useState('');
-  const [countDownNum, setCountDownNum] = React.useState(0); // 倒计时
   let [maskList, maskDispatch] = React.useContext(Mask.context);
-  const [curBankCard, setCurBankCard] = React.useState({}); // 默认银行卡，没有则提示添加
-
-  console.log(route.params?.card, '提现的银行卡')
+  const curBankCard = useSelector(state => state?.asset?.curBankCard) || {}; // 当前选中银行卡
+  const [showCountDown, setShowCountDown] = React.useState(false); // 是否显示获取验证码倒计时
+  const accountMoney = useSelector(state => state?.asset?.anchorAssetsInfo?.accountMoney) || 0; // 可提现金额
 
   React.useEffect(() => {
-    // setCurCard()
     apiGetUserBankCards().then(res => {
-      
+      if (!curBankCard?.id) {
+        const defaultBankCard = res?.length !== 0 && res?.[0] || {};
+        // setDefaultBankCard(defaultBankCard);
+        dispatch(updateCurBankCards(defaultBankCard));
+      }
     })
-  }, [])
+  }, []);
 
   /**
    * 当前银行卡
@@ -54,36 +59,54 @@ const Withdraw = (props: any) =>  {
   const {
     card,
   } = route.params || {}
-  
 
+  /**
+   * 展示倒计时
+   */
+  const renderCoundDown = (second: number) => {
+    return <PrimaryText onPress={getCode}>{'' + second}s后重发</PrimaryText>
+  }
+  
   /**
    * 获取验证码
    */
   const getCode = () => {
-    
-  }
+    setShowCountDown(true);
+  };
 
   /**
    * 提交提现
    */
   const onSumbit = async () => {
-    maskDispatch({
-      type: Mask.Actions.PUSH,
-      payload: {
-        type: Mask.ContentTypes.Normal,
-        data: {
-          text: '验证码错误，请重新输入!',
-          title: '提示',
-          rightBtnText: '确定',
-          onPressRight: () => {alert(421)}
-        }
-      }});
-    Toast.showLoading('');
-    // const success = await dispatch(addBankCard());
-    await sleep(1000)
-    Toast.hide('')
-    Toast.show('提现成功')
-    goBack();
+    // maskDispatch({
+    //   type: Mask.Actions.PUSH,
+    //   payload: {
+    //     type: Mask.ContentTypes.Normal,
+    //     data: {
+    //       text: '验证码错误，请重新输入!',
+    //       title: '提示',
+    //       rightBtnText: '确定',
+    //       onPressRight: () => {alert(421)}
+    //     }
+    //   }});
+    // Toast.showLoading('');
+    // // const success = await dispatch(addBankCard());
+    // await sleep(1000)
+    // Toast.hide('')
+    // Toast.show('提现成功')
+    // goBack();
+
+    const params = {
+      "amount": withdrawNum,
+      "code": "string",
+      "userBankCardId": curBankCard.id
+    };
+
+    apiWithdraw(params).then(async res => {
+      await sleep(1000)
+      Toast.show('提现成功')
+      goBack();
+    });
   };
 
   return (
@@ -95,21 +118,30 @@ const Withdraw = (props: any) =>  {
         style={styles.nav}
       />
       <View style={styles.contentWrapper}>
-        <ListItem
-          title={
-            <T4 style={{marginBottom: pad}}>{card?.name}</T4>
-          }
-          subtitle={
-            <TinyText>尾号{card?.cardNum.slice(-4)}储蓄卡</TinyText>
-          }
-          leftAvatar={{ source: card?.icon}}
-          chevron
-          style={{marginBottom: pad}}
-          onPress={() => replace('BankCardBag')}
-        />
+        {
+          curBankCard?.id
+          && 
+          <ListItem
+            title={
+              <T4 style={{marginBottom: pad}}>{curBankCard?.bankName}</T4>
+            }
+            subtitle={
+              <TinyText>尾号{curBankCard?.bankAccountNo}储蓄卡</TinyText>
+            }
+            leftAvatar={{ source: images.bankIcon}}
+            chevron
+            style={{marginBottom: pad}}
+            onPress={() => replace('BankCardBag')}
+          />
+          ||
+          <TouchableOpacity onPress={() => navigate('AddBankCard')} style={styles.addButton}>
+            <Image source={images.addBankCardIcon} style={styles.addIcon} />
+            <PrimaryText >添加银行卡</PrimaryText>
+          </TouchableOpacity>
+        }
         <FormRow 
           title={'提现金额'}
-          placeholder={'可提现金额¥999.00'}
+          placeholder={`可提现金额¥${accountMoney}`}
           value={withdrawNum}
           onChangeText={setWithdrawNum}
         />
@@ -118,16 +150,17 @@ const Withdraw = (props: any) =>  {
           value={verifyCode}
           onChangeText={setVerifyCode}
           rightTitle={
-            countDownNum > 0 
-              && <PrimaryText>{'' + countDownNum}s后重发</PrimaryText>
-              || <PrimaryText style={{color: Colors.blueColor}} onPress={getCode}>获取验证码</PrimaryText>
+            showCountDown
+            && <CountDown
+              deadline={Date.now() + 60000}
+              renderTime={
+                second => renderCoundDown(second)
+              }
+              onStop={() => setShowCountDown(false)}
+            />
+            || <PrimaryText style={{color: Colors.blueColor}} onPress={getCode}>获取验证码</PrimaryText>
           }
           maxLength={6}
-          // inputStyle={{borderWidth: 2, borderColor: 'red'}}
-        />
-        <CountDown
-          deadline={Date.now() + 6000}
-          onStop={() => {alert('结束')}}
         />
         <TinyText style={{padding: pad}}>每次提现将会收取1.00元手续费，建议减少提现次数，避免造成资金损失</TinyText>
       </View>
@@ -160,6 +193,19 @@ const styles = StyleSheet.create({
   },
   button: {
     width: vw(80),
+  },
+  addIcon: {
+    width: 18,
+    height: 18,
+    marginRight: pad,
+  },
+  addButton: {
+    height: pxToDp(100),
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.whiteColor,
+    marginBottom: pad
   },
 });
 

@@ -35,9 +35,10 @@ interface BrandGoodRowProps {
   data: any,
   dataAdapter: (d: any) => {
     img: any,
-    bank: string,
+    bankName: string,
     cardType: string,
-    cardId: string,
+    bankAccountNo: string,
+    bgNum: string | number
   },
   imgStyle: StyleProp<any>,
   style: StyleProp<any>,
@@ -45,7 +46,6 @@ interface BrandGoodRowProps {
 }
 
 const BrandGoodRow = (props: BrandGoodRowProps) =>  {
-
   const data = (props.dataAdapter ? props.dataAdapter(props.data) : props.data) || {};
 
   /**
@@ -60,7 +60,7 @@ const BrandGoodRow = (props: BrandGoodRowProps) =>  {
       style={StyleSheet.flatten([styles.style, props.style])}
       onPress={onPress}
     >
-      <ImageBackground source={images.bankBgBlue} style={styles.cardWrapper}>
+      <ImageBackground source={images['bankBg' + props?.bgNum]} style={styles.cardWrapper}>
         <Avatar source={images.bankIcon} style={StyleSheet.flatten([styles.avatar, props.imgStyle])} />
         <View style={styles.contentWrapper}>
           <T3 numberOfLines={1} style={{color: Colors.whiteColor}}>{data.bankName}</T3>

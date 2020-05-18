@@ -25,7 +25,7 @@ import Empty from '../../../components/Empty/index';
 import {getBankCards} from '../../../actions/asset';
 import withPage from '../../../components/HOCs/withPage';
 import {apiGetUserBankCards} from '../../../service/api';
-import {updateBankCards} from '../../../actions/asset';
+import {updateBankCards, updateCurBankCards} from '../../../actions/asset';
 
 const ROW_HEIGHT = 120;
 
@@ -34,23 +34,12 @@ const CardBag = (props: any) =>  {
   const {navigate, goBack, replace} = useNavigation();
   const route = useRoute();
   const dispatch = useDispatch();
-
-  /**
-   * 获取参数
-   */
-  // const {
-  //   onPicked, // 选中银行卡后的动作
-  // } = route.params || {};
-
-  // console.log(onPicked, 'onPicked')
-
   const bankCards = useSelector(state => state.asset?.bankCards) || defaultCards;
  
   /**
    * 
    */
   React.useEffect(() => {
-    // dispatch(getBankCards());
     apiGetUserBankCards().then(res => {
       dispatch(updateBankCards(res));
     })
@@ -60,6 +49,7 @@ const CardBag = (props: any) =>  {
    * 跳转
    */
   const onPress = (card: any) => {
+    dispatch(updateCurBankCards(card))
     replace('Withdraw', {card})
   }
 
@@ -83,6 +73,7 @@ const CardBag = (props: any) =>  {
               bankCards.map((card: any, index: number) => {
                 return (
                   <BandCardRow
+                    bgNum={parseInt(String(index % 4))}
                     key={`card_${index}`}
                     onPress={() => onPress(card)}
                     data={card}

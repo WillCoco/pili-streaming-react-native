@@ -80,7 +80,7 @@ export const apiSendVerCode = (data: any) => get1(`${HOST_JAVA}/user/sendAppMess
 // 更新用户信息
 export const apiUpdateUserInfo = (data: any) => post1(`${HOST_JAVA}/miniApp/updateUserInfo`, data)
 // 注册 & 登录
-export const apiLogin = (data: any) => post1(`${HOST_JAVA}/user/appRegisterOrLogin`, data)
+export const apiLogin = (data: any) => post(`${HOST_JAVA}/user/appRegisterOrLogin`, data)
 // 我的页面
 export const apiGetUserData = () => get1(`${HOST_JAVA}/user/getUserInfo`)
 // 发现模块 获取作品
@@ -181,7 +181,7 @@ export const apiAnewAddLiveGoods = (data: any) => post2(`${HOST_JAVA}/anchor/ane
 // 新增或修改寄回地址
 export const apiAuReturnedAddress = (data: any) => post(`${HOST_JAVA}/anchor/auReturnedAddress`, data)
 // 主播删除预组货商品
-export const apiDelGroupGoods = (data: any) => post(`${HOST_JAVA}/anchor/delGroupGoods`, data)
+export const apiDelGroupGoods = (data: any) => post2(`${HOST_JAVA}/anchor/delGroupGoods`, data)
 // 删除主播直播回放
 export const apiDelLivePlayback = (data: any) => post(`${HOST_JAVA}/anchor/delLivePlayback`, data)
 // 删除寄回地址
@@ -193,9 +193,9 @@ export const apiGetBrandGoodsList = (data: any) => post(`${HOST_JAVA}/anchor/get
 // 主播添加预组货分类品牌数据
 export const apiGetCatBrandAll = (data: any) => get(`${HOST_JAVA}/anchor/getCatBrandAll`, data)
 // 主播预组货(店铺)商品列表
-export const apiGetGroupGoods = (data: any) => post(`${HOST_JAVA}/anchor/getGroupGoods`, data)
+export const apiGetGroupGoods = (data: any) => post1(`${HOST_JAVA}/anchor/getGroupGoods`, data)
 // 主播直播数据列表
-export const apiGetLiveDataList = (data: any) => post(`${HOST_JAVA}/anchor/getLiveDataList`, data)
+export const apiGetLiveDataList = (data: any) => post1(`${HOST_JAVA}/anchor/getLiveDataList`, data)
 // 我的直播列表
 export const apiGetLiveList = (data: any) => get(`${HOST_JAVA}/anchor/getLiveList`, data)
 // 分页查询寄回地址列表
@@ -220,6 +220,9 @@ export const apiCloseLive= (data: any) => get2(`${HOST_JAVA}/anchor/closeLive`, 
 export const apiAnchorToLive= (data: any) => get2(`${HOST_JAVA}/anchor/anchorToLive`, data)
 // 是否在直播
 export const apiIsWorkLiveNow = (data: any) => get2(`${HOST_JAVA}/anchor/isWorkLiveNow`, data)
+// 主播在预组货取消添加店铺商品
+export const apiDelAnchorGoods = (data: any) => post2(`${HOST_JAVA}/anchor/delAnchorBrandGoods`, data)
+
 
 
 /**
@@ -252,7 +255,7 @@ export const apiUploadFile = (data: any) => post(`${HOST_JAVA}/user/uploadFile`,
  * 资产相关的接口 ==============================================================
  */
 // 绑定银行卡
-export const apiBindingBankCard = (data: any) => post(`${HOST_JAVA}/assets/bindingBankCard`, data, false)
+export const apiBindingBankCard = (data: any) => post2(`${HOST_JAVA}/assets/bindingBankCard`, data)
 // 查询用户账单列表
 export const apiGetUserAssetsRecords = (data: any) => post(`${HOST_JAVA}/assets/getUserAssetsRecords`, data)
 // 查询用户资产信息
