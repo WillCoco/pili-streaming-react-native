@@ -46,7 +46,6 @@ class Poll {
     if (!this.isPolling) {
       return;
     }
-    console.log(this.frameId, 'stop')
     cancelAnimationFrame(this.frameId); // 取消不掉
 
     this.isPolling = false;

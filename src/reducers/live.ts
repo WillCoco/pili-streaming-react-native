@@ -31,6 +31,8 @@ interface InitStateTypes {
     anchorName: string, //
     pushUrl?: string, // 推流地址
     pullUrl?: string, // 观看地址
+    advance?: string, // 预告视频地址
+    liveTime?: string, // 预告直播时间
     isAttention?: AttentionTypes, // 是否关注
     likeSum?: boolean, // 是
     bigPic?: string, // 

@@ -20,7 +20,7 @@ import PagingList from '../../../components/PagingList';
 import images from '../../../assets/images';
 import {pad} from '../../../constants/Layout';
 import {Colors} from '../../../constants/Theme';
-import {getAdvanceList} from '../../../actions/live';
+import { getAdvanceList, updateLivingInfo } from '../../../actions/live';
 import pxToDp from '../../../utils/px2dp';
 import {EMPTY_OBJ} from '../../../constants/freeze';
 import { MediaType } from '../../../liveTypes';
@@ -148,8 +148,8 @@ const AnchorTrailers = () =>  {
           const {
             smallPic,
             title,
-            remind,
-            liveTime
+            liveTime,
+            anchorLogo
           } = item || EMPTY_OBJ;
           return (
             <TrailersCard
@@ -160,10 +160,16 @@ const AnchorTrailers = () =>  {
               liveTime={liveTime}
               onSharePress={onSharePress}
               onRemindPress={() => onRemindPress(item.remind, index)}
-              onPress={() => navigate('LivingRoomScreen', {
-                mediaType: MediaType.teaser,
-                liveTime: new Date(liveTime).getTime()
-              })}
+              onPress={() => {
+                navigate('LivingRoomScreen', {
+                  mediaType: MediaType.teaser,
+                  // liveTime: new Date(liveTime).getTime()
+                });
+
+                // 更新房间信息
+                dispatch(updateLivingInfo(item))
+              }
+              }
             />
           )
         }}

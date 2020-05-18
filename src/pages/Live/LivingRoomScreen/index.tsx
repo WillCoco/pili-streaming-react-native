@@ -15,7 +15,6 @@ interface LiveWindowParams {
   mediaType: MediaType, // 媒体类型
   liveId?: string | number, // 直播id
   groupID?: string, // im群组
-  liveTime?: string, // 预告开播时间
 }
 
 const LivingRoomScreen = (props: any) : any =>  {
@@ -23,7 +22,6 @@ const LivingRoomScreen = (props: any) : any =>  {
 
   const {
     mediaType,
-    liveTime,
   } : LiveWindowParams = (route.params || EMPTY_OBJ) as LiveWindowParams;
 
   // 直播
@@ -40,7 +38,6 @@ const LivingRoomScreen = (props: any) : any =>  {
     return (
       <LiveWindow.AudienceTeaser
         safeTop={props.safeTop}
-        liveTime={liveTime}
       />
     )
   }

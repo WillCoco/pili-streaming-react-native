@@ -6,7 +6,13 @@ import { connect } from 'react-redux'
 import { setWorkGoodsList, setAddedGoodsList } from '../../actions/works'
 import formatSinglePrice from '../../utils/formatGoodsPrice'
 
-function GoodsCard(props: any) {
+function GoodsCard(props: {
+  type?: any
+  dispatch?: any
+  goodsInfo?: any
+  goodsList?: any
+  addedGoodsList?: any
+}) {
   const { goodsInfo, goodsList, addedGoodsList, type } = props
 
   const addGoods = () => {

@@ -165,6 +165,7 @@ const LiveVideo = (props: LiveVideoProps): any => {
   // bigPic返回不对
   const bgUri = bigPic ? {uri: bigPic} : images.livingbg
 
+  console.log(backUrl, 'backUrlbackUrlbackUrlbackUrl')
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
       <Image style={styles.imgBg} source={images.livingbg} resizeMode="cover" />
@@ -189,7 +190,7 @@ const LiveVideo = (props: LiveVideoProps): any => {
         ) : null
       }
       <View style={styles.livingBottomBlock}>
-        <LivingBottomBlock.AudienceVideo onPressShopBag={() => shopCardAnim(true)} />
+        <LivingBottomBlock.AudienceRecord onPressShopBag={() => shopCardAnim(true)} />
       </View>
       <LiveIntro
         showFollowButton

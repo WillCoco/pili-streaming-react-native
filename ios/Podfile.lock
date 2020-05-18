@@ -227,6 +227,8 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
   - React-jsinspector (0.61.5)
+  - react-native-cameraroll (1.4.0):
+    - React
   - react-native-nodemediaclient (0.1.9):
     - NodeMediaClient (= 2.7.3)
     - React
@@ -351,6 +353,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - "react-native-cameraroll (from `../node_modules/@react-native-community/cameraroll`)"
   - react-native-nodemediaclient (from `../node_modules/react-native-nodemediaclient`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-video (from `../node_modules/react-native-video`)
@@ -456,6 +459,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-cameraroll:
+    :path: "../node_modules/@react-native-community/cameraroll"
   react-native-nodemediaclient:
     :path: "../node_modules/react-native-nodemediaclient"
   react-native-safe-area-context:
@@ -567,6 +572,7 @@ SPEC CHECKSUMS:
   React-jsi: cb2cd74d7ccf4cffb071a46833613edc79cdf8f7
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
+  react-native-cameraroll: dbda741db5dadcdcf738e55a1fd565c307943bca
   react-native-nodemediaclient: 70fed835f717ac7cb3d59e26b9eccc55353f88a1
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   react-native-video: eee541262ada11bc7ffe8ec5508e6a877937c462
@@ -609,4 +615,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 801c7e626fb714bf09507a4b576de1c1c33907c9
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.1

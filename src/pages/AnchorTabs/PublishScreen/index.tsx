@@ -47,6 +47,8 @@ const PublishScreen = (props: any) =>  {
       index: 0,
       routes: [{ name: 'Root', params: {initialRoute: '我的'}}],
     });
+
+    // navigate('我的')
   }
 
   /**

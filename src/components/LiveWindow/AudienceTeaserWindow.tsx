@@ -160,8 +160,10 @@ const LiveVideo = (props: LiveVideoProps): any => {
     setShopCardVisible(visiable);
   };
 
-  const bigPic = useSelector((state: any) => state?.live?.livingInfo) || '';
+  const bigPic = useSelector((state: any) => state?.live?.livingInfo?.bigPic) || '';
 
+  const liveTime = useSelector((state: any) => state?.live?.livingInfo?.liveTime) || '';
+  
   // bigPic返回不对
   const bgUri = bigPic ? {uri: bigPic} : images.livingbg
 
@@ -169,7 +171,7 @@ const LiveVideo = (props: LiveVideoProps): any => {
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
       <Image style={styles.imgBg} source={images.livingbg} resizeMode="cover" />
       <TrailerCountDown
-        deadline={props.liveTime}
+        deadline={liveTime}
         style={styles.countDown}
       />
       <View style={styles.livingBottomBlock}>

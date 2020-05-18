@@ -55,7 +55,6 @@ const AudienceShopCard = (props: {
   const goodsQuantity = Math.max(props.goodsQuantity, goods.length) || 0;
   const showEmpty = goods.length === 0;
 
-  console.log(props.visible, 'props.visible')
   if (!props.visible) {
     return null
   }

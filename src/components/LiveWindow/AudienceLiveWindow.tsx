@@ -201,7 +201,10 @@ const LiveWindow = (props: LiveWindowProps): any => {
         style={styles.video}
       />
       <View style={styles.livingBottomBlock}>
-        <LivingBottomBlock.Audience onPressShopBag={() => shopCardAnim(true)} />
+        <LivingBottomBlock.Audience 
+          likeQuantity={anchorInfo?.likeSum}
+          onPressShopBag={() => shopCardAnim(true)} 
+        />
       </View>
 
       {!!noticeBubbleText ? <NoticeBubble text={noticeBubbleText} /> : null}

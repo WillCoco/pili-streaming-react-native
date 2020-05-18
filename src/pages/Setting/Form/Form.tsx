@@ -40,7 +40,7 @@ export default function Form(props) {
 
       <TouchableWithoutFeedback onPress={() => navigation.push('AboutUs')}>
         <View style={styles.formItem}>
-          <Text style={styles.title}>关于圈品</Text>
+          <Text style={styles.title}>关于我们</Text>
           <Ionicons size={20} name='ios-arrow-forward' color={Colors.darkGrey} />
         </View>
       </TouchableWithoutFeedback>

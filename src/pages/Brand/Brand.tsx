@@ -79,7 +79,7 @@ export default function Brand() {
       console.log('关注/取消关注', res)
       const params = {
         pageNo: 1,
-        pageSize: pageNo * pageSize
+        pageSize: pageNoRef.current * pageSize
       }
 
       if (pageType === 'default') {

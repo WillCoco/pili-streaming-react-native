@@ -35,7 +35,7 @@ function Cart(props: any) {
   }, [navigation])
 
   useEffect(() => {
-    if (isLogin && cartList.length) {
+    if (isLogin && cartList.count) {
       updateCartList(cartList)
     }
   }, [cartList])

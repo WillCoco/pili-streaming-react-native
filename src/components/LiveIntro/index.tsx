@@ -89,6 +89,13 @@ const LiveIntro = (props: LiveMsgProps) =>  {
   
   const name = props.name || livingInfo.anchorName;
 
+  const anchorId = useSelector((state: any) => state?.anchorData?.anchorInfo?.anchorId);
+
+  /**
+   * 是否显示关注按钮
+   */
+  const showFollowButton = props.showFollowButton && (livingInfo.anchorId !== anchorId);
+
   return (
     <TouchableOpacity
       style={StyleSheet.flatten([styles.wrapper, props.style, {top: props.safeTop + pad}])}
@@ -114,7 +121,7 @@ const LiveIntro = (props: LiveMsgProps) =>  {
         </SmallText>
       </View>
       {
-        props.showFollowButton && (
+        showFollowButton && (
           <FollowButton 
             isFollow={livingInfo.isAttention == '1'}
             onPress={onFollowPress}

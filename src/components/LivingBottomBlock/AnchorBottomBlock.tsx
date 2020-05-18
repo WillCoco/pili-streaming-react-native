@@ -103,13 +103,13 @@ const LivingRoomScreen = (props: any) : any =>  {
                 name: livingInfo.anchorName,
                 rightBtnText: title,
                 onPressRight: () => {
-                // 禁言或者取消禁言
-                const options: any = {userID: userId}
-                if (isSilent) {
-                  options.muteTime = 0;
-                }
+                  // 禁言或者取消禁言
+                  const options: any = {userID: userId}
+                  if (isSilent) {
+                    options.muteTime = 0;
+                  }
 
-                dispatch(setGroupMemberMuteTime(options))
+                  dispatch(setGroupMemberMuteTime(options))
                 }
               }
           }})
