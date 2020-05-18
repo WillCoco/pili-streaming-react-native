@@ -13,7 +13,7 @@ import ExpressStepper from '../../components/ExpressStepper/ExpressStepper'
 export default function OrderDetail() {
   const id = useRoute().params.id
   const navigation = useNavigation()
-  const [orderDetail, setOrderDetail] = useState({})
+  const [orderDetail, setOrderDetail]: any = useState({})
   const [expressList, setExpressList] = useState([])
 
   navigation.setOptions({

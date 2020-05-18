@@ -1,6 +1,6 @@
 import configStore from "../../store";
-import Toast from "react-native-tiny-toast";
-import { toggleLoginState, setToke, setUserInfo } from "../../actions/user";
+// import Toast from "react-native-tiny-toast";
+// import { toggleLoginState, setToke, setUserInfo } from "../../actions/user";
 const { store } = configStore();
 import { sleep } from "../../utils/tools";
 import {getParam} from "./getParams";
@@ -38,7 +38,6 @@ interface Options {
  * @param options 
  */
 export const get = (path: any, data?: any, options: Options = {}) => {
-  console.log(path, data, 1111000000)
   // 加token
   const { userData } = store.getState();
   if (userData.token) {
@@ -59,7 +58,7 @@ export const get = (path: any, data?: any, options: Options = {}) => {
       const r1 = await response.text();
       const r2 = r1.trim && r1.trim();
       return r2 && JSON.parse(r2);
-    });
+    })
 
   // 超时
   const raceTimeout = Promise.race([fn, timeout(options.timeout || DEFAULT_TIMEOUT, path)]);
@@ -100,7 +99,7 @@ export const post = (path: RequestInfo, data: any, options: Options = {}) => {
 };
 
 /**
- * 直播上传接口
+ * 发表作品上传接口
  */
 export interface FileType {
   uri: string;
@@ -114,7 +113,6 @@ export const uploadWorkMedia = (
   options: Options = {}
 ): any => {
   let formData = new FormData();
-  console.log(params, "file");
   formData.append("fileType", params.fileType);
   formData.append("file", params.file as any);
 
@@ -143,7 +141,7 @@ export const uploadWorkMedia = (
 
 
 /**
- * 上传接口
+ * 直播上传接口
  */
 export interface UpdateParams {
   size: string;

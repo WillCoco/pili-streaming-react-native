@@ -58,20 +58,20 @@ function Home(props: HomeProps) {
   const pageSize = 20
 
   useEffect(() => {
+    getRecommendGoodsList(false)
+  }, [])
+
+  useEffect(() => {
     if (isFocused) {
-      initData(false)
+      initData()
       setCountDown()
-    } else {
-      pageNoRef.current = 1
-      setRecommendGoodsList([])
     }
   }, [isFocused])
 
   /**
    * 加载初始化数据
-   * @param isPullDown 是否是下拉刷新
    */
-  const initData = (isPullDown: boolean) => {
+  const initData = () => {
     apiGetIndexData().then((res: any) => {
       console.log('首页初始化数据', res)
       const selectedGoodsInfo = {
@@ -88,8 +88,6 @@ function Home(props: HomeProps) {
       if (categoryList.length === 1) {
         setCategoryList([...categoryList, ...res.category])
       }
-
-      getRecommendGoodsList(isPullDown)
       setLoading(false)
     })
   }

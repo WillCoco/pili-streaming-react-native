@@ -20,6 +20,7 @@ import { Ionicons } from '@expo/vector-icons'
 
 import WorkCard from '../../components/WorkCard/WorkCard'
 import checkIsBottom from '../../utils/checkIsBottom'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
 function Found(props: any) {
   const navigation = useNavigation()
@@ -28,11 +29,11 @@ function Found(props: any) {
   let pageNoRef = useRef(1)
   let hasMoreRef = useRef(true)
   const { isLogin } = props
-  const [sort, setSort] = useState(0)
   const [workList, setWorkList] = useState([])
   const [maxHeight, setMaxHeight] = useState(0)
   const [showMask, setShowMask] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [isErr, setIsErr] = useState(false)
   const rotateAnim = new Animated.Value(0)
 
   useEffect(() => {
@@ -71,8 +72,8 @@ function Found(props: any) {
       hasMoreRef.current = pageNoRef.current < totalPage
       setWorkList(isPullDown ? waterFall(res.worksInfoList).items : tempList)
       setMaxHeight(isPullDown ? waterFall(res.worksInfoList).maxHeight : maxH)
-    }).catch(err => {
-      console.log(err, '232222')
+    }).catch((err: any) => {
+      setIsErr(true)
     })
   }
 
@@ -102,8 +103,10 @@ function Found(props: any) {
     }
   }
 
+  if (isErr) return <NetWorkErr />
+
   return (
-    <View>
+    <>
       <ScrollView
         showsVerticalScrollIndicator={false}
         onMomentumScrollEnd={(e) => onReachBottom(e)}
@@ -155,7 +158,7 @@ function Found(props: any) {
       {
         showMask && <TouchableOpacity style={styles.mask} onPress={() => setShowMask(false)} />
       }
-    </View>
+    </>
   )
 }
 

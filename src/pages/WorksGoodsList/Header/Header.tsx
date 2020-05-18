@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import { Colors } from '../../../constants/Theme'
 import { Ionicons } from '@expo/vector-icons'
 import pxToDp from '../../../utils/px2dp'
+import { setSearchKey } from '../../../actions/home'
 
-function Header(props: any) {
+function Header(props: { toSearch?: any; statusBarHeight?: any }) {
   const { statusBarHeight } = props
   const navigation = useNavigation()
+  const [searchKey, setSearchKey] = useState('')
 
   return (
     <View style={[styles.container, {
@@ -23,6 +25,9 @@ function Header(props: any) {
         <TextInput
           placeholder='搜索添加商品'
           style={styles.searchInput}
+          clearButtonMode='while-editing'
+          onChangeText={(text) => setSearchKey(text)}
+          onSubmitEditing={() => props.toSearch(searchKey)}
         />
       </View>
 

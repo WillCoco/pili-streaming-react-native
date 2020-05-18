@@ -98,17 +98,7 @@ const LivingGoodsWareHouse = (props: any) =>  {
   const canRemove = checkedList && checkedList.length > 0;
 
   React.useEffect(() => {
-    // let loading: any;
-    // const getData = async () => {
-    //   loading = Toast.showLoading('');
-    //   await dispatch(getPlatformBrands());
-    //   Toast.hide(loading);
-    // };
-    // getData();
-    //
-    // return () => {
-    //   Toast.hide('');
-    // }
+
   }, [])
 
   /**
@@ -359,7 +349,6 @@ const LivingGoodsWareHouse = (props: any) =>  {
               <WarehouseRow
                 isChecked={item.isChecked}
                 dataAdapter={() => {
-                  console.log(brandGoodAdapter(item), 'itemitemitemitem')
                   return brandGoodAdapter(item)
                 }}
                 onPressCheck={() => {checkGood(index)}}

@@ -1,5 +1,5 @@
 import { compose } from 'redux';
-import {get, post, uploadWorkMedia, liveUpload, FileType, UpdateParams} from './fetchOrigin';
+import { get, post, uploadWorkMedia, liveUpload, FileType, UpdateParams } from './fetchOrigin';
 import * as RS from './responseHandlers';
 
 type ParamsType = Array<any>

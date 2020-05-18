@@ -39,8 +39,8 @@ function BrandCard(props: { focusBrandShop?: any; brandInfo?: any; isLogin?: any
       <View style={styles.brandHeader}>
         <TouchableWithoutFeedback onPress={toBrandShop}>
           <View style={styles.brandInfo}>
-            <Image style={styles.brandLogo} source={{ uri: brandInfo.logo }} />
-            <Text style={styles.brandName}>{brandInfo.name}</Text>
+            <Image style={styles.brandLogo} source={{ uri: brandInfo?.logo || '' }} />
+            <Text style={styles.brandName}>{brandInfo?.name || ''}</Text>
           </View>
         </TouchableWithoutFeedback>
         <Text

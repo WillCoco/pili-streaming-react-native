@@ -16,7 +16,11 @@ import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
 
 function Cart(props: any) {
+  const { isLogin } = props.userData
+  const { cartList } = props.cartData
   const navigation = useNavigation()
+  const [isEmpty, setIsEmpty] = useState(true)
+  const [allCartGoodsInfo, setAllCartGoodsInfo] = useState({})
 
   navigation.setOptions({
     headerTitle: '购物车',
@@ -29,14 +33,11 @@ function Cart(props: any) {
     headerBackTitleVisible: false,
     headerRight: () => <CartHeaderButton />
   })
-  
-  const [isEmpty, setIsEmpty] = useState(false)
-  const [allCartGoodsInfo, setAllCartGoodsInfo] = useState({})
 
   const { userData, cartData } = props
 
   useEffect(() => {
-    if (props.userData.isLogin) {
+    if (isLogin) {
       navigation.addListener('focus', () => {
         getCartList()
       })
@@ -48,10 +49,10 @@ function Cart(props: any) {
   }, [navigation])
 
   useEffect(() => {
-    if (props.userData.isLogin) {
-      updateCartList(props.cartData.cartList)
+    if (isLogin && cartList.count) {
+      updateCartList(cartList)
     }
-  }, [props.cartData.cartList])
+  }, [cartList])
 
   /**
    * 获取购物车列表

@@ -114,6 +114,7 @@ function BrandShop(props: any) {
     <ScrollView
       onScroll={(e) => scrollPage(e)}
       scrollEventThrottle={200}
+      showsVerticalScrollIndicator={false}
     >
       {/* 轮播图 */}
       {

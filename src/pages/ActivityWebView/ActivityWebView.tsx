@@ -8,7 +8,7 @@ import { strDiscode } from '../../utils/discodeRichText'
 export default function ActivityWebView() {
   const route = useRoute()
   const navigation = useNavigation()
-  const uri = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8&data={"head":{"accessType":"1","plMid":"","method":"sandpay.trade.orderCreate","productId":"00002000","mid":"S4514032","channelType":"07","reqTime":"20200508183504","version":"1.0"},"body":{"subject":"杉德收银台统测试订单标题","payModeList":"[alipay]","frontUrl":"http://61.129.71.103:8003/jspsandpay/payReturn.jsp","terminalId":"shzdbh001","body":"{\"mallOrderCode\":\"mall00000000001\",\"receiveAddress\":\"上海市徐汇区田林路487号宝石园22号2楼\",\"goodsDesc\":\"杉德卡1张\"}","storeId":"shmdbh001","userId":"C0908992","merchExtendParams":"shkzcs","clearCycle":"0","extend":"kzy","totalAmount":"000000000012","txnTimeOut":"20200509183504","bizExtendParams":"yykzcs","notifyUrl":"http://127.0.0.1/WebGateway/stateChangeServlet","orderCode":"20200508183504","operatorId":"czybh001","accountingMode":"02","riskRateInfo":"fkxxy"}}&signType=01&sign=CkAspqeYrEdPRBf9zoPebbls1vJwPNfSI%2B4LXjfKbN6WJDByFYCxV2jQR3sXADlxvuTCBzCSepF0NnSbpECFqJgKVQRTTev69xJt8hG2rsiRB6wTgafznTvePkrqmOB54hzo%2FI2XTCTX4rCt2tttd3qEBo%2Bp5TjZRa0s6%2FGs%2FiSqNSD4RhBwqSJkMHAh6Rv%2BYouw9XkDgHVCJ4iMrhX%2F%2FsUNsmwtjIh6vSnpfM7BdVzsPgCry3K2h%2BQTeH0DKYBxQICKtdkQHMZCn3Bw7oJ4U4clHv5gIwDH3T2K8k78wnUPTaTEhyoK%2Fut9ofsmpbKVHLGgk91AfJCPpWjdL1BATg%3D%3D&extend=kzy'
+  const uri = 'http://192.168.4.136'
 
   navigation.setOptions({
     headerTitle: '活动页面',

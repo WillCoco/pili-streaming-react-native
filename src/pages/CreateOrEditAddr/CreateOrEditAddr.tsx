@@ -7,10 +7,10 @@ import { setAddressList } from '../../actions/address'
 import cityData from '../../utils/chianCityData'
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
-import { apiEditAddr, apiAddrList, apiAddAddr } from '../../service/api'
+import { apiEditAddr, apiAddrList, apiAddAddr, apiDelAddr } from '../../service/api'
 import Toast from 'react-native-tiny-toast'
 
-function CreateOrEditAddr(props) {
+function CreateOrEditAddr(props: { dispatch: (arg0: { type: string; payload: any[] }) => void }) {
   const navigation = useNavigation()
   const route = useRoute()
   const pageType = route.params.type
@@ -86,6 +86,7 @@ function CreateOrEditAddr(props) {
         Toast.show('请填写完整信息', {
           position: 0
         })
+        return
       }
     }
 
@@ -104,6 +105,21 @@ function CreateOrEditAddr(props) {
         navigation.goBack()
       }, 1500)
     }
+  }
+
+  /**
+   * 删除地址
+   */
+  const remove = () => {
+    const { address_id } = addressInfo
+
+    apiDelAddr({ address_id }).then((res: any) => {
+      console.log('删除地址', res)
+      if (res.success) {
+        updateAddrList()
+        navigation.goBack()
+      }
+    })
   }
 
   /**
@@ -154,7 +170,7 @@ function CreateOrEditAddr(props) {
             </Picker>
           </View>
 
-          <View style={[styles.formItem]}>
+          <View style={[styles.formItem, { borderBottomWidth: 0 }]}>
             <Text style={styles.formItemTitle}>详细地址</Text>
             <TextInput
               maxLength={40}
@@ -172,7 +188,7 @@ function CreateOrEditAddr(props) {
           <Text style={styles.submitBtnText}>设为默认地址</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={submit} style={styles.delBtn}>
+        <TouchableOpacity onPress={remove} style={styles.delBtn}>
           <Text style={[styles.submitBtnText, { color: Colors.basicColor, fontWeight: 'normal' }]}>删除地址</Text>
         </TouchableOpacity>
 

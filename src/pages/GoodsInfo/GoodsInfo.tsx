@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { View, ScrollView, Dimensions, StyleSheet, Platform, Text, ImageBackground } from 'react-native'
+import { View, ScrollView, Dimensions, StyleSheet, Platform, Text, ImageBackground, Image } from 'react-native'
 import { useRoute, useNavigation, useIsFocused } from '@react-navigation/native'
 import { connect } from 'react-redux'
-import HTML from 'react-native-render-html'
+// import HTML from 'react-native-render-html'
+// import HTML from 'react-native-htmlview'
 import Toast from 'react-native-tiny-toast'
+import WebView from 'react-native-webview'
 
 import ActionSheet from '../../components/ActionSheet/ActionSheet'
 import Swiper from './Swiper/Swiper'
@@ -21,8 +23,30 @@ import { Colors } from '../../constants/Theme'
 import { strDiscode } from '../../utils/discodeRichText'
 import pxToDp from '../../utils/px2dp'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
 let timer: any
+
+// const BaseScript = `(function () {
+//                       var height = null;
+//                       function changeHeight() {
+//                         console.log('11111')
+//                         if (document.body.scrollHeight != height) {
+//                           height = document.body.scrollHeight;
+//                           if (window.postMessage) {
+//                             window.postMessage(JSON.stringify({
+//                               type: 'setHeight',
+//                               height: height,
+//                             }))
+//                           }
+//                         }
+//                       }
+//                       setTimeout(changeHeight, 300);
+//                   } ())`
+
+const BaseScript = `
+console.log(11)
+`
 
 function GoodsInfo(props: any) {
   const route = useRoute()
@@ -32,24 +56,26 @@ function GoodsInfo(props: any) {
   const { id: goodsId, shareUserId } = route.params
   const [isLoadingComplete, setIsLoadingComplete] = useState(false)
   const [swiperList, setSwiperList] = useState([])
-  const [goodsInfo, setGoodsInfo] = useState({})
+  const [goodsInfo, setGoodsInfo]: any = useState({})
   const [goodsType, setGoodsType] = useState('')
   const [goodsContent, setGoodsContent] = useState('')
   const [goodsSku, setGoodsSku] = useState([])  // 规格列表
   const [curSku, setCurSku] = useState('')  // 当前选中的规格
-  const [curSkuInfo, setCurSkuInfo] = useState({})  // 当前选中规格的详细信息
+  const [curSkuInfo, setCurSkuInfo]: any = useState({})  // 当前选中规格的详细信息
   const [showGoodsSku, setShowGoodsSku] = useState(false)
   const [showCoupon, setShowCoupon] = useState(false)
   const [showShareBar, setShowShareBar] = useState(false)
   const [buttonType, setButtonType] = useState('')  // 商品规格操作面板购买按钮文字
   const [soldOut, setSoldOut] = useState(false)
+  let [goodsNum, setGoodsNum] = useState(1)
+  const [couponList, setCouponList] = useState([])
+  const [isErr, setIsErr] = useState(false)
+  const [webViewHeight, setWebViewHeight] = useState(0)
   const [countDownInfo, setCountDownInfo] = useState({
     hours: 0,
     min: 0,
     sec: 0
   })
-  let [goodsNum, setGoodsNum] = useState(1)
-  const [couponList, setCouponList] = useState([])
   const goodsInfoRef: any = useRef()
 
   navigation.setOptions({
@@ -92,7 +118,10 @@ function GoodsInfo(props: any) {
       goodsInfoRef.current = res
       setGoodsInfo(goodsInfoRef.current)
       setSwiperList(res.goods_images_list)
-      setGoodsContent(strDiscode(res.goods_content))
+      // setGoodsContent(strDiscode(res.goods_content))
+
+      let content = strDiscode(res.goods_content).replace(/\<img/gi, '<img style="width: 100%; height: auto"')
+      setGoodsContent(content)
 
 
       if (res.is_sale || res.is_snap_up) {
@@ -123,6 +152,8 @@ function GoodsInfo(props: any) {
       setSoldOut(false)
 
       if (isLogin) getGoodsCoupon(res.goods_id)
+    }).catch((err: any) => {
+      setIsErr(true)
     })
   }
 
@@ -160,9 +191,11 @@ function GoodsInfo(props: any) {
    * 加载优惠券
    */
   const getGoodsCoupon = (id: number) => {
-    apiGetUnclaimedCoupons({ goodsId: id }).then(res => {
+    apiGetUnclaimedCoupons({ goodsId: id }).then((res: any) => {
       console.log('加载优惠券', res)
       setCouponList(JSON.parse(JSON.stringify(res)))
+    }).catch((err: any) => {
+      setIsErr(true)
     })
   }
 
@@ -298,7 +331,7 @@ function GoodsInfo(props: any) {
       sku_id: curSkuInfo.id
     }
 
-    apiAddCart(params).then(res => {
+    apiAddCart(params).then((res: any) => {
       console.log('加入购物车', res)
 
       if (res === '添加成功') {
@@ -348,7 +381,7 @@ function GoodsInfo(props: any) {
     apiGoodsIsLike({
       goods_id,
       type: is_collect ? 0 : 1
-    }).then(res => {
+    }).then((res: any) => {
       console.log('收藏/取消收藏', res)
 
       goodsInfo.is_collect = is_collect ? 0 : 1
@@ -367,6 +400,10 @@ function GoodsInfo(props: any) {
     }
 
     setShowShareBar(true)
+  }
+
+  if (isErr) {
+    return <NetWorkErr />
   }
 
   if (soldOut) {
@@ -406,10 +443,41 @@ function GoodsInfo(props: any) {
           <BrandCard goodsInfo={goodsInfo} />
           {/* 商品详情 */}
           <View style={{ marginTop: pxToDp(10) }}>
-            <HTML
+            {/* <HTML
               html={goodsContent}
               imagesMaxWidth={Dimensions.get('window').width}
+            /> */}
+            {/* <HTML
+              value={goodsContent}
+              renderNode={(node, index, siblings, parent, defaultRenderer) => {
+                if (node.name == 'img') {
+                  const a = node.attribs;
+                  return (<Image resizeMode='cover' style={{ flex: 1, width: Dimensions.get('window').width }} source={{ uri: a.src }} />)
+                }
+              }}
+            /> */}
+            <WebView
+              injectedJavaScript={`console.log(111)`}
+              style={{
+                width: Dimensions.get('window').width,
+                height: 1000
+              }}
+              source={{ html: goodsContent }}
+              decelerationRate='normal'
+              onMessage={(event) => {
+                console.log(event, '====')
+                try {
+                  const action = JSON.parse(event.nativeEvent.data)
+                  if (action.type === 'setHeight' && action.height > 0) {
+                    setWebViewHeight(action.height)
+                  }
+                } catch (error) {
+                  // pass
+                  console.log(error)
+                }
+              }}
             />
+
           </View>
         </ScrollView>
         {/* 底部操作栏 */}

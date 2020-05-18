@@ -7,7 +7,7 @@ import pxToDp from '../../../utils/px2dp'
 
 import { apiGoodsIsLike } from '../../../service/api'
 
-export default function GoodsCard(props: { goodsInfo: any }) {
+export default function GoodsCard(props: { goodsInfo: any, updateGoodsList: any }) {
   const { goodsInfo } = props
   const navigation = useNavigation()
 
@@ -24,6 +24,8 @@ export default function GoodsCard(props: { goodsInfo: any }) {
       type: is_like ? 0 : 1
     }).then(res => {
       console.log('喜欢/取消喜欢', res)
+
+      props.updateGoodsList(goods_id)
     })
   }
 

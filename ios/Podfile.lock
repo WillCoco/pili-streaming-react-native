@@ -227,7 +227,7 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
   - React-jsinspector (0.61.5)
-  - react-native-cameraroll (1.6.2):
+  - react-native-cameraroll (1.4.0):
     - React
   - react-native-nodemediaclient (0.1.9):
     - NodeMediaClient (= 2.7.3)
@@ -572,7 +572,7 @@ SPEC CHECKSUMS:
   React-jsi: cb2cd74d7ccf4cffb071a46833613edc79cdf8f7
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
-  react-native-cameraroll: ac69828fc43b9dbf92149714fd739577d38e4448
+  react-native-cameraroll: dbda741db5dadcdcf738e55a1fd565c307943bca
   react-native-nodemediaclient: 70fed835f717ac7cb3d59e26b9eccc55353f88a1
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   react-native-video: eee541262ada11bc7ffe8ec5508e6a877937c462

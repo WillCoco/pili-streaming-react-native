@@ -19,8 +19,8 @@ import Toast from 'react-native-tiny-toast'
 function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] }) => void; choosedAddress: {} }) {
   const route = useRoute()
   const navigation = useNavigation()
-  const [tempOrderList, setTempOrderList] = useState([])
-  const [defaultAddress, setDefaultAddress] = useState([])
+  const [tempOrderList, setTempOrderList]: any = useState([])
+  const [defaultAddress, setDefaultAddress]: any = useState([])
   const [isEmptyAddr, setIsEmptyAddr] = useState(true)
   const [orderTotalCount, setOrderTotalCount] = useState(0)
   const [orderTotalPrice, setOrderTotalPrice] = useState(0)
@@ -88,8 +88,20 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
     apiGetOrderDiscountDetail(req).then((res: any) => {
       console.log('获取订单优惠信息', res)
 
-
-      tempOrderList.forEach(item => {
+      tempOrderList.forEach((item: {
+        shop_info: {
+          shop_id: any;
+          carriage: any;
+          couponList: any[];
+          discountDesc: any;
+          saleDiscount: any;
+          totalPrice: number;
+          totalCount: number;
+          curTotalPrice: any;
+          choosedCoupon: any
+        };
+        selectedGoods: any[]
+      }) => {
         item.shop_info.totalPrice = 0
         item.shop_info.totalCount = 0
 
@@ -107,7 +119,13 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
           fullAmount: 0
         }]
 
-        res.forEach(_item => {
+        res.forEach((_item: {
+          shopId: any;
+          carriage: any;
+          saleDiscount: any;
+          discountDesc: any;
+          availableCoupons: any[];
+        }) => {
           if (_item.shopId === item.shop_info.shop_id) {
             item.shop_info.couponList = [..._item.availableCoupons, ...emptyCoupon]  // 可用优惠券列表
             item.shop_info.discountDesc = _item.discountDesc  // 优惠描述
@@ -275,6 +293,7 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
 
     apiCreateOrder(params).then((res: any) => {
       Toast.hide(loading)
+      console.log('提交订单', res)
 
       if (res.code !== 200) {
         Toast.show('创建订单失败')
@@ -282,8 +301,6 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
       }
 
       let payURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
-
-      console.log('提交订单', res)
 
       for (let item in res.data) {
         console.log(item)
