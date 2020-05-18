@@ -10,7 +10,7 @@ export default function AboutUs() {
   const navigation = useNavigation()
 
   navigation.setOptions({
-    headerTitle: '关于圈品',
+    headerTitle: '关于我们',
     headerStyle: {
       backgroundColor: Colors.basicColor,
       elevation: 0,  // 去除安卓状态栏底部阴影

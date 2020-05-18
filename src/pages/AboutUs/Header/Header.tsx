@@ -7,7 +7,7 @@ export default function Header() {
   return (
     <ImageBackground source={require('../../../assets/mine-image/about_us_bgi.png')} style={styles.container}>
       <Image source={require('../../../assets/mine-image/logo.png')} style={styles.logo} />
-      <Text style={styles.name}>圈品商城</Text>
+      <Text style={styles.name}>v1.0.0</Text>
     </ImageBackground>
   )
 }
