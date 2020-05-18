@@ -28,9 +28,11 @@ import AudienceShopCard from "../../components/LivingShopCard/AudienceShopCard";
 import { vw, vh } from "../../utils/metric";
 import { PrimaryText } from "react-native-normalization-text";
 import { apiEnterLive } from '../../service/api';
+import { updateLivingInfo } from '../../actions/live';
 import withPage from '../../components/HOCs/withPage';
 
 const { window } = L;
+const EMPTY_OBJ = {};
 
 interface LiveWindowProps {
   style?: StyleProp<any>;
@@ -38,51 +40,73 @@ interface LiveWindowProps {
   safeTop: number;
 }
 
+interface LiveWindowParams {
+  liveId: string | number, // 直播id
+  groupID: string, // im群组
+  mediaType: MediaType, // 媒体类型
+  // mediaSource: string, // 拉流地址、 video
+}
+
 const LiveWindow = (props: LiveWindowProps): any => {
   const { goBack, replace } = useNavigation();
   const dispatch = useDispatch();
-  const route = useRoute() || {};
+  const route = useRoute() || EMPTY_OBJ;
+
+  const {
+    liveId,
+    groupID,
+    mediaType,
+  } : LiveWindowParams = (route.params || EMPTY_OBJ) as LiveWindowParams;
 
   // 房间信息
-  const room = useSelector((state) => state?.im?.room);
+  const room = useSelector((state: any) => state?.im?.room);
 
   // 直播结束
-  const isLiveOver = useSelector((state) => state?.im?.isLiveOver);
+  const isLiveOver = useSelector((state: any) => state?.im?.isLiveOver);
 
   // 用户id
-  const userId = useSelector(state => state?.userData?.userInfo?.userId) || '';
+  const userId = useSelector((state: any) => state?.userData?.userInfo?.userId) || '';
+
+  const pullUrl = useSelector((state: any) => state?.live?.livingInfo?.pullUrl) || '';
+  const backUrl = useSelector((state: any) => state?.live?.livingInfo?.backRtmp) || '';
 
   // 主播信息
   const [anchorInfo, setAnchorInfo]: [any, any] = React.useState({})
+
+
+
+  console.log(backUrl, 'backUrl')
+
 
   /**
    * 进入直播间，获取拉流地址 TODO:
    */
   React.useEffect(() => {
     const params = {
-      liveId: route?.params?.liveId,
+      liveId,
       userId
     }
 
-    apiEnterLive(params).then(res => {
-      console.log(res);
-      setAnchorInfo(res);
-    })
+    apiEnterLive(params)
+      .then((res: any) => {
+        // const safeRes = res || {};
+        console.log(res, '进入列表');
+        res.watchNum = res.watchNum -1; // 这里重新会重复加人数
+        dispatch(updateLivingInfo(res))
+        setAnchorInfo(res);
+      })
   }, []);
 
   /**
    * 播放类型
    */
-  const { mediaType } = route;
-
   const playerComponent = React.useMemo(() => {
     // 预告片
     if (mediaType === MediaType.teaser) {
       return (
         <Video
           source={{
-            uri:
-              "http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4",
+            uri: 1,
           }} // Can be a URL or a local file.
           repeat
           fullscreen
@@ -96,12 +120,40 @@ const LiveWindow = (props: LiveWindowProps): any => {
       );
     }
 
-    // 直播和回放都是拉流
+    // 回放
+    if (mediaType === MediaType.record) {
+      return (
+        <Video
+          source={{
+            uri: 'http://pili-vod.youzfx.cn/VIDEO/20200517/1261962827418042368.m3u8',
+          }} // Can be a URL or a local file.
+          repeat
+          fullscreen
+          resizeMode="cover"
+          // paused
+          // ref={ref}                                        // Store reference
+          // onBuffer={this.onBuffer}                // Callback when remote video is buffering
+          // onError={this.videoError}               // Callback when video cannot be loaded
+          style={styles.video}
+        />
+      )
+      return (
+        <LivePuller
+          ref={player}
+          // inputUrl="rtmp://58.200.131.2:1935/livetv/hunantv"
+          inputUrl={backUrl}
+          onStatus={onPlayerStatus}
+          style={styles.video}
+        />
+      );
+    }
+
+    // 直播
     return (
       <LivePuller
         ref={player}
         // inputUrl="rtmp://58.200.131.2:1935/livetv/hunantv"
-        inputUrl="rtmp://pili-live-rtmp.youzfx.cn/pili-yunshanbo/live1212641224414990336"
+        inputUrl={pullUrl}
         onStatus={onPlayerStatus}
         style={styles.video}
       />
@@ -147,16 +199,21 @@ const LiveWindow = (props: LiveWindowProps): any => {
    *
    */
   React.useEffect(() => {
-    dispatch(joinGroup())
-      .then((success?: boolean) => {
-        setIsIMJoinSecceed(!!success);
-      })
-      .catch((err: any) => {
-        console.log(err, "err");
-        // 找不到指定群组 显示结束
-        setIsIMJoinSecceed(false);
-      });
-
+    // 直播加群
+    if (mediaType === MediaType.living) {
+      dispatch(joinGroup({
+        groupID
+      }))
+        .then((success?: boolean) => {
+          setIsIMJoinSecceed(!!success);
+        })
+        .catch((err: any) => {
+          console.log(err, "err");
+          // 找不到指定群组 显示结束
+          setIsIMJoinSecceed(false);
+        });
+    }
+    
     return () => {
       // player.current?.stop(); // 返回时停止
     };
@@ -218,10 +275,10 @@ const LiveWindow = (props: LiveWindowProps): any => {
       {!!noticeBubbleText ? <NoticeBubble text={noticeBubbleText} /> : null}
       <LiveIntro
         showFollowButton
-        anchorId={1} // TODO:
-        liveTitle={anchorInfo?.anchorName || '直播间'}
-        liveSubTitle={`123214`}
-        userId={userId}
+        // anchorId={1} // TODO:
+        // liveTitle={anchorInfo?.anchorName || '直播间'}
+        // liveSubTitle={`123214`}
+        // userId={userId}
         isFollow={anchorInfo?.isAttention} // 是否关注(0:没关注；1：关注)
       />
 

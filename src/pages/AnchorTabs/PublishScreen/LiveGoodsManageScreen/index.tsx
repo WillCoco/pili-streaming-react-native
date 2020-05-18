@@ -23,8 +23,10 @@ import ButtonRadius from '../../../../components/Buttons/ButtonRadius';
 import PagingList from '../../../../components/PagingList';
 import CheckBox from '../../../../components/CheckBox';
 import {startLive, } from '../../../../actions/live';
-import {getWareHouseGoods, AddGoodsTargetType} from '../../../../actions/shop';
-import Toast from 'react-native-tiny-toast';
+import {getWareHouseGoods, AddGoodsTargetType, goodsCheckedFormat} from '../../../../actions/shop';
+// import Toast from 'react-native-tiny-toast';
+import {Toast, Portal} from '@ant-design/react-native';
+import {brandGoodAdapter} from '../../../../utils/dataAdapters';
 
 const emptyList: [] = [];
 const emptyObj: {} = {};
@@ -163,32 +165,32 @@ const LiveGoodsManage = (props: any) =>  {
    * @params: {Array} dataList - 预组货列表原数据
    * @params: {Array} checkList - 本地操作选择的
    */
-  const dataFormat = (dataList: Array<any>, checkList?: Array<any>) => {
-    // 本地选择过之后刷新, format数据
-    if (checkList) {
-      const checked = checkList.filter(c => c.isChecked)
-      const result: Array<any> = [];
+  // const dataFormat = (dataList: Array<any>, checkList?: Array<any>) => {
+  //   // 本地选择过之后刷新, format数据
+  //   if (checkList) {
+  //     const checked = checkList.filter(c => c.isChecked)
+  //     const result: Array<any> = [];
 
-      dataList.forEach(d => {
-        const matchedGood = checked.find(o => (o.id === d.id && !!o.id)) // todo: 标识
-        if (matchedGood) {
-          result.push({...d, isChecked: matchedGood.isChecked})
-        } else {
-          result.push(d)
-        }
-      })
+  //     dataList.forEach(d => {
+  //       const matchedGood = checked.find(o => (o.id === d.id && !!o.id)) // todo: 标识
+  //       if (matchedGood) {
+  //         result.push({...d, isChecked: matchedGood.isChecked})
+  //       } else {
+  //         result.push(d)
+  //       }
+  //     })
 
-      return result;
-    }
+  //     return result;
+  //   }
 
-    // 本地没有选择过, format数据默认未选中
-    return dataList.map((d: any) => {
-      return {
-        ...d,
-        isChecked: false
-      }
-    });
-  }
+  //   // 本地没有选择过, format数据默认未选中
+  //   return dataList.map((d: any) => {
+  //     return {
+  //       ...d,
+  //       isChecked: false
+  //     }
+  //   });
+  // }
 
   /**
    * 刷新
@@ -201,7 +203,9 @@ const LiveGoodsManage = (props: any) =>  {
     })) || [];
 
     console.log(goods, 'goodsgoodsgoodsgoods')
-    const r = Promise.resolve({result: dataFormat(goods, dataList)});
+    console.log(goodsCheckedFormat(goods, dataList), 2222222)
+    
+    const r = Promise.resolve({result: goodsCheckedFormat(goods, dataList)});
     return r;
   }
 
@@ -216,7 +220,7 @@ const LiveGoodsManage = (props: any) =>  {
     }));
 
     console.log(goods, '更多');
-    const result = Promise.resolve({result: dataFormat(goods, dataList)});
+    const result = Promise.resolve({result: goodsCheckedFormat(goods, dataList)});
 
     return result;
   };
@@ -229,22 +233,25 @@ const LiveGoodsManage = (props: any) =>  {
       return;
     }
     
-    console.log(dataList, '选中要去直播卖的商品');
+    const goodsIdList = checkedList.map(d => d.goodsId);
+    console.log(goodsIdList, '选中要去直播卖的商品');
 
-    return;
-    Toast.showLoading('');
-    
+    const loading = Toast.loading('加载中');
 
     // 提交更改
-    const r = await dispatch(startLive({
-      goodsIdList: checkedList,
-    }))
+    const r = await dispatch(startLive({goodsIdList})) as any;
 
-    Toast.hide('');
+    console.log(r, '创建直播');
+
+    Portal.remove(loading);
 
     if (r) {
       // 跳转
-      navigate(nextNav);
+      navigate(nextNav, {
+        groupID: r?.groupId,
+        liveId: r?.liveId,
+        roomName: r?.roomName,// 房间名称
+      });
     }
   }
 
@@ -260,8 +267,12 @@ const LiveGoodsManage = (props: any) =>  {
             return (
               <GoodCheckRow
                 isChecked={item.isChecked}
+                dataAdapter={() => {
+                  console.log(brandGoodAdapter(item), 'itemitemitemitem')
+                  return brandGoodAdapter(item)
+                }}
                 onPressCheck={() => checkGood(index)}
-                onPressAddShop={() => addShop(item?.isInShopList)} // 是否在橱窗列表
+                onPressAddShop={() => addShop(item?.isExit)} // 是否在橱窗列表
                 style={{
                   marginBottom: 4,
                 }}

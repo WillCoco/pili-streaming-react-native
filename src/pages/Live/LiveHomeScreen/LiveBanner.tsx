@@ -30,8 +30,9 @@ const LiveBanner = (props: LiveBannerProps) : React.ReactElement =>  {
 
   React.useEffect(() => {
     apiUserLiveBanner().then((res: any) => {
-      setBannerList(res)
+      setBannerList(res?.data || [])
     })
+    .catch(console.warn)
   }, [])
 
   return (
@@ -45,7 +46,7 @@ const LiveBanner = (props: LiveBannerProps) : React.ReactElement =>  {
           bannerList.map((banner: any, i) => {
             const bannerSource = typeof banner?.bimgobject === 'string' ? {uri: banner?.bimgobject} : banner?.bimgobject;
             return (
-              <TouchableOpacity  onPress={() => navigate('LivingRoomScreen', {liveId: banner?.extend})}>
+              <TouchableOpacity onPress={() => navigate('LivingRoomScreen', {liveId: banner?.extend})}>
                 <Image
                   key={`banner_${i}`}
                   source={bannerSource}

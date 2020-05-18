@@ -36,7 +36,7 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
    */
   const type: MediaType = props.liveInfo?.liveStatus;
   let liveTypeEle;
-  switch (+type) {
+  switch (type) {
     case MediaType.living:
       liveTypeEle = (
         <Image
@@ -86,7 +86,11 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
   return (
     <TouchableOpacity
       style={StyleSheet.flatten([styles.wrapper, props.style])}
-      onPress={() => navigate('LivingRoomScreen', {liveId: props.liveInfo?.liveId})}
+      onPress={() => navigate('LivingRoomScreen', {
+        liveId: props.liveInfo?.liveId,
+        groupID: props.liveInfo?.groupId || `live${props.liveInfo?.liveId}`,
+        mediaType: type
+      })}
     >
       <Image
         source={

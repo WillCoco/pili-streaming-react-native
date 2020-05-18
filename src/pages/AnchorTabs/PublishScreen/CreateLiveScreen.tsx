@@ -88,7 +88,7 @@ const CreateLiveScreen = (props: any) =>  {
 
     const result = await api.apiLiveUploadFile({
       fileType: 'PICTURE',
-      size: '2',
+      size: '20',
       unit: 'M',
       file: r,
     });

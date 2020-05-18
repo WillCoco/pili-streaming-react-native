@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 import LiveWindow from '../../../components/LiveWindow';
 import withPage from '../../../components/HOCs/withPage';
-import { pad } from '../../../constants/Layout';
-import { safeTop } from '../../../constants/DeviceInfo';
 
 const AnchorLivingRoomScreen = (props: any) : any =>  {
   // 主播

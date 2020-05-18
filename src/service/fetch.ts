@@ -133,8 +133,20 @@ export const post = (
         const r2 = r1.trim && r1.trim();
         return r2 && JSON.parse(r2);
       })
-      .then((result: { data: any; code: number; message: string }) => {
+      .then((result: { data: any; code: number; message: string } | any) => {
         console.log("%cresult:", "color: red; font-size: 20px; ", result);
+        if (result.timeout) {
+          console.warn(`连接超时: ${result.timeout}`);
+          Toast.show("连接超时");
+          return;
+        }
+
+        // if (result.status !== 200) {
+        //   Toast.show("网络错误", { position: 0 });
+        //   return;
+        // }
+
+        console.log(result, "=========");
 
         if (result.code === 200) {
           return onlyData

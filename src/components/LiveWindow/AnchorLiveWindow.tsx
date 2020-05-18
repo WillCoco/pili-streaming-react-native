@@ -11,7 +11,7 @@ import {
   LayoutAnimation,
   BackHandler,
 } from 'react-native';
-import {useNavigation, useFocusEffect} from '@react-navigation/native';
+import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux'
 import LiveIntro from '../LiveIntro';
 import LivingBottomBlock from '../LivingBottomBlock';
@@ -24,11 +24,13 @@ import Mask from '../../components/Mask';
 import AnchorShopCard from '../../components/LivingShopCard/AnchorShopCard';
 import withPage from '../../components/HOCs/withPage';
 import {pad} from '../../constants/Layout';
-import { createGroup, dismissGroup, updateGroupProfile, sendRoomMessage } from '../../actions/im';
+import { joinGroup, dismissGroup, updateGroupProfile, sendRoomMessage, } from '../../actions/im';
+import { anchorToLive, closeLive } from '../../actions/live';
 import Toast from 'react-native-tiny-toast';
 import { MessageType } from '../../reducers/im';
 
 const {window} = L;
+const EMPTY_OBJ = {};
 
 interface LiveWindowProps {
   style?: StyleProp<any>,
@@ -37,8 +39,19 @@ interface LiveWindowProps {
   safeBottom: number,
 }
 
+interface LiveWindowParams {
+  groupID: string,
+  liveId: string,
+}
+
 const LiveWindow = (props: LiveWindowProps) : any =>  {
   const {goBack, replace} = useNavigation();
+  const route = useRoute();
+
+  const {
+    groupID,
+    liveId,
+  }: LiveWindowParams = (route.params || EMPTY_OBJ) as LiveWindowParams;
 
   console.log(useNavigation(), 'useNavigation()useNavigation()useNavigation()')
   const dispatch = useDispatch();
@@ -64,27 +77,28 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
   /**
    * 所在房间信息
    */
-  const room = useSelector(state => state?.im?.room);
+  const room = useSelector((state: any) => state?.im?.room);
 
   /**
    * 所在房间成员数量
    */
-  const roomMemberNum = useSelector(state => state?.im?.roomMemberNum);
+  const roomMemberNum = useSelector((state: any) => state?.im?.roomMemberNum);
 
   /**
    * im加群状态
    */
   const [isIMJoinSecceed, setIsIMJoinSecceed]: [undefined|boolean, any] = React.useState(undefined);
 
-  const onPressClose = () => {
-    replace('AnchorLivingEnd');
+  const onConfirmClose = async () => {
+    const r1: any = await dispatch(closeLive({liveId}));
+    replace('AnchorLivingEnd', r1?.data);
     return true;
   }
 
   /**
    * 退出直播
    */
-  const closeLive = async () => {
+  const onPressClose = async () => {
     Toast.showLoading('');
     // const r = await dispatch(getGroupProfile());
     Toast.hide('');
@@ -95,9 +109,9 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
         type: Mask.ContentTypes.Normal,
         data: {
           text: `有${roomMemberNum}人正在观看你的直播 确认关闭直播吗？`,
-          title: 'dasdas?',
+          title: '关闭直播间?',
           rightBtnText: '确定',
-          onPressRight: onPressClose
+          onPressRight: onConfirmClose
         }
       }});
   };
@@ -111,7 +125,8 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
    * 
    */
   React.useEffect(() => {
-    dispatch(createGroup({roomName: '上级传递'}))
+    // 加群
+    dispatch(joinGroup({groupID}, {shoudSendMsg: false}))
       .then((success?: boolean) => {
         setIsIMJoinSecceed(!!success)
       })
@@ -120,9 +135,17 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
         // 找不到指定群组 显示结束
         setIsIMJoinSecceed(false)
       });
+
+    // 获取推流地址
+    dispatch(anchorToLive({liveId}))
+      .then((success?: boolean) => {
+      })
+      .catch((err: any) => {
+        console.log(err, 'err');
+      });
     
     return () => {
-      dispatch(dismissGroup()); // 退im群
+      // dispatch(dismissGroup()); // 退im群
       // todo 晴空room消息、message、livegoods
       camera.current.stopPreview();
       Toast.hide('');
@@ -133,6 +156,8 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
     if (camera.current) {
       camera.current.start()
     }
+    // 获取主播推流地址
+
     return () => {
       camera.current.stop()
     }
@@ -192,7 +217,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
-          closeLive()
+          onPressClose()
           return true;
       };
 
@@ -211,9 +236,8 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       {/*  backgroundColor: 'rgba(0,0,0,0.01)' 修复摄像上层气泡边缘显示问题 */}
       <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.01)', zIndex: 1}}>
         <LiveIntro
-          anchorId={1}
           liveTitle="湖南卫视直播间"
-          liveSubTitle={`123214`}
+          // liveSubTitle={`123214`}
         />
         <LivingBottomBlock.Anchor
           onPressShopBag={() => shopCardAnim(true)}
@@ -233,7 +257,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
         <TouchableOpacity onPress={switchCamera} style={StyleSheet.flatten([styles.camera, {top: props.safeTop + (pad * 2)}])}>
           <Iconchangecamera size={24} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={closeLive} style={StyleSheet.flatten([styles.close, {top: props.safeTop + (pad * 2)}])}>
+        <TouchableOpacity onPress={onPressClose} style={StyleSheet.flatten([styles.close, {top: props.safeTop + (pad * 2)}])}>
           <Iconcloselight size={24} />
         </TouchableOpacity>
         {

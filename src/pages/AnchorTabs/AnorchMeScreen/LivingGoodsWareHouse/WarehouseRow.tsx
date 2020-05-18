@@ -36,14 +36,15 @@ interface WarehouseRowProps {
   onPressCheck: (d?: any) => any,
   onPressRemove: (d?: any) => any,
   onPressAddShop: (d?: any) => any,
+  onPressDelShop: (d?: any) => any,
 }
 
 const WarehouseRow = (props: WarehouseRowProps) =>  {
-
   const data = (props.dataAdapter ? props.dataAdapter(props.data) : props.data) || {};
-
-  const btnText = data.canAdd ? '添加店铺' : '取消添加';
-  const btnBg = data.canAdd ? Colors.basicColor : Colors.lightGrey;
+    console.log(data, '88888')
+  const btnText = !data.isAdded ? '添加店铺' : '取消添加';
+  const btnBg = !data.isAdded ? Colors.basicColor : Colors.lightGrey;
+  const btnFn = !data.isAdded ? props.onPressAddShop : props.onPressDelShop;
 
   return (
     <View style={StyleSheet.flatten([styles.style, props.style])}>
@@ -67,7 +68,7 @@ const WarehouseRow = (props: WarehouseRowProps) =>  {
               text={btnText}
               size={20}
               style={{width: scale(75), backgroundColor: btnBg}}
-              onPress={props.onPressAddShop}
+              onPress={btnFn}
             />
           </View>
       </View>
@@ -76,9 +77,9 @@ const WarehouseRow = (props: WarehouseRowProps) =>  {
 };
 
 WarehouseRow.defaultProps = {
-  data: {
-    title: '标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题',
-  }
+  // data: {
+  //   title: '标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题',
+  // }
 };
 
 const ROW_HEIGHT = 120;
