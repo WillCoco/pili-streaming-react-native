@@ -32,6 +32,13 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
   const {navigate} = useNavigation()
 
   /**
+   * 封面图格式错误处理 TODO:捕捉不到
+   */
+  const onImageLoadError = (err: any) => {
+    console.log(err, 'image-err');
+  } 
+
+  /**
    * 根据类型去定义LiveWindow的播放类型(直播、回放、预告)
    */
   const type: MediaType = props.liveInfo?.liveStatus;
@@ -89,16 +96,18 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
       onPress={() => navigate('LivingRoomScreen', {
         liveId: props.liveInfo?.liveId,
         groupID: props.liveInfo?.groupId || `live${props.liveInfo?.liveId}`,
+        anchorId: props.liveInfo?.anchorId,
         mediaType: type
       })}
     >
       <Image
         source={
-          props.liveInfo?.livePic ? {uri: props.liveInfo?.livePic} : {
-            uri: 'https://goss.veer.com/creative/vcg/veer/800water/veer-302989341.jpg'
-          }
+          (props.liveInfo?.livePic && props.liveInfo?.livePic !== '0')
+            ? {uri: props.liveInfo?.livePic} 
+            : {uri: 'https://goss.veer.com/creative/vcg/veer/800water/veer-302989341.jpg'}
         }
         style={styles.img}
+        onError={(e) => onImageLoadError}
       />
       <View style={styles.liveTitleWrapper}>
         {liveTypeEle}

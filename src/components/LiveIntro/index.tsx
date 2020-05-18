@@ -23,7 +23,7 @@ import {pad} from '../../constants/Layout';
 // import {vw} from '../../utils/metric';
 // import {Colors} from '../../constants/Theme';
 import FollowButton from '../../components/FollowButton';
-import {apiAttentionAnchor} from '../../service/api';
+import {apiAttentionAnchor, apiEnterLive} from '../../service/api';
 import {shorNum} from '../../utils/numeric';
 
 
@@ -46,6 +46,8 @@ interface LiveMsgProps {
 }
 
 const LiveIntro = (props: LiveMsgProps) =>  {
+
+  console.log(props, 4312532152353215);
   const {navigate} = useNavigation();
 
   const livingInfo = useSelector((state: any) => {
@@ -67,21 +69,19 @@ const LiveIntro = (props: LiveMsgProps) =>  {
   /**
    * 取消/关注 
    */
-  const onFollowPress = (isFollow: boolean) => {
-    console.log(isFollow, 'isFollow')
+  // const onFollowPress = (isFollow: boolean) => {
+  //   console.log(isFollow, 'isFollow')
 
-    const params = {
-      anchorId: props?.anchorId,
-      attentionType: "1", // 1：关注；2：取关
-      userId: props?.userId
-    }
+  //   const params = {
+  //     anchorId: props?.anchorId,
+  //     attentionType: isFollow ? "2" : "1", // 1：关注；2：取关
+  //     userId: props?.userId,
+  //   }
 
-    apiAttentionAnchor(params).then(res => {
-      // TODO:
-
-    })
-    Toast.show('关注/取消关注成功')
-  }
+  //   apiAttentionAnchor(params).then(res => {
+  //     Toast.show(isFollow ? '取消关注成功' : '关注成功')
+  //   })
+  // }
 
   return (
     <TouchableOpacity
@@ -111,7 +111,7 @@ const LiveIntro = (props: LiveMsgProps) =>  {
         props.showFollowButton && (
           <FollowButton 
             isFollow={livingInfo.isAttention == '1'}
-            onPress={onFollowPress}
+            onPress={props?.onFollowPress}
             // style={{marginLeft: pad}}
           />
         )

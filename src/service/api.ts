@@ -91,7 +91,7 @@ export const apiCheckIsInvite = () => get(`${HOST_JAVA}/miniApp/isInvite`)
 // 更新用户信息
 export const apiUpdateUserInfo = (data: any) => post(`${HOST_JAVA}/miniApp/updateUserInfo`, data)
 // 注册 & 登录
-export const apiLogin = (data: any) => post1(`${HOST_JAVA}/user/appRegisterOrLogin`, data)
+export const apiLogin = (data: any) => post(`${HOST_JAVA}/user/appRegisterOrLogin`, data)
 // 我的页面
 export const apiGetUserData = () => get(`${HOST_JAVA}/user/getUserInfo`)
 // 发现模块 => 新视界获取作品
@@ -268,7 +268,7 @@ export const apiUploadFile = (data: any) => post(`${HOST_JAVA}/user/uploadFile`,
  * 资产相关的接口 ==============================================================
  */
 // 绑定银行卡
-export const apiBindingBankCard = (data: any) => post(`${HOST_JAVA}/assets/bindingBankCard`, data, false)
+export const apiBindingBankCard = (data: any) => post2(`${HOST_JAVA}/assets/bindingBankCard`, data)
 // 查询用户账单列表
 export const apiGetUserAssetsRecords = (data: any) => post(`${HOST_JAVA}/assets/getUserAssetsRecords`, data)
 // 查询用户资产信息

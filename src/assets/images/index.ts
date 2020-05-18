@@ -236,17 +236,17 @@ const images : {
     return require('./incomeActive.png')
   },
   // 银行卡背景图
-  get bankBgBlue() {
-    return require('../bank-card-image/bgBlue.png')
+  get bankBg0() {
+    return require('../bank-card-image/bg0.png')
   },
-  get bankBgOrange() {
-    return require('../bank-card-image/bgOrange.png')
+  get bankBg1() {
+    return require('../bank-card-image/bg1.png')
   },
-  get bankBgRed() {
-    return require('../bank-card-image/bgRed.png')
+  get bankBg2() {
+    return require('../bank-card-image/bg2.png')
   },
-  get bankBgGreen() {
-    return require('../bank-card-image/bgGreen.png')
+  get bankBg3() {
+    return require('../bank-card-image/bg3.png')
   },
   // 添加银行卡icon
   get addBankCardIcon() {

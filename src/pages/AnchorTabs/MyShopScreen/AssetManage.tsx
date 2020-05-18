@@ -20,10 +20,17 @@ import { Colors } from '../../../constants/Theme';
 import { pad } from '../../../constants/Layout';
 import images from '../../../assets/images/index';
 import {apiGetUserAssetsStatistics} from '../../../service/api';
+import Toast from 'react-native-tiny-toast';
+import Mask from '../../../components/Mask';
+import {useSelector, useDispatch} from 'react-redux';
+import {setAnchorAssetsInfo} from '../../../actions/asset';
 
 const AssetManage = (props: any) =>  {
   const {navigate, replace} = useNavigation();
   const [assetsInfo, setAssetsInfo] = React.useState({})
+  const identityName = useSelector(state => state?.userData?.userInfo?.identityName);
+  const [maskList, maskDispatch] = React.useContext(Mask.context);
+  const dispatch = useDispatch();
 
   /**
    * 店铺资金
@@ -49,10 +56,39 @@ const AssetManage = (props: any) =>  {
    */
   React.useEffect(() => {
     apiGetUserAssetsStatistics().then(res => {
-      console.log(res);
       setAssetsInfo(res);
+      dispatch(setAnchorAssetsInfo(res));
     })
   }, []);
+
+  /**
+   * 提现前置校验
+   */
+  const beforeWithdraw = () => {
+    // 可提现金额
+    // if (+assetsInfo?.accountMoney <= 0) {
+    //   Toast.show("无可提现金额");
+    //   return;
+    // }
+    // 是否实名
+    if (!identityName) {
+      maskDispatch({
+        type: Mask.Actions.PUSH,
+        payload: {
+          type: Mask.ContentTypes.Normal,
+          data: {
+            text: '为了您的资金安全，请先前往实名认证！',
+            title: '提示',
+            rightBtnText: '去实名认证',
+            onPressRight: () => {navigate('RealName')}
+          }
+        }
+      });
+      return;
+    }
+    // 去提现
+    navigate('Withdraw');
+  };
 
   const RenderRow = (props: {
     text: string,
@@ -99,7 +135,7 @@ const AssetManage = (props: any) =>  {
                   imgStyle={{height: 40, width: 40}}
                   textStyle={{color: '#fff', marginTop: 6}}
                 >
-                  <PrimaryText color="white" style={{marginTop: 2}}>¥{assetsInfo[row.key]}</PrimaryText>
+                  <PrimaryText color="white" style={{marginTop: 2}}>¥{assetsInfo[row.key] || 0}</PrimaryText>
                 </ImageText>
               )
             })
@@ -109,7 +145,7 @@ const AssetManage = (props: any) =>  {
           text="提现"
           textStyle={{color: '#fff'}}
           style={styles.buttonStyle}
-          onPress={() => navigate('Withdraw')}
+          onPress={beforeWithdraw}
         />
       </View>
       <View style={styles.contentWrapper}>

@@ -12,7 +12,6 @@ import {Input} from 'react-native-elements';
 import {useSelector, useDispatch} from 'react-redux';
 import {PrimaryText} from 'react-native-normalization-text';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import Toast from 'react-native-tiny-toast';
 import NavBar from '../../../components/NavBar';
 import ButtonRadius from '../../../components/Buttons/ButtonRadius';
 import {Colors} from '../../../constants/Theme';
@@ -22,7 +21,10 @@ import {addBankCard} from '../../../actions/asset';
 import FormRow from '../../../components/FormRow';
 import withPage from '../../../components/HOCs/withPage';
 import {apiBindingBankCard} from '../../../service/api';
+import {updateBankCards, updateCurBankCards} from '../../../actions/asset';
+import {apiGetUserBankCards} from '../../../service/api';
 import Mask from '../../../components/Mask';
+import {Portal, Toast} from '@ant-design/react-native';
 
 const ROW_HEIGHT = 120;
 
@@ -52,8 +54,22 @@ const AddBankCard = (props: any) =>  {
       bankAccountNo: cardNum,
     }
 
-    apiBindingBankCard(params).then(res => {
-      // TODO:
+    const t = Toast.loading('添加中');
+
+    apiBindingBankCard(params).then((res: any) => {
+      console.log(res, 'bind');
+      Portal.remove(t);
+
+      setCardNum('');
+      Toast.show('绑定成功');
+      apiGetUserBankCards().then(res => {
+        dispatch(updateBankCards(res));
+      })
+      goBack();
+      
+    }).catch((err: any) => {
+      console.log(err, 'apiBindingBankCard');
+      Portal.remove(t);
     })
   };
 

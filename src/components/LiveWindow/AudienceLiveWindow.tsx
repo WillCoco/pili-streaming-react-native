@@ -27,9 +27,10 @@ import { MediaType } from "../../liveTypes";
 import AudienceShopCard from "../../components/LivingShopCard/AudienceShopCard";
 import { vw, vh } from "../../utils/metric";
 import { PrimaryText } from "react-native-normalization-text";
-import { apiEnterLive } from '../../service/api';
+import { apiEnterLive, apiAttentionAnchor } from '../../service/api';
 import { updateLivingInfo } from '../../actions/live';
 import withPage from '../../components/HOCs/withPage';
+import { Toast } from "@ant-design/react-native";
 
 const { window } = L;
 const EMPTY_OBJ = {};
@@ -86,12 +87,11 @@ const LiveWindow = (props: LiveWindowProps): any => {
       liveId,
       userId
     }
-
     apiEnterLive(params)
       .then((res: any) => {
         // const safeRes = res || {};
         console.log(res, '进入列表');
-        res.watchNum = res.watchNum -1; // 这里重新会重复加人数
+        res.watchNum = res.watchNum - 1; // 这里重新会重复加人数
         dispatch(updateLivingInfo(res))
         setAnchorInfo(res);
       })
@@ -102,6 +102,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
    */
   const playerComponent = React.useMemo(() => {
     // 预告片
+    // 直播状态（1：预告；2：直播中；3：回放
     if (mediaType === MediaType.teaser) {
       return (
         <Video
@@ -124,9 +125,12 @@ const LiveWindow = (props: LiveWindowProps): any => {
     if (mediaType === MediaType.record) {
       return (
         <Video
+          // source={{
+          //   uri: 'http://pili-vod.youzfx.cn/VIDEO/20200517/1261962827418042368.m3u8',
+          // }} // Can be a URL or a local file.
           source={{
-            uri: 'http://pili-vod.youzfx.cn/VIDEO/20200517/1261962827418042368.m3u8',
-          }} // Can be a URL or a local file.
+            uri: anchorInfo?.backRtmp
+          }}
           repeat
           fullscreen
           resizeMode="cover"
@@ -153,7 +157,8 @@ const LiveWindow = (props: LiveWindowProps): any => {
       <LivePuller
         ref={player}
         // inputUrl="rtmp://58.200.131.2:1935/livetv/hunantv"
-        inputUrl={pullUrl}
+        // inputUrl={pullUrl}
+        inputUrl={anchorInfo?.pullUrl}
         onStatus={onPlayerStatus}
         style={styles.video}
       />
@@ -220,6 +225,44 @@ const LiveWindow = (props: LiveWindowProps): any => {
   }, []);
 
   /**
+   * 取消/关注 
+   */
+  const onFollowPress = (isFollow) => {
+    console.log(isFollow, 'isFollow');
+
+    const params = {
+      anchorId: route?.params?.anchorId,
+      attentionType: isFollow ? "2" : "1", // 1：关注；2：取关
+      userId: userId,
+    }
+
+    apiAttentionAnchor(params).then(res => {
+
+      apiEnterLive({
+        liveId,
+        userId
+      })
+        .then((res: any) => {
+          res.watchNum = res.watchNum - 1; // 这里重新会重复加人数
+          dispatch(updateLivingInfo(res))
+          setAnchorInfo(res);
+        })
+      Toast.show(isFollow ? '取消关注成功' : '关注成功')
+    })
+
+    apiEnterLive({liveId,userId})
+      .then((res: any) => {
+        // const safeRes = res || {};
+        console.log(res, '进入列表');
+        res.watchNum = res.watchNum - 1; // 这里重新会重复加人数
+        dispatch(updateLivingInfo(res))
+        setAnchorInfo(res);
+      })
+
+    Toast.show(isFollow ? '取消关注成功' : '关注成功');
+  }
+
+  /**
    * 公告气泡
    */
   const noticeBubbleText = room?.notification;
@@ -278,11 +321,12 @@ const LiveWindow = (props: LiveWindowProps): any => {
       {!!noticeBubbleText ? <NoticeBubble text={noticeBubbleText} /> : null}
       <LiveIntro
         showFollowButton
-        anchorId={anchorInfo?.anchorId}
+        anchorId={route?.params?.anchorId}
         liveTitle={anchorInfo?.anchorName || '直播间'}
         liveSubTitle={`${anchorInfo?.watchNum || 0}观看`}
         userId={userId}
         isFollow={anchorInfo?.isAttention} // 是否关注(0:没关注；1：关注)
+        onFollowPress={() => {onFollowPress(anchorInfo?.isAttention)}}
       />
 
       <TouchableOpacity

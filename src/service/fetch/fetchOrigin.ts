@@ -68,7 +68,7 @@ export const get = (path: any, data?: any, options: Options = {}) => {
 };
 
 /**
- * get方法
+ * post方法
  * @param path 
  * @param data 
  * @param options 
