@@ -35,7 +35,7 @@ import {
 
 const isAndroid = Platform.OS === 'android';
 
-export default class App extends Component {
+export default class Steam extends Component {
   state = {
     androidPermissionGranted: false,
     state: null,
@@ -67,7 +67,6 @@ export default class App extends Component {
         },
         size: {
           width: 50,
-          height: 20,
         },
       },
       pictureStreamingFile: null,
@@ -175,7 +174,7 @@ export default class App extends Component {
     const [value, onChange] = this.useStateOfPath(keyPath);
     return {value, onChange};
   };
-
+  
   componentDidMount() {
     if (isAndroid) {
       PermissionsAndroid.requestMultiple([

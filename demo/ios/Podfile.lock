@@ -224,6 +224,10 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
+  - ReactNativeNavigation (6.6.0):
+    - React
+    - React-RCTImage
+    - React-RCTText
   - RNFileSelector (1.0.0):
     - FileBrowser
     - React
@@ -262,6 +266,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativeNavigation (from `../node_modules/react-native-navigation`)
   - RNFileSelector (from `../node_modules/react-native-file-selector/ios`)
   - RNFS (from `../node_modules/react-native-fs`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -324,6 +329,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeNavigation:
+    :path: "../node_modules/react-native-navigation"
   RNFileSelector:
     :path: "../node_modules/react-native-file-selector/ios"
   RNFS:
@@ -365,6 +372,7 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
+  ReactNativeNavigation: e0d1a123d25212f0b2a10a5248e30bb3c94692d4
   RNFileSelector: 898821102ce11fdd59ed87a1cc3200edb7192fd6
   RNFS: 0d4191b1052bef9ce70deff00a5b4169c62bbd9b
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
