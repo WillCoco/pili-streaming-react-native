@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, PixelRatio, TouchableOpacity, Clipboard } from 
 import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
 import Toast from 'react-native-tiny-toast'
-import AnchorShowcaseManage from '../../AnchorTabs/AnorchMeScreen/AnchorShowcaseManage'
 
 export default function OrderCard(props: { detail: any }) {
   const { detail } = props

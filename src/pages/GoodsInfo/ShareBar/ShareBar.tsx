@@ -95,19 +95,19 @@ function ShareBar(props: any) {
     const imageData = base64Img;
 
     // 报错了 先注释
-    // RNFetchBlob.fs.writeFile(downloadDest, imageData, 'base64').then((rst) => {
-    //   try {
-    //     CameraRoll.saveToCameraRoll(downloadDest).then((res) => {
-    //       console.log('suc', res)
-    //       success && success()
-    //     }).catch((err) => {
-    //       console.log('fai', err)
-    //     })
-    //   } catch (err) {
-    //     console.log('catch', err)
-    //     fail && fail()
-    //   }
-    // });
+    RNFetchBlob.fs.writeFile(downloadDest, imageData, 'base64').then(() => {
+      // try {
+      //   CameraRoll.saveToCameraRoll(downloadDest).then((res) => {
+      //     console.log('suc', res)
+      //     success && success()
+      //   }).catch((err) => {
+      //     console.log('fai', err)
+      //   })
+      // } catch (err) {
+      //   console.log('catch', err)
+      //   fail && fail()
+      // }
+    });
   }
 
   // const downLoad = async () => {
