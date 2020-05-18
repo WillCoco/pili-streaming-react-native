@@ -23,8 +23,12 @@ import ScrollableTab from '../../../components/ScrollableTab';
 import { vw, vh } from '../../../utils/metric';
 import Empty from '../../../components/Empty';
 import PagingList from '../../../components/PagingList';
-import { getShowcaseGoods, AddGoodsTargetType } from '../../../actions/shop';
-import Toast from 'react-native-tiny-toast'
+import { getShowcaseGoods, AddGoodsTargetType, getWareHouseGoods, addGoods2ShowCase, DelGroupHouseGoods } from '../../../actions/shop';
+// import Toast from 'react-native-tiny-toast';
+import { Toast, portal } from '@ant-design/react-native';
+
+const INIT_PAGE_NO = 1;
+const PAGE_SIZE = 10;
 
 const exampleData = [...Array(5)].map((d, index) => ({
   key: `item-${index}`, // For example only -- don't use index as your key!
@@ -40,41 +44,50 @@ const AnchorShowcaseManage = () =>  {
   /**
    * store橱窗商品
    */
-  const goodsList = useSelector(state => state?.showcase?.showcaseGoods);
+  // const goodsList = useSelector(state => state?.showcase?.showcaseGoods);
 
   React.useEffect(() => {
-    // 获取数据
-    let loading: any;
-    const getData = async () => {
-      loading = Toast.showLoading('');
-      const data = await dispatch(getShowcaseGoods())
-      setData(data);
-      Toast.hide(loading);
-    };
-    getData();
 
-    return () => {
-      if (loading) {
-        Toast.hide(loading);
-      }
-    }
   }, [])
 
+  /*
+  * 刷新
+  * */
   const dispatch = useDispatch();
-  const [data, setData]: Array<any> = React.useState(goodsList || []);
+  const [goodsList, setGoodList]: Array<any> = React.useState([]);
+
+  const onRefresh = async () => {
+      setRemoveList([]);
+
+      const goods: any = await dispatch(getWareHouseGoods({
+          pageNo: INIT_PAGE_NO,
+          pageSize: PAGE_SIZE,
+          selType: AddGoodsTargetType.showcaseGoods
+      })) || [];
+
+      return {result: goods}
+  };
+
+  /*
+   * 上拉加载
+   * */
+  const onEndReached = async (page, size) => {
+      // const goods: any = await dispatch(getWareHouseGoods({
+      //     pageNo: page,
+      //     pageSize: size,
+      //     selType: AddGoodsTargetType.showcaseGoods
+      // })) || [];
+      //
+      // setGoodList(goods)
+  };
 
   /**
    * 渲染行
    */
-  const renderItem = ({item, index, drag, isActive}: any): React.ReactNode => {
-    console.log(index, 'indexxxx')
+  const renderItem = ({item, index}: any): React.ReactNode => {
     return (
       <LiveGoodManageRow
         data={item}
-        drag={drag}
-        isActive={isActive}
-        onMoveDownPress={() => onMoveDownPress(index, item)}
-        onMoveUpPress={() => onMoveUpPress(index, item)}
         onRemovePress={() => onRemovePress(index, item)}
       />
     )
@@ -110,11 +123,13 @@ const AnchorShowcaseManage = () =>  {
   /**
    * 删除
    */
+  const [removeList, setRemoveList]: Array<any> = React.useState([]);
   const onRemovePress = (index: number, item: any) => {
-    setData((data: Array<any>) => {
-        console.log(data, '删除')
+    removeList.push(item.goodsId);
+    setRemoveList(removeList);
+
+    setGoodList((data: Array<any>) => {
       const newData = [...data];
-        alert(index)
       newData.splice(index, 1);
       return newData;
     })
@@ -123,43 +138,68 @@ const AnchorShowcaseManage = () =>  {
   /**
    * 提交修改
    */
-  const onSubmit = () => {
-    alert('提交')
+  const onSubmit = async () => {
+    if(removeList && removeList.length > 0) {
+        const t = Toast.loading('删除中')
+        const Bool = await dispatch(DelGroupHouseGoods({
+            goodsIdList: [...removeList]
+        }));
+        portal.remove(t);
+        if(Bool){
+            Toast.success('删除成功');
+            setRemoveList([])
+        }else {
+            Toast.fail('删除失败');
+        }
+    }  else {
+        Toast.info('没有修改');
+    }
+
+  }
+
+  const addGoods = async (brandGoods: Array<any>, data: any) => {
+      const goodList = Array.isArray(data) ? data : [data];
+      const goodIdsNeed2Add = goodList.map((d: any) => d.goodsId);
+      if(goodIdsNeed2Add && goodIdsNeed2Add.length > 0){
+          return await dispatch(addGoods2ShowCase({
+              brandGoods,
+              goodIdsNeed2Add
+          }));
+      }
   }
 
   /**
    * 是否空
    */
-  const isEmpty = !goodsList || goodsList.length === 0;
-  console.log(data, 'dataaa')
+  // const isEmpty = !goodsList || goodsList.length === 0;
+
   return (
     <View style={styles.style}>
       <NavBar title="店铺商品管理" leftTheme="light" titleStyle={{color: '#fff'}} style={{backgroundColor: Colors.basicColor}} />
-      {
-        !isEmpty ? <Empty text="暂无商品" /> : (
-          <DraggableFlatList
-            data={data}
+        <PagingList
+            data={goodsList}
+            setData={setGoodList}
+            size={PAGE_SIZE}
             renderItem={renderItem}
-            keyExtractor={(item, index) => `draggable-item-${index}`}
-            onDragEnd={({ data }) => setData(data)}
-            contentContainerStyle={styles.contentContainerStyle}
-            ListFooterComponent={() => {
-              return (
-                <SmallText color="grey" style={styles.footer}>没有更多啦~</SmallText>
-              )
-            }}
-            getItemLayout={(data, index) => (
-              {length: ROW_HEIGHT, offset: ROW_HEIGHT * index, index}
+            getItemLayout={(data: any, index: number) => (
+                {length: ROW_HEIGHT, offset: ROW_HEIGHT * index, index}
             )}
-          />
-        )
-      }
+            onRefresh={onRefresh}
+            onEndReached={onEndReached}
+            keyExtractor={(item: any, index: number) => 'index' + index + item}
+            initialNumToRender={PAGE_SIZE}
+            columnWrapperStyle={{justifyContent: 'space-between'}}
+            contentContainerStyle={styles.pagingListWrapper}
+        />
       <View style={styles.btnsWrapper}>
         <ButtonRadius
           text="添加商品"
           textStyle={styles.addText}
           style={styles.addBtn}
-          onPress={() => navigate('GoodsSupply', {type: AddGoodsTargetType.showcaseGoods})}
+          onPress={() => navigate('GoodsSupply', {
+              type: AddGoodsTargetType.showcaseGoods,
+              onPicked: addGoods
+          })}
         />
         <ButtonRadius
           text="提交保存"
@@ -177,6 +217,7 @@ AnchorShowcaseManage.defaultProps = {
 const styles = StyleSheet.create({
   style: {
     flex: 1,
+    paddingBottom: pad * 1.5 + 40
   },
   btnsWrapper: {
     flex: 1,

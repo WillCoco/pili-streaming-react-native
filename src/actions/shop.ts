@@ -79,21 +79,39 @@ export const updateReturnAddress = (retrunAddress: any) => {
 /**
  * 获取橱窗商品
  */
-export const getShowcaseGoods = () => {
-  return async function(dispatch: Dispatch<any>, getState: any) {
-    // 请求更新
-    // mock
-    await sleep(3000);
-    const showcaseGoods = [1,2,3,4,5,6,7];
-    console.log(showcaseGoods, 'showcaseGoods')
 
-
-    // 若成功去更新store
-    dispatch(updateShowcaseGoods(showcaseGoods));
-
-    return Promise.resolve(showcaseGoods);
-  }
-}
+// interface GetShowcaseGoodsPrarms {
+//     selType: AddGoodsTargetType,
+//     pageNo: number,
+//     pageSize: number,
+// }
+// export const getShowcaseGoods = (params: GetShowcaseGoodsPrarms) => {
+//   return async function(dispatch: Dispatch<any>, getState: any) {
+//     // 请求更新
+//     // mock
+//     // await sleep(3000);
+//     // const showcaseGoods = [1,2,3,4,5,6,7];
+//     // console.log(showcaseGoods, 'showcaseGoods')
+//       return async function (dispatch: Dispatch<any>, getState: any): Promise<any> {
+//           const anchorId = getState()?.anchorData?.anchorInfo?.anchorId;
+//           return api.apiDelGroupGoods({
+//               ...params,
+//               anchorId
+//           })
+//               .then(r => {
+//                   console.log(r)
+//                   // 若成功去更新store
+//                   // dispatch(updateShowcaseGoods(showcaseGoods));
+//                   // return Promise.resolve(showcaseGoods);
+//               })
+//               .catch(err => {
+//                   console.log(`delWareHouseGoods error: ${err}`)
+//                       return Promise.resolve(false);
+//               })
+//       }
+//
+//   }
+// }
 
 /**
  * 更新橱窗商品
@@ -223,6 +241,46 @@ export const addGoods2WareHouse = (params: AddGoods2WareHouseParams) => {
       return Promise.resolve(false);
     })
   }
+}
+
+/*
+* 商品管理添加商品到橱窗
+* */
+interface AddGoods2ShowCaseParams {
+    brandGoods: Array<any>, // 品牌商品
+    goodIdsNeed2Add: Array<string>, // 待添加的ids
+}
+
+export const addGoods2ShowCase = (params: AddGoods2ShowCaseParams) => {
+    return async function(dispatch: Dispatch<any>, getState: any) {
+        const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
+        console.log(params, 'parmassss')
+
+        const goodsIdList = params.goodIdsNeed2Add || [];
+        return api.apiAddAnchorGoods({
+            goodsIdList,
+            anchorId
+        })
+            .then(r => {
+                const isSucceed = r && r.code === 200 && r.success;
+
+                if (isSucceed) {
+
+                    const newPlatformGoods = changeIsExit(
+                        params.brandGoods,
+                        (platformGood) => goodsIdList.indexOf(platformGood.goodsId) !== -1,
+                        true,
+                    );
+                    console.log(newPlatformGoods, 'newPlatformGoods')
+
+                    return Promise.resolve(newPlatformGoods)
+                }
+            })
+            .catch(err => {
+                console.log(`addGoods2ShowCase error: ${err}`)
+                return Promise.resolve(false);
+            })
+    }
 }
 
 /**
