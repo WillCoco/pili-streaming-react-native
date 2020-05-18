@@ -7,7 +7,7 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import withPage from '../HOCs/withPage';
 import Iconback from '../Iconfont/Iconback';
 import { Colors } from '../../constants/Theme';
@@ -28,15 +28,15 @@ interface NavBarProps {
   onLeftPress?: () => void,
 }
 
-const NavBar = (props: NavBarProps) =>  {
-  const {goBack} = useNavigation();
+const NavBar = (props: NavBarProps) => {
+  const { goBack } = useNavigation();
 
   const LeftComponent = props.left;
   const RightComponent = props.right;
 
- /**
-   * 左侧事件
-   */
+  /**
+    * 左侧事件
+    */
   const onLeftPress = () => {
     props.onLeftPress ? props.onLeftPress() : goBack()
   }
@@ -53,7 +53,7 @@ const NavBar = (props: NavBarProps) =>  {
   // console.log(props.style, 'navstyle')
 
   return (
-    <View style={StyleSheet.flatten([styles.style, {paddingTop: props.safeTop, height: 44 + props.safeTop}, props.style])}>
+    <View style={StyleSheet.flatten([styles.style, { paddingTop: props.safeTop, height: 44 + props.safeTop }, props.style])}>
       <View style={StyleSheet.flatten([styles.leftWrapper, props.leftWrapperStyle])}>
         {
           LeftComponent ? <LeftComponent {...props} /> : defaultLeftComponent

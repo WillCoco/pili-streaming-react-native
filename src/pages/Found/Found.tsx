@@ -37,7 +37,6 @@ function Found(props: any) {
 
   useEffect(() => {
     getFoundList(false)
-    console.log(pageNoRef)
   }, [])
 
   useEffect(() => {
@@ -48,7 +47,7 @@ function Found(props: any) {
    * 加载发现数据
    * @param isPullDown 是否是下拉刷新
    */
-  const getFoundList = (isPullDown: boolean) => {
+  const getFoundList = async (isPullDown: boolean) => {
     const params = {
       page: pageNoRef.current,
       pageSize: pageSize,
@@ -72,6 +71,8 @@ function Found(props: any) {
       hasMoreRef.current = pageNoRef.current < totalPage
       setWorkList(isPullDown ? waterFall(res.worksInfoList).items : tempList)
       setMaxHeight(isPullDown ? waterFall(res.worksInfoList).maxHeight : maxH)
+    }).catch(err => {
+      console.log(err, '232222')
     })
   }
 

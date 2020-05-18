@@ -30,17 +30,27 @@ const Normal = (props: {
   const [, dispatch] = React.useContext(MaskContext)
 
   /**
-   * 左默认关闭
+   * 取消
    */
   const onPressLeft = () => {
-    props.onPressLeft ? props.onPressLeft() : dispatch({type: Actions.REMOVE});
+    if (props.onPressLeft) {
+      const needRemove = props.onPressLeft();
+      if (needRemove) {
+        dispatch({type: Actions.REMOVE});
+      }
+      return;
+    }
+    dispatch({type: Actions.REMOVE});
   }
+  
   /**
-   * 左默认关闭
+   * 确定
    */
   const onPressRight = () => {
-    props.onPressRight();
-    dispatch({type: Actions.REMOVE});
+    const needRemove = props.onPressRight();
+    if (needRemove) {
+      dispatch({type: Actions.REMOVE});
+    }
   }
 
   return (

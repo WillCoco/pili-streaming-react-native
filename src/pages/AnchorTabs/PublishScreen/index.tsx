@@ -17,12 +17,14 @@ import {LinearGradient} from 'expo-linear-gradient';
 import {apiAnchorHomePage} from '../../../service/api';
 import {setAnchorInfo} from '../../../actions/anchor';
 import {useDispatch, useSelector} from 'react-redux';
+import Mask from '../../../components/Mask';
 
 const PublishScreen = (props: any) =>  {
+  const [maskList, maskDispatch] = React.useContext(Mask.context);
   const {navigate, reset} = useNavigation();
   const dispatch = useDispatch();
-  const anchorInfo = useSelector(state => state?.anchorData?.anchorInfo) || {}
-  const userId = useSelector(state => state?.userData?.userInfo?.userId)
+  const anchorInfo = useSelector((state: any) => state?.anchorData?.anchorInfo) || {}
+  const userId = useSelector((state: any) => state?.userData?.userInfo?.userId)
 
   /**
    * 获取主播详情
@@ -45,6 +47,35 @@ const PublishScreen = (props: any) =>  {
 
     navigate('我的')
   }
+
+  /**
+   * 检测下有没有直播 
+   * 可选关闭或者继续直播
+   */
+  React.useEffect(() => {
+    if (false) {
+      maskDispatch({
+        type: Mask.Actions.PUSH,
+        payload: {
+          type: Mask.ContentTypes.Normal,
+          data: {
+            title: '您有直播未正常关闭',
+            text: '是否恢复上次直播',
+            rightBtnText: '恢复直播',
+            onPressLeft: () => {
+              // 关闭直播件
+
+              return true;
+            },
+            onPressRight: () => {
+              // 继续去直播
+
+              return true;
+            },
+          }
+        }})
+    }
+  }, [])
 
   return (
     <View style={styles.style}>

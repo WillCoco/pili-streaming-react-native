@@ -55,9 +55,9 @@ const MyShopScreen = (props) =>  {
    * 店铺资金
    */
   const assetTypes = [
-    {img: images.assetAvailable, text: '可提现金额', onPress: () => navigate('AnchorRecords')},
-    {img: images.assetHaveSettled, text: '已结算金额', onPress: () => navigate('AnchorTrailers')},
-    {img: images.assetWaitForSettle, text: '待结算金额', onPress: () => navigate('LivesAnalyze')},
+    {key: 'accountMoney', img: images.assetAvailable, text: '可提现金额', onPress: () => navigate('AnchorRecords')},
+    {key: 'willSettle', img: images.assetWaitForSettle, text: '待结算金额', onPress: () => navigate('AnchorTrailers')},
+    {key: 'frozenMoney', img: images.assetFrozen, text: '冻结金额', onPress: () => navigate('LivesAnalyze')},
   ];
 
   /**
@@ -132,7 +132,7 @@ const MyShopScreen = (props) =>  {
                   imgStyle={{height: 40, width: 40}}
                   textStyle={{color: '#fff', marginTop: 6}}
                 >
-                  <PrimaryText color="white" style={{marginTop: 2}}>¥{0.00}</PrimaryText>
+                  <PrimaryText color="white" style={{marginTop: 2}}>¥{assetsInfo[row.key] || 0}</PrimaryText>
                 </ImageText>
               )
             })

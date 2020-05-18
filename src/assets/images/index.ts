@@ -197,11 +197,11 @@ const images : {
   get assetAvailable() {
     return require('./assetAvailable.png')
   },
-  get assetHaveSettled() {
-    return require('./assetHaveSettled.png')
-  },
   get assetWaitForSettle() {
     return require('./assetWaitForSettle.png')
+  },
+  get assetFrozen() {
+    return require('./assetFrozen.png')
   },
   // 店铺工具
   get toolGoodsManage() {
@@ -223,11 +223,17 @@ const images : {
   get incomeLive() {
     return require('./incomeLive.png')
   },
+  get incomeInvite() {
+    return require('./incomeInvite.png')
+  },
+  get incomeShare() {
+    return require('./incomeShare.png')
+  },
   get incomeShop() {
     return require('./incomeShop.png')
   },
-  get incomeInvite() {
-    return require('./incomeInvite.png')
+  get incomeActive() {
+    return require('./incomeActive.png')
   },
   // 银行卡背景图
   get bankBgBlue() {
@@ -250,8 +256,8 @@ const images : {
     return require('../bank-card-image/bgButton.png')
   },
   // 银行卡icon
-  get BOCIcon() {
-    return require('../bank-card-image/BOC.png')
+  get bankIcon() {
+    return require('../bank-card-image/bankIcon.png')
   },
   // 主播tabs
   get tabShop() {

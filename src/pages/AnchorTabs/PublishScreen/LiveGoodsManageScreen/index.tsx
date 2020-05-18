@@ -17,15 +17,20 @@ import {vw} from '../../../../utils/metric';
 import {Colors} from '../../../../constants/Theme';
 import {pad} from '../../../../constants/Layout';
 import Empty from '../../../../components/Empty';
-import GoodCheckRow from './LiveGoodsManageRow';
+import GoodCheckRow, {ROW_HEIGHT} from './LiveGoodsManageRow';
 import NavBar from '../../../../components/NavBar';
 import ButtonRadius from '../../../../components/Buttons/ButtonRadius';
+import PagingList from '../../../../components/PagingList';
 import CheckBox from '../../../../components/CheckBox';
-import {startLive} from '../../../../actions/live';
+import {startLive, } from '../../../../actions/live';
+import {getWareHouseGoods, AddGoodsTargetType} from '../../../../actions/shop';
 import Toast from 'react-native-tiny-toast';
 
 const emptyList: [] = [];
 const emptyObj: {} = {};
+
+const PAGE_SIZE = 14;
+const INIT_PAGE_NO = 1;
 
 const LiveGoodsManage = (props: any) =>  {
   const {navigate, goBack} = useNavigation();
@@ -44,6 +49,13 @@ const LiveGoodsManage = (props: any) =>  {
     nextNav?: string, // 
     btnText?: string, // 
   } = route.params || emptyObj;
+
+  /**
+   * 获取
+   */
+  // React.useEffect(() => {
+  //   dispatch(getWareHouseGoods())
+  // }, [])
 
 
   // const liveConfig = useSelector(state => state?.live?.liveConfig);
@@ -72,7 +84,7 @@ const LiveGoodsManage = (props: any) =>  {
   /**
    * 预组货货物
    */
-  const [dataList, setDataList] = React.useState(warehouseGoods);
+  const [dataList, setDataList]: Array<any> = React.useState(warehouseGoods);
 
   /**
    * 过滤出选中的
@@ -104,7 +116,12 @@ const LiveGoodsManage = (props: any) =>  {
   /**
    * 现在是否全选
    */
-  const isCheckedAll = !dataList.find((o: any) => !o.isChecked);
+  const isCheckedAll = React.useMemo(() => {
+    if (!dataList || !dataList.length) {
+      return false;
+    }
+    return !dataList.find((o: any) => (!o.isChecked)) // todo: 标识
+  }, [dataList]);
 
   /**
    * 全选/反选
@@ -141,13 +158,79 @@ const LiveGoodsManage = (props: any) =>  {
   }
 
   /**
+   * 加工原数据
+   * 加上isChecked字段
+   * @params: {Array} dataList - 预组货列表原数据
+   * @params: {Array} checkList - 本地操作选择的
+   */
+  const dataFormat = (dataList: Array<any>, checkList?: Array<any>) => {
+    // 本地选择过之后刷新, format数据
+    if (checkList) {
+      const checked = checkList.filter(c => c.isChecked)
+      const result: Array<any> = [];
+
+      dataList.forEach(d => {
+        const matchedGood = checked.find(o => (o.id === d.id && !!o.id)) // todo: 标识
+        if (matchedGood) {
+          result.push({...d, isChecked: matchedGood.isChecked})
+        } else {
+          result.push(d)
+        }
+      })
+
+      return result;
+    }
+
+    // 本地没有选择过, format数据默认未选中
+    return dataList.map((d: any) => {
+      return {
+        ...d,
+        isChecked: false
+      }
+    });
+  }
+
+  /**
+   * 刷新
+   */
+  const onRefresh = async () => {
+    const goods: any = await dispatch(getWareHouseGoods({
+      pageNo: INIT_PAGE_NO,
+      pageSize: PAGE_SIZE,
+      selType: AddGoodsTargetType.warehouseGoods
+    })) || [];
+
+    console.log(goods, 'goodsgoodsgoodsgoods')
+    const r = Promise.resolve({result: dataFormat(goods, dataList)});
+    return r;
+  }
+
+  /**
+   * 更多
+   */
+  const onEndReached = async (pageNo: number, pageSize: number) => {
+    const goods: any = await dispatch(getWareHouseGoods({
+      pageSize,
+      pageNo,
+      selType: AddGoodsTargetType.warehouseGoods
+    }));
+
+    console.log(goods, '更多');
+    const result = Promise.resolve({result: dataFormat(goods, dataList)});
+
+    return result;
+  };
+
+  /**
    * 确认
    */
   const onSubmit = async () => {
     if (!isVaildData()) {
       return;
     }
+    
     console.log(dataList, '选中要去直播卖的商品');
+
     return;
     Toast.showLoading('');
     
@@ -168,29 +251,33 @@ const LiveGoodsManage = (props: any) =>  {
   return (
     <View style={styles.style}>
       <NavBar title={navTitle} leftTheme="light" titleStyle={{color: '#fff'}} style={{backgroundColor: Colors.basicColor}} />
-      {
-        dataList && dataList.length > 0 ? (
-          <ScrollView style={styles.scroll} contentContainerStyle={{backgroundColor: Colors.bgColor}}>
-            {
-              dataList.map((good: any, index: number) => {
-                return (
-                  <GoodCheckRow 
-                    // data={{goodTitle: 1}}
-                    isChecked={good.isChecked}
-                    onPressCheck={() => checkGood(index)}
-                    onPressAddShop={() => addShop(good?.isInShopList)} // 是否在橱窗列表
-                    style={{
-                      marginBottom: 4,
-                    }}
-                  />
-                )
-              })
-            }
-          </ScrollView>
-        ) : (
-          <Empty style={{backgroundColor: Colors.bgColor}} text="暂无商品" />
-        )
-      }
+      <PagingList
+          data={dataList}
+          setData={setDataList}
+          size={PAGE_SIZE}
+          // initListData={warehouseGoods}
+          renderItem={({item, index}: any) => {
+            return (
+              <GoodCheckRow
+                isChecked={item.isChecked}
+                onPressCheck={() => checkGood(index)}
+                onPressAddShop={() => addShop(item?.isInShopList)} // 是否在橱窗列表
+                style={{
+                  marginBottom: 4,
+                }}
+              />
+            )
+          }}
+          getItemLayout={(data: any, index: number) => (
+            {length: ROW_HEIGHT, offset: ROW_HEIGHT * index, index}
+          )}
+          onRefresh={onRefresh}
+          onEndReached={onEndReached}
+          keyExtractor={(item: any, index: number) => 'index' + index + item}
+          initialNumToRender={PAGE_SIZE}
+          columnWrapperStyle={{justifyContent: 'space-between'}}
+          contentContainerStyle={styles.pagingListWrapper}
+        />
       <View style={styles.summaryWrapper}>
         <CheckBox
           label="全选"

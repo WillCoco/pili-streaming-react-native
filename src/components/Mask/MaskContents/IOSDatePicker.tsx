@@ -11,7 +11,6 @@ import {
 import {PrimaryText, SmallText, T4} from 'react-native-normalization-text';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { vw } from '../../../utils/metric';
-import ButtonRadius from '../../Buttons/ButtonRadius';
 import { radioLarge, pad, radio } from '../../../constants/Layout';
 import { Colors } from '../../../constants/Theme';
 import MaskContext from '../MaskContext';

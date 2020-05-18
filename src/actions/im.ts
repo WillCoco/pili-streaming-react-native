@@ -188,9 +188,9 @@ export function login(params?: {
         // }
 
         // 手动
-        setTimeout(() => {
-          dispatch(getGroupList())
-        }, 3000)
+        // setTimeout(() => {
+        //   dispatch(getGroupList())
+        // }, 3000)
 
       })
       .catch(function(imError: any) {
@@ -368,7 +368,8 @@ export const sendRoomMessage = (msgInfo: SendMessageParams) => {
 
     const groupID = getState()?.im?.room?.groupID;
     let message = tim.createCustomMessage({
-      to: TEST_ROOM || msgInfo.to || groupID,
+      // to: TEST_ROOM || msgInfo.to || groupID,
+      to: groupID || msgInfo.to || TEST_ROOM,
       conversationType: TIM.TYPES.CONV_GROUP,
       // 消息优先级，用于群聊（v2.4.2起支持）。如果某个群的消息超过了频率限制，后台会优先下发高优先级的消息，详细请参考：https://cloud.tencent.com/document/product/269/3663#.E6.B6.88.E6.81.AF.E4.BC.98.E5.85.88.E7.BA.A7.E4.B8.8E.E9.A2.91.E7.8E.87.E6.8E.A7.E5.88.B6)
       // 支持的枚举值：TIM.TYPES.MSG_PRIORITY_HIGH, TIM.TYPES.MSG_PRIORITY_NORMAL（默认）, TIM.TYPES.MSG_PRIORITY_LOW, TIM.TYPES.MSG_PRIORITY_LOWEST

@@ -17,11 +17,14 @@ import {pad} from '../../../constants/Layout';
 import {Colors} from '../../../constants/Theme';
 import {brandGoodAdapter} from '../../../utils/dataAdapters';
 import images from '../../../assets/images/index';
+import { Toast, portal } from '@ant-design/react-native';
+// import Toast from 'react-native-tiny-toast';
 
 const PAGE_SIZE = 14;
+const EMPTY_LIST: [] = [];
 
 export interface BrandGoodsParams {
-  onPicked: (goodsList: Array<any>) => any,
+  onPicked: (brandGoodsList: Array<any>, pickedGood: any) => any,
   brandId: number,
   type: AddGoodsTargetType, // 区分添加橱窗还是
 }
@@ -30,6 +33,8 @@ const BrandGoods = () =>  {
   const {navigate, goBack} = useNavigation();
   const route = useRoute();
   const dispatch = useDispatch();
+
+  const [brandGoods, setBrandGoods] = React.useState(EMPTY_LIST);
 
   /**
    * 获取参数
@@ -72,6 +77,19 @@ const BrandGoods = () =>  {
     return Promise.resolve({result});
   };
 
+  const onPressAdd = async (good: any) => {
+    const t = Toast.loading('加载中')
+    const addedList = await onPicked(brandGoods, good);
+
+    console.log(Toast, 'addedListaddedList')
+    portal.remove(t);
+
+    if (!!addedList) {
+      Toast.success('添加成功');
+      setBrandGoods(addedList);
+    }
+  }
+
   return (
     <View style={styles.style}>
       <NavBar
@@ -81,6 +99,8 @@ const BrandGoods = () =>  {
         style={styles.nav}
       />
       <PagingList
+        data={brandGoods}
+        setData={setBrandGoods}
         size={PAGE_SIZE}
         // initListData={warehouseGoods}
         renderItem={({item, index}) => {
@@ -89,9 +109,10 @@ const BrandGoods = () =>  {
             <BrandGoodRow
               data={item}
               dataAdapter={(item: any) => {
+                console.log(item, '2222222')
                 return brandGoodAdapter(item);
               }}
-              onPress={onPicked}
+              onPress={onPressAdd}
               style={{paddingHorizontal: pad}}
             />
           )

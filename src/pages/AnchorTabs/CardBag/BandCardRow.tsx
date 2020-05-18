@@ -61,11 +61,10 @@ const BrandGoodRow = (props: BrandGoodRowProps) =>  {
       onPress={onPress}
     >
       <ImageBackground source={images.bankBgBlue} style={styles.cardWrapper}>
-        <Avatar source={data.img || images.BOCIcon} style={StyleSheet.flatten([styles.avatar, props.imgStyle])} />
+        <Avatar source={images.bankIcon} style={StyleSheet.flatten([styles.avatar, props.imgStyle])} />
         <View style={styles.contentWrapper}>
-          <T3 numberOfLines={1} style={{color: Colors.whiteColor}}>{data.bank}</T3>
-          <PrimaryText numberOfLines={1} style={{color: Colors.whiteColor}}>{data.cardType}</PrimaryText>
-          <T1 numberOfLines={1} style={{color: Colors.whiteColor}}>{data.cardId}</T1>
+          <T3 numberOfLines={1} style={{color: Colors.whiteColor}}>{data.bankName}</T3>
+          <T1 numberOfLines={1} style={{color: Colors.whiteColor}}>**** **** **** {data.bankAccountNo}</T1>
         </View>
       </ImageBackground>
     </TouchableOpacity>
@@ -103,14 +102,15 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     height: ROW_HEIGHT,
-    padding: pad,
+    paddingVertical: pad * 2,
+    paddingHorizontal: pad,
   },
   contentWrapper: {
     flex: 1,
-    height: 100,
     marginRight: pad,
     justifyContent: 'space-between',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    paddingBottom: pad
   },
   checkImg: {
     height: 20,

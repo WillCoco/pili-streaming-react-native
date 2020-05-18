@@ -64,6 +64,8 @@ const styles = StyleSheet.create({
   shareText: {
     marginHorizontal: 4,
     paddingVertical: 1,
+    borderWidth: 1,
+    borderColor: 'transparent'
   },
   profitText: {
     flex: -1,

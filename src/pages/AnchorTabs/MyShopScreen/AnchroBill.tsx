@@ -36,11 +36,7 @@ const AnchroBill = props =>  {
   const [billDate, setBillDate]: any = React.useState(new Date());
 
   React.useEffect(() => {
-    getBillList({
-      pageNo: 0,
-      pageSize: 10,
-      searchTime: new Date()
-    })
+    
   }, []);
 
   /**
@@ -52,11 +48,6 @@ const AnchroBill = props =>  {
     pageSize: number
     searchTime: Date
   }
-
-  const getBillList = (params: BillListParams) => {
-    apiGetUserAssetsRecords(params)
-  }
-
 
   /**
    * 渲染行
@@ -78,19 +69,29 @@ const AnchroBill = props =>  {
   /**
    * 改变时间
    */
-  const onDatePicker = value => {
-    setBillDate(value)
-
-    // TODO: 根据时间拉取接口
+  const onDatePicker = (value: Date) => {
+    apiGetUserAssetsRecords({
+      pageNo: 0,
+      pageSize: 10,
+      searchTime: value
+    }).then(res => {
+      setData(res?.records)
+    })
   }
 
   /**
    * 刷新
    */
-  const onRefresh = () => {
-    // const d = [{id: 1, canAdd: true},{id: 2}, {id: 3}];
-    // const r = Promise.resolve({result: dataFormat(d, dataList)});
-    // return r;
+  const onRefresh = async () => {
+    const result = await apiGetUserAssetsRecords({
+      pageNo: 0,
+      pageSize: 10,
+      searchTime: new Date()
+    }).then(res => {
+      return res?.records
+    })
+
+    return Promise.resolve({result})
   }
 
   /**
@@ -129,7 +130,7 @@ const AnchroBill = props =>  {
         <View style={styles.billContainer}>
           
           <PagingList
-            // data={dataList}
+            data={data}
             // setData={setDataList}
             size={10}
             // initListData={warehouseGoods}

@@ -155,7 +155,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
         console.log(err, "err");
         // 找不到指定群组 显示结束
         setIsIMJoinSecceed(false);
-      });
+      })
     })
 
     return () => {

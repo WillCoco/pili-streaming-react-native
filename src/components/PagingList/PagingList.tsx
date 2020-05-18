@@ -22,7 +22,7 @@ interface PageListProps {
   ListFooterComponent?: any,
   data: Array<any>,
   initListData?: Array<any>,
-  setData?: (d: any) => Array<any> | undefined,
+  setData?: (d: any) => any,
   size: number,
   isInitGetData?: boolean,
   renderItem: (data?: any) => JSX.Element,
@@ -67,7 +67,7 @@ const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
     setNoMore(false);
     setEmpty(false);
     page.current = props.initPage;
-    const {result, code} = (await props.onRefresh(page, size)) || {};
+    const {result, code} = (await props.onRefresh(page.current, size)) || {};
     setIsRefreshing(false);
     console.log(result, '====');
     setData(result || []);

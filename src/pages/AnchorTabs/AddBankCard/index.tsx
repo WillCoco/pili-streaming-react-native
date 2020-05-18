@@ -35,39 +35,36 @@ const AddBankCard = (props: any) =>  {
   const [cardNum, setCardNum] = React.useState('');
   let [maskList, maskDispatch] = React.useContext(Mask.context);
 
+  let identityName = useSelector(state => state?.userData?.userInfo?.identityName) || '';
+  identityName = '*' + identityName?.substring(1); // 脱敏
+
   /**
    * 提交绑定
    */
   const onSumbit = async () => {
-    // Toast.showLoading('');
-    // const success = await dispatch(addBankCard());
-    // Toast.hide('')
-    // Toast.show('添加成功', {
-    //   position: 0
-    // })
-    // if (success) {
-    //   goBack();
-    // }
+    
+    if (!cardNum) {
+      Toast.show('请输入银行卡号');
+      return;
+    }
+
     const params = {
-      bankAccountNo: '1234',
+      bankAccountNo: cardNum,
     }
 
     apiBindingBankCard(params).then(res => {
-      // console.log(res, 423155231);
       // TODO:
-      maskDispatch({
-      type: Mask.Actions.PUSH,
-      payload: {
-        type: Mask.ContentTypes.Normal,
-        data: {
-          text: '为了您的资金安全，请先前往实名认证！',
-          title: '提示',
-          rightBtnText: '去实名认证',
-          onPressRight: () => {alert(421)}
-        }
-      }});
     })
   };
+
+  /**
+   * 输入银行卡号
+   */
+  const onCardNumInput = (value: string) => {
+    if ((/^[0-9]*$/).test(value)) {
+      setCardNum(value)
+    } 
+  }
 
   return (
     <View style={styles.style}>
@@ -81,17 +78,18 @@ const AddBankCard = (props: any) =>  {
         <FormRow 
           title={'姓名:'}
           placeholder={'请输入真实姓名'}
-          value={name}
-          onChangeText={setName}
+          value={identityName}
           bottomDivider
+          editable={false}
         />
         <FormRow 
           title={'银行卡号:'}
           placeholder={'请填写银行卡号'}
           value={cardNum}
-          onChangeText={setCardNum}
+          onChangeText={onCardNumInput}
+          keyboardType={'numeric'}
         />
-        <PrimaryText style={styles.tip}>为了资金安全，请填写{'*大勇'}名下单银行卡</PrimaryText>
+        <PrimaryText style={styles.tip}>为了资金安全，请填写{identityName}名下单银行卡</PrimaryText>
       </View>
       <ButtonRadius
         text="提交"
