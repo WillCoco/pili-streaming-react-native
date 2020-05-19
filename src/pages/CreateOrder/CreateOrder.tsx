@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { setAddressList } from '../../actions/address'
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
-import { Ionicons } from '@expo/vector-icons'
 
 import AddressBar from './AddressBar/AddressBar'
 import ShopCard from './ShopCard/ShopCard'
@@ -263,7 +262,8 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
       item.selectedGoods.forEach((_item: any, _index: number) => {
         item.orderGoodsReqs.push({
           goodsNum: _item.goods_num,  // 商品数量
-          skuId: ~~_item.sku_id  // 规格 id
+          skuId: ~~_item.sku_id,  // 规格 id
+          shareUserId: route.params.shareUserId
         })
 
         cartIds.push(_item.cart_id)
@@ -282,8 +282,6 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
       }
     })
 
-    // route.params.shareUserId
-
     let params = {
       cartIds,
       payType: 2,  //  支付方式
@@ -299,6 +297,8 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
         Toast.show('创建订单失败')
         return
       }
+
+      route.params.onOrderCompleted && route.params.onOrderCompleted(params)
 
       let payURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
 

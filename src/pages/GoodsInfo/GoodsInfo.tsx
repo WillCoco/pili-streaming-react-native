@@ -51,10 +51,7 @@ console.log(11)
 interface GoodsInfoParams {
   id: string | number,
   shareUserId: string | number,
-  onOrderCompleted: (orderInfo: {
-    quantity: number, // 下单数量
-    [key: string]: any,
-  }) => any
+  onOrderCompleted: (orderInfo: any) => any
 }
 
 function GoodsInfo(props: any) {
