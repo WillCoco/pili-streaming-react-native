@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { connect } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
@@ -10,6 +10,8 @@ import GoodsCard from '../../components/GoodsCard/GoodsCard'
 import { Colors } from '../../constants/Theme'
 import { apiSearch, apiGetIndexGoodsList } from '../../service/api'
 import pxToDp from '../../utils/px2dp'
+import LoadMore from '../../components/LoadMore/LoadMore'
+import checkIsBottom from '../../utils/checkIsBottom'
 
 function HomeSearch(props: { searchKey: React.ReactNode }) {
   const navgation = useNavigation()
@@ -35,8 +37,9 @@ function HomeSearch(props: { searchKey: React.ReactNode }) {
   const [sortValue, setSortValue] = useState('sort')
   const [isEmpty, setIsEmpty] = useState(false)
   const [emptySearchKey, setEmptySearchKey] = useState('')
-  const [goodsList, setGoodsList] = useState([])
-  let [pageNo, setPageNo] = useState(1)
+  const [goodsList, setGoodsList]: Array<any> = useState([])
+  const hasMoreRef = useRef(true)
+  const pageNoRef = useRef(1)
 
   /**
    * 搜索
@@ -45,7 +48,7 @@ function HomeSearch(props: { searchKey: React.ReactNode }) {
   const toSearch = (placeholderSearchKey: string) => {
     const params = {
       pageSize,
-      pageNo: 1,
+      pageNo: pageNoRef.current,
       order: sortValue,
       search_word: searchKey || placeholderSearchKey
     }
@@ -59,7 +62,9 @@ function HomeSearch(props: { searchKey: React.ReactNode }) {
         return
       }
 
-      setGoodsList(res.list)
+      const totalPage = Math.ceil(res.count / pageSize)
+      hasMoreRef.current = pageNoRef.current < totalPage
+      setGoodsList([...goodsList, ...res.list])
     })
   }
 
@@ -68,18 +73,33 @@ function HomeSearch(props: { searchKey: React.ReactNode }) {
    */
   const getRecommendGoods = () => {
     const params = {
-      pageNo,
+      pageNo: pageNoRef.current,
       pageSize
     }
 
     apiGetIndexGoodsList(params).then((res: any) => {
       console.log('推荐商品', res)
-      setGoodsList(res.list)
+      const totalPage = Math.ceil(res.count / pageSize)
+      hasMoreRef.current = pageNoRef.current < totalPage
+      setGoodsList([...goodsList, ...res.list])
     })
   }
 
+  /**
+   * 触底加载
+   */
+  const onReachBottom = (e: any) => {
+    if (hasMoreRef.current && checkIsBottom(e)) {
+      pageNoRef.current += 1
+      toSearch(searchKey)
+    }
+  }
+
   return (
-    <ScrollView>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      onMomentumScrollEnd={(e) => onReachBottom(e)}
+    >
       {isEmpty && <EmptyContent emptyText={emptySearchKey} />}
       <View style={styles.goodsList}>
         {
@@ -95,6 +115,7 @@ function HomeSearch(props: { searchKey: React.ReactNode }) {
           })
         }
       </View>
+      {!!goodsList.length && <LoadMore hasMore={hasMoreRef.current} />}
     </ScrollView>
   )
 }

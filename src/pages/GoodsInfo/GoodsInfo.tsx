@@ -204,6 +204,10 @@ function GoodsInfo(props: any) {
       console.log('加载优惠券', res)
       setCouponList(JSON.parse(JSON.stringify(res)))
     }).catch((err: any) => {
+      if (err.code === '203' || err.code === '204') {
+        navigation.push('Login')
+        return
+      }
       setIsErr(true)
     })
   }

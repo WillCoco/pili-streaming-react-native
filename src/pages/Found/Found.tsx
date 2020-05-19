@@ -7,6 +7,7 @@ import {
   StyleSheet,
   RefreshControl,
   TouchableOpacity,
+  ActivityIndicator,
   TouchableWithoutFeedback
 } from 'react-native'
 import { useNavigation, useIsFocused } from '@react-navigation/native'
@@ -21,6 +22,7 @@ import { Ionicons } from '@expo/vector-icons'
 import WorkCard from '../../components/WorkCard/WorkCard'
 import checkIsBottom from '../../utils/checkIsBottom'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+import LoadMore from '../../components/LoadMore/LoadMore'
 
 function Found(props: any) {
   const navigation = useNavigation()
@@ -57,6 +59,7 @@ function Found(props: any) {
 
     apiGetWorks(params).then((res: any) => {
       console.log('发现数据', res)
+      setLoading(false)
       if (!res.worksInfoList) return
 
       res.worksInfoList.forEach((item: any) => {
@@ -68,7 +71,6 @@ function Found(props: any) {
       let maxH = waterFall(tempList).maxHeight
 
       const totalPage = Math.ceil(res.totalCount / pageSize)
-
       hasMoreRef.current = pageNoRef.current < totalPage
       setWorkList(isPullDown ? waterFall(res.worksInfoList).items : tempList)
       setMaxHeight(isPullDown ? waterFall(res.worksInfoList).maxHeight : maxH)
@@ -126,6 +128,7 @@ function Found(props: any) {
             })
           }
         </View>
+        <LoadMore hasMore={hasMoreRef.current} />
       </ScrollView>
 
 

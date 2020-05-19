@@ -5,13 +5,15 @@ import { Colors } from '../../constants/Theme'
 import { apiGetEnshrine } from '../../service/api'
 import GoodsCard from '../../components/GoodsCardRow/GoodsCardRow'
 import pxToDp from '../../utils/px2dp'
+import LoadMore from '../../components/LoadMore/LoadMore'
 
 export default function CollectGoods() {
   const navigation = useNavigation()
   const pageSize = 20
   let pageNoRef = useRef(1)
   let hasMoreRef = useRef(true)
-  const [goodsList, setGoodsList] = useState([])
+  const [goodsList, setGoodsList]: Array<any> = useState([])
+  const [complete, setComplete] = useState(false)
 
   navigation.setOptions({
     headerTitle: '商品收藏',
@@ -34,11 +36,10 @@ export default function CollectGoods() {
       pageSize
     }).then((res: any) => {
       console.log('我的收藏', res)
+      setComplete(true)
       if (!res.count) return
       const totalPage = Math.ceil(res.count / pageSize)
-
       hasMoreRef.current = pageNoRef.current < totalPage
-
       setGoodsList([...goodsList, ...res.list])
     })
   }
@@ -52,25 +53,7 @@ export default function CollectGoods() {
     getMyCollectGoods()
   }
 
-  if (goodsList.length) {
-    return (
-      <ScrollView
-        onMomentumScrollEnd={onBeachBottom}
-      >
-        {
-          goodsList.map((item: any, index: number) => {
-            return (
-              <GoodsCard
-                goodsInfo={item}
-                key={`goods-${index}`}
-                style={index && { marginTop: pxToDp(10) }}
-              />
-            )
-          })
-        }
-      </ScrollView>
-    )
-  } else {
+  if (!goodsList.length && complete) {
     return (
       <View style={styles.container}>
         <ImageBackground source={require('../../assets/images/img_nocollect.png')} style={styles.emptyImg}>
@@ -80,7 +63,24 @@ export default function CollectGoods() {
     )
   }
 
-  
+  return (
+    <ScrollView
+      onMomentumScrollEnd={onBeachBottom}
+    >
+      {
+        goodsList.map((item: any, index: number) => {
+          return (
+            <GoodsCard
+              goodsInfo={item}
+              key={`goods-${index}`}
+              style={index && { marginTop: pxToDp(10) }}
+            />
+          )
+        })
+      }
+      <LoadMore hasMore={hasMoreRef.current} />
+    </ScrollView>
+  )
 }
 
 const styles = StyleSheet.create({

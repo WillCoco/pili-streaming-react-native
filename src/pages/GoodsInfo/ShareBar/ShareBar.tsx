@@ -1,5 +1,14 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, Share, Platform, PermissionsAndroid } from 'react-native'
+import {
+  View,
+  Text,
+  Share,
+  Image,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  PermissionsAndroid
+} from 'react-native'
 import CameraRoll from '@react-native-community/cameraroll'
 import RNFetchBlob from 'rn-fetch-blob'
 import RNFS from 'react-native-fs'
@@ -8,7 +17,6 @@ import pxToDp from '../../../utils/px2dp'
 import { AntDesign } from '@expo/vector-icons'
 import { Colors } from '../../../constants/Theme'
 import * as WeChat from 'react-native-wechat-lib'
-// import * as FileSystem from 'expo-file-system'
 import { apiCreatePoster, apiGetUserData } from '../../../service/api'
 import { setUserInfo } from '../../../actions/user'
 import Toast from 'react-native-tiny-toast'
@@ -16,23 +24,49 @@ import Toast from 'react-native-tiny-toast'
 function ShareBar(props: { hideShareBar?: any; dispatch?: any; goodsId?: any; userId?: any }) {
   const [progress, setProgress] = useState(0)
   const { goodsId, userId } = props
+  const [posterPath, setPosterPath] = useState('')
 
   /**
    * 分享到微信
    */
-  const shareToWeChat = () => {
-    WeChat.shareMiniProgram({
-      title: 'Mini program.',
-      userName: 'gh_d39d10000000',
-      webpageUrl: 'https://google.com/show.html',
-      thumbImageUrl: 'https://google.com/1.jpg',
-      scene: 0
-    }).then(res => {
-      Toast.show('已保存至相册')
-      props.hideShareBar()
-    }).catch(err => {
-      console.log(err)
-    })
+  // const shareToWeChat = () => {
+  // WeChat.shareMiniProgram({
+  //   title: 'Mini program.',
+  //   userName: 'gh_d39d10000000',
+  //   webpageUrl: 'https://google.com/show.html',
+  //   thumbImageUrl: 'https://google.com/1.jpg',
+  //   scene: 0
+  // }).then(res => {
+  //   Toast.show('已保存至相册')
+  //   props.hideShareBar()
+  // }).catch(err => {
+  //   console.log(err)
+  // })
+  // }
+
+  /**
+   * 立即分享
+   */
+  const share = async () => {
+    try {
+      const result = await Share.share({
+        message: '分享测试'
+      });
+
+      if (result.action === Share.sharedAction) {
+        console.log(result)
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {  // iOS Only
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
   }
 
   /**
@@ -86,7 +120,7 @@ function ShareBar(props: { hideShareBar?: any; dispatch?: any; goodsId?: any; us
     // 报错了 先注释
     RNFetchBlob.fs.writeFile(downloadDest, imageData, 'base64').then(async () => {
       try {
-        if (Platform.OS === 'ios') {
+        if (Platform.OS !== 'ios') {
           const granted = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
             {
@@ -106,6 +140,13 @@ function ShareBar(props: { hideShareBar?: any; dispatch?: any; goodsId?: any; us
               Toast.show('保存失败')
             })
           }
+        } else {
+          CameraRoll.saveToCameraRoll(downloadDest).then((res) => {
+            console.log('saveSuccess', res)
+            success && success()
+          }).catch((err) => {
+            Toast.show('保存失败')
+          })
         }
       } catch (err) {
         console.log('catch', err)
@@ -123,9 +164,9 @@ function ShareBar(props: { hideShareBar?: any; dispatch?: any; goodsId?: any; us
         </TouchableOpacity>
       </View>
       <View style={styles.content}>
-        <TouchableOpacity style={styles.item} onPress={shareToWeChat}>
+        <TouchableOpacity style={styles.item} onPress={share}>
           <Image source={require('../../../assets/goods-image/icon_wechat.png')} style={styles.icon} />
-          <Text style={styles.shareText}>分享到微信</Text>
+          <Text style={styles.shareText}>立即分享</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.item} onPress={createMiniAppCode}>
           <Image source={require('../../../assets/goods-image/icon_miniapp.png')} style={styles.icon} />

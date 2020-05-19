@@ -6,10 +6,11 @@ import pxToDp from '../../../utils/px2dp'
 
 import CardTitle from '../../../components/CardTitle/CardTitle'
 import GoodsCard from '../../../components/GoodsCard/GoodsCard'
+import LoadMore from '../../../components/LoadMore/LoadMore'
 
-export default function GoodsList(props) {
+export default function GoodsList(props: { list: any, hasMore: boolean }) {
   const navigation = useNavigation()
-  const { list } = props
+  const { list, hasMore } = props
 
   const toGoodsInfo = (id: number) => {
     navigation.push('GoodsInfo', { id })
@@ -30,6 +31,7 @@ export default function GoodsList(props) {
           })
         }
       </View>
+      <LoadMore hasMore={hasMore} />
     </View>
   )
 }

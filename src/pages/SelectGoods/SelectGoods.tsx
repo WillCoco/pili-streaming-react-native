@@ -9,6 +9,7 @@ import GoodsCard from './GoodsCard/GoodsCard'
 
 import { Colors } from '../../constants/Theme'
 import checkIsBottom from '../../utils/checkIsBottom'
+import LoadMore from '../../components/LoadMore/LoadMore'
 
 export default function SelectGoods() {
   const pageSize = 20
@@ -127,6 +128,7 @@ export default function SelectGoods() {
                   )
                 })
               }
+              {!!goodsList.length && <LoadMore hasMore={hasMoreRef.current} />}
             </ScrollView>
           )
         })

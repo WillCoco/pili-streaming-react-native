@@ -6,6 +6,7 @@ import { Colors } from '../../constants/Theme'
 import { apiGetUserWorks, apiWorksManage } from '../../service/api'
 import WorkCard from './WorkCard/WorkCard'
 import pxToDp from '../../utils/px2dp'
+import LoadMore from '../../components/LoadMore/LoadMore'
 
 export default function PublishedWork() {
   const navigation = useNavigation()
@@ -91,6 +92,7 @@ export default function PublishedWork() {
           )
         })
       }
+      <LoadMore hasMore={hasMoreRef.current} />
     </ScrollView>
   )
 }

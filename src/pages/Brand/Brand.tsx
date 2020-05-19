@@ -10,6 +10,7 @@ import { apiBrandList, apiGetAttention, apiAttentionBrand } from '../../service/
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
 import checkIsBottom from '../../utils/checkIsBottom'
+import LoadMore from '../../components/LoadMore/LoadMore'
 
 export default function Brand() {
   const route = useRoute()
@@ -22,6 +23,7 @@ export default function Brand() {
   let hasMoreRef = useRef(true)
 
   const [brandList, setBrandList] = useState([])
+  const [complete, setComplete] = useState(false)
 
   navgation.setOptions({
     headerTitle: pageType === 'default' ? '圈品超级品牌' : '品牌关注',
@@ -56,6 +58,8 @@ export default function Brand() {
     }
 
     Toast.hide(loading)
+
+    setComplete(true)
 
     const totalPage = Math.ceil(result.count / pageSize)
 
@@ -108,7 +112,7 @@ export default function Brand() {
     }
   }
 
-  if (pageType === 'focus' && !brandList.length) {
+  if (!brandList.length && complete) {
     return (
       <View style={styles.container}>
         <ImageBackground source={require('../../assets/images/img_empty_brand.png')} style={styles.emptyImg}>
@@ -134,6 +138,7 @@ export default function Brand() {
           )
         })
       }
+      <LoadMore hasMore={hasMoreRef.current} />
     </ScrollView>
   )
 }

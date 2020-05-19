@@ -8,10 +8,11 @@ import GoodsCardRow from '../../components/GoodsCardRow/GoodsCardRow'
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
 import checkIsBottom from '../../utils/checkIsBottom'
+import LoadMore from '../../components/LoadMore/LoadMore'
 
 export default function Belt() {
   const navigation = useNavigation()
-  const [goodsList, setGoodsList] = useState([])
+  const [goodsList, setGoodsList]: Array<any> = useState([])
   const pageSize = 20
   let pageNoRef = useRef(1)
   let hasMoreRef = useRef(true)
@@ -79,6 +80,7 @@ export default function Belt() {
             )
           })
         }
+        <LoadMore hasMore={hasMoreRef.current} />
       </ScrollView>
     </View>
   )
