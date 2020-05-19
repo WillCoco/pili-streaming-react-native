@@ -80,7 +80,7 @@ export const apiSendVerCode = (data: any) => get1(`${HOST_JAVA}/user/sendAppMess
 // 更新用户信息
 export const apiUpdateUserInfo = (data: any) => post1(`${HOST_JAVA}/miniApp/updateUserInfo`, data)
 // 注册 & 登录
-export const apiLogin = (data: any) => post(`${HOST_JAVA}/user/appRegisterOrLogin`, data)
+export const apiLogin = (data: any) => post1(`${HOST_JAVA}/user/appRegisterOrLogin`, data)
 // 我的页面
 export const apiGetUserData = () => get1(`${HOST_JAVA}/user/getUserInfo`)
 // 发现模块 获取作品

@@ -64,7 +64,7 @@ function Mine(props: { dispatch?: any; isLogin?: any }) {
       getOrderCount()  // 获取订单数量
     }).catch((err: any) => {
       console.log(err, 'errrrrr')
-      if (err.code === '203') {
+      if (err.code === '203' || err.code === '204') {
         navigation.push('Login')
         return
       }

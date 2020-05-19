@@ -15,6 +15,8 @@ import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
+const defaultAvatar = require('../../../assets/mine-image/default_avatar.png')
+
 function Header(props: { userData: { userInfo: any; isLogin: any }; publicData: { statusBarHeight: any } }) {
   const navigation = useNavigation()
   const { userInfo, isLogin } = props.userData
@@ -84,8 +86,8 @@ function Header(props: { userData: { userInfo: any; isLogin: any }; publicData: 
         <View style={styles.userInfo}>
           {
             isLogin
-              ? <Image source={{ uri: userInfo?.userAvatar }} style={styles.avatar} />
-              : <Image source={require('../../../assets/mine-image/default_avatar.png')} style={styles.avatar} />
+              ? <Image source={{ uri: userInfo?.userAvatar }} defaultSource={defaultAvatar} style={styles.avatar} />
+              : <Image source={defaultAvatar} style={styles.avatar} />
           }
           <View>
             <Text style={styles.userName}>{isLogin ? userInfo?.nickName : '立即登录'}</Text>
