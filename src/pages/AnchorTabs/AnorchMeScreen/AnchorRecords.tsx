@@ -38,7 +38,6 @@ import share from '../../../utils/share';
 import usePermissions from '../../../hooks/usePermissions';
 import RNFS from 'react-native-fs'
 import { Toast, portal } from '@ant-design/react-native';
-import Share from 'react-native-share';
 
 const PAGE_SIZE = 10;
 const INIT_PAGE_NO = 1;

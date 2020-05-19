@@ -17,16 +17,20 @@ import {
     TouchableOpacity,
     TouchableWithoutFeedback
 } from 'react-native';
+import dayjs from 'dayjs';
 import {PrimaryText,scale} from 'react-native-normalization-text';
 import {useNavigation} from '@react-navigation/native';
+import { connect } from 'react-redux';
+import { Toast, portal } from '@ant-design/react-native';
+
 import withPage from '../../../components/HOCs/withPage';
 import { pad } from '../../../constants/Layout';
 import images from '../../../assets/images'
 import NavBar from '../../../components/NavBar';
-import { connect } from 'react-redux';
 import { apiGetLiveDataList } from '../../../service/api';
 import {isIOS, isAndroid} from '../../../constants/DeviceInfo';
 import PagingList from '../../../components/PagingList';
+import ImagePickerBox from '../../../components/DatePicker';
 
 const LiveInfoCard = (props: {
     addFavourite: number,
@@ -85,31 +89,52 @@ const LivesAnalyze = (props) =>  {
     const [liveInfoList, setLiveInfoList] = useState([]);
 
     useEffect(() => {
-        getDataListFn()
-    }, []);
 
-    /*
-    * 上拉加载更多
-    * */
-    const onEndReached = () => {};
+    });
 
     /*
     *  获取直播数据
     * */
-    const getDataListFn = () => {
+    const [time, setTime] = useState();
+
+    const getDataListFn = (date: string) => {
+        const t = Toast.loading('加载中');
+        const {anchorId} = anchorInfo;
+        const params = {
+            anchorId,
+            dateScope: date,
+            pageNo: 1,
+            pageSize: 10,
+        }
+        apiGetLiveDataList(params).then(res => {
+            portal.remove(t)
+            setTime(params.dateScope);
+            const {records = []} = res;
+            setLiveInfoList(records)
+        }).catch(err => {
+            Toast.fail('获取数据失败');
+            console.log(err, 'error')
+        });
+    };
+
+    /*
+    * 上拉加载更多
+    * */
+    const onEndReached = (page, size) => {
         const {anchorId} = anchorInfo;
         apiGetLiveDataList({
             anchorId,
-            dateScope: '2020-05',
-            pageNo: 1,
-            pageSize: 10,
+            dateScope: time,
+            pageNo: page,
+            pageSize: size,
         }).then(res => {
             const {records = []} = res;
-            setLiveInfoList(records)
+            return Promise.resolve({result: records});
         }).catch(err => {
             console.log(err, 'error')
         });
     };
+
 
     return (
         <ImageBackground
@@ -122,39 +147,42 @@ const LivesAnalyze = (props) =>  {
                 style={styles.navWrapper}
                 onLeftPress={goBack}
             />
-            <View style={styles.style}>
-                <ScrollView>
-                    <View style={[styles.style, {alignItems:'center'}]}>
-                        <View >
-                            <View style={styles.cardSty}>
-                                {/*<PrimaryText>图表</PrimaryText>*/}
-                            </View>
+            <View style={[styles.style,{alignItems:'center'}]}>
+                <View>
+                    <View >
+                        <View style={styles.cardSty}>
+                            {/*<PrimaryText>图表</PrimaryText>*/}
                         </View>
-                        <PagingList
-                            size={10}
-                            data={liveInfoList}
-                            setData={setLiveInfoList}
-                            initListData={liveInfoList}
-                            renderItem={({item, index}) => {
-                                return (
-                                    <LiveInfoCard
-                                        addFavourite={item.addFavourite}
-                                        createTime={item.createTime}
-                                        likeSum={item.likeSum}
-                                        moneySum={item.moneySum}
-                                        liveDuration={item.liveDuration}
-                                        orderSum={item.orderSum}
-                                        watchSum={item.watchSum}
-                                        key={`_${index}`}/>
-                                )
-                            }}
-                            onEndReached={onEndReached}
-                            initialNumToRender={10}>
-                        </PagingList>
                     </View>
-                </ScrollView>
+                    <View style={{alignSelf: 'flex-start'}}>
+                        <ImagePickerBox
+                            onPicked={getDataListFn}
+                        />
+                    </View>
+                </View>
+                <PagingList
+                    size={10}
+                    data={liveInfoList}
+                    setData={setLiveInfoList}
+                    initListData={liveInfoList}
+                    renderItem={({item, index}) => {
+                        return (
+                            <LiveInfoCard
+                                addFavourite={item.addFavourite}
+                                createTime={item.createTime}
+                                likeSum={item.likeSum}
+                                moneySum={item.moneySum}
+                                liveDuration={item.liveDuration}
+                                orderSum={item.orderSum}
+                                watchSum={item.watchSum}
+                                key={`_${index}`}/>
+                        )
+                    }}
+                    onRefresh={() => null}
+                    onEndReached={onEndReached}
+                    initialNumToRender={10}>
+                </PagingList>
             </View>
-
         </ImageBackground>
     )
 };

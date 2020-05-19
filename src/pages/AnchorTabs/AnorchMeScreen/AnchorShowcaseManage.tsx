@@ -23,8 +23,7 @@ import ScrollableTab from '../../../components/ScrollableTab';
 import { vw, vh } from '../../../utils/metric';
 import Empty from '../../../components/Empty';
 import PagingList from '../../../components/PagingList';
-import { getShowcaseGoods, AddGoodsTargetType, getWareHouseGoods, addGoods2ShowCase, DelGroupHouseGoods } from '../../../actions/shop';
-// import Toast from 'react-native-tiny-toast';
+import { AddGoodsTargetType, getWareHouseGoods, addGoods2ShowCase, DelGroupHouseGoods } from '../../../actions/shop';
 import { Toast, portal } from '@ant-design/react-native';
 
 const INIT_PAGE_NO = 1;
