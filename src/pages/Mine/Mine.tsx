@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { StyleSheet, ScrollView } from 'react-native'
-import { useNavigation, useIsFocused } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { setUserInfo } from '../../actions/user'
 import { apiGetUserData, apiGetOrderCount, apiGetIndexGoodsList } from '../../service/api'
@@ -17,10 +17,10 @@ import checkIsBottom from '../../utils/checkIsBottom'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
 function Mine(props: { dispatch?: any; isLogin?: any }) {
-  const navigation = useNavigation()
   const pageSize = 20
   const { isLogin } = props
   const focused = useIsFocused()
+  const navigation = useNavigation()
   const [orderCount, setOrderCount] = useState({})
   const [goodsList, setGoodsList] = useState([])
   const [isErr, setIsErr] = useState(false)
@@ -64,6 +64,10 @@ function Mine(props: { dispatch?: any; isLogin?: any }) {
       getOrderCount()  // 获取订单数量
     }).catch((err: any) => {
       console.log(err, 'errrrrr')
+      if (err.code === '203') {
+        navigation.push('Login')
+        return
+      }
       setIsErr(true)
     })
   }
@@ -113,7 +117,7 @@ function Mine(props: { dispatch?: any; isLogin?: any }) {
       {/* 工具栏 */}
       <ToolBar />
       {/* 推荐商品 */}
-      <GoodsList list={goodsList} />
+      <GoodsList list={goodsList} hasMore={hasMoreRef.current} />
     </ScrollView>
   )
 }

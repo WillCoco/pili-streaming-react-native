@@ -29,7 +29,7 @@ export const timeoutHandler = (promise: any) => {
  */
 export const authInvalidHandler = (promise: Promise<any>) => {
   return promise.then((result: any) => {
-    if (result && result.code === 203 || result.code === 204) {
+    if (result && result.code === '203' || result.code === '204') {
       Toast.show("用户信息过期，请重新登录", { position: 0 });
       store.dispatch(toggleLoginState(false));
       store.dispatch(setToke(""));
@@ -48,7 +48,7 @@ export const authInvalidHandler = (promise: Promise<any>) => {
 export const restErrorHandler = (promise: any) => {
   return promise.then((result: any) => {
     // console.log(result, 'dataHandler')
-    if (result && result.code !== 200 && result.code !== 203 && result.code !== 204) {
+    if (result && result.code !== 200 && result.code !== '203' && result.code !== '204') {
       Toast.show(result.message);
       return Promise.reject(result);
     }
