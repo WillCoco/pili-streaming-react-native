@@ -1,22 +1,20 @@
 package com.pili_startkit;
 
-import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
-import com.facebook.react.ReactApplication;
-import com.rnfs.RNFSPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
-import com.facebook.soloader.SoLoader;
 import com.qiniu.pili.droid.rnpili.PiliPackage;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-public class MainApplication extends Application implements ReactApplication {
+import com.reactnativenavigation.NavigationApplication;
+import com.reactnativenavigation.react.NavigationReactNativeHost;
+public class MainApplication extends NavigationApplication {
 
   private final ReactNativeHost mReactNativeHost =
-      new ReactNativeHost(this) {
+          new NavigationReactNativeHost(this) {
         @Override
         public boolean getUseDeveloperSupport() {
           return BuildConfig.DEBUG;
@@ -46,7 +44,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
-    SoLoader.init(this, /* native exopackage */ false);
+//    SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this); // Remove this line if you don't want Flipper enabled
   }
 

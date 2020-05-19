@@ -67,6 +67,7 @@ export default class Steam extends Component {
         },
         size: {
           width: 50,
+          height: 50,
         },
       },
       pictureStreamingFile: null,
@@ -174,7 +175,7 @@ export default class Steam extends Component {
     const [value, onChange] = this.useStateOfPath(keyPath);
     return {value, onChange};
   };
-  
+
   componentDidMount() {
     if (isAndroid) {
       PermissionsAndroid.requestMultiple([
