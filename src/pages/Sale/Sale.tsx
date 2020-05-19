@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { StyleSheet, ScrollView } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import Toast from 'react-native-tiny-toast'
 
 import { apiSaleList, apiSeckillList } from '../../service/api'
 
@@ -20,7 +19,6 @@ export default function Sale() {
   let hasMoreRef = useRef(true)
   const [headerGoodsList, setHeaderGoodsList] = useState([])
   const [goodsList, setGoodsList] = useState([])
-  const [isReady, setIsReady] = useState(false)
   const [timeList, setTimeList] = useState([
     { time: '10:00', ongoing: false, state: '' },
     { time: '14:00', ongoing: false, state: '' },
@@ -54,14 +52,11 @@ export default function Sale() {
       return
     }
 
-    let loading = Toast.showLoading('')
-
     apiSaleList({
       pageNo: pageNoRef.current,
       pageSize
     }).then((res: any) => {
       console.log(res, '特卖专区')
-      Toast.hide(loading)
 
       if (!res.count) return
 
@@ -88,7 +83,6 @@ export default function Sale() {
    */
   const setSeckillQuantum = async () => {
     const curHours = new Date().getHours()
-    let loading = Toast.showLoading('')
 
     let timeQuantum: string
 
@@ -124,7 +118,6 @@ export default function Sale() {
       time_quantum: timeQuantum
     }).then((res: any) => {
       console.log(res, '限时秒杀')
-      Toast.hide(loading)
 
       if (!res.count) return
 

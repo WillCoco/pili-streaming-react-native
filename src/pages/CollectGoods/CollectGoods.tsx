@@ -13,6 +13,7 @@ export default function CollectGoods() {
   let pageNoRef = useRef(1)
   let hasMoreRef = useRef(true)
   const [goodsList, setGoodsList]: Array<any> = useState([])
+  const [complete, setComplete] = useState(false)
 
   navigation.setOptions({
     headerTitle: '商品收藏',
@@ -35,11 +36,10 @@ export default function CollectGoods() {
       pageSize
     }).then((res: any) => {
       console.log('我的收藏', res)
+      setComplete(true)
       if (!res.count) return
       const totalPage = Math.ceil(res.count / pageSize)
-
       hasMoreRef.current = pageNoRef.current < totalPage
-
       setGoodsList([...goodsList, ...res.list])
     })
   }
@@ -53,7 +53,7 @@ export default function CollectGoods() {
     getMyCollectGoods()
   }
 
-  if (!goodsList.length) {
+  if (!goodsList.length && complete) {
     return (
       <View style={styles.container}>
         <ImageBackground source={require('../../assets/images/img_nocollect.png')} style={styles.emptyImg}>

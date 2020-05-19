@@ -23,6 +23,7 @@ export default function Brand() {
   let hasMoreRef = useRef(true)
 
   const [brandList, setBrandList] = useState([])
+  const [complete, setComplete] = useState(false)
 
   navgation.setOptions({
     headerTitle: pageType === 'default' ? '圈品超级品牌' : '品牌关注',
@@ -57,6 +58,8 @@ export default function Brand() {
     }
 
     Toast.hide(loading)
+
+    setComplete(true)
 
     const totalPage = Math.ceil(result.count / pageSize)
 
@@ -109,7 +112,7 @@ export default function Brand() {
     }
   }
 
-  if (!brandList.length) {
+  if (!brandList.length && complete) {
     return (
       <View style={styles.container}>
         <ImageBackground source={require('../../assets/images/img_empty_brand.png')} style={styles.emptyImg}>

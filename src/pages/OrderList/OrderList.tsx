@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { ScrollView } from 'react-native'
+import { ScrollView, View, Text, StyleSheet, ImageBackground } from 'react-native'
 import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view'
@@ -21,6 +21,7 @@ export default function OrderList() {
   let pageNoRef = useRef(1)
   let hasMoreRef = useRef(true)
   let indexRef = useRef(0)
+  let completeRef = useRef(false)
   let orderListRef = useRef([])
 
   navigation.setOptions({
@@ -53,6 +54,7 @@ export default function OrderList() {
     pageNoRef.current = 1
     indexRef.current = e.i
     orderListRef.current = []
+    completeRef.current = false
     setOrderList(orderListRef.current)
 
     if (indexRef.current === 5) {
@@ -87,7 +89,7 @@ export default function OrderList() {
       const totalPage = Math.ceil(res.total / pageSize)
 
       hasMoreRef.current = pageNoRef.current < totalPage
-
+      completeRef.current = true
       orderListRef.current = [...orderListRef.current, ...res.records]
 
       setOrderList(orderListRef.current)
@@ -121,7 +123,7 @@ export default function OrderList() {
       const totalPage = Math.ceil(res.count / pageSize)
 
       hasMoreRef.current = pageNoRef.current < totalPage
-
+      completeRef.current = true
       orderListRef.current = [...orderListRef.current, ...res.records]
 
       setOrderList(orderListRef.current)
@@ -219,26 +221,32 @@ export default function OrderList() {
             <ScrollView
               key={`tab-${index}`}
               tabLabel={item}
-              style={{ padding: pxToDp(20) }}
+              style={{ padding: pxToDp(20), flex: 1 }}
               showsVerticalScrollIndicator={false}
               onMomentumScrollEnd={(e) => onReachBottom(e)}
             >
               {
-                orderList.map((_item: any, _index: number) => {
-                  return (
-                    <OrderItem
-                      orderInfo={_item}
-                      key={`order-${_index}`}
-                      cancelOrder={(id: number) => cancelOrder(id)}
-                      remindDelivery={(id: number) => remindDelivery(id)}
-                      confirmTheGoods={(id: number) => confirmTheGoods(id)}
-                      toPay={(id: number) => toPay(id)}
-                      extendReceiveGoods={(id: number) => extendReceiveGoods(id)}
-                    />
-                  )
-                })
+                !!orderList.length
+                  ? orderList.map((_item: any, _index: number) => {
+                    return (
+                      <OrderItem
+                        orderInfo={_item}
+                        key={`order-${_index}`}
+                        cancelOrder={(id: number) => cancelOrder(id)}
+                        remindDelivery={(id: number) => remindDelivery(id)}
+                        confirmTheGoods={(id: number) => confirmTheGoods(id)}
+                        toPay={(id: number) => toPay(id)}
+                        extendReceiveGoods={(id: number) => extendReceiveGoods(id)}
+                      />
+                    )
+                  })
+                  : <View style={styles.emptyContainer}>
+                    <ImageBackground source={require('../../assets/images/emptyList.png')} style={styles.emptyImg}>
+                      <Text style={styles.emptyText}>暂无订单</Text>
+                    </ImageBackground>
+                  </View>
               }
-              <LoadMore hasMore={hasMoreRef.current} />
+              {!!orderList.length && completeRef.current && <LoadMore hasMore={hasMoreRef.current} />}
             </ScrollView>
           )
         })
@@ -246,3 +254,21 @@ export default function OrderList() {
     </ScrollableTabView>
   )
 }
+
+const styles = StyleSheet.create({
+  emptyContainer: {
+    flexDirection: 'row',
+    marginTop: '50%',
+    justifyContent: 'center'
+  },
+  emptyImg: {
+    width: pxToDp(380),
+    height: pxToDp(360),
+    paddingTop: pxToDp(300)
+  },
+  emptyText: {
+    fontSize: pxToDp(28),
+    color: Colors.lightBlack,
+    textAlign: 'center'
+  }
+})
