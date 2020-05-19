@@ -101,6 +101,7 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
       })}
     >
       <Image
+        defaultSource={require('../../assets/mine-image/logo.png')}
         source={
           (props.liveInfo?.livePic && props.liveInfo?.livePic !== '0')
             ? {uri: props.liveInfo?.livePic} 

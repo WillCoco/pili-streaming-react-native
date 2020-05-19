@@ -67,11 +67,36 @@ const AnchroBill = props =>  {
   }
 
   /**
+   * 账单类型icon
+   */
+  const billTypeIcon = (type: number) => {
+    switch (type) {
+      case 1:
+        return images.billIconShare;
+      case 2:
+        return images.billIconInvite;
+      case 3: 
+        return images.bankIcon;
+      case 4: 
+        return images.billIconReceive;
+      case 5: 
+        return images.billIconWithdraw;
+      case 6: 
+        return images.bankIcon;
+      case 7: 
+        return images.bankIcon;
+      default:
+        return images.bankIcon;
+    }
+  }
+
+  /**
    * 改变时间
    */
   const onDatePicker = (value: Date) => {
+    setBillDate(value)
     apiGetUserAssetsRecords({
-      pageNo: 0,
+      pageNo: 1,
       pageSize: 10,
       searchTime: value
     }).then(res => {
@@ -84,7 +109,7 @@ const AnchroBill = props =>  {
    */
   const onRefresh = async () => {
     const result = await apiGetUserAssetsRecords({
-      pageNo: 0,
+      pageNo: 1,
       pageSize: 10,
       searchTime: new Date()
     }).then(res => {
@@ -118,7 +143,7 @@ const AnchroBill = props =>  {
           <DatePicker
             value={billDate}
             mode="month"
-            minDate={new Date(2020, 4)}
+            minDate={new Date(2020, 3)}
             maxDate={new Date(2099, 11)}
             onChange={onDatePicker}
             format="YYYY-MM"
@@ -128,21 +153,20 @@ const AnchroBill = props =>  {
           </DatePicker>
         </View>
         <View style={styles.billContainer}>
-          
           <PagingList
             data={data}
-            // setData={setDataList}
+            setData={setData}
             size={10}
             // initListData={warehouseGoods}
             renderItem={({item, index}: any) => {
               return (
                 <ListItem
-                  leftAvatar={{source: images.BOCIcon}}
-                  title={'提现'}
-                  subtitle={'2020.04.11  12:22'}
+                  leftAvatar={{source: billTypeIcon(item.type)}}
+                  title={item.desc}
+                  subtitle={item.createTime}
                   subtitleStyle={{color: Colors.darkGrey, marginTop: pad}}
-                  rightTitle={'+12.90¥'}
-                  rightTitleStyle={{fontWeight: 'bold'}}
+                  rightTitle={(+item.amount > 0 ? '+' : '') + (item.amount / 100) + '¥'}
+                  rightTitleStyle={+item.amount > 0 ? {fontWeight: 'bold', color: Colors.darkBlack} : {fontWeight: 'bold', color: Colors.basicColor}}
                   bottomDivider
                 />
               )

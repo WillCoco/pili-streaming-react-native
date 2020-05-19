@@ -344,6 +344,23 @@ const images : {
   // 关注主播空图
   get emptyAttention() {
     return require('../images/img_empty_attention.png')
+  },
+  // 账单icon
+  get billIconShare() {
+    return require('./billShare.png')
+  },
+  get billIconInvite() {
+    return require('./billInvite.png')
+  },
+  get billIconWithdraw() {
+    return require('./billWithdraw.png')
+  },
+  get billIconReceive() {
+    return require('./billReceive.png')
+  },
+  // 404页，网络错误页
+  get errorPage() {
+    return require('../default-image/err_network.png')
   }
 }
 

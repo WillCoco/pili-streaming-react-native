@@ -141,7 +141,7 @@ const Withdraw = (props: any) =>  {
         }
         <FormRow 
           title={'提现金额'}
-          placeholder={`可提现金额¥${accountMoney}`}
+          placeholder={`可提现金额¥${accountMoney / 100}`}
           value={withdrawNum}
           onChangeText={setWithdrawNum}
         />
@@ -162,7 +162,7 @@ const Withdraw = (props: any) =>  {
           }
           maxLength={6}
         />
-        <TinyText style={{padding: pad}}>每次提现将会收取1.00元手续费，建议减少提现次数，避免造成资金损失</TinyText>
+        <TinyText style={{padding: pad}}>每次提现将会收取0.50元手续费，建议减少提现次数，避免造成资金损失</TinyText>
       </View>
      
       <ButtonRadius

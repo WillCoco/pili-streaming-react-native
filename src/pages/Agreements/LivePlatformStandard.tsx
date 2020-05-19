@@ -1,3 +1,6 @@
+/**
+ * 直播平台管理规范
+ */
 import React from 'react'
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
@@ -5,7 +8,7 @@ import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
 import withPage from '../../components/HOCs/withPage'
 
-function ServiceAgreement(props: any) {
+function LivePlatformStandard(props: any) {
   const navigation = useNavigation()
 
   navigation.setOptions({
@@ -174,4 +177,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default withPage(ServiceAgreement)
+export default withPage(LivePlatformStandard)

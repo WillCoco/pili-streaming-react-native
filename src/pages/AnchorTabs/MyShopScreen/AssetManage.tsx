@@ -135,7 +135,7 @@ const AssetManage = (props: any) =>  {
                   imgStyle={{height: 40, width: 40}}
                   textStyle={{color: '#fff', marginTop: 6}}
                 >
-                  <PrimaryText color="white" style={{marginTop: 2}}>¥{assetsInfo[row.key] || 0}</PrimaryText>
+                  <PrimaryText color="white" style={{marginTop: 2}}>¥{(assetsInfo[row.key] / 100) || 0}</PrimaryText>
                 </ImageText>
               )
             })

@@ -14,6 +14,7 @@ export default function ToolBar() {
     // userRole可能为undefined, 空指针  @hicks
     if (userRole.indexOf('2') > -1) { // 是主播，前往直播首页
       navigation.push('AnchorTabs')
+      navigation.push('BeAnchor')
     } else { // 不是主播，去开通
       navigation.push('BeAnchor')
     }
@@ -30,10 +31,6 @@ export default function ToolBar() {
         <TouchableOpacity style={styles.item}>
           <Image source={require('../../../assets/mine-image/icon_about.png')} style={styles.icon} />
           <Text style={styles.text}>云闪播APP</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.item}>
-          <Image source={require('../../../assets/mine-image/icon_xieyi.png')} style={styles.icon} />
-          <Text style={styles.text}>云闪播协议</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.item} onPress={toLive}>
           <Image source={require('../../../assets/mine-image/icon_live.png')} style={styles.icon} />

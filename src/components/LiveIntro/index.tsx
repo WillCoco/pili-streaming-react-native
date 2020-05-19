@@ -49,7 +49,6 @@ interface LiveMsgProps {
 
 const LiveIntro = (props: LiveMsgProps) =>  {
 
-  console.log(props, 4312532152353215);
   const {navigate} = useNavigation();
 
   const livingInfo = useSelector((state: any) => {
