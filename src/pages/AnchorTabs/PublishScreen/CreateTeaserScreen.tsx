@@ -22,7 +22,8 @@ import {Colors} from '../../../constants/Theme';
 import { isIOS, isAndroid } from '../../../constants/DeviceInfo';
 import {releaseTeaser} from '../../../actions/live';
 import * as api from '../../../service/api';
-import Toast from 'react-native-tiny-toast';
+import {Toast, Portal} from '@ant-design/react-native';
+import { vh } from '../../../utils/metric';
 
 const CreateTraserScreen = (props: {
   safeTop: number,
@@ -138,6 +139,7 @@ const CreateTraserScreen = (props: {
       return false;
     }
 
+    console.log(liveTimeStamp.current, 'liveTimeStamp.currentliveTimeStamp.currentliveTimeStamp.current');
     if (!liveTimeStamp.current) {
       Toast.show('请选择开播时间');
       return false;
@@ -171,12 +173,12 @@ const CreateTraserScreen = (props: {
     if (!isDataVaild()) {
       return;
     }
-    // Toast.showLoading('');
+    const loading = Toast.loading('上传中');
 
     // 上传封面
     const coverUpload = api.apiLiveUploadFile({
       fileType: 'PICTURE',
-      size: '10',
+      size: '20',
       unit: 'M',
       file: cover1,
     });
@@ -186,7 +188,7 @@ const CreateTraserScreen = (props: {
     if (video) {
       videoUpload = api.apiLiveUploadFile({
         fileType: 'VIDEO',
-        size: '100',
+        size: '20',
         unit: 'M',
         file: video,
       });
@@ -198,13 +200,13 @@ const CreateTraserScreen = (props: {
     // console.log(coverResult,  'videoResultvideoResult');
 
     if (!coverResult) {
-      Toast.hide('');
+      Portal.remove(loading);
       Toast.show(coverMessage || '上传封面失败')
       return;
     }
 
     if (video && !videoResult) {
-      Toast.hide('');
+      Portal.remove(loading);
       Toast.show(videoMessage || '上传视频失败')
       return;
     }
@@ -220,20 +222,21 @@ const CreateTraserScreen = (props: {
       bigPic: coverResult,
       liveTime: liveTimeStamp.current,
     }));
-    Toast.hide('');
+    Portal.remove(loading);
 
     Toast.show('发布成功')
     goBack();
   }
 
   return (
-    <ScrollView style={styles.style}>
+    <View style={styles.style}>
+    <ScrollView style={styles.scroll}>
       <NavBar title="发布预告" />
       <View style={styles.contentWrapper}>
         <PrimaryText style={styles.title}>直播封面图(必填)</PrimaryText>
         <View style={styles.row}>
           <ImagePickerBox
-            placeholderText="封面图1"
+            placeholderText="封面图"
             onPicked={onPickedCover1}
             style={{marginRight: pad}}
           />
@@ -273,8 +276,8 @@ const CreateTraserScreen = (props: {
             onChangeText={setTitle}
           />
         </View>
-        <PrimaryText style={styles.title}>内容简介</PrimaryText>
-        <TextInput
+        {/* <PrimaryText style={styles.title}>内容简介</PrimaryText> */}
+        {/* <TextInput
           multiline
           textAlignVertical="top"
           placeholder="介绍直播内容或注意事项，少于60字"
@@ -282,8 +285,10 @@ const CreateTraserScreen = (props: {
           value={introductoryText}
           onChangeText={setIntroductoryText}
           style={styles.contentInput}
-        />
+        /> */}
       </View>
+      
+    </ScrollView>
       <TouchableOpacity
         style={StyleSheet.flatten([
           styles.btnWrapper,
@@ -293,7 +298,7 @@ const CreateTraserScreen = (props: {
       >
         <PrimaryText color="white">发布预告</PrimaryText>
       </TouchableOpacity>
-    </ScrollView>
+    </View>
   )
 };
 
@@ -304,6 +309,9 @@ const styles = StyleSheet.create({
   style: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  scroll: {
+    flex: 1,
   },
   contentWrapper: {
     padding: pad

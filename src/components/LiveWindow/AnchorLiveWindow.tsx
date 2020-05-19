@@ -99,9 +99,6 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
    * 退出直播
    */
   const onPressClose = async () => {
-    Toast.showLoading('');
-    // const r = await dispatch(getGroupProfile());
-    Toast.hide('');
 
     maskDispatch({
       type: Mask.Actions.PUSH,

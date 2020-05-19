@@ -1,5 +1,6 @@
 // import {consts} from 'pili-streaming-react-native';
 import liveActionTypes from '../constants/Live';
+import { EMPTY_OBJ } from '../constants/freeze';
 
 export interface LiveConfig {
   cover?: { // 封面
@@ -37,7 +38,8 @@ interface InitStateTypes {
     likeSum?: boolean, // 是
     bigPic?: string, // 
     liveGoodsNum?: string, // 直播商品数量
-  }
+  },
+  isLiveOver: boolean | undefined, // 所在房间直播是否结束(观众端)
 }
 
 const DEFAULT_OPTIONS: any = {
@@ -58,17 +60,23 @@ const INITIAL_STATE: InitStateTypes = {
   pusherConfig: DEFAULT_OPTIONS,
   livingGoods: [1,2],
   livingGoodsQuantity: 0,
-  livingInfo: undefined
+  livingInfo: undefined,
+  isLiveOver: undefined,
 }
 
 export default function live(state = INITIAL_STATE, action: any) {
   switch (action.type) {
     case liveActionTypes.UPDATE_LIVE_CONFIG:
+      if (!action.payload.liveConfig) {
+        return {...state, liveConfig: {cover: undefined, title: ''}};
+      }
       return {...state, liveConfig: {...state.liveConfig, ...action.payload.liveConfig}};
     case liveActionTypes.UPDATE_PUSHER_CONFIG:
       return {...state, pusherConfig: {...state.pusherConfig, ...action.payload.pusherConfig}};
     case liveActionTypes.UPDATE_LIVING_INFO:
       return {...state, livingInfo: {...state.livingInfo, ...action.payload.livingInfo}};
+    case liveActionTypes.UPDATE_LIVING_STATUS:
+      return {...state, isLiveOver: action.payload.isLiveOver};
     default:
       return state;
   }

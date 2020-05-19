@@ -20,6 +20,7 @@ const Trailer = (props: {
   style: StyleProp<any>
 }) =>  {
   const t = moment(props.deadline);
+  
   const deadline = t.format("YYYY/MM/DD HH:mm");
 
   const renderCell = (value: number | string, unit: string) => {
@@ -44,14 +45,21 @@ const Trailer = (props: {
         <PrimaryText color="white">{deadline}</PrimaryText>
       </View>
       <CountDown
-        deadline={props.deadline}
+        deadline={t.valueOf()}
         onStop={onStop}
         renderTime={(seconds) => {
-          const duration = moment.duration(seconds, 'seconds')
-          const d = Math.floor(duration.asDays()) || '0';
-          const h = Math.floor(duration.asHours()) || '0';
-          const m = Math.floor(duration.asMinutes()) || '0';
-          const s = Math.floor(duration.asSeconds()) || '0';
+          const durationDay = moment.duration(seconds, 'seconds')
+          const d = Math.floor(durationDay.asDays()) || 0;
+          let restSeconds = seconds - (d * 24 * 3600);
+          const durationHour = moment.duration(restSeconds, 'seconds')
+          const h = Math.floor(durationHour.asHours()) || 0;
+          restSeconds = restSeconds - (h * 3600);
+          const durationMinuts = moment.duration(restSeconds, 'seconds')
+          const m = Math.floor(durationMinuts.asMinutes()) || 0;
+          restSeconds = restSeconds - (m * 60);
+          const durationSeconds = moment.duration(restSeconds, 'seconds')
+          const s = Math.floor(durationSeconds.asSeconds()) || '0';
+
           return (
             <View style={styles.renderTimeWrapper}>
               {renderCell(d, '天')}

@@ -209,7 +209,7 @@ export const apiLiveUploadFile = (file: UpdateParams) => liveUpload(`${HOST_JAVA
 // 直播发布预告
 export const apiReleaseNotice= (data: any) => post2(`${HOST_JAVA}/anchor/releaseNotice`, data)
 // 直播间商品管理数据列表
-export const apiSelLiveGoods= (data: any) => post2(`${HOST_JAVA}/anchor/selLiveGoods`, data)
+export const apiSelLiveGoods= (data: any) => get2(`${HOST_JAVA}/anchor/selLiveGoods`, data)
 // 准时开播页面展示数据
 export const apiSelStartLive= (data: any) => post2(`${HOST_JAVA}/anchor/selStartLive`, data)
 // 选择商品开始直播

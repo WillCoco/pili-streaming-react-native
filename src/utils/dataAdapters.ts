@@ -17,9 +17,11 @@ export const brandGoodAdapter = (good: any) => {
   return {
     img: good.originalImg,
     title: good.goodsName,
-    discountPrice: formatSinglePrice(good.shopPrice),
-    pirce: formatSinglePrice(good.marketPrice),
+    discountPrice: formatSinglePrice(good.shopPrice), // 折扣价
+    pirce: formatSinglePrice(good.marketPrice), // 市场价
     profit: formatSinglePrice(good.rebate),
     isAdded: good.isExist === 1, // 1 存在, 2 不存在
+    goodsId: good.goodsId,  // id
+    storeCount: good.storeCount, // 总库存
   }
 }

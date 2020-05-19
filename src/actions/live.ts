@@ -18,7 +18,7 @@ interface liveConfigType {
 /**
  * 更新直播配置(标题、封面)
  */
-export const updateLiveConfig = (liveConfig: LiveConfig) => {
+export const updateLiveConfig = (liveConfig?: LiveConfig) => {
   return {type: liveActionType.UPDATE_LIVE_CONFIG, payload: {liveConfig}}
 }
 
@@ -126,7 +126,8 @@ export const releaseTeaser = (params: ReleaseTeaserParams) => {
       return Promise.resolve(isSucceed(r));
     })
     .catch((error: any) => {
-      console.log(`releaseTeaser error: ${error}`)
+      console.log(`releaseTeaser error:`)
+      console.log(error)
       return Promise.resolve(false);
     })
   }
@@ -239,8 +240,8 @@ export const getAdvanceList = (params: GetAdvanceListParams) => {
       return Promise.resolve(EMPTY_ARR);
     })
     .catch((error: any) => {
-      return Promise.resolve(EMPTY_ARR);
       console.log(`getAdvanceList error: ${error}`)
+      return Promise.resolve(EMPTY_ARR);
     })
   }
 }
@@ -257,4 +258,11 @@ export const updatePusherConfig = (pusherConfig: any) => {
  */
 export const updateLivingInfo = (livingInfo: any) => {
   return {type: liveActionType.UPDATE_LIVING_INFO, payload: {livingInfo}}
+}
+
+/**
+ * 更新观众端房间直播状态
+ */
+export function updateLivingStatus(isLiveOver: boolean) {
+  return {type: liveActionType.UPDATE_LIVING_STATUS, payload: {isLiveOver}}
 }

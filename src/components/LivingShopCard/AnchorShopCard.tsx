@@ -11,7 +11,7 @@ import {
   LayoutAnimation,
   SafeAreaView
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import { PrimaryText, SmallText, T4, scale, T3 } from 'react-native-normalization-text';
 import PhoneShapWrapper from '../../components/PhoneShapWrapper';
@@ -26,9 +26,16 @@ import { vh, vw } from '../../utils/metric';
 import Empty from '../Empty/index';
 import { Colors } from '../../constants/Theme';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { brandGoodAdapter } from '../../utils/dataAdapters';
+import { isSucceed, } from '../../utils/fetchTools';
+import { EMPTY_ARR } from '../../constants/freeze';
+import {apiSelLiveGoods} from '../../service/api';
+import {addGroupHouseGoods, changeIsExit, delGroupHouseGoods} from '../../actions/shop';
+import { Toast, Portal } from '@ant-design/react-native';
 
-const emptyList: [] = [];
 const ROW_HEIGHT = 120;
+const PAGE_SIZE = 14;
+const INIT_PAGE_NO = 1;
 
 const AnchorShopCard = (props: {
   goods: Array<any>,
@@ -39,8 +46,11 @@ const AnchorShopCard = (props: {
   onPressClose: () => any,
   safeBottom: number,
 }) =>  {
-
   const {navigate} = useNavigation();
+  const route = useRoute()
+  const dispatch = useDispatch();
+
+  const {liveId} = (route.params) as any;
 
   /**
    * 直播商品
@@ -117,35 +127,19 @@ const AnchorShopCard = (props: {
     });
   }
 
-  /**
-   * 刷新
-   */
-  const onRefresh = () => {
-    const d = [{id: 1, canAdd: true},{id: 2}, {id: 3}];
-    const r = Promise.resolve({result: dataFormat(d, dataList)});
-    return r;
-  }
-
-  /**
-   * 更多
-   */
-  const onEndReached = () => {
-    
-  }
-
    /**
    * 全选/反选
    */
   const onPressCheckAll = () => {
     // 全选
     if (!isCheckedAll) {
-      const newCheckedList = (dataList || emptyList).map((good: any) => ({...good, isChecked: true}));
+      const newCheckedList = (dataList || EMPTY_ARR).map((good: any) => ({...good, isChecked: true}));
       setDataList(newCheckedList);
       return;
     }
 
     // 取消全选
-    const newCheckedList = (dataList || emptyList).map((good: any) => ({...good, isChecked: false}));
+    const newCheckedList = (dataList || EMPTY_ARR).map((good: any) => ({...good, isChecked: false}));
     setDataList(newCheckedList);
   }
 
@@ -154,15 +148,29 @@ const AnchorShopCard = (props: {
   }
 
   /**
-   * 添加店铺
+   * 添加到橱窗
    */
-  const onPressAddShop = () => {
+  const onPressAddShop = async (data: any) => {
+    const goodsIdList = Array.isArray(data) ? checkedList.map(d => d.goodsId) : [data?.goodsId];
+    // const loading = Toast.loading('添加中');
+    await dispatch(addGroupHouseGoods({goodsIdList}));
+    console.log(goodsIdList, 'goodsIdList')
+    setDataList(changeIsExit(dataList, (item) => goodsIdList.indexOf(item.goodsId) !== -1, true))
+    // Portal.remove(loading);
+    Toast.success('添加成功');
   }
 
-   /**
-   * 提交选中
+  /**
+   * 从橱窗删除
    */
-  const onPressSubmit = () => {
+  const onPressRemoveShop = async (data: any) => {
+    const goodsIdList = Array.isArray(data) ? checkedList.map(d => d.goodsId) : [data?.goodsId];
+    // const loading = Toast.loading('删除中');
+    await dispatch(delGroupHouseGoods({goodsIdList}));
+    console.log(goodsIdList, 'goodsIdList')
+    setDataList(changeIsExit(dataList, (item) => goodsIdList.indexOf(item.goodsId) !== -1, false))
+    // Portal.remove(loading);
+    // Toast.show('成功');
   }
 
   /**
@@ -176,95 +184,134 @@ const AnchorShopCard = (props: {
     setDataList(newDataList);
   }
 
+  /**
+   * 获取在售直播商品
+   */
+  const onRefresh = async () => {
+    const result = await apiSelLiveGoods({
+      liveId,
+      pageSize: PAGE_SIZE,
+      pageNo: INIT_PAGE_NO,
+    })
+      .catch((r: any) => {console.log(r, 'selLiveGoods')});
+
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.data?.records || EMPTY_ARR});
+    }
+
+    return Promise.resolve({result: EMPTY_ARR});
+  }
+
+  /**
+   * 获取更多在售直播商品
+   */
+  const onEndReached = async (pageNo: number, pageSize: number) => {
+    const result = await apiSelLiveGoods({
+      liveId,
+      pageSize,
+      pageNo,
+    })
+    .catch((r: any) => {console.log(r, 'selLiveGoods')});
+
+    console.log(result, 'result')
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.data?.records || EMPTY_ARR});
+    }
+    return Promise.resolve({result: EMPTY_ARR});
+  };
+
   if (!props.visible) {
     return null
   }
   
   return (
-    <TouchableWithoutFeedback onPress={props.onPressClose}>
-      <View style={StyleSheet.flatten([styles.style])}>
-        <TouchableWithoutFeedback onPress={() => {alert(1)}}>
-          <PhoneShapWrapper
-            style={StyleSheet.flatten([styles.contentStyle, {paddingBottom: props.safeBottom}])}
-          >
-            <View style={styles.cardTitleWrapper}>
-              <TouchableOpacity
-                style={StyleSheet.flatten([styles.titleLeft])}
-                onPress={() => props.setVisible(false)}
-              >
-                <Iconback size={scale(10)} />
-                <SmallText style={{}}>返回直播间</SmallText>
-              </TouchableOpacity>
-              <T4 style={styles.titleCenter}>直播商品管理</T4>
-              <TouchableOpacity
-                onPress={() => navigate('LiveGoodsManageAgain')}
-              >
-                <SmallText style={styles.titleRight}>重新组货</SmallText>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.scrollWrapper}>
-              <PagingList
-                data={dataList}
-                setData={setDataList}
-                size={14}
-                // initListData={warehouseGoods}
-                renderItem={({item, index}: any) => {
-                  return (
-                    <AnchorRow
-                      // data={livingGoods}
-                      key={`anchorShopCard_${index}`}
-                      isChecked={item.isChecked}
-                      // index={index}
-                      style={{borderBottomWidth: 1, borderColor: Colors.divider}}
-                      onPressCheck={() => checkGood(index)}
-                      onPressAddShop={() => onPressAddShop(item)}
-                    />
-                  )
-                }}
-                getItemLayout={(data, index) => (
-                  {length: ROW_HEIGHT, offset: ROW_HEIGHT * index, index}
-                )}
-                onRefresh={onRefresh}
-                onEndReached={onEndReached}
-                keyExtractor={(item, index) => 'index' + index + item}
-                initialNumToRender={14}
-                numColumns={1}
-                columnWrapperStyle={{justifyContent: 'space-between'}}
-                contentContainerStyle={styles.pagingListWrapper}
+    <View style={StyleSheet.flatten([styles.style])}>
+      <TouchableWithoutFeedback onPress={props.onPressClose}>
+        <View style={{flex: 1}} />
+      </TouchableWithoutFeedback>
+      <View>
+        <PhoneShapWrapper
+          style={StyleSheet.flatten([styles.contentStyle, {paddingBottom: props.safeBottom}])}
+        >
+          <View style={styles.cardTitleWrapper}>
+            <TouchableOpacity
+              style={StyleSheet.flatten([styles.titleLeft])}
+              onPress={() => props.setVisible(false)}
+            >
+              <Iconback size={scale(10)} />
+              <SmallText style={{}}>返回直播间</SmallText>
+            </TouchableOpacity>
+            <T4 style={styles.titleCenter}>直播商品管理</T4>
+            <TouchableOpacity
+              onPress={() => navigate('LiveGoodsManageAgain')}
+            >
+              <SmallText style={styles.titleRight}>重新组货</SmallText>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.scrollWrapper}>
+            <PagingList
+              data={dataList}
+              setData={setDataList}
+              size={14}
+              // initListData={warehouseGoods}
+              renderItem={({item, index}: any) => {
+                return (
+                  <AnchorRow
+                    data={item}
+                    dataAdapter={brandGoodAdapter}
+                    key={`anchorShopCard_${index}`}
+                    isChecked={item.isChecked}
+                    // index={index}
+                    style={{borderBottomWidth: 1, borderColor: Colors.divider}}
+                    onPressCheck={() => checkGood(index)}
+                    onPressAddShop={() => onPressAddShop(item)}
+                    onPressRemoveShop={() => onPressRemoveShop(item)}
+                  />
+                )
+              }}
+              getItemLayout={(data: any, index: number) => (
+                {length: ROW_HEIGHT, offset: ROW_HEIGHT * index, index}
+              )}
+              onRefresh={onRefresh}
+              onEndReached={onEndReached}
+              keyExtractor={(item: any, index: number) => 'index' + index + item}
+              initialNumToRender={14}
+              numColumns={1}
+              columnWrapperStyle={{justifyContent: 'space-between'}}
+              contentContainerStyle={styles.pagingListWrapper}
+            />
+          </View>
+          <View style={StyleSheet.flatten([styles.rowBetween, {backgroundColor: '#fff'}])}>
+            <View style={StyleSheet.flatten([styles.rowBetween, {flex: 1, paddingHorizontal: pad}])}>
+              <CheckBox
+                label="全选"
+                isChecked={isCheckedAll}
+                labelStyle={{color: Colors.lightBlack, fontSize: scale(11)}}
+                onPress={onPressCheckAll}
               />
-            </View>
-            <View style={StyleSheet.flatten([styles.rowBetween, {backgroundColor: '#fff'}])}>
-              <View style={StyleSheet.flatten([styles.rowBetween, {flex: 1, paddingHorizontal: pad}])}>
-                <CheckBox
-                  label="全选"
-                  isChecked={isCheckedAll}
-                  labelStyle={{color: Colors.lightBlack, fontSize: scale(11)}}
-                  onPress={onPressCheckAll}
-                />
-                <View style={styles.textWrapper}>
-                  <SmallText style={styles.summaryText}>共</SmallText>
-                  <T3 color="theme" style={StyleSheet.flatten([styles.summaryText, {lineHeight: scale(20)}])}>{checkedList.length || 0}</T3>
-                  <SmallText style={styles.summaryText}>件商品</SmallText>
-                </View>
+              <View style={styles.textWrapper}>
+                <SmallText style={styles.summaryText}>共</SmallText>
+                <T3 color="theme" style={StyleSheet.flatten([styles.summaryText, {lineHeight: scale(20)}])}>{checkedList.length || 0}</T3>
+                <SmallText style={styles.summaryText}>件商品</SmallText>
               </View>
-              
-              <TouchableOpacity
-                disabled={!canSubmit}
-                onPress={onPressSubmit}
-                style={StyleSheet.flatten([
-                  styles.submit,
-                  {
-                    backgroundColor: canSubmit ? Colors.basicColor : Colors.darkGrey
-                  }
-                ])}
-              >
-                <T4 color="white">上架</T4>
-              </TouchableOpacity>
             </View>
-          </PhoneShapWrapper>
-          </TouchableWithoutFeedback>
+            
+            <TouchableOpacity
+              disabled={!canSubmit}
+              onPress={onPressAddShop}
+              style={StyleSheet.flatten([
+                styles.submit,
+                {
+                  backgroundColor: canSubmit ? Colors.basicColor : Colors.darkGrey
+                }
+              ])}
+            >
+              <T4 color="white">上架</T4>
+            </TouchableOpacity>
+          </View>
+        </PhoneShapWrapper>
         </View>
-    </TouchableWithoutFeedback>
+    </View>
   )
 };
 

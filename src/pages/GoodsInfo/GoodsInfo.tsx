@@ -48,12 +48,21 @@ const BaseScript = `
 console.log(11)
 `
 
+interface GoodsInfoParams {
+  id: string | number,
+  shareUserId: string | number,
+  onOrderCompleted: (orderInfo: {
+    quantity: number, // 下单数量
+    [key: string]: any,
+  }) => any
+}
+
 function GoodsInfo(props: any) {
   const route = useRoute()
   const navigation = useNavigation()
   const isFocused = useIsFocused()
   const { isLogin } = props
-  const { id: goodsId, shareUserId } = route.params
+  const { id: goodsId, shareUserId, onOrderCompleted }: GoodsInfoParams = route.params as GoodsInfoParams;
   const [isLoadingComplete, setIsLoadingComplete] = useState(false)
   const [swiperList, setSwiperList] = useState([])
   const [goodsInfo, setGoodsInfo]: any = useState({})
@@ -363,8 +372,7 @@ function GoodsInfo(props: any) {
         goods_id: curSkuInfo.goods_id
       }]
     }]
-
-    navigation.push('CreateOrder', { tempOrderList, shareUserId })
+    navigation.push('CreateOrder', { tempOrderList, shareUserId, onOrderCompleted })
   }
 
   /**

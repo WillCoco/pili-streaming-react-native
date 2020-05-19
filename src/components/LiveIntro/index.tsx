@@ -25,6 +25,7 @@ import {pad} from '../../constants/Layout';
 import FollowButton from '../../components/FollowButton';
 import {apiAttentionAnchor, apiEnterLive} from '../../service/api';
 import {shorNum} from '../../utils/numeric';
+import defaultImages from '../../assets/default-image';
 
 
 export type msgList = any[] | undefined;
@@ -49,7 +50,6 @@ interface LiveMsgProps {
 
 const LiveIntro = (props: LiveMsgProps) =>  {
 
-  console.log(props, 4312532152353215);
   const {navigate} = useNavigation();
 
   const livingInfo = useSelector((state: any) => {
@@ -102,7 +102,7 @@ const LiveIntro = (props: LiveMsgProps) =>  {
       onPress={onPress}
     >
       <Avatar
-        source={livingInfo.anchorLogo ? {uri: livingInfo.anchorLogo} : undefined}
+        source={livingInfo.anchorLogo ? {uri: livingInfo.anchorLogo} : defaultImages.userAvatarSmall}
         size={40}
         style={{marginRight: 4}}
       />

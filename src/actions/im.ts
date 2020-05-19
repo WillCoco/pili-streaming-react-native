@@ -9,6 +9,7 @@ import {RoomType, MessageType, RoomMessageType} from '../reducers/im';
 import Toast from 'react-native-tiny-toast';
 import {store} from '../store';
 import {safeParse} from '../utils/saftyFn';
+import {updateLivingStatus} from './live';
 
 const {tim, TIM, userSig, getUserSig: getUserSigLocal} = timModlue;
 
@@ -137,7 +138,7 @@ function handleSysMsg(message: any) {
     // 群组被解散
     if (operationType === 5) {
       // 设置直播状态, 显示结束页
-      store.dispatch(updateRoomStatus(true));
+      store.dispatch(updateLivingStatus(true));
       
       // 清空房间相关数据
       store.dispatch(clearLiveRoom());
@@ -771,20 +772,13 @@ function updateMessage2Store(newRoomMessage: RoomMessageType) {
 }
 
 /**
- * 更新观众端房间直播状态
- */
-export function updateRoomStatus(isLiveOver: boolean) {
-  return {type: imActionType.UPDATE_ROOM_STATUS, payload: {isLiveOver}}
-}
-
-/**
  * 退出直播清除系列数据
  */
 export function clearLiveRoom(role?: 'ANCHOR' | 'AUDIENCE') {
   return function(dispatch: Dispatch<any>, getState: any) {
     // 清空房间消息
     dispatch(updateRoomMessage([]));
-    // 清空房间信息
+    // 清空im房间信息
     dispatch(updateRoom());
     // 清空成员数量
     dispatch(updateRoomMemberNum(0));
