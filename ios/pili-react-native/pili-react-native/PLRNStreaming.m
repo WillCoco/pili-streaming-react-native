@@ -100,6 +100,14 @@ const char *networkStatus[] = {
   return self;
 };
 
+- (void)dealloc
+{
+    if (self.session) {
+        [self.session destroy];
+    }
+}
+
+
 - (void)setRtmpURL:(NSString *)rtmpURL
 {
   _rtmpURL = rtmpURL;
