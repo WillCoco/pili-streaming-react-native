@@ -82,7 +82,7 @@ export const apiSendVerCode = (data: any) => get1(`${HOST_JAVA}/user/sendAppMess
 // 更新用户信息
 export const apiUpdateUserInfo = (data: any) => post1(`${HOST_JAVA}/miniApp/updateUserInfo`, data)
 // 注册 & 登录
-export const apiLogin = (data: any) => post(`${HOST_JAVA}/user/appRegisterOrLogin`, data)
+export const apiLogin = (data: any) => post1(`${HOST_JAVA}/user/appRegisterOrLogin`, data)
 // 我的页面
 export const apiGetUserData = () => get1(`${HOST_JAVA}/user/getUserInfo`)
 // 发现模块 获取作品
@@ -211,7 +211,7 @@ export const apiLiveUploadFile = (file: UpdateParams) => liveUpload(`${HOST_JAVA
 // 直播发布预告
 export const apiReleaseNotice= (data: any) => post2(`${HOST_JAVA}/anchor/releaseNotice`, data)
 // 直播间商品管理数据列表
-export const apiSelLiveGoods= (data: any) => post2(`${HOST_JAVA}/anchor/selLiveGoods`, data)
+export const apiSelLiveGoods= (data: any) => get2(`${HOST_JAVA}/anchor/selLiveGoods`, data)
 // 准时开播页面展示数据
 export const apiSelStartLive= (data: any) => post2(`${HOST_JAVA}/anchor/selStartLive`, data)
 // 选择商品开始直播

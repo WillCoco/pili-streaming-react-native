@@ -25,6 +25,7 @@ import {pad} from '../../constants/Layout';
 import FollowButton from '../../components/FollowButton';
 import {apiAttentionAnchor, apiEnterLive} from '../../service/api';
 import {shorNum} from '../../utils/numeric';
+import defaultImages from '../../assets/default-image';
 
 
 export type msgList = any[] | undefined;
@@ -101,7 +102,7 @@ const LiveIntro = (props: LiveMsgProps) =>  {
       onPress={onPress}
     >
       <Avatar
-        source={livingInfo.anchorLogo ? {uri: livingInfo.anchorLogo} : undefined}
+        source={livingInfo.anchorLogo ? {uri: livingInfo.anchorLogo} : defaultImages.userAvatarSmall}
         size={40}
         style={{marginRight: 4}}
       />

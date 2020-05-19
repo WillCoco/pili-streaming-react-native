@@ -82,7 +82,6 @@ const PublishScreen = (props: any) =>  {
             onPressRight: () => {
               // 继续去直播
               const r2 = dispatch(anchorToLive({liveId}));
-              console.log(r2, 11111222223333)
               navigate('AnorchLivingRoomScreen', {groupID: groupId, liveId});
               return true;
             },

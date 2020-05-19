@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import Toast from 'react-native-tiny-toast'
@@ -10,6 +10,8 @@ import GoodsCardRow from '../../components/GoodsCardRow/GoodsCardRow'
 
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
+import checkIsBottom from '../../utils/checkIsBottom'
+import LoadMore from '../../components/LoadMore/LoadMore'
 
 function BrandShop(props: any) {
   const pageSize = 20
@@ -17,10 +19,11 @@ function BrandShop(props: any) {
   const navigation = useNavigation()
   const { isLogin } = props
   const brandId = route.params.id
-  const [pageNo, setPageNo] = useState(1)
-  const [brandInfo, setBrandInfo] = useState({})
-  const [goodsList, setGoodsList] = useState([])
+  const [brandInfo, setBrandInfo]: any = useState({})
+  const [goodsList, setGoodsList]: Array<any> = useState([])
   const [isLoaded, setIsLoaded] = useState(false)
+  const pageNoRef = useRef(1)
+  const hasMoreRef = useRef(true)
 
   navigation.setOptions({
     headerTitle: '',
@@ -59,13 +62,15 @@ function BrandShop(props: any) {
    */
   const getGoodsList = () => {
     apiBrandGoodsList({
-      pageNo,
+      pageNo: pageNoRef.current,
       pageSize,
       brand_id: brandId
-    }).then(res => {
+    }).then((res: any) => {
       console.log('品牌商品列表', res)
-      if (res.list.length) {
-        setGoodsList(res.list)
+      if (res.count) {
+        const totalPage = Math.ceil(res.count / pageSize)
+        hasMoreRef.current = pageNoRef.current < totalPage
+        setGoodsList([...goodsList, ...res.list])
       }
     })
   }
@@ -106,6 +111,16 @@ function BrandShop(props: any) {
     }
   }
 
+  /**
+   * 触底加载
+   */
+  const onReachBottom = (e: any) => {
+    if (hasMoreRef.current && checkIsBottom(e)) {
+      pageNoRef.current += 1
+      getGoodsList()
+    }
+  }
+
   if (!isLoaded) {
     return <></>
   }
@@ -115,6 +130,7 @@ function BrandShop(props: any) {
       onScroll={(e) => scrollPage(e)}
       scrollEventThrottle={200}
       showsVerticalScrollIndicator={false}
+      onMomentumScrollEnd={(e) => onReachBottom(e)}
     >
       {/* 轮播图 */}
       {
@@ -144,6 +160,7 @@ function BrandShop(props: any) {
           })
         }
       </View>
+      <LoadMore hasMore={hasMoreRef.current} />
     </ScrollView>
   )
 }

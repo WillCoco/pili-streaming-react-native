@@ -163,7 +163,6 @@ const AnchorTrailers = () =>  {
               onPress={() => {
                 navigate('LivingRoomScreen', {
                   mediaType: MediaType.teaser,
-                  // liveTime: new Date(liveTime).getTime()
                 });
 
                 // 更新房间信息
@@ -184,23 +183,6 @@ const AnchorTrailers = () =>  {
         columnWrapperStyle={{justifyContent: 'space-between'}}
         contentContainerStyle={styles.pagingListWrapper}
       />
-      {/* <ScrollView style={styles.myTrailersPage}>
-        {
-          trailersList.map((item, index) => {
-            return (
-              <TrailersCard
-                key={`_${index}`}
-                img={item.img}
-                title={item.title}
-                remind={item.remind}
-                liveTime={item.liveTime}
-                onSharePress={onSharePress}
-                onRemindPress={() => onRemindPress(item.remind, index)}
-              />
-            )
-          })
-        }
-      </ScrollView> */}
     </View>
   )
 };
