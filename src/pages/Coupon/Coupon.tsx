@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ImageBackground, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, StyleSheet, ImageBackground, TouchableWithoutFeedback, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
 import { apiGetCouponList } from '../../service/api'
@@ -9,7 +9,7 @@ import moment from 'moment'
 
 export default function Coupon() {
   const navigation = useNavigation()
-  const [couponList, setCouponList] = useState([])
+  const [couponList, setCouponList]: Array<any> = useState([])
 
   navigation.setOptions({
     headerTitle: '优惠券',
@@ -27,7 +27,7 @@ export default function Coupon() {
   }, [])
 
   const getCouponList = () => {
-    apiGetCouponList().then(res => {
+    apiGetCouponList().then((res: Array<any>) => {
       console.log('已领取的优惠券', res)
       setCouponList(res)
     })
@@ -48,7 +48,10 @@ export default function Coupon() {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
       {
         couponList.map((item: any, index: number) => {
           return (
@@ -81,7 +84,7 @@ export default function Coupon() {
           )
         })
       }
-    </View>
+    </ScrollView>
   )
 }
 

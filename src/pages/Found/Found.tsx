@@ -71,7 +71,6 @@ function Found(props: any) {
       let maxH = waterFall(tempList).maxHeight
 
       const totalPage = Math.ceil(res.totalCount / pageSize)
-
       hasMoreRef.current = pageNoRef.current < totalPage
       setWorkList(isPullDown ? waterFall(res.worksInfoList).items : tempList)
       setMaxHeight(isPullDown ? waterFall(res.worksInfoList).maxHeight : maxH)

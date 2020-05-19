@@ -5,13 +5,14 @@ import { Colors } from '../../constants/Theme'
 import { apiGetEnshrine } from '../../service/api'
 import GoodsCard from '../../components/GoodsCardRow/GoodsCardRow'
 import pxToDp from '../../utils/px2dp'
+import LoadMore from '../../components/LoadMore/LoadMore'
 
 export default function CollectGoods() {
   const navigation = useNavigation()
   const pageSize = 20
   let pageNoRef = useRef(1)
   let hasMoreRef = useRef(true)
-  const [goodsList, setGoodsList] = useState([])
+  const [goodsList, setGoodsList]: Array<any> = useState([])
 
   navigation.setOptions({
     headerTitle: '商品收藏',
@@ -52,25 +53,7 @@ export default function CollectGoods() {
     getMyCollectGoods()
   }
 
-  if (goodsList.length) {
-    return (
-      <ScrollView
-        onMomentumScrollEnd={onBeachBottom}
-      >
-        {
-          goodsList.map((item: any, index: number) => {
-            return (
-              <GoodsCard
-                goodsInfo={item}
-                key={`goods-${index}`}
-                style={index && { marginTop: pxToDp(10) }}
-              />
-            )
-          })
-        }
-      </ScrollView>
-    )
-  } else {
+  if (!goodsList.length) {
     return (
       <View style={styles.container}>
         <ImageBackground source={require('../../assets/images/img_nocollect.png')} style={styles.emptyImg}>
@@ -80,7 +63,24 @@ export default function CollectGoods() {
     )
   }
 
-  
+  return (
+    <ScrollView
+      onMomentumScrollEnd={onBeachBottom}
+    >
+      {
+        goodsList.map((item: any, index: number) => {
+          return (
+            <GoodsCard
+              goodsInfo={item}
+              key={`goods-${index}`}
+              style={index && { marginTop: pxToDp(10) }}
+            />
+          )
+        })
+      }
+      <LoadMore hasMore={hasMoreRef.current} />
+    </ScrollView>
+  )
 }
 
 const styles = StyleSheet.create({

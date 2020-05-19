@@ -10,6 +10,7 @@ import GoodsList from './GoodsList/GoodsList'
 
 import { Colors } from '../../constants/Theme'
 import checkIsBottom from '../../utils/checkIsBottom'
+import LoadMore from '../../components/LoadMore/LoadMore'
 
 export default function Sale() {
   const navigation = useNavigation()
@@ -77,6 +78,8 @@ export default function Sale() {
       } else {
         setGoodsList([...goodsList, ...res, list])
       }
+    }).catch(err => {
+      console.log(err, '===')
     })
   }
 
@@ -220,6 +223,7 @@ export default function Sale() {
       />
 
       <GoodsList goodsList={goodsList} type={route.params.type} />
+      <LoadMore hasMore={hasMoreRef.current} />
     </ScrollView>
   )
 }

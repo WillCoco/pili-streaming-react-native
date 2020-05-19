@@ -9,6 +9,7 @@ import Toast from 'react-native-tiny-toast'
 import OrderItem from './OrderItem/OrderItem'
 import pxToDp from '../../utils/px2dp'
 import checkIsBottom from '../../utils/checkIsBottom'
+import LoadMore from '../../components/LoadMore/LoadMore'
 
 export default function OrderList() {
   const navigation = useNavigation()
@@ -237,6 +238,7 @@ export default function OrderList() {
                   )
                 })
               }
+              <LoadMore hasMore={hasMoreRef.current} />
             </ScrollView>
           )
         })

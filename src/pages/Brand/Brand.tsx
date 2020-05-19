@@ -10,6 +10,7 @@ import { apiBrandList, apiGetAttention, apiAttentionBrand } from '../../service/
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
 import checkIsBottom from '../../utils/checkIsBottom'
+import LoadMore from '../../components/LoadMore/LoadMore'
 
 export default function Brand() {
   const route = useRoute()
@@ -108,7 +109,7 @@ export default function Brand() {
     }
   }
 
-  if (pageType === 'focus' && !brandList.length) {
+  if (!brandList.length) {
     return (
       <View style={styles.container}>
         <ImageBackground source={require('../../assets/images/img_empty_brand.png')} style={styles.emptyImg}>
@@ -134,6 +135,7 @@ export default function Brand() {
           )
         })
       }
+      <LoadMore hasMore={hasMoreRef.current} />
     </ScrollView>
   )
 }

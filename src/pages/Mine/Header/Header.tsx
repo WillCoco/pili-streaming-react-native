@@ -174,7 +174,6 @@ function Header(props: { userData: { userInfo: any; isLogin: any }; publicData: 
             <Text style={[styles.leveltext, styles.savePrice]}>{formatSinglePrice(userInfo?.saveMoney || 0)}</Text>
           </View>
         </View>
-
       </ImageBackground>
     </ImageBackground>
   )
