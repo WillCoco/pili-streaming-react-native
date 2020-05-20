@@ -69,6 +69,8 @@ export const apiSearch = (data: any) => get1(`${HOST_PHP}/mobile/Goods/getGoodsL
 export const apiGetEnshrine = (data: any) => get1(`${HOST_PHP}/mobile/goods/getEnshrine`, data)
 // 我关注的店铺
 export const apiGetAttention = (data: any) => get1(`${HOST_PHP}/mobile/brand/getAttention`, data)
+// 实名认证
+export const apiRealName = (data: any) => post(`${HOST_PHP}/mobile/user/authentication`, data)
 
 /**
  * JAVA 接口 ==================================================================

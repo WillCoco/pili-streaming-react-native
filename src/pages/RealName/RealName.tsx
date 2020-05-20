@@ -14,14 +14,30 @@ import withPage from '../../components/HOCs/withPage'
 import pxToDp from '../../utils/px2dp'
 import { useNavigation } from '@react-navigation/native'
 import Mask from '../../components/Mask'
+import {apiRealName} from '../../service/api'
+import {Portal, Toast} from '@ant-design/react-native'
 
 const RealName = props => {
   const [name, setName] = React.useState('')
   const [idNumber, setIdNumber] = React.useState('')
   let [maskList, maskDispatch] = React.useContext(Mask.context);
-  const {navigate} = useNavigation()
+  const {navigate, goBack} = useNavigation()
 
+  /**
+   * 前置确认
+   */
   const beforeSubmit = () => {
+
+    if (!(/^[\u4E00-\u9FA5]{2,}$/.test(name))) {
+      Toast.info('请输入合法的名字')
+      return
+    }
+
+    if (!(/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/.test(idNumber))) {
+      Toast.info('请输入合法的身份证号')
+      return
+    }
+
     maskDispatch({
       type: Mask.Actions.PUSH,
       payload: {
@@ -30,9 +46,33 @@ const RealName = props => {
           text: '实名认证信息一旦提交将无法更改！',
           title: '提示',
           rightBtnText: '确定',
-          onPressRight: () => {alert(421)}
+            onPressRight: onSubmit
         }
       }});
+  }
+
+  /**
+   * 提交实名认证
+   */
+  const onSubmit = () => {
+    const params = {
+      identityName: name,
+      identityNum: idNumber,
+    }
+
+    maskDispatch({
+      type: Mask.Actions.REMOVE,
+    });
+
+    const loading = Toast.loading('认证中')
+    apiRealName(params).then(res => {
+      Portal.remove(loading)
+      console.log(res?.success) 
+      if (res?.success) {
+        Toast.info('实名认证通过')
+        goBack()
+      }
+    })
   }
 
   return (
@@ -58,10 +98,10 @@ const RealName = props => {
         bottomDivider
       />
       <PrimaryText style={styles.tip}>继续表示同意
-        <PrimaryText style={{color: Colors.blueColor}} onPress={() => navigate('PrivacyPolicy')}>用户协议隐私条款</PrimaryText>
+        <PrimaryText style={{color: Colors.blueColor}} onPress={() => navigate('PrivacyPolicy')}>云闪播用户隐私政策协议</PrimaryText>
       </PrimaryText>
       <ButtonRadius
-        text="开始视频认证"
+        text="开始认证"
         style={styles.button}
         onPress={beforeSubmit}
       />

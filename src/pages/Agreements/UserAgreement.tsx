@@ -1,3 +1,6 @@
+/**
+ * 云闪播用户协议
+ */
 import React from 'react'
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
@@ -5,7 +8,7 @@ import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
 import withPage from '../../components/HOCs/withPage'
 
-function Tenants(props: any) {
+function UserAgreement(props: any) {
   const navigation = useNavigation()
 
   navigation.setOptions({
@@ -152,4 +155,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default withPage(Tenants)
+export default withPage(UserAgreement)

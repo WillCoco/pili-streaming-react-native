@@ -7,22 +7,35 @@
  * @lastModificationDate:
  */
 import React from 'react';
-import {View, ImageBackground, StyleSheet, Text} from 'react-native';
-// import {useNavigation} from 'react-navigation-hooks';
+import {View, ImageBackground, StyleSheet, Text, Image} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import images from '../../assets/images';
+import pxToDp from '../../utils/px2dp';
+import pad from '../../constants/Layout';
+import {PrimaryText} from 'react-native-normalization-text';
+
+
 
 const RootError = (props) => {
-  // const {goBack} = useNavigation();
-  const goBack = () => {}
+  const {goBack, navigate, reset} = useNavigation();
+
+  const goHome = () => {
+    reset({
+      index: 0,
+      routes: [{ name: 'Root', params: {initialRoute: '首页'}}],
+    });
+  };
+  
   return (
     <View style={styles.wrapper}>
       <View>
-        <ImageBackground
+        <Image
           resizeMode="contain"
-          // source={require('../images/error404.png')}
+          source={images.errorPage}
           style={styles.img}
         />
-        <Text style={styles.text}>页面出错</Text>
-        <Text style={styles.link} onPress={() => goBack()}>返回</Text>
+        <PrimaryText style={styles.text}>页面出错</PrimaryText>
+        <PrimaryText style={styles.link} onPress={goHome}>返回首页</PrimaryText>
       </View>
     </View>
   );
@@ -32,13 +45,15 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
     paddingBottom: 15,
   },
   title: {
     textAlign: 'center',
   },
   img: {
-
+    width: pxToDp(380),
+    height: pxToDp(360)
   },
   text: {
     textAlign: 'center',
