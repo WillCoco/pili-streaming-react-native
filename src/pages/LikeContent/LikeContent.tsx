@@ -1,22 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { View, Text, StyleSheet, ImageBackground, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { Colors } from '../../constants/Theme'
+
 import { apiGetUserFavorite } from '../../service/api'
+
 import pxToDp from '../../utils/px2dp'
 import waterFall from '../../utils/waterFall'
-import WorkCard from '../../components/WorkCard/WorkCard'
+import { Colors } from '../../constants/Theme'
 import checkIsBottom from '../../utils/checkIsBottom'
+
+import WorkCard from '../../components/WorkCard/WorkCard'
 import LoadMore from '../../components/LoadMore/LoadMore'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+
+const pageSize = 20
 
 export default function LikeContent() {
-  const navigation = useNavigation()
-  const pageSize = 20
-  let pageNoRef = useRef(1)
-  let hasMoreRef = useRef(true)
-  const [worksList, setWorksList]: Array<any> = useState([])
+  const pageNoRef = useRef(1)
+  const hasMoreRef = useRef(true)
+
+  const navigation: any = useNavigation()
+  
   const [maxHeight, setMaxHeight] = useState(0)
   const [isEmpty, setIsEmpty] = useState(false)
+  const [netWorkErr, setNetWorkErr] = useState(false)
+  const [worksList, setWorksList]: Array<any> = useState([])
 
   navigation.setOptions({
     headerTitle: '喜欢的内容',
@@ -56,6 +64,9 @@ export default function LikeContent() {
 
       setWorksList(tempList)
       setMaxHeight(maxH)
+    }).catch((err: any) => {
+      console.log('我喜欢的内容', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -68,6 +79,8 @@ export default function LikeContent() {
       getWorksList()
     }
   }
+
+  if (netWorkErr) return <NetWorkErr reload={getWorksList} />
 
   if (isEmpty) {
     return (

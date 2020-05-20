@@ -29,7 +29,7 @@ function Setting(props: any) {
   const logOut = () => {
     apiLogout({
       platform: 'app'
-    }).then(res => {
+    }).then((res: any) => {
       console.log('退出', res)
       props.dispatch(toggleLoginState(false))
       props.dispatch(setToke(''))
@@ -39,6 +39,8 @@ function Setting(props: any) {
       setTimeout(() => {
         navigation.navigate('首页')
       }, 1000)
+    }).catch((err: any) => {
+      console.log(err)
     })
   }
 

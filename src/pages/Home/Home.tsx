@@ -23,41 +23,47 @@ import { apiGetIndexData, apiGetIndexGoodsList } from '../../service/api'
 
 import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
+import checkIsBottom from '../../utils/checkIsBottom'
 
 import { Ionicons } from '@expo/vector-icons'
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view'
 
-import HomeSwiper from './HomeSwiper'
 import HomeNav from './HomeNav'
+import HomeSwiper from './HomeSwiper'
+import withPage from '../../components/HOCs/withPage'
+import LoadMore from '../../components/LoadMore/LoadMore'
+import SearchBar from '../../components/SearchBar/SearchBar'
+import CardTitle from '../../components/CardTitle/CardTitle'
 import GoodsCard from '../../components/GoodsCard/GoodsCard'
 import GoodsCardRow from '../../components/GoodsCardRow/GoodsCardRow'
-import CardTitle from '../../components/CardTitle/CardTitle'
-import withPage from '../../components/HOCs/withPage'
-import checkIsBottom from '../../utils/checkIsBottom'
 import SeckillCountDown from '../../components/SeckillCountDown/SeckillCountDown'
-import SearchBar from '../../components/SearchBar/SearchBar'
-import LoadMore from '../../components/LoadMore/LoadMore'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+
+const pageSize = 20
 
 function Home(props: HomeProps) {
-  const navigation = useNavigation()
-  const isFocused = useIsFocused()
-  let { swiperList, activityList, selectedGoodsInfo, seckillList } = props.homeData
   const { statusBarHeight } = props.publicData
-  let pageNoRef = useRef(1)
-  let hasMoreRef = useRef(true)
-  const [categoryList, setCategoryList] = useState([{ name: '首页' }])
-  const [categoryData, setCategoryData] = useState({})
+  let { swiperList, activityList, selectedGoodsInfo, seckillList } = props.homeData
+
+  const pageNoRef = useRef(1)
+  const hasMoreRef = useRef(true)
+
+  const isFocused: boolean = useIsFocused()
+  const navigation: any = useNavigation()
+
   const [loading, setLoading] = useState(false)
   const [timeQuantum, setTimeQuantum] = useState('')
-  const [recommendGoodsList, setRecommendGoodsList] = useState([])
+  const [netWorkErr, setNetWorkErr] = useState(false)
   const [isComplete, setIsComplete] = useState(false)
+  const [categoryData, setCategoryData]: any = useState({})
+  const [recommendGoodsList, setRecommendGoodsList]: Array<any> = useState([])
+  const [categoryList, setCategoryList] = useState([{ name: '首页' }])
   const [countDownList, setCountDownList] = useState([
     { timeQuantum: '10:00', state: '' },
     { timeQuantum: '14:00', state: '' },
     { timeQuantum: '20:00', state: '' }
   ])
-  const pageSize = 20
-
+  
   useEffect(() => {
     getRecommendGoodsList(false)
   }, [])
@@ -90,6 +96,9 @@ function Home(props: HomeProps) {
         setCategoryList([...categoryList, ...res.category])
       }
       setLoading(false)
+    }).catch((err: any) => {
+      console.log('首页初始化数据', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -106,6 +115,9 @@ function Home(props: HomeProps) {
       hasMoreRef.current = pageNoRef.current < totalPage
       setRecommendGoodsList(isPullDown ? res.list : [...recommendGoodsList, ...res.list])
       setIsComplete(true)
+    }).catch((err: any) => {
+      console.log('首页圈重点数据', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -115,7 +127,7 @@ function Home(props: HomeProps) {
   const onPullDownRefresh = () => {
     pageNoRef.current = 1
     setLoading(true)
-    initData(true)
+    initData()
   }
 
   /**
@@ -206,6 +218,16 @@ function Home(props: HomeProps) {
   const toSelectedGoodsInfo = (id: number) => {
     navigation.push('SelectGoodsInfo', { id })
   }
+
+  /**
+   * 网络错误 重新加载
+   */
+  const reload = () => {
+    initData()
+    getRecommendGoodsList(false)
+  }
+
+  if (netWorkErr) return <NetWorkErr reload={reload} />
 
   if (!isComplete) return <></>
 

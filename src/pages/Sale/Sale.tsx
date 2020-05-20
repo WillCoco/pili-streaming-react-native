@@ -1,24 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { StyleSheet, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 
 import { apiSaleList, apiSeckillList } from '../../service/api'
 
-import Header from './Header/Header'
-import GoodsList from './GoodsList/GoodsList'
-
 import { Colors } from '../../constants/Theme'
 import checkIsBottom from '../../utils/checkIsBottom'
+
+import Header from './Header/Header'
+import GoodsList from './GoodsList/GoodsList'
 import LoadMore from '../../components/LoadMore/LoadMore'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+
+const pageSize = 20
 
 export default function Sale() {
-  const navigation = useNavigation()
-  const route = useRoute()
-  const pageSize = 20
+  const route: any = useRoute()
+  const navigation: any = useNavigation()
+  
   let pageNoRef = useRef(1)
   let hasMoreRef = useRef(true)
-  const [headerGoodsList, setHeaderGoodsList] = useState([])
-  const [goodsList, setGoodsList] = useState([])
+
+  const [goodsList, setGoodsList]: Array<any> = useState([])
+  const [netWorkErr, setNetWorkErr] = useState(false)
+  const [headerGoodsList, setHeaderGoodsList]: Array<any> = useState([])
   const [timeList, setTimeList] = useState([
     { time: '10:00', ongoing: false, state: '' },
     { time: '14:00', ongoing: false, state: '' },
@@ -58,11 +63,11 @@ export default function Sale() {
     }).then((res: any) => {
       console.log(res, '特卖专区')
 
-      if (!res.count) return
-
       const totalPage = Math.ceil(res.count / pageSize)
 
       hasMoreRef.current = pageNoRef.current < totalPage
+
+      if (!res.count) return
 
       if (pageNoRef.current === 1) {
         setHeaderGoodsList(res.list.slice(0, 2))
@@ -71,10 +76,11 @@ export default function Sale() {
           setGoodsList(res.list.slice(2))
         }
       } else {
-        setGoodsList([...goodsList, ...res, list])
+        setGoodsList([...goodsList, ...res.list])
       }
-    }).catch(err => {
-      console.log(err, '===')
+    }).catch((err: any) => {
+      console.log('特卖专区', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -132,8 +138,11 @@ export default function Sale() {
           setGoodsList(res.list.slice(2))
         }
       } else {
-        setGoodsList([...goodsList, ...res, list])
+        setGoodsList([...goodsList, ...res.list])
       }
+    }).catch((err: any) => {
+      console.log('限时秒杀', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -199,10 +208,10 @@ export default function Sale() {
     }
   }
 
+  if (netWorkErr) return <NetWorkErr reload={getGoodsList} />
 
   return (
     <ScrollView
-      style={styles.container}
       onScroll={(e) => scrollPage(e)}
       scrollEventThrottle={200}
       showsVerticalScrollIndicator={false}
@@ -220,9 +229,3 @@ export default function Sale() {
     </ScrollView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-
-  }
-})

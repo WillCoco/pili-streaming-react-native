@@ -6,19 +6,24 @@ import { Colors } from '../../constants/Theme'
 import { apiPublishWorks } from '../../service/api'
 import { setAddedGoodsList, setMediaList } from '../../actions/works'
 
-import Form from './Form/Form'
-import ImagePicker from './ImagePicker/ImagePicker'
-import GoodsList from './GoodsList/GoodsList'
 import Toast from 'react-native-tiny-toast'
 
+import Form from './Form/Form'
+import GoodsList from './GoodsList/GoodsList'
+import ImagePicker from './ImagePicker/ImagePicker'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+
 function PublishWork(props: any) {
-  const navigation = useNavigation()
-  const route = useRoute()
-  const isFocused = useIsFocused()
   const { addedGoodsList, mediaList } = props
-  const { type: pageType } = route.params
+
+  const route: any = useRoute()
+  const navigation: any = useNavigation()
+
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
+  const [netWorkErr, setNetWorkErr] = useState(false)
+
+  const { type: pageType } = route.params
 
   navigation.setOptions({
     headerTitle: `发布${pageType === 'video' ? '视频' : '图片'}`,
@@ -79,7 +84,7 @@ function PublishWork(props: any) {
       worksType: pageType === 'video' ? 'VIDEO' : 'PICTURE'
     }
 
-    apiPublishWorks(params).then(res => {
+    apiPublishWorks(params).then((res: any) => {
       console.log('发表作品', res)
       if (res === '请求成功') {
         Toast.showSuccess('已发布')
@@ -91,8 +96,13 @@ function PublishWork(props: any) {
           navigation.goBack()
         }, 1000)
       }
+    }).catch((err: any) => {
+      console.log('发表作品', err)
+      setNetWorkErr(true)
     })
   }
+
+  if (netWorkErr) return <NetWorkErr reload={() => navigation.goBack()} />
 
   return (
     <View style={styles.container}>

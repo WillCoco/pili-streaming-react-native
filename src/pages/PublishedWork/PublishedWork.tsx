@@ -7,14 +7,19 @@ import { apiGetUserWorks, apiWorksManage } from '../../service/api'
 import WorkCard from './WorkCard/WorkCard'
 import pxToDp from '../../utils/px2dp'
 import LoadMore from '../../components/LoadMore/LoadMore'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+
+const pageSize = 20
 
 export default function PublishedWork() {
-  const navigation = useNavigation()
-  const pageSize = 20
   let pageNoRef = useRef(1)
   let hasMoreRef = useRef(true)
-  const [workList, setWorkList] = useState([])
+
+  const navigation: any = useNavigation()
+
   const [isEmpty, setIsEmpty] = useState(false)
+  const [netWorkErr, setNetWorkErr] = useState(false)
+  const [workList, setWorkList]: Array<any> = useState([])
 
   navigation.setOptions({
     headerTitle: '我的作品',
@@ -40,9 +45,12 @@ export default function PublishedWork() {
       if (res && res.totalCount) {
         const totalPage = res.totalCount / pageSize
         hasMoreRef.current = pageNoRef.current < totalPage
-        setWorkList(JSON.parse(JSON.stringify(res.worksInfoList)))
+        setWorkList([...workList, ...res.worksInfoList])
       }
       setIsEmpty(!res.totalCount)
+    }).catch((err: any) => {
+      console.log('我的作品', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -50,9 +58,10 @@ export default function PublishedWork() {
     apiWorksManage({  
       worksId: id,
       operateMode: opera
-    }).then(res => {
+    }).then((res: any) => {
       console.log('操作作品', res)
       if (res) {
+        pageNoRef.current = 1
         getPublishedWorks()
       }
     })
@@ -66,6 +75,8 @@ export default function PublishedWork() {
     pageNoRef.current += 1
     getPublishedWorks()
   }
+
+  if (netWorkErr) return <NetWorkErr reload={getPublishedWorks} />
 
   if (isEmpty) {
     return (

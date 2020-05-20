@@ -1,29 +1,42 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { ScrollView, View, Text, StyleSheet, ImageBackground } from 'react-native'
-import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native'
-import { Colors } from '../../constants/Theme'
-import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view'
-import { apiGetOrderList, apiGetReturnOrderList, apiCancelOrder, apiReminderDeliverGoods, apiConfirmReceiveGoods, apiExtendReceiveGoods, apiPayOrder } from '../../service/api'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import {
+  apiPayOrder,
+  apiCancelOrder,
+  apiGetOrderList,
+  apiExtendReceiveGoods,
+  apiGetReturnOrderList,
+  apiConfirmReceiveGoods,
+  apiReminderDeliverGoods
+} from '../../service/api'
+
+import pxToDp from '../../utils/px2dp'
 import Toast from 'react-native-tiny-toast'
+import { Colors } from '../../constants/Theme'
+import checkIsBottom from '../../utils/checkIsBottom'
+import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view'
 
 import OrderItem from './OrderItem/OrderItem'
-import pxToDp from '../../utils/px2dp'
-import checkIsBottom from '../../utils/checkIsBottom'
 import LoadMore from '../../components/LoadMore/LoadMore'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+
+const pageSize = 20
+const tabList = ['全部', '待付款', '待发货', '待收货', '已完成', '退款/售后']
 
 export default function OrderList() {
-  const navigation = useNavigation()
-  const route = useRoute()
-  const isFocused = useIsFocused()
-  const pageSize = 20
-  const tabList = ['全部', '待付款', '待发货', '待收货', '已完成', '退款/售后']
-  const [orderList, setOrderList] = useState([])
-  let pageNoRef = useRef(1)
-  let hasMoreRef = useRef(true)
-  let indexRef = useRef(0)
-  let completeRef = useRef(false)
-  let orderListRef = useRef([])
+  const indexRef = useRef(0)
+  const pageNoRef = useRef(1)
+  const orderListRef: any = useRef([])
+  const hasMoreRef = useRef(true)
+  const completeRef = useRef(false)
 
+  const route: any = useRoute()
+  const navigation: any = useNavigation()
+
+  const [netWorkErr, setNetWorkErr] = useState(false)
+  const [orderList, setOrderList]: Array<any> = useState([])
+  
   navigation.setOptions({
     headerTitle: `我的订单`,
     headerStyle: {
@@ -36,6 +49,13 @@ export default function OrderList() {
   })
 
   useEffect(() => {
+    initData()
+  }, [])
+
+  /**
+   * 初始化
+   */
+  const initData = () => {
     indexRef.current = route.params.index
 
     if (indexRef.current === 5) {
@@ -43,7 +63,7 @@ export default function OrderList() {
     } else {
       getOrderList(indexRef.current)
     }
-  }, [])
+  }
 
   /**
    * 切换 TAB
@@ -93,6 +113,9 @@ export default function OrderList() {
       orderListRef.current = [...orderListRef.current, ...res.records]
 
       setOrderList(orderListRef.current)
+    }).catch((err: any) => {
+      console.log('获取订单列表')
+      setNetWorkErr(true)
     })
   }
 
@@ -103,8 +126,8 @@ export default function OrderList() {
     const loading = Toast.showLoading('')
 
     apiGetReturnOrderList({
-      pageNo: pageNoRef.current,
-      pageSize
+      pageSize,
+      pageNo: pageNoRef.current
     }).then((res: any) => {
       Toast.hide(loading)
       console.log('售后订单列表', res)
@@ -127,6 +150,9 @@ export default function OrderList() {
       orderListRef.current = [...orderListRef.current, ...res.records]
 
       setOrderList(orderListRef.current)
+    }).catch((err: any) => {
+      console.log('售后订单列表')
+      setNetWorkErr(true)
     })
   }
 
@@ -135,11 +161,13 @@ export default function OrderList() {
    */
   const cancelOrder = (id: number) => {
     console.log(id)
-    apiCancelOrder({ orderId: id }).then(res => {
+    apiCancelOrder({ orderId: id }).then(() => {
       Toast.showSuccess('已取消该订单')
       orderListRef.current = []
       setOrderList(orderListRef.current)
       getOrderList(indexRef.current)
+    }).catch((err: any) => {
+      console.log(err.message)
     })
   }
 
@@ -147,8 +175,10 @@ export default function OrderList() {
    * 提醒发货
    */
   const remindDelivery = (id: number) => {
-    apiReminderDeliverGoods({ orderId: id }).then(res => {
+    apiReminderDeliverGoods({ orderId: id }).then(() => {
       Toast.showSuccess('已提醒卖家')
+    }).catch((err: any) => {
+      console.log(err.message)
     })
   }
 
@@ -156,8 +186,10 @@ export default function OrderList() {
    * 确认收货
    */
   const confirmTheGoods = (id: number) => {
-    apiConfirmReceiveGoods({ orderId: id }).then(res => {
+    apiConfirmReceiveGoods({ orderId: id }).then(() => {
       Toast.showSuccess('已完成收货')
+    }).catch((err: any) => {
+      console.log(err.message)
     })
   }
 
@@ -183,6 +215,8 @@ export default function OrderList() {
       }
 
       navigation.push('PayWebView', { url: payURL })
+    }).catch((err: any) => {
+      console.log(err.message)
     })
   }
 
@@ -190,8 +224,10 @@ export default function OrderList() {
    * 延迟收货
    */
   const extendReceiveGoods = (id: number) => {
-    apiExtendReceiveGoods({ orderId: id }).then(res => {
+    apiExtendReceiveGoods({ orderId: id }).then(() => {
       Toast.showSuccess('已延长收货时间')
+    }).catch((err: any) => {
+      console.log(err.message)
     })
   }
 
@@ -204,6 +240,8 @@ export default function OrderList() {
       indexRef.current === 5 ? getReturnOrderList() : getOrderList(indexRef.current)
     }
   }
+
+  if (netWorkErr) return <NetWorkErr reload={initData} />
 
   return (
     <ScrollableTabView
@@ -219,8 +257,8 @@ export default function OrderList() {
         tabList.map((item: string, index: number) => {
           return (
             <ScrollView
-              key={`tab-${index}`}
               tabLabel={item}
+              key={`tab-${index}`}
               style={{ padding: pxToDp(20), flex: 1 }}
               showsVerticalScrollIndicator={false}
               onMomentumScrollEnd={(e) => onReachBottom(e)}

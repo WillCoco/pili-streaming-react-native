@@ -25,8 +25,7 @@ export default function ClassifyTab(props: { changeTab: any; tabs: any }) {
 
 const styles = StyleSheet.create({
   conatainer: {
-    width: pxToDp(180),
-    flex: 1
+    width: pxToDp(180)
   },
   tabItem: {
     width: pxToDp(180),

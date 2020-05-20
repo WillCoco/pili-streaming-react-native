@@ -1,22 +1,27 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
 import { Ionicons } from '@expo/vector-icons'
 
 import { apiSelectGoodsInfo } from '../../service/api'
-import CardTitle from '../../components/CardTitle/CardTitle'
-import GoodsCard from './GoodsCard/GoodsCard'
-import Swiper from './Swiper/Swiper'
+
 import pxToDp from '../../utils/px2dp'
 import formatSinglePrice from '../../utils/formatGoodsPrice'
 
+import Swiper from './Swiper/Swiper'
+import GoodsCard from './GoodsCard/GoodsCard'
+import CardTitle from '../../components/CardTitle/CardTitle'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+
 export default function SelectGoodsInfo() {
-  const route = useRoute()
-  const navigation = useNavigation()
-  const [swiperList, setSwiperList] = useState([])
+  const route: any = useRoute()
+  const navigation: any = useNavigation()
+
   const [goodsInfo, setGoodsInfo]: any = useState({})
-  const [goodsList, setGoodsList] = useState([])
+  const [netWorkErr, setNetWorkErr] = useState(false)
+  const [goodsList, setGoodsList]: Array<any> = useState([])
+  const [swiperList, setSwiperList]: Array<any> = useState([])
 
   navigation.setOptions({
     headerTitle: '',
@@ -39,10 +44,12 @@ export default function SelectGoodsInfo() {
       goods_id: route.params.id
     }).then((res: any) => {
       console.log('精选好物详情', res)
-
       setSwiperList(res.goods_img)
       setGoodsInfo(res.goods)
       setGoodsList(res.recommend)
+    }).catch((err: any) => {
+      console.log('精选好物详情', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -50,6 +57,8 @@ export default function SelectGoodsInfo() {
     const id = goodsInfo.goods_id
     navigation.push('GoodsInfo', { id })
   }
+
+  if (netWorkErr) return <NetWorkErr reload={getSelectedInfo} />
 
   return (
     <View style={{ flex: 1 }}>
@@ -66,7 +75,7 @@ export default function SelectGoodsInfo() {
           <CardTitle title='你可能还想看' />
           <View style={styles.goodsListContainer}>
             {
-              goodsList && goodsList.map((item, index) => {
+              goodsList && goodsList.map((item: any, index: number) => {
                 return (
                   <GoodsCard key={`goods-${index}`} goodsInfo={item} style={{ marginBottom: pxToDp(20) }} />
                 )
@@ -91,8 +100,6 @@ export default function SelectGoodsInfo() {
     </View>
   )
 }
-
-const deviceHeight = Dimensions.get('window').height
 
 const styles = StyleSheet.create({
   container: {

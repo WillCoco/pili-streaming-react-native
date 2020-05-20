@@ -4,19 +4,22 @@ import { useNavigation } from '@react-navigation/native'
 
 import { apiGetClassifyList, apiGetClassifyGoodsList } from '../../service/api'
 
-import SearchBar from '../../components/SearchBar/SearchBar'
-import ClassiftyTab from './ClassifyTab/ClassifyTab'
-import ClassifyContent from './ClassifyContent/ClassifyContent'
-
-import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
+import { Colors } from '../../constants/Theme'
+
+import ClassiftyTab from './ClassifyTab/ClassifyTab'
+import SearchBar from '../../components/SearchBar/SearchBar'
+import ClassifyContent from './ClassifyContent/ClassifyContent'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+
+const pageSize = 20
 
 export default function Classify() {
-  const navigation = useNavigation()
-  const [classifyTabs, setClassifyTabs] = useState([])
-  const [goodsList, setGoodsList] = useState([])
+  const navigation: any = useNavigation()
   const [pageNo, setPageNo] = useState(1)
-  const pageSize = 20
+  const [netWorkErr, setNetWorkErr] = useState(false)
+  const [goodsList, setGoodsList]: Array<any> = useState([])
+  const [classifyTabs, setClassifyTabs]: Array<any> = useState([])
 
   navigation.setOptions({
     headerTitle: '分类',
@@ -45,6 +48,9 @@ export default function Classify() {
       })
       setClassifyTabs(res.categoryList)
       getGoodsList(res.categoryList[0].id)
+    }).catch((err: any) => {
+      console.log('分类标签', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -53,9 +59,12 @@ export default function Classify() {
    * @param id 标签 id 
    */
   const getGoodsList = (id: number) => {
-    apiGetClassifyGoodsList({ pageNo, pageSize, id }).then(res => {
+    apiGetClassifyGoodsList({ pageNo, pageSize, id }).then((res: { goodsList: Array<any> }) => {
       console.log(res, '当前标签对应的商品列表')
       setGoodsList(res.goodsList)
+    }).catch((err: any) => {
+      console.log('当前标签对应的商品列表', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -74,8 +83,10 @@ export default function Classify() {
     getGoodsList(classifyTabs[index].id)
   }
 
+  if (netWorkErr) return <NetWorkErr reload={getClassifyTabs} />
+
   return (
-    <View>
+    <>
       <View style={styles.searchBar}>
         <SearchBar
           hasSearchKey={false}
@@ -86,13 +97,11 @@ export default function Classify() {
           toSearchPage={() => navigation.push('HomeSearch')}
         />
       </View>
-
       <View style={styles.content}>
         <ClassiftyTab tabs={classifyTabs} changeTab={(index: number) => changeTab(index)} />
-
         <ClassifyContent goodsList={goodsList} />
       </View>
-    </View>
+    </>
   )
 }
 

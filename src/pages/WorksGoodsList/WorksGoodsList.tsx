@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, ScrollView } from 'react-native'
 import { connect } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
@@ -7,10 +7,14 @@ import { setWorkGoodsList } from '../../actions/works'
 
 import Header from './Header/Header'
 import GoodsCard from '../../components/WorksGoodsCard/WorksGoodsCard'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
 function WorksGoodsList(props: any) {
-  const navigation = useNavigation()
   const { goodsList, addedGoodsList } = props
+
+  const navigation: any = useNavigation()
+
+  const [netWorkErr, setNetWorkErr] = useState(false)
 
   navigation.setOptions({
     headerShown: false
@@ -43,8 +47,13 @@ function WorksGoodsList(props: any) {
       }
 
       props.dispatch(setWorkGoodsList(res.list))
+    }).catch((err: any) => {
+      console.log(err)
+      setNetWorkErr(true)
     })
   }
+
+  if (netWorkErr) return <NetWorkErr reload={getGoodsList} />
 
   return (
     <View style={{ flex: 1 }}>

@@ -2,19 +2,25 @@ import React, { useState, useRef } from 'react'
 import { View, Text, ScrollView, ImageBackground, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
-import SearchBar from './SearchBar/SearchBar'
-import WorkCard from '../../components/WorkCard/WorkCard'
-
+import pxToDp from '../../utils/px2dp'
+import Toast from 'react-native-tiny-toast'
+import waterFall from '../../utils/waterFall'
 import { Colors } from '../../constants/Theme'
 import { apiSearchWork } from '../../service/api'
-import Toast from 'react-native-tiny-toast'
-import pxToDp from '../../utils/px2dp'
-import waterFall from '../../utils/waterFall'
 import checkIsBottom from '../../utils/checkIsBottom'
-import LoadMore from '../../components/LoadMore/LoadMore'
 
-export default function FoundSearch(props: { searchKey: React.ReactNode }) {
-  const navgation = useNavigation()
+import SearchBar from './SearchBar/SearchBar'
+import WorkCard from '../../components/WorkCard/WorkCard'
+import LoadMore from '../../components/LoadMore/LoadMore'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+
+const pageSize = 20
+
+export default function FoundSearch() {
+  const pageNoRef = useRef(1)
+  const hasMoreRef = useRef(true)
+
+  const navgation: any = useNavigation()
 
   navgation.setOptions({
     headerTitle: () => <SearchBar
@@ -30,14 +36,12 @@ export default function FoundSearch(props: { searchKey: React.ReactNode }) {
     headerBackTitleVisible: false
   })
 
-  const [searchKey, setSearchKey] = useState('')
   const [maxHeight, setMaxHeight] = useState(0)
-  const [worksList, setWorksList]: Array<any> = useState([])
   const [isEmpty, setIsEmpty] = useState(false)
-  const pageSize = 20
-  const pageNoRef = useRef(1)
-  const hasMoreRef = useRef(true)
-
+  const [searchKey, setSearchKey] = useState('')
+  const [netWorkErr, setNetWorkErr] = useState(false)
+  const [worksList, setWorksList]: Array<any> = useState([])
+  
   const toSearch = () => {
     if (!searchKey) {
       Toast.show('搜索关键字不能为空', { position: 0 })
@@ -67,6 +71,9 @@ export default function FoundSearch(props: { searchKey: React.ReactNode }) {
       hasMoreRef.current = pageNoRef.current < totalPage
       setWorksList(tempList)
       setMaxHeight(maxH)
+    }).catch((err: any) => {
+      console.log('发现搜索', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -79,6 +86,8 @@ export default function FoundSearch(props: { searchKey: React.ReactNode }) {
       toSearch()
     }
   }
+
+  if (netWorkErr) return <NetWorkErr reload={toSearch} />
 
   if (isEmpty) {
     return (

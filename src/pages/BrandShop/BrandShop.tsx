@@ -1,29 +1,36 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
-import Toast from 'react-native-tiny-toast'
 import { connect } from 'react-redux'
 import { apiBrandInfo, apiBrandGoodsList, apiAttentionBrand } from '../../service/api'
 
+import pxToDp from '../../utils/px2dp'
+import { Colors } from '../../constants/Theme'
+import checkIsBottom from '../../utils/checkIsBottom'
+
+import Toast from 'react-native-tiny-toast'
 import BrandSwiper from './BrandSwiper/BrandSwiper'
+import LoadMore from '../../components/LoadMore/LoadMore'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 import GoodsCardRow from '../../components/GoodsCardRow/GoodsCardRow'
 
-import { Colors } from '../../constants/Theme'
-import pxToDp from '../../utils/px2dp'
-import checkIsBottom from '../../utils/checkIsBottom'
-import LoadMore from '../../components/LoadMore/LoadMore'
+const pageSize = 20
 
 function BrandShop(props: any) {
-  const pageSize = 20
-  const route = useRoute()
-  const navigation = useNavigation()
   const { isLogin } = props
-  const brandId = route.params.id
-  const [brandInfo, setBrandInfo]: any = useState({})
-  const [goodsList, setGoodsList]: Array<any> = useState([])
-  const [isLoaded, setIsLoaded] = useState(false)
+
   const pageNoRef = useRef(1)
   const hasMoreRef = useRef(true)
+
+  const route: any = useRoute()
+  const navigation: any = useNavigation()
+  
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [netWorkErr, setNetWorkErr] = useState(false)
+  const [brandInfo, setBrandInfo]: any = useState({})
+  const [goodsList, setGoodsList]: Array<any> = useState([])
+  
+  const { id: brandId } = route.params
 
   navigation.setOptions({
     headerTitle: '',
@@ -54,6 +61,9 @@ function BrandShop(props: any) {
       console.log('店铺详情', res)
       setBrandInfo(res)
       setIsLoaded(true)
+    }).catch((err: any) => {
+      console.log('店铺详情', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -72,6 +82,9 @@ function BrandShop(props: any) {
         hasMoreRef.current = pageNoRef.current < totalPage
         setGoodsList([...goodsList, ...res.list])
       }
+    }).catch((err: any) => {
+      console.log('品牌商品列表', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -98,14 +111,14 @@ function BrandShop(props: any) {
       apiAttentionBrand({
         brand_id: brandId,
         type: is_attention ? 0 : 1
-      }).then(res => {
+      }).then((res: any) => {
         console.log('关注/取消关注店铺', res)
-
         brandInfo.is_attention = is_attention ? 0 : 1
-
         setBrandInfo(JSON.parse(JSON.stringify(brandInfo)))
+      }).catch((err: any) => {
+        console.log('关注/取消关注店铺', err)
+        Toast.show(err.message)
       })
-
     } else {
       navigation.push('Login')
     }
@@ -121,9 +134,17 @@ function BrandShop(props: any) {
     }
   }
 
-  if (!isLoaded) {
-    return <></>
+  /**
+   * 网络异常 重新加载
+   */
+  const reload = () => {
+    getBrandInfo()
+    getGoodsList()
   }
+
+  if (netWorkErr) return <NetWorkErr reload={reload} />
+
+  if (!isLoaded) return <></>
 
   return (
     <ScrollView

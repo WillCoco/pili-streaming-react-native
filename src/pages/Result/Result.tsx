@@ -4,6 +4,9 @@ import { useNavigation } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
 
+const successIcon = require('../../assets/order-image/pay_success.png')
+const failedIcon = require('../../assets/order-image/pay_failed.png')
+
 export default function Result() {
   const navigation = useNavigation()
 
@@ -21,12 +24,12 @@ export default function Result() {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Image source={require('../../assets/order-image/result.png')} style={styles.icon} />
+        <Image source={successIcon} style={styles.icon} />
         <Text style={styles.statusText}>支付成功</Text>
         <Text style={styles.price}>¥888.88</Text>
       </View>
-      <TouchableOpacity style={styles.completeBtn} onPress={() => navigation.navigate('')}>
-        <Text style={styles.text}>完成</Text>
+      <TouchableOpacity style={styles.completeBtn} onPress={() => navigation.navigate('首页')}>
+        <Text style={styles.text}>继续购物</Text>
       </TouchableOpacity>
     </View>
   )

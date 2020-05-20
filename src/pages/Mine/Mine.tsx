@@ -4,29 +4,32 @@ import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { setUserInfo } from '../../actions/user'
 import { apiGetUserData, apiGetOrderCount, apiGetIndexGoodsList } from '../../service/api'
-import withPage from '../../components/HOCs/withPage'
 
 import Header from './Header/Header'
-import OrdersContent from './OrdersContent/OrdersContent'
-import FansContent from './FansContent/FansContent'
-import Account from './Account/Account'
-// import Banner from './Banner/Banner'
-import GoodsList from './GoodsList/GoodsList'
 import ToolBar from './ToolBar/ToolBar'
+import Account from './Account/Account'
+import GoodsList from './GoodsList/GoodsList'
+import FansContent from './FansContent/FansContent'
 import checkIsBottom from '../../utils/checkIsBottom'
+import OrdersContent from './OrdersContent/OrdersContent'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+// import Banner from './Banner/Banner'
+
+const pageSize = 20
 
 function Mine(props: { dispatch?: any; isLogin?: any }) {
-  const pageSize = 20
   const { isLogin } = props
-  const focused = useIsFocused()
-  const navigation = useNavigation()
-  const [orderCount, setOrderCount] = useState({})
-  const [goodsList, setGoodsList] = useState([])
-  const [isErr, setIsErr] = useState(false)
-  let pageNoRef = useRef(1)
-  let hasMoreRef = useRef(true)
 
+  const pageNoRef = useRef(1)
+  const hasMoreRef = useRef(true)
+
+  const focused: boolean = useIsFocused()
+  const navigation: any = useNavigation()
+
+  const [netWorkErr, setNetWorkErr] = useState(false)
+  const [orderCount, setOrderCount]: any = useState({})
+  const [goodsList, setGoodsList]: Array<any> = useState([])
+  
   useEffect(() => {
     getGoodsList()
   }, [])
@@ -49,6 +52,9 @@ function Mine(props: { dispatch?: any; isLogin?: any }) {
       const totalPage = Math.ceil(res.count / pageSize)
       hasMoreRef.current = pageNoRef.current < totalPage
       setGoodsList([...goodsList, ...res.list])
+    }).catch((err: any) => {
+      console.log('推荐商品', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -63,12 +69,12 @@ function Mine(props: { dispatch?: any; isLogin?: any }) {
       props.dispatch(setUserInfo(res))
       getOrderCount()  // 获取订单数量
     }).catch((err: any) => {
-      console.log(err, 'errrrrr')
+      console.log('获取用户信息', err)
       if (err.code === '203' || err.code === '204') {
         navigation.push('Login')
         return
       }
-      setIsErr(true)
+      setNetWorkErr(true)
     })
   }
 
@@ -94,9 +100,15 @@ function Mine(props: { dispatch?: any; isLogin?: any }) {
     }
   }
 
-  if (isErr) {
-    return <NetWorkErr />
+  /**
+   * 网络异常 重新加载
+   */
+  const reload = () => {
+    getUserInfo()
+    getGoodsList()
   }
+
+  if (netWorkErr) return <NetWorkErr reload={reload} />
 
   return (
     <ScrollView
@@ -124,7 +136,7 @@ function Mine(props: { dispatch?: any; isLogin?: any }) {
 
 export default connect(
   (state: any) => state.userData
-)(withPage(Mine))
+)(Mine)
 
 const styles = StyleSheet.create({
   container: {

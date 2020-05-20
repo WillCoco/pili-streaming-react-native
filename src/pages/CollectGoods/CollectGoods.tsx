@@ -1,19 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { View, Text, StyleSheet, ImageBackground, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { Colors } from '../../constants/Theme'
+
 import { apiGetEnshrine } from '../../service/api'
-import GoodsCard from '../../components/GoodsCardRow/GoodsCardRow'
+
 import pxToDp from '../../utils/px2dp'
+import { Colors } from '../../constants/Theme'
+
+import GoodsCard from '../../components/GoodsCardRow/GoodsCardRow'
 import LoadMore from '../../components/LoadMore/LoadMore'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+
+const pageSize = 20
 
 export default function CollectGoods() {
-  const navigation = useNavigation()
-  const pageSize = 20
   let pageNoRef = useRef(1)
   let hasMoreRef = useRef(true)
-  const [goodsList, setGoodsList]: Array<any> = useState([])
+
+  const navigation: any = useNavigation()
+  
   const [complete, setComplete] = useState(false)
+  const [netWorkErr, setNetWorkErr] = useState(false)
+  const [goodsList, setGoodsList]: Array<any> = useState([])
 
   navigation.setOptions({
     headerTitle: '商品收藏',
@@ -41,6 +49,9 @@ export default function CollectGoods() {
       const totalPage = Math.ceil(res.count / pageSize)
       hasMoreRef.current = pageNoRef.current < totalPage
       setGoodsList([...goodsList, ...res.list])
+    }).catch((err: any) => {
+      console.log('我的收藏', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -52,6 +63,8 @@ export default function CollectGoods() {
     pageNoRef.current += 1
     getMyCollectGoods()
   }
+
+  if (netWorkErr) return <NetWorkErr reload={getMyCollectGoods} />
 
   if (!goodsList.length && complete) {
     return (
