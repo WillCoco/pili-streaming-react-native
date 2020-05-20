@@ -48,12 +48,18 @@ const BaseScript = `
 console.log(11)
 `
 
+interface GoodsInfoParams {
+  id: string | number,
+  shareUserId: string | number,
+  onOrderCompleted: (orderInfo: any) => any
+}
+
 function GoodsInfo(props: any) {
   const route = useRoute()
   const navigation = useNavigation()
   const isFocused = useIsFocused()
   const { isLogin } = props
-  const { id: goodsId, shareUserId } = route.params
+  const { id: goodsId, shareUserId, onOrderCompleted }: GoodsInfoParams = route.params as GoodsInfoParams;
   const [isLoadingComplete, setIsLoadingComplete] = useState(false)
   const [swiperList, setSwiperList] = useState([])
   const [goodsInfo, setGoodsInfo]: any = useState({})
@@ -195,6 +201,10 @@ function GoodsInfo(props: any) {
       console.log('加载优惠券', res)
       setCouponList(JSON.parse(JSON.stringify(res)))
     }).catch((err: any) => {
+      if (err.code === '203' || err.code === '204') {
+        navigation.push('Login')
+        return
+      }
       setIsErr(true)
     })
   }
@@ -363,8 +373,7 @@ function GoodsInfo(props: any) {
         goods_id: curSkuInfo.goods_id
       }]
     }]
-
-    navigation.push('CreateOrder', { tempOrderList, shareUserId })
+    navigation.push('CreateOrder', { tempOrderList, shareUserId, onOrderCompleted })
   }
 
   /**

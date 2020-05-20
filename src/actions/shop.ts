@@ -8,6 +8,7 @@ import * as api from '../service/api';
 import Toast from 'react-native-tiny-toast';
 import calcStrLength from '../utils/calcStrLength';
 import {safeStringify} from '../utils/saftyFn';
+import { EMPTY_OBJ } from '../constants/freeze';
 import {isSucceed} from "../utils/fetchTools";
 
 /* ----------- 店铺相关 ----------- */
@@ -338,11 +339,10 @@ export const delWareHouseGoods = (params: DelGoods2WareHouseParams) => {
 /**
  * 预组货添加商品到橱窗
  */
-interface addGroupa2WareHouseParams {
+interface AddGroup2WareHouseParams {
     "goodsIdList": Array<number>,
 }
-
-export const AddGroupHouseGoods = (params: addGroupa2WareHouseParams) => {
+export const addGroupHouseGoods = (params: AddGroup2WareHouseParams) => {
     return async function (dispatch: Dispatch<any>, getState: any): Promise<any> {
         const anchorId = getState()?.anchorData?.anchorInfo?.anchorId;
         return api.apiAddAnchorGoods({
@@ -350,7 +350,7 @@ export const AddGroupHouseGoods = (params: addGroupa2WareHouseParams) => {
             anchorId
         })
             .then(r => {
-                if (isSucceed(r)) {
+                if(isSucceed(r)) {
                     return Promise.resolve(true);
                 }
             })
@@ -365,10 +365,10 @@ export const AddGroupHouseGoods = (params: addGroupa2WareHouseParams) => {
 /**
  * 预组货删除商品到橱窗
  */
-interface delGroup2WareHouseParams {
+interface DelGroup2WareHouseParams {
     "goodsIdList": Array<number>,
 }
-export const DelGroupHouseGoods = (params: delGroup2WareHouseParams) => {
+export const delGroupHouseGoods = (params: DelGroup2WareHouseParams) => {
     return async function (dispatch: Dispatch<any>, getState: any): Promise<any> {
         const anchorId = getState()?.anchorData?.anchorInfo?.anchorId;
         return api.apiDelAnchorGoods({
@@ -376,9 +376,9 @@ export const DelGroupHouseGoods = (params: delGroup2WareHouseParams) => {
             anchorId
         })
             .then(r => {
-               if(isSucceed(r)) {
-                   return Promise.resolve(true);
-               }
+                if(isSucceed(r)) {
+                    return Promise.resolve(true);
+                }
             })
             .catch(err => {
                 console.log(`DelGroup2WareHouseParams error: ${err}`)
@@ -392,36 +392,36 @@ export const DelGroupHouseGoods = (params: delGroup2WareHouseParams) => {
  * 单选 选中/取消 预组货仓库商品
  * // todo: 改成id判断
  */
-export const checkWarehouseGoods = (index: number) => {
-  return async function(dispatch: Dispatch<any>, getState: any): Promise<any> {
-    const warehouseGoods = getState()?.shop?.warehouseGoods || [];
-    const newWarehouseGoods = [...warehouseGoods];
+// export const checkWarehouseGoods = (index: number) => {
+//   return async function(dispatch: Dispatch<any>, getState: any): Promise<any> {
+//     const warehouseGoods = getState()?.shop?.warehouseGoods || [];
+//     const newWarehouseGoods = [...warehouseGoods];
 
-    if (newWarehouseGoods[index]) {
-      newWarehouseGoods[index].isChecked = !newWarehouseGoods[index].isChecked
-    }
+//     if (newWarehouseGoods[index]) {
+//       newWarehouseGoods[index].isChecked = !newWarehouseGoods[index].isChecked
+//     }
 
 
-    dispatch(updateWarehouseGoods(newWarehouseGoods));
-  }
-}
+//     dispatch(updateWarehouseGoods(newWarehouseGoods));
+//   }
+// }
 
 /**
  * 全选/取消 预组货仓库商品
  */
-export const checkAllWarehouseGoods = (isChecked: boolean) => {
-  return async function(dispatch: Dispatch<any>, getState: any): Promise<any> {
-    const warehouseGoods = getState()?.shop?.warehouseGoods || [];
-    const newWarehouseGoods = warehouseGoods.map((good: any) => {
-      return {
-        ...good,
-        isChecked
-      }
-    });
+// export const checkAllWarehouseGoods = (isChecked: boolean) => {
+//   return async function(dispatch: Dispatch<any>, getState: any): Promise<any> {
+//     const warehouseGoods = getState()?.shop?.warehouseGoods || [];
+//     const newWarehouseGoods = warehouseGoods.map((good: any) => {
+//       return {
+//         ...good,
+//         isChecked
+//       }
+//     });
 
-    dispatch(updateWarehouseGoods(newWarehouseGoods));
-  }
-}
+//     dispatch(updateWarehouseGoods(newWarehouseGoods));
+//   }
+// }
 
 /**
  * 添加成功 修改isExited字段
@@ -492,14 +492,14 @@ export const goodsCheckedFormat = (dataList: Array<any>, checkList?: Array<any>,
  * @param isMatch
  * @param isAdd
  */
-const changeIsExit = (list: Array<any>, isMatch: (v: any) => boolean, isAdd?: boolean) => {
+export const changeIsExit = (list: Array<any>, isMatch: (v: any) => boolean, isAdd?: boolean) => {
   if (!list || !list.map) {
     return list;
   };
 
   console.log(list, 'llisttttt')
   return list.map((good) => {
-    const safeGood = good || {};
+    const safeGood = good || EMPTY_OBJ;
     console.log(safeGood, 'safeGood')
     console.log(list, 'list')
     console.log(isMatch(safeGood), 'isMatch(safeGood)')

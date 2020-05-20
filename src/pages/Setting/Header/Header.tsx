@@ -104,7 +104,7 @@ function Header(props: { dispatch?: any; userInfo?: any }) {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {
             !editable
-              ? <Text style={styles.input}>{userInfo.nickName}</Text>
+              ? <Text style={[styles.input, { lineHeight: pxToDp(60) }]}>{userInfo.nickName}</Text>
               : <TextInput
                 autoFocus
                 editable={editable}
@@ -166,6 +166,7 @@ const styles = StyleSheet.create({
     height: pxToDp(28)
   },
   editAvatar: {
+    paddingTop: pxToDp(5),
     fontSize: pxToDp(20),
     backgroundColor: 'rgba(0,0,0,0.5)',
     textAlign: 'center',

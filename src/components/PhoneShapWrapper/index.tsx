@@ -19,7 +19,6 @@ const phoneShapeWrapper = (props: {
   return (
     <View
       style={StyleSheet.flatten([styles.historyWrapper, {...props.style}])}
-      onStartShouldSetResponder={() => true}
     >
       <View style={styles.shape} />
       {props.children}

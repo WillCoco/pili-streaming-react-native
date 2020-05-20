@@ -16,7 +16,7 @@ import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
 import formatGoodsPrice from '../../utils/formatGoodsPrice'
 
-function GoodsCard(props: any) {
+function GoodsCard(props: { isLogin?: any; style?: any; tapGoodsCard?: any; goodsInfo?: any }) {
   const { goodsInfo } = props
   const navigation = useNavigation()
 

@@ -84,7 +84,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
         // const safeRes = res || {};
         console.log(res, '进入列表');
         res.watchNum = res.watchNum - 1; // 这里重新会重复加人数
-        dispatch(updateLivingInfo(res))
+        dispatch(updateLivingInfo({...res, liveId}))
         setAnchorInfo(res);
       })
   }, []);

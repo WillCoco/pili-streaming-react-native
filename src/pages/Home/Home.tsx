@@ -36,6 +36,7 @@ import withPage from '../../components/HOCs/withPage'
 import checkIsBottom from '../../utils/checkIsBottom'
 import SeckillCountDown from '../../components/SeckillCountDown/SeckillCountDown'
 import SearchBar from '../../components/SearchBar/SearchBar'
+import LoadMore from '../../components/LoadMore/LoadMore'
 
 function Home(props: HomeProps) {
   const navigation = useNavigation()
@@ -359,6 +360,7 @@ function Home(props: HomeProps) {
                               style={{ marginBottom: pxToDp(20) }} goodsInfo={item} tapGoodsCard={(id: number) => toGoodsInfo(id)} />)
                           }
                         </View>
+                        <LoadMore hasMore={hasMoreRef.current} />
                       </View>
                     </>
                 }

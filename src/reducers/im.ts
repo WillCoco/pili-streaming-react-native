@@ -36,7 +36,6 @@ interface InitStateTypes {
   userSig?: string,
   rooms?: Array<RoomType>,
   room?: RoomType,
-  isLiveOver: boolean | undefined,
   roomMemberNum: number,
   roomMessages: Array<RoomMessageType>,
   orderMessages: Array<RoomMessageType>,
@@ -49,7 +48,6 @@ const INITIAL_STATE: InitStateTypes = {
   userSig: undefined, // 登录签名(自动登录?)
   room: undefined, // 所在房间的信息(im group + 观看等数据)
   roomMemberNum: 0, // 从room中抽出来的成员数量字段, 减少room依赖过度更新
-  isLiveOver: undefined, // 所在房间直播是否结束(观众端)
   roomMessages: [], // 房间消息
   orderMessages: [], // 购买消息
   followMessages: [], // 关注消息
@@ -71,8 +69,6 @@ export default function homeData(state = INITIAL_STATE, action: any) {
       return {...state, orderMessages: action.payload.orderMessages};
     case imActionTypes.UPDATE_FOLLOW_MESSAGES:
       return {...state, followMessages: action.payload.followMessages};
-    case imActionTypes.UPDATE_ROOM_STATUS:
-      return {...state, isLiveOver: action.payload.isLiveOver};
     case imActionTypes.UPDATE_ROOM_MEMBER_NUM:
       return {...state, roomMemberNum: action.payload.roomMemberNum};
     default:

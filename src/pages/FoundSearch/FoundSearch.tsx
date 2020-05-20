@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { View, Text, ScrollView, ImageBackground, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
@@ -10,6 +10,8 @@ import { apiSearchWork } from '../../service/api'
 import Toast from 'react-native-tiny-toast'
 import pxToDp from '../../utils/px2dp'
 import waterFall from '../../utils/waterFall'
+import checkIsBottom from '../../utils/checkIsBottom'
+import LoadMore from '../../components/LoadMore/LoadMore'
 
 export default function FoundSearch(props: { searchKey: React.ReactNode }) {
   const navgation = useNavigation()
@@ -30,21 +32,20 @@ export default function FoundSearch(props: { searchKey: React.ReactNode }) {
 
   const [searchKey, setSearchKey] = useState('')
   const [maxHeight, setMaxHeight] = useState(0)
-  const [worksList, setWorksList] = useState([])
+  const [worksList, setWorksList]: Array<any> = useState([])
   const [isEmpty, setIsEmpty] = useState(false)
-  const pageSize = 50
-  let [pageNo, setPageNo] = useState(1)
+  const pageSize = 20
+  const pageNoRef = useRef(1)
+  const hasMoreRef = useRef(true)
 
   const toSearch = () => {
-    console.log(searchKey)
-
     if (!searchKey) {
       Toast.show('搜索关键字不能为空', { position: 0 })
       return
     }
 
     const params = {
-      page: pageNo,
+      page: pageNoRef.current,
       pageSize,
       searchKeyword: searchKey
     }
@@ -59,9 +60,24 @@ export default function FoundSearch(props: { searchKey: React.ReactNode }) {
         item.imageHeight = item.worksMoreInfo.imageHeight
       })
 
-      setWorksList(waterFall(res.worksInfoList).items)
-      setMaxHeight(waterFall(res.worksInfoList).maxHeight)
+      let tempList = [...worksList, ...waterFall(res.worksInfoList).items]
+      let maxH = waterFall(tempList).maxHeight
+
+      const totalPage = Math.ceil(res.totalCount / pageSize)
+      hasMoreRef.current = pageNoRef.current < totalPage
+      setWorksList(tempList)
+      setMaxHeight(maxH)
     })
+  }
+
+  /**
+   * 触底加载
+   */
+  const onReachBottom = (e: any) => {
+    if (hasMoreRef.current && checkIsBottom(e)) {
+      pageNoRef.current += 1
+      toSearch()
+    }
   }
 
   if (isEmpty) {
@@ -75,7 +91,10 @@ export default function FoundSearch(props: { searchKey: React.ReactNode }) {
   }
 
   return (
-    <ScrollView>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      onMomentumScrollEnd={(e) => onReachBottom(e)}
+    >
       <View style={{ height: maxHeight }}>
         {
           worksList && worksList.map((item: any, index: number) => {
@@ -85,6 +104,7 @@ export default function FoundSearch(props: { searchKey: React.ReactNode }) {
           })
         }
       </View>
+      {!!worksList.length && <LoadMore hasMore={hasMoreRef.current} />}
     </ScrollView>
   )
 }

@@ -28,11 +28,12 @@ import { PrimaryText } from "react-native-normalization-text";
 import { apiEnterLive } from '../../service/api';
 import { updateLivingInfo } from '../../actions/live';
 import withPage from '../HOCs/withPage';
-import TrailerCountDown from '../TrailerCountDown';
 import { Colors } from '../../constants/Theme';
+import { isSucceed } from '../../utils/fetchTools';
+import { EMPTY_OBJ } from '../../constants/freeze';
 
-const { window } = L;
-const EMPTY_OBJ = {};
+const PAGE_SIZE = 14;
+const INIT_PAGE_NO = 1;
 
 interface LiveVideoProps {
   style?: StyleProp<any>;

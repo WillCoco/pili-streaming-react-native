@@ -19,28 +19,24 @@ import ButtonRadius from '../../components/Buttons/ButtonRadius';
 import CheckBox from '../../components/CheckBox';
 import images from '../../assets/images/index';
 import { Colors } from '../../constants/Theme';
+import { EMPTY_OBJ } from '../../constants/freeze';
 
 interface AnchorRowManageRowProps {
   data: any,
-  dataAdapter: (d: any) => {
-    title: string,
-    img: any,
-    skuQuantity: number,
-    canAdd: boolean,
-  },
+  dataAdapter: (d?: any) => any,
   isChecked: boolean,
   imgStyle: StyleProp<any>,
   style: StyleProp<any>,
   onPressCheck: (d?: any) => any,
   onPressAddShop: (d?: any) => any,
+  onPressRemoveShop: (d?: any) => any,
 }
 
 const AnchorRowManageRow = (props: AnchorRowManageRowProps) =>  {
+  const data = (props.dataAdapter ? props.dataAdapter(props.data) : props.data) || EMPTY_OBJ;
 
-  const data = (props.dataAdapter ? props.dataAdapter(props.data) : props.data) || {};
-
-  const btnText = data.canAdd ? '添加橱窗' : '取消添加';
-  const btnBg = data.canAdd ? Colors.basicColor : Colors.lightGrey;
+  const btnText = !data.isAdded ? '添加橱窗' : '取消添加';
+  const btnBg = !data.isAdded ? Colors.basicColor : Colors.lightGrey;
 
   return (
     <View style={StyleSheet.flatten([styles.style, props.style])}>
@@ -49,7 +45,7 @@ const AnchorRowManageRow = (props: AnchorRowManageRowProps) =>  {
         onPress={props.onPressCheck}
         style={{height: '100%', paddingHorizontal: pad}}
       />
-      <Image source={data.img || images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
+      <Image source={data.img ? {uri: data.img} : images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
       <View style={styles.contentWrapper}>
         <View style={styles.titleWrapper}>
           <PrimaryText numberOfLines={2} style={{flex: 1}}>{data.title}</PrimaryText>
@@ -58,16 +54,16 @@ const AnchorRowManageRow = (props: AnchorRowManageRowProps) =>  {
           </TouchableOpacity> */}
         </View>
         <View style={styles.rowBetween}>
-          <SmallText color="grey" profit={111} style={{flex: -1}}>总库存:  {data.skuQuantity}</SmallText>
-          <ShareProfit profit={111} style={{flex: -1}} />
+          <SmallText color="grey" style={{flex: -1}}>总库存:  {data.storeCount}</SmallText>
+          <ShareProfit profit={data.profit} style={{flex: -1}} />
         </View>
         <View style={styles.rowBetween}>
-          <DiscountPrice discountPrice={120} price={110} />
+          <DiscountPrice discountPrice={data.discountPrice} price={data.pirce} />
           <ButtonRadius
             text={btnText}
             size={20}
             style={{width: scale(75), backgroundColor: btnBg}}
-            onPress={props.onPressAddShop}
+            onPress={data.isAdded ? props.onPressRemoveShop : props.onPressAddShop}
           />
         </View>
       </View>
@@ -77,12 +73,12 @@ const AnchorRowManageRow = (props: AnchorRowManageRowProps) =>  {
 
 AnchorRowManageRow.defaultProps = {
   data: {
-    title: '标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题',
-    skuQuantity: '11'
+    title: '',
+    skuQuantity: ''
   }
 };
 
-const ROW_HEIGHT = 120;
+export const ROW_HEIGHT = 120;
 const styles = StyleSheet.create({
   style: {
     flex: 1,

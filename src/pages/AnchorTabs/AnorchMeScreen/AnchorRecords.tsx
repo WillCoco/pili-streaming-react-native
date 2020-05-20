@@ -151,36 +151,42 @@ const AnchorRecords = (props) => {
    * 点击下载按钮
    */
   const onDownloadPress = (url) => {
-      const t = Toast.loading('')
-      // const saveImageUrl = 'https://gslb.miaopai.com/stream/9Q5ADAp2v5NHtQIeQT7t461VkNPxvC2T.mp4?vend=miaopai&';
-      if(Platform.OS === 'ios') {
-          CameraRoll.saveToCameraRoll(url).then(function(result) {
-              portal.remove(t)
-              Toast.success("视频已保存至相册")
-          }).catch(function(error) {
-              console.log(error, '67890')
-              portal.remove(t)
-              Toast.fail("视频保存失败")
-          });
-      }else {
-          const storeLocation = `${RNFS.DocumentDirectoryPath}`;
-          let pathName = new Date().getTime() + ".mp4";
-          let downloadDest = `${storeLocation}/${pathName}`;
-          const ret = RNFS.downloadFile({fromUrl:url,toFile:downloadDest});
-          ret.promise.then(res => {
-              if(res && res.statusCode === 200){
-                  if(isPermissionGranted) {
-                      CameraRoll.saveToCameraRoll("file://" + downloadDest).then(function(result) {
-                          portal.remove(t)
-                          Toast.success("视频已保存至相册")
-                      }).catch(function(error) {
-                          portal.remove(t)
-                          Toast.fail("视频保存失败")
-                      });
+      const t = Toast.loading('');
+      if(url) {
+          // const saveImageUrl = 'https://gslb.miaopai.com/stream/9Q5ADAp2v5NHtQIeQT7t461VkNPxvC2T.mp4?vend=miaopai&';
+          if(Platform.OS === 'ios') {
+              CameraRoll.saveToCameraRoll(url).then(function(result) {
+                  portal.remove(t)
+                  Toast.success("视频已保存至相册")
+              }).catch(function(error) {
+                  console.log(error, '67890')
+                  portal.remove(t)
+                  Toast.fail("视频保存失败")
+              });
+          }else {
+              const storeLocation = `${RNFS.DocumentDirectoryPath}`;
+              let pathName = new Date().getTime() + ".mp4";
+              let downloadDest = `${storeLocation}/${pathName}`;
+              const ret = RNFS.downloadFile({fromUrl:url,toFile:downloadDest});
+              ret.promise.then(res => {
+                  if(res && res.statusCode === 200){
+                      if(isPermissionGranted) {
+                          CameraRoll.saveToCameraRoll("file://" + downloadDest).then(function(result) {
+                              portal.remove(t)
+                              Toast.success("视频已保存至相册")
+                          }).catch(function(error) {
+                              portal.remove(t)
+                              Toast.fail("视频保存失败")
+                          });
+                      }
                   }
-              }
-          })
+              })
+          }
+      }else {
+          portal.remove(t)
+          Toast.fail("视频不存在")
       }
+
   };
 
   return (

@@ -7,13 +7,14 @@ import pxToDp from '../../utils/px2dp'
 import waterFall from '../../utils/waterFall'
 import WorkCard from '../../components/WorkCard/WorkCard'
 import checkIsBottom from '../../utils/checkIsBottom'
+import LoadMore from '../../components/LoadMore/LoadMore'
 
 export default function LikeContent() {
   const navigation = useNavigation()
   const pageSize = 20
   let pageNoRef = useRef(1)
   let hasMoreRef = useRef(true)
-  const [worksList, setWorksList] = useState([])
+  const [worksList, setWorksList]: Array<any> = useState([])
   const [maxHeight, setMaxHeight] = useState(0)
   const [isEmpty, setIsEmpty] = useState(false)
 
@@ -48,6 +49,10 @@ export default function LikeContent() {
 
       let tempList = [...worksList, ...waterFall(res.worksInfoList).items]
       let maxH = waterFall(tempList).maxHeight
+
+      const totalPage = Math.ceil(res.totalCount / pageSize)
+
+      hasMoreRef.current = pageNoRef.current < totalPage
 
       setWorksList(tempList)
       setMaxHeight(maxH)
@@ -88,6 +93,7 @@ export default function LikeContent() {
           })
         }
       </View>
+      <LoadMore hasMore={hasMoreRef.current} />
     </ScrollView>
   )
 }

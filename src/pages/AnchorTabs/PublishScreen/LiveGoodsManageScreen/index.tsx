@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {PrimaryText, SmallText, T1, scale} from 'react-native-normalization-text';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute, CommonActions, Route} from '@react-navigation/native';
 import withPage from '../../../../components/HOCs/withPage';
 import {vw} from '../../../../utils/metric';
 import {Colors} from '../../../../constants/Theme';
@@ -22,7 +22,7 @@ import NavBar from '../../../../components/NavBar';
 import ButtonRadius from '../../../../components/Buttons/ButtonRadius';
 import PagingList from '../../../../components/PagingList';
 import CheckBox from '../../../../components/CheckBox';
-import {startLive, } from '../../../../actions/live';
+import {startLive, updateLiveConfig} from '../../../../actions/live';
 import {getWareHouseGoods, AddGoodsTargetType, goodsCheckedFormat} from '../../../../actions/shop';
 // import Toast from 'react-native-tiny-toast';
 import {Toast, Portal} from '@ant-design/react-native';
@@ -35,7 +35,7 @@ const PAGE_SIZE = 14;
 const INIT_PAGE_NO = 1;
 
 const LiveGoodsManage = (props: any) =>  {
-  const {navigate, goBack} = useNavigation();
+  const {navigate, goBack, dispatch: navDisPatch, reset} = useNavigation();
   const dispatch = useDispatch();
 
   /**
@@ -232,7 +232,7 @@ const LiveGoodsManage = (props: any) =>  {
     if (!isVaildData()) {
       return;
     }
-    
+
     const goodsIdList = checkedList.map(d => d.goodsId);
     console.log(goodsIdList, '选中要去直播卖的商品');
 
@@ -246,6 +246,9 @@ const LiveGoodsManage = (props: any) =>  {
     Portal.remove(loading);
 
     if (r) {
+      // 重置开播参数
+      dispatch(updateLiveConfig())
+
       // 跳转
       navigate(nextNav, {
         groupID: r?.groupId,

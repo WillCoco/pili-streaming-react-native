@@ -56,10 +56,10 @@ const TrailersCard = (props: {
               <Image source={images.iconShare} style={styles.shareImg} />
               <T2 style={styles.buttonText} color="grey">分享</T2>
             </TouchableOpacity>
-            <TouchableOpacity onPress={props.onRemindPress} style={styles.operationButton}>
-              <Image source={props.remind ? images.iconHasRemind : images.iconRemind} style={styles.remindImg} />
-              <T2 style={styles.buttonText} color="grey">{props.remind ? '已提醒' : '开播提醒'}</T2>
-            </TouchableOpacity>
+            {/*<TouchableOpacity onPress={props.onRemindPress} style={styles.operationButton}>*/}
+              {/*<Image source={props.remind ? images.iconHasRemind : images.iconRemind} style={styles.remindImg} />*/}
+              {/*<T2 style={styles.buttonText} color="grey">{props.remind ? '已提醒' : '开播提醒'}</T2>*/}
+            {/*</TouchableOpacity>*/}
           </View>
           <Text style={styles.punctuality} onPress={() => navigate('CreateLiveScreen')}>准时开播</Text>
         </View>
@@ -171,7 +171,6 @@ const AnchorTrailers = () =>  {
               onPress={() => {
                 navigate('LivingRoomScreen', {
                   mediaType: MediaType.teaser,
-                  // liveTime: new Date(liveTime).getTime()
                 });
 
                 // 更新房间信息
@@ -192,23 +191,6 @@ const AnchorTrailers = () =>  {
         columnWrapperStyle={{justifyContent: 'space-between'}}
         contentContainerStyle={styles.pagingListWrapper}
       />
-      {/* <ScrollView style={styles.myTrailersPage}>
-        {
-          trailersList.map((item, index) => {
-            return (
-              <TrailersCard
-                key={`_${index}`}
-                img={item.img}
-                title={item.title}
-                remind={item.remind}
-                liveTime={item.liveTime}
-                onSharePress={onSharePress}
-                onRemindPress={() => onRemindPress(item.remind, index)}
-              />
-            )
-          })
-        }
-      </ScrollView> */}
     </View>
   )
 };
