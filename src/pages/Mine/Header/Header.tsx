@@ -17,8 +17,18 @@ import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
 const defaultAvatar = require('../../../assets/mine-image/default_avatar.png')
 
-function Header(props: { userData: { userInfo: any; isLogin: any }; publicData: { statusBarHeight: any } }) {
-  const navigation = useNavigation()
+interface Props {
+  userData: {
+    userInfo: any
+    isLogin: any
+  }
+  publicData: {
+    statusBarHeight: any
+  }
+}
+
+function Header(props: Props) {
+  const navigation: any = useNavigation()
   const { userInfo, isLogin } = props.userData
   const { statusBarHeight } = props.publicData
 

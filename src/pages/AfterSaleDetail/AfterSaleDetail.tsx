@@ -4,15 +4,18 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
 import { apiReturnOrderDetail } from '../../service/api'
 
+import pxToDp from '../../utils/px2dp'
+
 import ShopCard from './ShopCard/ShopCard'
 import AddiInfoCard from './AddiInfoCard/AddiInfoCard'
 import ReturnSchedule from './ReturnSchedule/ReturnSchedule'
-import pxToDp from '../../utils/px2dp'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
 export default function AfterSaleDetail() {
-  const navigation = useNavigation()
-  const route = useRoute()
-  const [orderInfo, setOrderInfo] = useState({})
+  const route: any = useRoute()
+  const navigation: any = useNavigation()
+  const [orderInfo, setOrderInfo]: any = useState({})
+  const [netWorkErr, setNetWorkErr] = useState(false)
 
   navigation.setOptions({
     headerTitle: `售后详情`,
@@ -26,17 +29,16 @@ export default function AfterSaleDetail() {
   })
 
   useEffect(() => {
-    navigation.addListener('focus', () => {
-      getOrderInfo()
-    })
+    getOrderInfo()
   }, [])
 
   /**
    * 获取订单详情
    */
   const getOrderInfo = () => {
-    apiReturnOrderDetail({ id: route.params.id }).then(res => {
+    apiReturnOrderDetail({ id: route.params.id }).then((res: { orderAfterSalesProcessVOList: any[] }) => {
       console.log('售后详情', res)
+      setNetWorkErr(false)
       res.orderAfterSalesProcessVOList.forEach((item: any) => {
         switch (item.type) {
           case 1:
@@ -72,8 +74,13 @@ export default function AfterSaleDetail() {
       })
 
       setOrderInfo(res)
+    }).catch((err: any) => {
+      console.log('售后详情', err)
+      setNetWorkErr(true)
     })
   }
+
+  if (netWorkErr) return <NetWorkErr reload={getOrderInfo} />
 
   return (
     <ScrollView>
@@ -87,7 +94,7 @@ export default function AfterSaleDetail() {
       <View style={styles.action}>
         <Text style={styles.btn}>取消申请</Text>
         {
-          (orderInfo.processType !== 2 && orderInfo.processType !== 4 || orderInfo.type ===  1) 
+          (orderInfo.processType !== 2 && orderInfo.processType !== 4 || orderInfo.type === 1)
           && <Text style={[styles.btn, { backgroundColor: Colors.basicColor }]}>填写快递单号</Text>
         }
       </View>
@@ -96,9 +103,6 @@ export default function AfterSaleDetail() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-
-  },
   action: {
     height: pxToDp(140),
     backgroundColor: Colors.whiteColor,

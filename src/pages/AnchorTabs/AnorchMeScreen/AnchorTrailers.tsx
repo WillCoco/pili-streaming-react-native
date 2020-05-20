@@ -24,6 +24,7 @@ import { getAdvanceList, updateLivingInfo } from '../../../actions/live';
 import pxToDp from '../../../utils/px2dp';
 import {EMPTY_OBJ} from '../../../constants/freeze';
 import { MediaType } from '../../../liveTypes';
+import share from '../../../utils/share';
 
 const ROW_HEIGHT = pxToDp(300);
 const INIT_PAGE_NO = 1;
@@ -38,7 +39,9 @@ const TrailersCard = (props: {
   onRemindPress: () => void
   onPress: () => void
 }) => {
-  return (
+    const {navigate} = useNavigation();
+
+    return (
     <TouchableOpacity
       style={{flexDirection: 'row', width: pxToDp(690), borderRadius: pxToDp(pad * 2), overflow: 'hidden', backgroundColor: Colors.whiteColor, marginLeft: pxToDp(pad * 3), marginTop: (pad * 3)}}
       onPress={props.onPress}
@@ -53,12 +56,12 @@ const TrailersCard = (props: {
               <Image source={images.iconShare} style={styles.shareImg} />
               <T2 style={styles.buttonText} color="grey">分享</T2>
             </TouchableOpacity>
-            <TouchableOpacity onPress={props.onRemindPress} style={styles.operationButton}>
-              <Image source={props.remind ? images.iconHasRemind : images.iconRemind} style={styles.remindImg} />
-              <T2 style={styles.buttonText} color="grey">{props.remind ? '已提醒' : '开播提醒'}</T2>
-            </TouchableOpacity>
+            {/*<TouchableOpacity onPress={props.onRemindPress} style={styles.operationButton}>*/}
+              {/*<Image source={props.remind ? images.iconHasRemind : images.iconRemind} style={styles.remindImg} />*/}
+              {/*<T2 style={styles.buttonText} color="grey">{props.remind ? '已提醒' : '开播提醒'}</T2>*/}
+            {/*</TouchableOpacity>*/}
           </View>
-          <Text style={styles.punctuality}>准时开播</Text>
+          <Text style={styles.punctuality} onPress={() => navigate('CreateLiveScreen')}>准时开播</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -87,8 +90,13 @@ const AnchorTrailers = () =>  {
   /**
    * 点击分享按钮
    */
-  const onSharePress = () => {
-    alert('分享预告')
+  const onSharePress = (url) => {
+      share({
+          title: '分享',
+          url,
+          failOnCancel: false,
+      }).then((res) => { console.log(res) })
+          .catch((err) => { err && console.log(err); });
   };
 
   /**
@@ -158,7 +166,7 @@ const AnchorTrailers = () =>  {
               title={title}
               remind={item.remind}
               liveTime={liveTime}
-              onSharePress={onSharePress}
+              onSharePress={() => onSharePress('假的假的假的')}
               onRemindPress={() => onRemindPress(item.remind, index)}
               onPress={() => {
                 navigate('LivingRoomScreen', {

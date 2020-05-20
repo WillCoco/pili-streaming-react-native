@@ -2,26 +2,27 @@ import React, { useState, useEffect } from 'react'
 import { ScrollView, SafeAreaView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
-
 import { setCartList, toggleCartAction } from '../../actions/cart'
 import { apiCartList, apiChangeCart, apiDelCartItem } from '../../service/api'
 
+import pxToDp from '../../utils/px2dp'
 import Toast from 'react-native-tiny-toast'
 
-import DefaultContent from './DefaultContent/DefaultContent'
 import CartItem from '../../components/CartItem/CartItem'
-import CartFooterAction from '../../components/CartFooterAction/CartFooterAction'
-import pxToDp from '../../utils/px2dp'
+import DefaultContent from './DefaultContent/DefaultContent'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+import CartFooterAction from '../../components/CartFooterAction/CartFooterAction'
 
 function Cart(props: any) {
-  const { isLogin } = props.userData
-  const { cartList } = props.cartData
-  const navigation = useNavigation()
-  const [isEmpty, setIsEmpty] = useState(true)
-  const [allCartGoodsInfo, setAllCartGoodsInfo] = useState({})
-  const [isErr, setIsErr] = useState(false)
   const { userData, cartData } = props
+  const { isLogin } = userData
+  const { cartList } = cartData
+
+  const navigation: any = useNavigation()
+
+  const [isEmpty, setIsEmpty] = useState(true)
+  const [netWorkErr, setNetWorkErr] = useState(false)
+  const [allCartGoodsInfo, setAllCartGoodsInfo]: any = useState({})
 
   useEffect(() => {
     if (isLogin) {
@@ -47,16 +48,17 @@ function Cart(props: any) {
   const getCartList = () => {
     apiCartList().then((res: any) => {
       console.log('购物车列表', res)
-      if (res.count) {
-        setIsEmpty(false)
-        props.dispatch(setCartList(res))
-        calcAllGoodsInfo(res)
-      } else {
-        // 购物车为空
+      setNetWorkErr(false)
+      if (!res.count) {
         setIsEmpty(true)
+        return
       }
+
+      calcAllGoodsInfo(res)
+      props.dispatch(setCartList(res))
     }).catch((err: any) => {
-      setIsErr(true)
+      console.log('购物车列表', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -253,7 +255,7 @@ function Cart(props: any) {
       cart_ids: selectedCartIds.toString()
     }
 
-    apiDelCartItem(params).then(res => {
+    apiDelCartItem(params).then((res: any) => {
       console.log('删除购物车商品', res)
 
       if (res === '操作成功') {
@@ -309,7 +311,7 @@ function Cart(props: any) {
 
   if (!userData.isLogin) return <DefaultContent type='notLogin' nextAction={toLogin} />
 
-  if (isErr) return <NetWorkErr />
+  if (netWorkErr) return <NetWorkErr reload={getCartList} />
 
   if (isEmpty) return <DefaultContent type='empty' nextAction={toHome} />
 

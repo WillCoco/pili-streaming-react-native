@@ -2,19 +2,24 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, ScrollView, ImageBackground, Image, TouchableOpacity, PixelRatio } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
-import { apiGetOrderDetail, apiCancelOrder, apiReminderDeliverGoods, apiConfirmReceiveGoods, apiExtendReceiveGoods, apiQueryExpress } from '../../service/api'
+import { apiGetOrderDetail, apiCancelOrder, apiReminderDeliverGoods, apiConfirmReceiveGoods, apiExtendReceiveGoods, apiQueryExpress, apiPayOrder } from '../../service/api'
 import pxToDp from '../../utils/px2dp'
 import Toast from 'react-native-tiny-toast'
 
 import GoodsCard from './GoodsCard/GoodsCard'
 import OrderCard from './OrderCard/OrderCard'
 import ExpressStepper from '../../components/ExpressStepper/ExpressStepper'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
 export default function OrderDetail() {
-  const id = useRoute().params.id
-  const navigation = useNavigation()
+  const route: any = useRoute()
+  const navigation: any = useNavigation()
+
+  const { id } = route
+
+  const [, setNetWorkErr] = useState(false)
   const [orderDetail, setOrderDetail]: any = useState({})
-  const [expressList, setExpressList] = useState([])
+  const [expressList, setExpressList]: Array<any> = useState([])
 
   navigation.setOptions({
     headerTitle: `订单详情`,
@@ -37,11 +42,15 @@ export default function OrderDetail() {
   const getOrderDetail = () => {
     apiGetOrderDetail({ orderId: id }).then((res: any) => {
       console.log('订单详情', res)
+      setNetWorkErr(false)
       setOrderDetail(res)
 
       if (res.deliveryNo && res.deliveryComCode) {
         queryExpress(res.deliveryNo, res.deliveryComCode, res.receivedTel)
       }
+    }).catch((err: any) => {
+      console.log('订单详情', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -49,11 +58,13 @@ export default function OrderDetail() {
    * 取消订单
    */
   const cancelOrder = () => {
-    apiCancelOrder({ orderId: orderDetail.id }).then(res => {
+    apiCancelOrder({ orderId: orderDetail.id }).then(() => {
       Toast.showSuccess('已取消该订单')
       setTimeout(() => {
         navigation.goBack()
       }, 1500)
+    }).catch((err: any) => {
+      console.log(err)
     })
   }
 
@@ -61,15 +72,37 @@ export default function OrderDetail() {
    * 去付款
    */
   const toPay = () => {
-    console.log('去支付')
+    let loading = Toast.showLoading('')
+    apiPayOrder({ id, payType: 2 }).then((res: any) => {
+      Toast.hide(loading)
+
+      console.log('去支付', res)
+
+      if (res.code !== 200) {
+        Toast.show('创建订单失败')
+        return
+      }
+
+      let payURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
+
+      for (let item in res.data) {
+        payURL += '&' + item + '=' + res.data[item]
+      }
+
+      navigation.push('PayWebView', { url: payURL })
+    }).catch((err: any) => {
+      console.log(err.message)
+    })
   }
 
   /**
    * 提醒发货
    */
   const remindDelivery = () => {
-    apiReminderDeliverGoods({ orderId: orderDetail.id }).then(res => {
+    apiReminderDeliverGoods({ orderId: orderDetail.id }).then(() => {
       Toast.showSuccess('已提醒卖家')
+    }).catch((err: any) => {
+      console.log(err)
     })
   }
 
@@ -77,8 +110,10 @@ export default function OrderDetail() {
    * 延迟收货
    */
   const extendReceiveGoods = () => {
-    apiExtendReceiveGoods({ orderId: orderDetail.id }).then(res => {
+    apiExtendReceiveGoods({ orderId: orderDetail.id }).then(() => {
       Toast.showSuccess('已延长收货时间')
+    }).catch((err: any) => {
+      console.log(err)
     })
   }
 
@@ -91,10 +126,12 @@ export default function OrderDetail() {
       invoiceNo,
       customerName: tel.substr(7)
     }
-    
+
     apiQueryExpress(params).then((res: any) => {
       console.log('物流信息', res)
       setExpressList(res.data.reverse())
+    }).catch((err: any) => {
+      console.log(err)
     })
   }
 
@@ -102,11 +139,13 @@ export default function OrderDetail() {
    * 确认收货
    */
   const confirmTheGoods = () => {
-    apiConfirmReceiveGoods({ orderId: orderDetail.id }).then(res => {
+    apiConfirmReceiveGoods({ orderId: orderDetail.id }).then(() => {
       Toast.showSuccess('已完成收货')
       setTimeout(() => {
         navigation.goBack()
       }, 1500)
+    }).catch((err: any) => {
+      console.log(err)
     })
   }
 
@@ -117,6 +156,8 @@ export default function OrderDetail() {
     const id = orderDetail.goodsList[0].goodsId
     navigation.push('GoodsInfo', { id })
   }
+
+  if (NetWorkErr) return <NetWorkErr reload={getOrderDetail} />
 
   return (
     <ScrollView>
@@ -151,8 +192,8 @@ export default function OrderDetail() {
       {/* 物流信息 */}
       {
         orderDetail.deliveryNo && orderDetail.deliveryComCode && <ExpressStepper
-        expressList={expressList}
-      />
+          expressList={expressList}
+        />
       }
 
       {/* 商品信息 */}
@@ -164,14 +205,14 @@ export default function OrderDetail() {
       {/* 订单操作 */}
       <View style={styles.orderActionBar}>
 
-        <TouchableOpacity style={styles.actionItem} onPress={() => {}}>
+        <TouchableOpacity style={styles.actionItem} onPress={() => { }}>
           <View style={styles.actionItem}>
             <Image source={require('../../assets/order-image/icon_kefu.png')} style={styles.icon} />
             <Text style={styles.btnText}>联系客服</Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.actionItem} onPress={() => {}}>
+        <TouchableOpacity style={styles.actionItem} onPress={() => { }}>
           <View style={styles.actionItem}>
             <Image source={require('../../assets/order-image/icon_phone.png')} style={styles.icon} />
             <Text style={styles.btnText}>立即购买</Text>

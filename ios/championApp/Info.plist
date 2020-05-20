@@ -29,7 +29,7 @@
 			<string>com.champion.mall</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>champiom</string>
+				<string>champion</string>
 			</array>
 		</dict>
 	</array>

@@ -1,19 +1,19 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableWithoutFeedback, Image } from 'react-native'
+import { View, Text, StyleSheet, TouchableWithoutFeedback, Image, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 
 export default function ClassifyContent(props: { goodsList: any }) {
   const { goodsList } = props
-  const navigation = useNavigation()
+  const navigation: any = useNavigation()
 
   const toGoodsInfo = (id: number) => {
     navigation.push('GoodsInfo', { id })
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.goodsList}>
         {
           goodsList && goodsList.map((item: any, index: number) => {
@@ -28,7 +28,7 @@ export default function ClassifyContent(props: { goodsList: any }) {
           })
         }
       </View>
-    </View>
+    </ScrollView>
   )
 }
 

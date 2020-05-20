@@ -9,6 +9,7 @@ import Toast from 'react-native-tiny-toast';
 import calcStrLength from '../utils/calcStrLength';
 import {safeStringify} from '../utils/saftyFn';
 import { EMPTY_OBJ } from '../constants/freeze';
+import {isSucceed} from "../utils/fetchTools";
 
 /* ----------- 店铺相关 ----------- */
 /**
@@ -314,7 +315,7 @@ export const getWareHouseGoods = (params: GetGoods2WareHouseParams) => {
  * 删除预组货商品
  */
 interface DelGoods2WareHouseParams {
-    "goodsIdList": Array,
+    "goodsIdList": Array<number>,
 }
 export const delWareHouseGoods = (params: DelGoods2WareHouseParams) => {
     return async function (dispatch: Dispatch<any>, getState: any): Promise<any> {
@@ -324,7 +325,9 @@ export const delWareHouseGoods = (params: DelGoods2WareHouseParams) => {
             anchorId
         })
             .then(r => {
-                return Promise.resolve(true);
+                if(isSucceed(r)) {
+                    return Promise.resolve(true);
+                }
             })
             .catch(err => {
                 console.log(`delWareHouseGoods error: ${err}`)
@@ -337,7 +340,7 @@ export const delWareHouseGoods = (params: DelGoods2WareHouseParams) => {
  * 预组货添加商品到橱窗
  */
 interface AddGroup2WareHouseParams {
-    "goodsIdList": Array,
+    "goodsIdList": Array<number>,
 }
 export const addGroupHouseGoods = (params: AddGroup2WareHouseParams) => {
     return async function (dispatch: Dispatch<any>, getState: any): Promise<any> {
@@ -347,7 +350,9 @@ export const addGroupHouseGoods = (params: AddGroup2WareHouseParams) => {
             anchorId
         })
             .then(r => {
-                return Promise.resolve(true);
+                if(isSucceed(r)) {
+                    return Promise.resolve(true);
+                }
             })
             .catch(err => {
                 console.log(`AddGroupHouseGoods error: ${err}`)
@@ -361,7 +366,7 @@ export const addGroupHouseGoods = (params: AddGroup2WareHouseParams) => {
  * 预组货删除商品到橱窗
  */
 interface DelGroup2WareHouseParams {
-    "goodsIdList": Array,
+    "goodsIdList": Array<number>,
 }
 export const delGroupHouseGoods = (params: DelGroup2WareHouseParams) => {
     return async function (dispatch: Dispatch<any>, getState: any): Promise<any> {
@@ -371,7 +376,9 @@ export const delGroupHouseGoods = (params: DelGroup2WareHouseParams) => {
             anchorId
         })
             .then(r => {
-                return Promise.resolve(true);
+                if(isSucceed(r)) {
+                    return Promise.resolve(true);
+                }
             })
             .catch(err => {
                 console.log(`DelGroup2WareHouseParams error: ${err}`)

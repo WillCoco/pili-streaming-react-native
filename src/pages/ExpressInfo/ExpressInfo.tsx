@@ -8,7 +8,7 @@ import { Colors } from '../../constants/Theme'
 export default function ExpressInfo() {
 
   return (
-    <View>
+    <>
       <View style={styles.container}>
         <Image source={require('../../assets/login-image/logo.png')} style={styles.logo} />
         <View style={styles.content}>
@@ -18,7 +18,7 @@ export default function ExpressInfo() {
         </View>
       </View>
       <ExpressStepper />
-    </View>
+    </>
   )
 }
 

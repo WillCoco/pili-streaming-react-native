@@ -70,23 +70,9 @@ function ShareBar(props: { hideShareBar?: any; dispatch?: any; goodsId?: any; us
   }
 
   /**
-   * 生成小程序码
-   */
-  const createMiniAppCode = () => {
-
-  }
-
-  /**
-   * 生成图文卡片
-   */
-  const createCrad = () => {
-
-  }
-
-  /**
    * 生成空间海报
    */
-  const createPoster = async () => {
+  const createPoster = async (shareType: number) => {
     let userInfo: any = {}
 
     if (!userId) {
@@ -96,7 +82,8 @@ function ShareBar(props: { hideShareBar?: any; dispatch?: any; goodsId?: any; us
 
     const params = {
       goodsId,
-      userId: userId || userInfo.userId
+      userId: userId || userInfo.userId,
+      shareType
     }
 
     apiCreatePoster(params).then((res: any) => {
@@ -168,15 +155,15 @@ function ShareBar(props: { hideShareBar?: any; dispatch?: any; goodsId?: any; us
           <Image source={require('../../../assets/goods-image/icon_wechat.png')} style={styles.icon} />
           <Text style={styles.shareText}>立即分享</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.item} onPress={createMiniAppCode}>
+        <TouchableOpacity style={styles.item} onPress={() => createPoster(2)}>
           <Image source={require('../../../assets/goods-image/icon_miniapp.png')} style={styles.icon} />
           <Text style={styles.shareText}>生成小程序码</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.item} onPress={createCrad}>
+        <TouchableOpacity style={styles.item} onPress={() => createPoster(3)}>
           <Image source={require('../../../assets/goods-image/icon_card.png')} style={styles.icon} />
           <Text style={styles.shareText}>生成图文卡片</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.item} onPress={createPoster}>
+        <TouchableOpacity style={styles.item} onPress={() => createPoster(1)}>
           <Image source={require('../../../assets/goods-image/icon_poster.png')} style={styles.icon} />
           <Text style={styles.shareText}>生成空间海报</Text>
         </TouchableOpacity>

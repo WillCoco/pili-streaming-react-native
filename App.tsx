@@ -30,7 +30,6 @@ import CreateOrder from './src/pages/CreateOrder/CreateOrder'
 import CreateOrEditAddr from './src/pages/CreateOrEditAddr/CreateOrEditAddr'
 import AddressList from './src/pages/AddressList/AddressList'
 import OrderList from './src/pages/OrderList/OrderList'
-import AccountInfo from './src/pages/AccountInfo/AccountInfo'
 import CollectGoods from './src/pages/CollectGoods/CollectGoods'
 import LikeContent from './src/pages/LikeContent/LikeContent'
 import Coupon from './src/pages/Coupon/Coupon'
@@ -173,7 +172,6 @@ export default function App(props: { skipLoadingScreen: any; }) {
                     <Stack.Screen name='SelectGoods' component={SelectGoods} />
                     <Stack.Screen name='SelectGoodsInfo' component={SelectGoodsInfo} />
                     <Stack.Screen name='OrderList' component={OrderList} />
-                    <Stack.Screen name='AccountInfo' component={AccountInfo} />
                     <Stack.Screen name='CollectGoods' component={CollectGoods} />
                     <Stack.Screen name='LikeContent' component={LikeContent} />
                     <Stack.Screen name='Coupon' component={Coupon} />

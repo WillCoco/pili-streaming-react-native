@@ -73,7 +73,7 @@ function Logion(props: any) {
 
     const loading = Toast.showLoading('')
 
-    apiSendVerCode({ userTel: telNum }).then(res => {
+    apiSendVerCode({ userTel: telNum }).then((res: any) => {
       console.log('发送验证码', res)
 
       setHasRegister(res)
@@ -92,6 +92,8 @@ function Logion(props: any) {
           setCountDown(60)
         }
       }, 1000)
+    }).catch((err: any) => {
+      console.log('发送验证码', err)
     })
   }
 
@@ -132,6 +134,8 @@ function Logion(props: any) {
           navigation.goBack()
         }, 1500)
       }
+    }).catch((err: any) => {
+      console.log('注册登录', err)
     })
   }
 

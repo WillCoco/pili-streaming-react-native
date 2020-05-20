@@ -5,22 +5,26 @@ import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab
 
 import { apiSelectGoodsTags, apiSelectGoodsList } from '../../service/api'
 
-import GoodsCard from './GoodsCard/GoodsCard'
-
 import { Colors } from '../../constants/Theme'
 import checkIsBottom from '../../utils/checkIsBottom'
+
+import GoodsCard from './GoodsCard/GoodsCard'
 import LoadMore from '../../components/LoadMore/LoadMore'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+
+const pageSize = 20
 
 export default function SelectGoods() {
-  const pageSize = 20
-  let pageNoRef = useRef(1)
-  let hasMoreRef = useRef(true)
-  let indexRef = useRef(0)
-  let goodsListRef = useRef([])
-  const navigation = useNavigation()
-  const [tags, setTags] = useState([])
-  const [goodsList, setGoodsList] = useState([])
-  const [activeIndex, setActiveIndex] = useState(0)
+  const navigation: any = useNavigation()
+
+  const indexRef: any = useRef(0)
+  const pageNoRef: any = useRef(1)
+  const hasMoreRef: any = useRef(true)
+  const goodsListRef: any = useRef([])
+  
+  const [tags, setTags]: Array<any> = useState([])
+  const [netWorkErr, setNetWorkErr] = useState(false)
+  const [goodsList, setGoodsList]: Array<any> = useState([])
 
   navigation.setOptions({
     headerTitle: '精选好物',
@@ -34,12 +38,23 @@ export default function SelectGoods() {
   })
 
   useEffect(() => {
+    initData()
+  }, [])
+
+  /**
+   * 初始化
+   */
+  const initData = () => {
     apiSelectGoodsTags().then((res: any) => {
       console.log('精选好物标签', res)
+      setNetWorkErr(false)
       setTags(res.category)
       getGoodsList(res.category[0].cat_id)
+    }).catch((err: any) => {
+      console.log('精选好物标签', err)
+      setNetWorkErr(true)
     })
-  }, [])
+  }
 
   /**
    * 切换 TAB
@@ -98,6 +113,8 @@ export default function SelectGoods() {
 
     setGoodsList(JSON.parse(JSON.stringify(goodsList)))
   }
+
+  if (netWorkErr) return <NetWorkErr reload={initData} />
 
   return (
     <ScrollableTabView
