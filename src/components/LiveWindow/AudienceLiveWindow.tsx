@@ -69,7 +69,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
   const pullUrl = useSelector((state: any) => state?.live?.livingInfo?.pullUrl) || '';
 
   // 主播信息
-  const [anchorInfo, setAnchorInfo]: [any, any] = React.useState({})
+  const [anchorInfo, setAnchorInfo]: [any, any] = React.useState({});
 
   /**
    * 进入直播间，获取拉流地址 TODO:
@@ -244,7 +244,6 @@ const LiveWindow = (props: LiveWindowProps): any => {
           onPressShopBag={() => shopCardAnim(true)} 
         />
       </View>
-
       {!!noticeBubbleText ? <NoticeBubble text={noticeBubbleText} /> : null}
       <LiveIntro
         showFollowButton

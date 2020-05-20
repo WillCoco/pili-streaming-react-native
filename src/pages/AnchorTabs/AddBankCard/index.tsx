@@ -62,9 +62,13 @@ const AddBankCard = (props: any) =>  {
 
       setCardNum('');
       Toast.show('绑定成功');
-      apiGetUserBankCards().then(res => {
-        dispatch(updateBankCards(res));
-      })
+      apiGetUserBankCards()
+        .then((res: any) => {
+          dispatch(updateBankCards(res));
+        })
+        .catch((err: any) => {
+          console.log(err);
+        })
       goBack();
       
     }).catch((err: any) => {

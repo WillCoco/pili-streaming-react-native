@@ -22,6 +22,9 @@ import MessageRow from './MessageRow'
 import PagingList from '../../../components/PagingList'
 import {apiGetUserChatList} from '../../../service/api'
 import {useDispatch, useSelector} from 'react-redux'
+import {isSucceed} from '../../../utils/fetchTools'
+import { EMPTY_ARR } from '../../../constants/freeze'
+
 
 const mockList = [
   {
@@ -54,7 +57,7 @@ function Message(props) {
   const [messageList, setMessageList] = useState([]) // 通知
   const [noticeList, setNoticeList] = useState([]) // 公告
   const [activeIndex, setActiveIndex] = useState(0)
-  const anchorId = useSelector(state => state?.anchorData?.anchorInfo?.anchorData)
+  const anchorId = useSelector(state => state?.anchorData?.anchorInfo?.anchorId)
 
   /**
    * 全部标记已读
@@ -87,19 +90,31 @@ function Message(props) {
       pageNo: 1,
       pageSize: 10,
     }
-    const result = await apiGetUserChatList(params).then(res => {
-      return res?.records
-    })
-    return Promise.resolve({
-      result: mockList
-    })
+    const result = await apiGetUserChatList(params)
+      .catch((err: any) => console.log('getUserChatList:', err))
+    
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.data?.records || EMPTY_ARR})
+    }
+    return Promise.resolve({result: EMPTY_ARR})
   }
 
   /**
    * 更多
    */
-  const onEndReached = () => {
+  const onEndReached = async (pageNo: number, pageSize: number) => {
+    const params = {
+      anchorId,
+      pageNo: 1,
+      pageSize: 10,
+    }
+    const result = await apiGetUserChatList(params)
+      .catch((err: any) => console.log('getUserChatList:', err))
     
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.data?.records || EMPTY_ARR})
+    }
+    return Promise.resolve({result: EMPTY_ARR})
   }
 
   return (
@@ -129,10 +144,9 @@ function Message(props) {
               <PagingList
                 key={`tab-${index}`} tabLabel={item + `(${0})`} // TODO:数字
                 // ref={c => plist.current = c}
-                size={10}
-                initListData={mockList}
+                size={14}
+                // initListData={mockList}
                 renderItem={({item, index}: any) => {
-                  console.log(item, 'itemmmmmmm')
                   return (
                     <MessageRow 
                       {...item}

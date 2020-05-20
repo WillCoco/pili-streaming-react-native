@@ -59,9 +59,10 @@ const AnorchMeScreen = () =>  {
    */
   React.useEffect(() => {
     apiAnchorHomePage({userId})
-      .then(res => {
+      .then((res: any) => {
         dispatch(setAnchorInfo(res))
       })
+      .catch(console.warn)
   }, []);
 
   /**

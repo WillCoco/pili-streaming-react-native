@@ -24,6 +24,8 @@ import Badge from '../../../components/Badge';
 import {pad} from '../../../constants/Layout';
 import {Colors} from '../../../constants/Theme';
 import {apiGetUserAssetsStatistics} from '../../../service/api';
+import { useDispatch } from 'react-redux';
+import {setAnchorAssetsInfo} from '../../../actions/asset';
 
 const ToolCell = (props: {
   text: string,
@@ -42,13 +44,18 @@ const ToolCell = (props: {
 
 const MyShopScreen = (props) =>  {
   const {navigate, reset, goBack} = useNavigation();
-  const [assetsInfo, setAssetsInfo] = React.useState({})
+  const [assetsInfo, setAssetsInfo] = React.useState({});
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
-    apiGetUserAssetsStatistics().then(res => {
-      console.log(res);
-      setAssetsInfo(res);
-    })
+    apiGetUserAssetsStatistics()
+      .then((res: any) => {
+        setAssetsInfo(res);
+        dispatch(setAnchorAssetsInfo(res));
+      })
+      .catch((err: any) => {
+        console.log('anchorAsset:', err);
+      })
   }, []);
 
   /**

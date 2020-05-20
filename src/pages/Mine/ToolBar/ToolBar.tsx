@@ -8,13 +8,12 @@ import {useSelector} from 'react-redux'
 
 export default function ToolBar() {
   const navigation = useNavigation()
-  const userRole = useSelector(state => state?.userData?.userInfo?.userRole) // 用户角色
+  const userRole = useSelector(state => state?.userData?.userInfo?.userRole) || '' // 用户角色
 
   const toLive = () => {
     // userRole可能为undefined, 空指针  @hicks
     if (userRole.indexOf('2') > -1) { // 是主播，前往直播首页
       navigation.push('AnchorTabs')
-      navigation.push('BeAnchor')
     } else { // 不是主播，去开通
       navigation.push('BeAnchor')
     }

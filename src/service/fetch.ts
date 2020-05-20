@@ -58,7 +58,7 @@ export const get = (path: any, data?: any, onlyData: boolean = true) => {
     .then(async (response: any) => {
       console.log(response, '=======')
 
-      if (response.timeout) {
+      if (response?.timeout) {
         Toast.show("连接超时");
         return;
       }

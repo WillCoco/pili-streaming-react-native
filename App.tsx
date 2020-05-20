@@ -190,7 +190,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                     <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
                     <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false, gestureEnabled: false }} />
                     <Stack.Screen name='LiveSearchScreen' component={LiveSearch} />
-                    {/*<Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{ headerShown: false }} />*/}
+                    <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{ headerShown: false }} />
                     <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{ headerShown: false }} />
                     <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} options={{ headerShown: false }} />
                     <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{ headerShown: false }} />
@@ -227,7 +227,8 @@ export default function App(props: { skipLoadingScreen: any; }) {
                     <Stack.Screen name='AnchorLivingEnd' component={AnchorLivingEndScreen} options={{ headerShown: false, gestureEnabled: false }} />
                     <Stack.Screen name='BankCardBag' component={BankCardBag} options={{ headerShown: false }} />
                     <Stack.Screen name='AddBankCard' component={AddBankCard} options={{ headerShown: false }} />
-                    <Stack.Screen name='Withdraw' component={Withdraw} options={{ headerShown: false }} />
+                    {/* <Stack.Screen name='Withdraw' component={Withdraw} options={{ headerShown: false }} /> */}
+                    <Stack.Screen name='Withdraw' component={AnchorLivingEndScreen} options={{ headerShown: false }} />
                     <Stack.Screen name='Message' component={Message} options={{ headerShown: false }} />
                     <Stack.Screen name='RealName' component={RealName} options={{ headerShown: false }} />
                     <Stack.Screen name='PrivacyPolicy' component={PrivacyPolicy} />
