@@ -60,6 +60,7 @@ function Found(props: any) {
 
     apiGetWorks(params).then((res: any) => {
       console.log('发现数据', res)
+      setNetWorkErr(false)
       setLoading(false)
       if (!res.worksInfoList) return
 

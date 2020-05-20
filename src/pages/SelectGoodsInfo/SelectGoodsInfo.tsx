@@ -44,6 +44,7 @@ export default function SelectGoodsInfo() {
       goods_id: route.params.id
     }).then((res: any) => {
       console.log('精选好物详情', res)
+      setNetWorkErr(false)
       setSwiperList(res.goods_img)
       setGoodsInfo(res.goods)
       setGoodsList(res.recommend)

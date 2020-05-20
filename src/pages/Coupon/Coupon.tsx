@@ -33,6 +33,7 @@ export default function Coupon() {
 
   const getCouponList = () => {
     apiGetCouponList().then((res: Array<any>) => {
+      setNetWorkErr(false)
       console.log('已领取的优惠券', res)
       setCouponList(res)
     }).catch((err: any) => {

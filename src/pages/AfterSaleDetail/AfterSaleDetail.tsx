@@ -38,6 +38,7 @@ export default function AfterSaleDetail() {
   const getOrderInfo = () => {
     apiReturnOrderDetail({ id: route.params.id }).then((res: { orderAfterSalesProcessVOList: any[] }) => {
       console.log('售后详情', res)
+      setNetWorkErr(false)
       res.orderAfterSalesProcessVOList.forEach((item: any) => {
         switch (item.type) {
           case 1:

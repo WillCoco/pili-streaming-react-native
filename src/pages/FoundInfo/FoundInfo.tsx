@@ -66,6 +66,7 @@ function FoundInfo(props: any) {
 
     apiGetWorksDetailInfo(params).then((res: any) => {
       console.log('发现详情', res)
+      setNetWorkErr(false)
       if (!res) {
         Toast.show('作品不存在', {
           position: 0

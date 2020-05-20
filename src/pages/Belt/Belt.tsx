@@ -48,6 +48,7 @@ export default function Belt() {
       pageSize
     }).then((res: any) => {
       console.log(res, '产业带数据')
+      setNetWorkErr(false)
       if (res.count) {
         const totalPage = Math.ceil(res.count / pageSize)
 

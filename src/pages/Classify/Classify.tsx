@@ -41,6 +41,7 @@ export default function Classify() {
    */
   const getClassifyTabs = () => {
     apiGetClassifyList().then((res: any) => {
+      setNetWorkErr(false)
       console.log(res, '分类标签')
       res.categoryList.forEach((item: any, index: number) => {
         item.active = false
@@ -60,6 +61,7 @@ export default function Classify() {
    */
   const getGoodsList = (id: number) => {
     apiGetClassifyGoodsList({ pageNo, pageSize, id }).then((res: { goodsList: Array<any> }) => {
+      setNetWorkErr(false)
       console.log(res, '当前标签对应的商品列表')
       setGoodsList(res.goodsList)
     }).catch((err: any) => {

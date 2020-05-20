@@ -41,6 +41,7 @@ export default function PublishedWork() {
       page: pageNoRef.current,
       pageSize
     }).then((res: any) => {
+      setNetWorkErr(false)
       console.log('我的作品', res)
       if (res && res.totalCount) {
         const totalPage = res.totalCount / pageSize

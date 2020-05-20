@@ -44,6 +44,7 @@ export default function CollectGoods() {
       pageSize
     }).then((res: any) => {
       console.log('我的收藏', res)
+      setNetWorkErr(false)
       setComplete(true)
       if (!res.count) return
       const totalPage = Math.ceil(res.count / pageSize)

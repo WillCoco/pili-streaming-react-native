@@ -48,6 +48,7 @@ function Cart(props: any) {
   const getCartList = () => {
     apiCartList().then((res: any) => {
       console.log('购物车列表', res)
+      setNetWorkErr(false)
       if (!res.count) {
         setIsEmpty(true)
         return

@@ -62,6 +62,7 @@ export default function Sale() {
       pageSize
     }).then((res: any) => {
       console.log(res, '特卖专区')
+      setNetWorkErr(false)
 
       const totalPage = Math.ceil(res.count / pageSize)
 
@@ -124,6 +125,7 @@ export default function Sale() {
       time_quantum: timeQuantum
     }).then((res: any) => {
       console.log(res, '限时秒杀')
+      setNetWorkErr(false)
 
       if (!res.count) return
 

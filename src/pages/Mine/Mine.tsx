@@ -49,6 +49,7 @@ function Mine(props: { dispatch?: any; isLogin?: any }) {
       pageSize
     }).then((res: any) => {
       console.log('推荐商品', res)
+      setNetWorkErr(false)
       const totalPage = Math.ceil(res.count / pageSize)
       hasMoreRef.current = pageNoRef.current < totalPage
       setGoodsList([...goodsList, ...res.list])
@@ -66,6 +67,7 @@ function Mine(props: { dispatch?: any; isLogin?: any }) {
 
     apiGetUserData().then((res: any) => {
       console.log('获取用户信息', res)
+      setNetWorkErr(false)
       props.dispatch(setUserInfo(res))
       getOrderCount()  // 获取订单数量
     }).catch((err: any) => {

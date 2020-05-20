@@ -86,6 +86,7 @@ function PublishWork(props: any) {
 
     apiPublishWorks(params).then((res: any) => {
       console.log('发表作品', res)
+      setNetWorkErr(false)
       if (res === '请求成功') {
         Toast.showSuccess('已发布')
         props.dispatch(setAddedGoodsList([]))

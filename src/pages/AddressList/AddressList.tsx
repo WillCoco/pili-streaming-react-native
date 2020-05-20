@@ -32,6 +32,7 @@ function AddressList(props: { dispatch?: any; addressList?: any }) {
 
   const getAddressList = () => {
     apiAddrList().then((res: any) => {
+      setNetWorkErr(false)
       console.log('获取收货地址列表', res)
       if (!res.length) {
         return

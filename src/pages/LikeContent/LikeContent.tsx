@@ -47,6 +47,7 @@ export default function LikeContent() {
       pageSize
     }).then((res: any) => {
       console.log('我喜欢的内容', res)
+      setNetWorkErr(false)
       setIsEmpty(!res.totalCount)
       if (!res.totalCount) return
 

@@ -56,6 +56,7 @@ export default function FoundSearch() {
 
     apiSearchWork(params).then((res: any) => {
       console.log('发现搜索', res)
+      setNetWorkErr(false)
       setIsEmpty(!res.totalCount)
       if (!res.totalCount) return
 

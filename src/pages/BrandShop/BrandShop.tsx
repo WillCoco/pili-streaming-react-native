@@ -58,6 +58,7 @@ function BrandShop(props: any) {
       brand_id: brandId
     }).then((res: any) => {
       Toast.hide(loading)
+      setNetWorkErr(false)
       console.log('店铺详情', res)
       setBrandInfo(res)
       setIsLoaded(true)
@@ -76,6 +77,7 @@ function BrandShop(props: any) {
       pageSize,
       brand_id: brandId
     }).then((res: any) => {
+      setNetWorkErr(false)
       console.log('品牌商品列表', res)
       if (res.count) {
         const totalPage = Math.ceil(res.count / pageSize)

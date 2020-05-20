@@ -9,9 +9,12 @@ import { Colors } from '../../constants/Theme'
 
 export default function PayWebview() {
   const webViewRef: any = useRef()
-  
+
   const route: any = useRoute()
   const navigation: any = useNavigation()
+
+  const { orderSn, payType } = route.params
+
   const [path, setPath] = useState(route?.params?.url)
 
   navigation.setOptions({
@@ -36,7 +39,13 @@ export default function PayWebview() {
       console.log('后台')
     } else if (nextAppState === 'active') {
       console.log('前台')
-      navigation.push('Result')
+      const params = {
+        orderSn,
+        payType
+      }
+
+      navigation.push('Result', params)
+      AppState.removeEventListener('change', handleAppStateChange)
     }
   }
 

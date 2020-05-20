@@ -118,6 +118,7 @@ function GoodsInfo(props: any) {
     }).then((res: any) => {
       console.log('商品详情', res)
       Toast.hide(loading)
+      setNetWorkErr(false)
       if (!res) {
         setSoldOut(true)
         setIsLoadingComplete(false)
@@ -202,6 +203,7 @@ function GoodsInfo(props: any) {
   const getGoodsCoupon = (id: number) => {
     apiGetUnclaimedCoupons({ goodsId: id }).then((res: any) => {
       console.log('加载优惠券', res)
+      setNetWorkErr(false)
       setCouponList(JSON.parse(JSON.stringify(res)))
     }).catch((err: any) => {
       if (err.code === '203' || err.code === '204') {

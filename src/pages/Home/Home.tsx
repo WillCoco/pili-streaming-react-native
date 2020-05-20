@@ -80,6 +80,7 @@ function Home(props: HomeProps) {
    */
   const initData = () => {
     apiGetIndexData().then((res: any) => {
+      setNetWorkErr(false)
       console.log('首页初始化数据', res)
       const selectedGoodsInfo = {
         subTitle: res.jxhtSubCategory.name,
@@ -111,6 +112,7 @@ function Home(props: HomeProps) {
       pageSize
     }).then((res: any) => {
       console.log('首页圈重点数据', res)
+      setNetWorkErr(false)
       const totalPage = Math.ceil(res.count / pageSize)
       hasMoreRef.current = pageNoRef.current < totalPage
       setRecommendGoodsList(isPullDown ? res.list : [...recommendGoodsList, ...res.list])

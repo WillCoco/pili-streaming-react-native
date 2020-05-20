@@ -60,6 +60,8 @@ export default function Brand() {
         result = await apiGetAttention(params)
       }
 
+      setNetWorkErr(false)
+
       setComplete(true)
 
       const totalPage = Math.ceil(result.count / pageSize)

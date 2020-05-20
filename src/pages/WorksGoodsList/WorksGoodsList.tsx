@@ -29,6 +29,7 @@ function WorksGoodsList(props: any) {
       keywords
     }).then((res: any) => {
       console.log('商品列表', res)
+      setNetWorkErr(false)
 
       if (addedGoodsList.length) {
         res.list.forEach((item: any) => {

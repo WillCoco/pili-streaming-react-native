@@ -94,6 +94,7 @@ function CreateOrder(props: Props) {
 
     apiGetOrderDiscountDetail(req).then((res: any) => {
       console.log('获取订单优惠信息', res)
+      setNetWorkErr(false)
 
       tempOrderList.forEach((item: {
         shop_info: {
@@ -156,6 +157,7 @@ function CreateOrder(props: Props) {
   const getAddressList = () => {
     apiAddrList().then((res: any[]) => {
       console.log('获取收货地址列表', res)
+      setNetWorkErr(false)
       if (!res.length) {
         setIsEmptyAddr(true)
         return
@@ -305,6 +307,7 @@ function CreateOrder(props: Props) {
 
     apiCreateOrder(params).then((res: any) => {
       Toast.hide(loading)
+      setNetWorkErr(false)
       console.log('提交订单', res)
 
       if (res.code !== 200) {
@@ -320,7 +323,15 @@ function CreateOrder(props: Props) {
         payURL += '&' + item + '=' + res.data[item]
       }
 
-      navigation.push('PayWebView', { url: payURL })
+      const params = {
+        url: payURL,
+        orderSn: res.data.orderSn,
+        payType: res.data.payType
+      }
+
+      console.log('创建订单路由参数', params)
+
+      navigation.push('PayWebView', params)
     }).catch((err: any) => {
       console.log('提交订单', err)
       setNetWorkErr(true)

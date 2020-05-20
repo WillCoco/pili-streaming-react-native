@@ -8,7 +8,6 @@ import { UpdateParams } from './fetch/fetchOrigin';
 
 const HOST_PHP = __DEV__ ? 'https://php.quanpinlive.com' : ''
 const HOST_JAVA = __DEV__ ? 'https://app.quanpinlive.com' : ''
-const SHANDE_HOST_JAVA = __DEV__ ? 'http://129.211.104.84:7001' : ''
 
 /**
  * PHP 接口 ==================================================================
@@ -163,8 +162,8 @@ export const apiQueryExpress = (data: any) => get1(`${HOST_JAVA}/order/queryExpr
 export const apiCreatePoster = (data: any) => get1(`${HOST_JAVA}/userShare/userGoodShare`, data)
 // 发布作品 上传文件
 export const apiWorkUpload = (data: any) => uploadWorkMedia(`${HOST_JAVA}/find/uploadFile`, data)
-// 杉德支付
-export const apiSandCreateOrder = (data: any) => post2(`${SHANDE_HOST_JAVA}/sandpay/createOrder`, data, false)
+// 查询订单支付状态
+export const apiQueryOrderPayStatus = (data: any) => get1(`${HOST_JAVA}/order/queryOrderPayStatus`, data) 
 
 
 /*

@@ -102,6 +102,7 @@ export default function OrderList() {
       }
 
     apiGetOrderList(params).then((res: any) => {
+      setNetWorkErr(false)
       Toast.hide(loading)
 
       console.log('获取订单列表', res)
@@ -130,6 +131,7 @@ export default function OrderList() {
       pageNo: pageNoRef.current
     }).then((res: any) => {
       Toast.hide(loading)
+      setNetWorkErr(false)
       console.log('售后订单列表', res)
       res.records.forEach((item: any) => {
         item.goodsList = [{

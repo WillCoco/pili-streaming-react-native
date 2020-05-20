@@ -47,6 +47,7 @@ export default function SelectGoods() {
   const initData = () => {
     apiSelectGoodsTags().then((res: any) => {
       console.log('精选好物标签', res)
+      setNetWorkErr(false)
       setTags(res.category)
       getGoodsList(res.category[0].cat_id)
     }).catch((err: any) => {
