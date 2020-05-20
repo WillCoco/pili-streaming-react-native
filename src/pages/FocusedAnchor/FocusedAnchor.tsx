@@ -41,7 +41,7 @@ function FocusedAnchor() {
       return res?.records
     })
 
-    return [134324, 24135]
+    return Promise.resolve({result})
   }
 
   /**
@@ -68,7 +68,7 @@ function FocusedAnchor() {
         // initListData={warehouseGoods}
         renderItem={({item, index}: any) => {
           return (
-            <AnchorCard key={`anchor-${index}`} />
+            <AnchorCard key={`anchor-${index}`} props={item}/>
           )
         }}
         empty={

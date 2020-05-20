@@ -4,10 +4,11 @@ import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
+import { useSelector } from 'react-redux'
 
 export default function Form(props) {
   const navigation = useNavigation()
-  const realname = ''
+  const realname = useSelector(state => state?.userData?.userInfo?.identityName)
 
   const contactService = () => {
     navigation.push('Service')

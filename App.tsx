@@ -86,8 +86,13 @@ import Withdraw from './src/pages/AnchorTabs/Withdraw'
 import Message from './src/pages/AnchorTabs/Message'
 import MaskProvider from './src/components/Mask/Provider';
 import RealName from './src/pages/RealName/RealName'
-import PrivacyPolicy from './src/pages/RealName/PrivacyPolicy'
 import PayWebView from './src/pages/PayWebView/PayWebView'
+
+// 所有协议
+import AnchorEntryAgreement from './src/pages/Agreements/AnchorEntryAgreement'
+import LivePlatformStandard from './src/pages/Agreements/LivePlatformStandard'
+import UserAgreement from './src/pages/Agreements/UserAgreement'
+import PrivacyPolicy from './src/pages/Agreements/PrivacyPolicy'
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -230,6 +235,9 @@ export default function App(props: { skipLoadingScreen: any; }) {
                     <Stack.Screen name='Service' component={Service} />
                     <Stack.Screen name='GoodsCart' component={GoodsCart} />
                     <Stack.Screen name='Result' component={Result} />
+                    <Stack.Screen name='UserAgreement' component={UserAgreement} />
+                    <Stack.Screen name='LivePlatformStandard' component={LivePlatformStandard} />
+                    <Stack.Screen name='AnchorEntryAgreement' component={AnchorEntryAgreement} />
                   </Stack.Navigator>
                 </NavigationContainer>
               </View>
