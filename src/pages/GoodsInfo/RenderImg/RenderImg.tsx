@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Image, Dimensions, ActivityIndicator } from 'react-native'
+import { Image, Dimensions, ActivityIndicator } from 'react-native'
 
 
 export default function renderImg(props: any) {

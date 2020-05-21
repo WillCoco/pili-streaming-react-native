@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { apiGoodInfo, apiGetUnclaimedCoupons, apiAddCart, apiGoodsIsLike } from '../../service/api'
 
 import pxToDp from '../../utils/px2dp'
+import AndroidHTML from 'react-native-render-html'
 import HTML from 'react-native-htmlview'
 import Toast from 'react-native-tiny-toast'
 import { Portal, Toast as AntToast } from '@ant-design/react-native'
@@ -386,14 +387,21 @@ function GoodsInfo(props: any) {
           <BrandCard goodsInfo={goodsInfo} />
           {/* 商品详情 */}
           <View style={{ marginTop: pxToDp(10) }}>
-            <HTML
-              value={goodsContent}
-              renderNode={(node: any) => {
-                if (node.name == 'img') {
-                  return <RenderImg node={node} />
-                }
-              }}
-            />
+            {
+              Platform.OS !== 'ios'
+                ? <AndroidHTML
+                  html={goodsContent}
+                  imagesMaxWidth={Dimensions.get('window').width}
+                />
+                : <HTML
+                  value={goodsContent}
+                  renderNode={(node: any, index: number) => {
+                    if (node.name == 'img') {
+                      return <RenderImg key={`img-${index}`} node={node} />
+                    }
+                  }}
+                />
+            }
           </View>
         </ScrollView>
         {/* 底部操作栏 */}
