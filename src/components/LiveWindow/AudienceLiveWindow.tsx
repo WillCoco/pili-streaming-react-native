@@ -30,6 +30,8 @@ import withPage from '../../components/HOCs/withPage';
 import { Toast } from "@ant-design/react-native";
 import { isSucceed } from '../../utils/fetchTools';
 import { EMPTY_OBJ } from '../../constants/freeze';
+import { MessageType } from "../../reducers/im";
+import { sendRoomMessage } from '../../actions/im';
 
 interface LiveWindowProps {
   style?: StyleProp<any>;
@@ -178,6 +180,17 @@ const LiveWindow = (props: LiveWindowProps): any => {
   };
 
   // console.log(isLiveOver, 'isLiveEnd')
+
+  /**
+   * 点击关注, 发送关注消息
+   */
+  const onFollowPress = (isFollowed: boolean) => {
+    // 发送关注消息
+    if (!isFollowed) {
+      dispatch(sendRoomMessage({text: '关注了主播', type: MessageType.follow}))
+    }
+  }
+
   // 直播结束
   if (isLiveOver) {
     console.log(12312312312312)
@@ -207,6 +220,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
       {!!noticeBubbleText ? <NoticeBubble text={noticeBubbleText} /> : null}
       <LiveIntro
         showFollowButton
+        onFollowPress={onFollowPress}
       />
 
       <TouchableOpacity

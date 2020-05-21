@@ -17,10 +17,8 @@ import VideoPlayer from '../VideoPlayer';
 import { useDispatch, useSelector } from "react-redux";
 import LiveIntro from "../LiveIntro";
 import LivingBottomBlock from "../LivingBottomBlock";
-import L from "../../constants/Layout";
 import Iconcloselight from "../Iconfont/Iconcloselight";
 import { pad } from "../../constants/Layout";
-import images from "../../assets/images";
 import defaultImages from "../../assets/default-image";
 import { MediaType } from "../../liveTypes";
 import AudienceShopCard from "../LivingShopCard/AudienceShopCard";
@@ -32,10 +30,8 @@ import withPage from '../HOCs/withPage';
 import { Colors } from '../../constants/Theme';
 import { isSucceed } from '../../utils/fetchTools';
 import { EMPTY_OBJ } from '../../constants/freeze';
-import { clearLiveRoom } from '../../actions/im';
-
-const PAGE_SIZE = 14;
-const INIT_PAGE_NO = 1;
+import Poller from '../../utils/poller';
+import { getLiveViewNum } from '../../actions/live';
 
 interface LiveVideoProps {
   style?: StyleProp<any>;
@@ -61,22 +57,27 @@ const LiveVideo = (props: LiveVideoProps): any => {
     anchorId
   } : LiveWindowParams = (route.params || EMPTY_OBJ) as LiveWindowParams;
 
-  // 房间信息
-  const room = useSelector((state: any) => state?.im?.room);
-
-  // 直播结束
-  const isLiveOver = useSelector((state: any) => state?.im?.isLiveOver);
-
   // 用户id
   const userId = useSelector((state: any) => state?.userData?.userInfo?.userId) || '';
 
   // 回放uri
   const backUrl = useSelector((state: any) => state?.live?.livingInfo?.backRtmp) || '';
 
+
   /**
-   * 进入直播间，获取拉流地址 TODO:
+   * 轮询器
+   */
+  const poller = React.useRef(new Poller({
+    interval: 1000 * 10,
+    initExec: false,
+    callback: () => dispatch(getLiveViewNum({liveId})),
+  }));
+
+  /**
+   * 进入回放
    */
   React.useEffect(() => {
+    // 获取回放信息
     const params = {
       liveId,
       userId,
@@ -86,13 +87,18 @@ const LiveVideo = (props: LiveVideoProps): any => {
       .then((res: any) => {
         if (isSucceed(res)) {
           console.log(res, '进入列表');
-          res.watchNum = res.watchNum -1; // 这里重新会重复加人数
+          // res.watchNum = res.watchNum -1; // 这里重新会重复加人数
           dispatch(updateLivingInfo({...res?.data, liveId, anchorId}))
         }
-        // const safeRes = res || {};
-        
       })
       .catch((error: any) => console.log(`apiEnterLive:` + error))
+
+    // 请求观看人数
+    poller.current.start();
+
+    return () => {
+      poller.current.stop();
+    }
   }, []);
 
   /**
@@ -120,17 +126,6 @@ const LiveVideo = (props: LiveVideoProps): any => {
     // player.current?.stop(); // 停止播放器实例
     goBack();
   };
-
-  /**
-   *
-   */
-  React.useEffect(() => {
-    // 直播加群
-  
-    return () => {
-      // player.current?.stop(); // 返回时停止
-    };
-  }, []);
 
   /**
    * 商品卡可见

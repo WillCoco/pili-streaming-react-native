@@ -29,8 +29,6 @@ import defaultImages from '../../assets/default-image';
 import { isSucceed } from '../../utils/fetchTools';
 import { Attention, AttentionParams } from '../../liveTypes';
 import { updateLivingInfo } from '../../actions/live';
-import { sendRoomMessage } from '../../actions/im';
-import { MessageType } from '../../reducers/im';
 
 export type msgList = any[] | undefined;
 export type onMsgListResponse = (v: boolean) => any;
@@ -110,10 +108,8 @@ const LiveIntro = (props: LiveMsgProps) =>  {
           const isAttention = isFollowed ? Attention.notAttention : Attention.isAttention;
           dispatch(updateLivingInfo({isAttention}));
 
-          // 发送消息
-          if (isFollowed) {
-            dispatch(sendRoomMessage({text: '关注了主播', type: MessageType.follow}))
-          }
+          // 发送关注消息
+          props.onFollowPress && props.onFollowPress(isFollowed)
           return;
         }
         Toast.show(isFollowed ? '取消关注失败' : '关注失败')

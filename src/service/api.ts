@@ -249,6 +249,8 @@ export const apiSearchLiveStreamList = (data: any) => get1(`${HOST_JAVA}/userLiv
 export const apiShoppingBag = (data: any) => get(`${HOST_JAVA}/userLive/shoppingBag`, data)
 // 用户直播列表轮播图
 export const apiUserLiveBanner = () => post1(`${HOST_JAVA}/userLive/userLiveBanner`)
+// 获取观看人数
+export const apiGetLiveViewNum = (data: any) => get2(`${HOST_JAVA}/userLive/getLiveViewNum`, data)
 // 上传用户头像本地base64
 export const apiUploadFile = (data: any) => post(`${HOST_JAVA}/user/uploadFile`, data)
 
