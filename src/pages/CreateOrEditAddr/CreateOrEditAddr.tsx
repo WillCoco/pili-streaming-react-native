@@ -11,18 +11,20 @@ import { apiEditAddr, apiAddrList, apiAddAddr, apiDelAddr } from '../../service/
 import Toast from 'react-native-tiny-toast'
 
 function CreateOrEditAddr(props: { dispatch: (arg0: { type: string; payload: any[] }) => void }) {
-  const navigation = useNavigation()
-  const route = useRoute()
+  const navigation: any = useNavigation()
+  const route: any = useRoute()
+
   const pageType = route.params.type
   const addressInfo = route.params.addressInfo ? route.params.addressInfo : {}
-  const [addrValue, setAddrValue] = useState([])  // 级联选择器对应的 code 数组
-  const [userName, setUserName] = useState(addressInfo.consignee || '')
+
+  const [isDefault, setIsDefault] = useState(0)
+  const [city, setCity] = useState(addressInfo.city || '')
+  const [addrValue, setAddrValue]: Array<any> = useState([])  // 级联选择器对应的 code 数组
   const [userTel, setUserTel] = useState(addressInfo.mobile || '')
   const [province, setProvince] = useState(addressInfo.province || '')
-  const [city, setCity] = useState(addressInfo.city || '')
   const [district, setDistrict] = useState(addressInfo.district || '')
+  const [userName, setUserName] = useState(addressInfo.consignee || '')
   const [addrDetail, setAddrDetail] = useState(addressInfo.address || '')
-  const [isDefault, setIsDefault] = useState(0)
 
   navigation.setOptions({
     headerTitle: pageType === 'edit' ? '编辑收货地址' : '新增收货地址',
@@ -46,8 +48,8 @@ function CreateOrEditAddr(props: { dispatch: (arg0: { type: string; payload: any
    */
   const discodsCityCode = () => {
     const provinceInfo = cityData.filter(item => item.label === addressInfo.province)[0]
-    const cityInfo = provinceInfo.children.filter(item => item.label === addressInfo.city)[0]
-    const districtInfo = cityInfo && cityInfo.children.filter(item => item.label === addressInfo.district)[0]
+    const cityInfo = provinceInfo.children.filter((item: { label: any }) => item.label === addressInfo.city)[0]
+    const districtInfo = cityInfo && cityInfo.children.filter((item: { label: any }) => item.label === addressInfo.district)[0]
 
     setAddrValue([provinceInfo.value, cityInfo ? cityInfo.value : '0', districtInfo ? districtInfo.value : '0'])
   }
@@ -69,7 +71,7 @@ function CreateOrEditAddr(props: { dispatch: (arg0: { type: string; payload: any
   }
 
   const submit = async () => {
-    let params = {
+    let params: any = {
       city,
       province,
       district,
@@ -90,20 +92,24 @@ function CreateOrEditAddr(props: { dispatch: (arg0: { type: string; payload: any
       }
     }
 
-    if (pageType === 'edit') {
-      params[`address_id`] = addressInfo.address_id
+    try {
+      if (pageType === 'edit') {
+        params[`address_id`] = addressInfo.address_id
 
-      result = await apiEditAddr(params)
-    } else {
-      result = await apiAddAddr(params)
-    }
+        result = await apiEditAddr(params)
+      } else {
+        result = await apiAddAddr(params)
+      }
 
-    if (result.success) {
-      Toast.showSuccess('编辑成功')
-      updateAddrList()
-      setTimeout(() => {
-        navigation.goBack()
-      }, 1500)
+      if (result.success) {
+        Toast.showSuccess('编辑成功')
+        updateAddrList()
+        setTimeout(() => {
+          navigation.goBack()
+        }, 1500)
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 

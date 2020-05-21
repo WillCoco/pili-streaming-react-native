@@ -24,6 +24,7 @@ import Toast from 'react-native-tiny-toast';
 import Mask from '../../../components/Mask';
 import {useSelector, useDispatch} from 'react-redux';
 import {setAnchorAssetsInfo} from '../../../actions/asset';
+import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
 const AssetManage = (props: any) =>  {
   const {navigate, replace} = useNavigation();
@@ -47,17 +48,21 @@ const AssetManage = (props: any) =>  {
   const incomeTypes = [
     {key: 'shareProfit', img: images.incomeShare, text: '分享收入'},
     {key: 'inviteProfit', img: images.incomeInvite, text: '邀请收入'},
-    {key: 'shopProfit', img: images.incomeShop, text: '自购返现'},
-    {key: 'activeAward', img: images.incomeActive, text: '活动奖励'},
+    {key: 'buySelfProfit', img: images.incomeShop, text: '自购返现'},
+    {key: 'activityProfit', img: images.incomeActive, text: '活动奖励'},
   ];
 
   /**
    * 获取用户资产
    */
   React.useEffect(() => {
-    apiGetUserAssetsStatistics().then(res => {
+    apiGetUserAssetsStatistics().then((res: any) => {
+      console.log(res, 'getuserAssetsStatistics');
       setAssetsInfo(res);
       dispatch(setAnchorAssetsInfo(res));
+    })
+    .catch((err: any) => {
+      console.log('anchorAsset:', err);
     })
   }, []);
 
@@ -65,11 +70,6 @@ const AssetManage = (props: any) =>  {
    * 提现前置校验
    */
   const beforeWithdraw = () => {
-    // 可提现金额
-    // if (+assetsInfo?.accountMoney <= 0) {
-    //   Toast.show("无可提现金额");
-    //   return;
-    // }
     // 是否实名
     if (!identityName) {
       maskDispatch({
@@ -135,7 +135,7 @@ const AssetManage = (props: any) =>  {
                   imgStyle={{height: 40, width: 40}}
                   textStyle={{color: '#fff', marginTop: 6}}
                 >
-                  <PrimaryText color="white" style={{marginTop: 2}}>¥{(assetsInfo[row.key] / 100) || 0}</PrimaryText>
+                  <PrimaryText color="white" style={{marginTop: 2}}>¥{formatSinglePrice(assetsInfo[row.key]) || 0.00}</PrimaryText>
                 </ImageText>
               )
             })
@@ -157,7 +157,7 @@ const AssetManage = (props: any) =>  {
                 key={`income_row_${index}`}
                 text={income.text}
                 img={income.img}
-                quantity={assetsInfo[income.key] || 0}
+                quantity={formatSinglePrice(assetsInfo[income.key]) || 0.00}
                 style={{borderTopWidth: index !== 0 ? 1 : 0, borderColor: Colors.divider}}
               />
             )

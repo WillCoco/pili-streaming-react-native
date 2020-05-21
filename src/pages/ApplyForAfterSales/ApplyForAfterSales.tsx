@@ -26,6 +26,8 @@ export default function ApplyForAfterSales() {
     { value: '换货', type: 3, active: false }
   ])
 
+  console.log(orderInfo)
+
   navigation.setOptions({
     headerTitle: `申请售后`,
     headerStyle: {

@@ -2,41 +2,42 @@ import React, { useState, useEffect, useRef } from 'react'
 import {
   View,
   Image,
-  Animated,
   ScrollView,
   StyleSheet,
   RefreshControl,
   TouchableOpacity,
-  ActivityIndicator,
   TouchableWithoutFeedback
 } from 'react-native'
 import { useNavigation, useIsFocused } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { apiGetWorks } from '../../service/api'
 
-import waterFall from '../../utils/waterFall'
 import pxToDp from '../../utils/px2dp'
-import { Colors } from '../../constants/Theme'
+import waterFall from '../../utils/waterFall'
 import { Ionicons } from '@expo/vector-icons'
+import { Colors } from '../../constants/Theme'
+import checkIsBottom from '../../utils/checkIsBottom'
 
 import WorkCard from '../../components/WorkCard/WorkCard'
-import checkIsBottom from '../../utils/checkIsBottom'
-import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 import LoadMore from '../../components/LoadMore/LoadMore'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+
+const pageSize = 20
 
 function Found(props: any) {
-  const navigation = useNavigation()
-  const isFocused = useIsFocused()
-  const pageSize = 20
-  let pageNoRef = useRef(1)
-  let hasMoreRef = useRef(true)
   const { isLogin } = props
-  const [workList, setWorkList] = useState([])
+
+  const pageNoRef = useRef(1)
+  const hasMoreRef = useRef(true)
+
+  const navigation: any = useNavigation()
+  const isFocused: boolean = useIsFocused()
+  
   const [maxHeight, setMaxHeight] = useState(0)
-  const [showMask, setShowMask] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [isErr, setIsErr] = useState(false)
-  const rotateAnim = new Animated.Value(0)
+  const [showMask, setShowMask] = useState(false)
+  const [workList, setWorkList]: any = useState([])
+  const [netWorkErr, setNetWorkErr] = useState(false)
 
   useEffect(() => {
     getFoundList(false)
@@ -59,6 +60,7 @@ function Found(props: any) {
 
     apiGetWorks(params).then((res: any) => {
       console.log('发现数据', res)
+      setNetWorkErr(false)
       setLoading(false)
       if (!res.worksInfoList) return
 
@@ -75,16 +77,9 @@ function Found(props: any) {
       setWorkList(isPullDown ? waterFall(res.worksInfoList).items : tempList)
       setMaxHeight(isPullDown ? waterFall(res.worksInfoList).maxHeight : maxH)
     }).catch((err: any) => {
-      setIsErr(true)
+      console.log('发现数据', err)
+      setNetWorkErr(true)
     })
-  }
-
-  const showAddAction = () => {
-    if (showMask) {
-      setShowMask(false)
-    } else {
-      setShowMask(true)
-    }
   }
 
   /**
@@ -104,8 +99,7 @@ function Found(props: any) {
       getFoundList(false)
     }
   }
-
-  if (isErr) return <NetWorkErr />
+  if (netWorkErr) return <NetWorkErr reload={() => getFoundList(false)} />
 
   return (
     <>
@@ -150,10 +144,10 @@ function Found(props: any) {
         }
 
         {
-          isLogin && <TouchableWithoutFeedback onPress={showAddAction}>
-            <Animated.View style={[styles.icon]}>
+          isLogin && <TouchableWithoutFeedback onPress={() => setShowMask(showMask ? false : true)}>
+            <View style={[styles.icon]}>
               <Ionicons name='ios-add' size={40} color={Colors.whiteColor} style={{ lineHeight: pxToDp(100) }} />
-            </Animated.View>
+            </View>
           </TouchableWithoutFeedback>
         }
       </View>

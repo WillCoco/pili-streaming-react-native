@@ -19,7 +19,9 @@ const Normal = (props: {
   title: string,
   text: string,
   leftBtnText: string,
+  showLeftBtn: boolean,
   rightBtnText: string,
+  showRightBtn: boolean,
   disabledLeft?: boolean,
   disabledRight?: boolean,
   onPressLeft: (v?: any) => any,
@@ -58,27 +60,35 @@ const Normal = (props: {
       <T4 style={StyleSheet.flatten([styles.title, props.titleStyle])}>{props.title}</T4>
       <PrimaryText style={StyleSheet.flatten([styles.text, props.textStyle])}>{props.text}</PrimaryText>
       <View style={styles.btnsWrapper}>
-        <ButtonRadius
-          size={40}
-          disabled={props.disabledLeft}
-          text={props.leftBtnText}
-          onPress={onPressLeft}
-          style={StyleSheet.flatten([styles.button, styles.leftButton])}
-        />
-        <ButtonRadius
-          size={40}
-          disabled={props.disabledRight}
-          text={props.rightBtnText}
-          onPress={onPressRight}
-          style={StyleSheet.flatten([styles.button, styles.rightButton])}
-        />
+        {
+          props.showLeftBtn &&
+          <ButtonRadius
+            size={40}
+            disabled={props.disabledLeft}
+            text={props.leftBtnText}
+            onPress={onPressLeft}
+            style={StyleSheet.flatten([styles.button, styles.leftButton])}
+          />
+        }
+        {
+          props.showRightBtn && 
+          <ButtonRadius
+            size={40}
+            disabled={props.disabledRight}
+            text={props.rightBtnText}
+            onPress={onPressRight}
+            style={StyleSheet.flatten([styles.button, styles.rightButton])}
+          />
+        }
       </View>
     </View>
   )
 };
 
 Normal.defaultProps = {
-  leftBtnText: '取消'
+  leftBtnText: '取消',
+  showLeftBtn: true,
+  showRightBtn: true,
 };
 
 const styles = StyleSheet.create({
@@ -91,17 +101,17 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   title: {
-    textAlign: 'center'
+    textAlign: 'center',
   },
   text: {
     textAlign: 'center',
-    maxWidth: vw(40),
-    marginTop: pad * 2
-
+    maxWidth: vw(60),
+    marginTop: pad * 2,
+    padding: pad,
   },
   btnsWrapper: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignSelf: 'stretch',
     marginTop: pad * 2
   },
@@ -110,7 +120,8 @@ const styles = StyleSheet.create({
     borderRadius: radio,
   },
   leftButton: {
-    backgroundColor: Colors.lightGrey
+    backgroundColor: Colors.lightGrey,
+    marginRight: pad * 4
   },
   rightButton: {
 

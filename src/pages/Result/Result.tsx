@@ -1,11 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity, Platform } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { Colors } from '../../constants/Theme'
+import { useNavigation, useRoute } from '@react-navigation/native'
+
+import { apiQueryOrderPayStatus } from '../../service/api'
+
 import pxToDp from '../../utils/px2dp'
+import { Colors } from '../../constants/Theme'
+
+const successIcon = require('../../assets/order-image/pay_success.png')
+const failedIcon = require('../../assets/order-image/pay_failed.png')
 
 export default function Result() {
+  const route: any = useRoute()
   const navigation = useNavigation()
+
+  const [paySuccess, setPaySuccess]= useState(false)
+
+  const { orderSn, payType } = route.params
 
   navigation.setOptions({
     headerTitle: `支付成功`,
@@ -15,18 +26,42 @@ export default function Result() {
     },
     headerTitleAlign: 'center',
     headerTintColor: Colors.whiteColor,
-    headerBackTitleVisible: false
+    headerBackTitleVisible: false,
+    headerLeft: () => {},
+    gesturesEnabled: false
   })
+
+  useEffect(() => {
+    queryOrderStauts()
+  }, [])
+
+  /**
+   * 查询订单支付状态
+   */
+  const queryOrderStauts = () => {
+    const params = {
+      orderSn,
+      payType
+    }
+
+    apiQueryOrderPayStatus(params).then((res: any) => {
+      console.log('订单支付成功', res)
+      setPaySuccess(true)
+    }).catch((err: any) => {
+      setPaySuccess(false)
+      console.log('订单支付失败', err)
+    })
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Image source={require('../../assets/order-image/result.png')} style={styles.icon} />
-        <Text style={styles.statusText}>支付成功</Text>
-        <Text style={styles.price}>¥888.88</Text>
+        <Image source={paySuccess ? successIcon : failedIcon} style={styles.icon} />
+        <Text style={styles.statusText}>{paySuccess ? '支付成功' : '支付失败'}</Text>
+        { paySuccess && <Text style={styles.price}>¥888.88</Text>}
       </View>
-      <TouchableOpacity style={styles.completeBtn} onPress={() => navigation.navigate('')}>
-        <Text style={styles.text}>完成</Text>
+      <TouchableOpacity style={styles.completeBtn} onPress={() => navigation.navigate('首页')}>
+        <Text style={styles.text}>继续购物</Text>
       </TouchableOpacity>
     </View>
   )

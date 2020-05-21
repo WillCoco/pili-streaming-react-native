@@ -6,21 +6,27 @@ import { connect } from 'react-redux'
 import { setCartList, toggleCartAction } from '../../actions/cart'
 import { apiCartList, apiChangeCart, apiDelCartItem } from '../../service/api'
 
-import Toast from 'react-native-tiny-toast'
-
-import DefaultContent from './DefaultContent/DefaultContent'
-import CartItem from '../../components/CartItem/CartItem'
-import CartFooterAction from '../../components/CartFooterAction/CartFooterAction'
-import CartHeaderButton from '../../components/CartHeaderButton/CartHeaderButton'
 import pxToDp from '../../utils/px2dp'
+import Toast from 'react-native-tiny-toast'
 import { Colors } from '../../constants/Theme'
 
+import CartItem from '../../components/CartItem/CartItem'
+import DefaultContent from './DefaultContent/DefaultContent'
+import CartFooterAction from '../../components/CartFooterAction/CartFooterAction'
+import CartHeaderButton from '../../components/CartHeaderButton/CartHeaderButton'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+
+
 function Cart(props: any) {
-  const { isLogin } = props.userData
-  const { cartList } = props.cartData
-  const navigation = useNavigation()
+  const { userData, cartData } = props
+  const { isLogin } = userData
+  const { cartList } = cartData
+
+  const navigation: any = useNavigation()
+
   const [isEmpty, setIsEmpty] = useState(true)
-  const [allCartGoodsInfo, setAllCartGoodsInfo] = useState({})
+  const [netWorkErr, setNetWorkErr] = useState(false)
+  const [allCartGoodsInfo, setAllCartGoodsInfo]: any = useState({})
 
   navigation.setOptions({
     headerTitle: '购物车',
@@ -33,8 +39,6 @@ function Cart(props: any) {
     headerBackTitleVisible: false,
     headerRight: () => <CartHeaderButton />
   })
-
-  const { userData, cartData } = props
 
   useEffect(() => {
     if (isLogin) {
@@ -60,14 +64,17 @@ function Cart(props: any) {
   const getCartList = () => {
     apiCartList().then((res: any) => {
       console.log('购物车列表', res)
-      if (res.count) {
-        setIsEmpty(false)
-        props.dispatch(setCartList(res))
-        calcAllGoodsInfo(res)
-      } else {
-        // 购物车为空
+      setNetWorkErr(false)
+      if (!res.count) {
         setIsEmpty(true)
+        return
       }
+
+      props.dispatch(setCartList(res))
+      calcAllGoodsInfo(res)
+    }).catch((err: any) => {
+      console.log('购物车列表', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -264,12 +271,13 @@ function Cart(props: any) {
       cart_ids: selectedCartIds.toString()
     }
 
-    apiDelCartItem(params).then(res => {
+    apiDelCartItem(params).then((res: any) => {
       console.log('删除购物车商品', res)
-
       if (res === '操作成功') {
         getCartList()
       }
+    }).catch((err: any) => {
+      Toast.show(err.message)
     })
   }
 
@@ -315,8 +323,10 @@ function Cart(props: any) {
       })
     })
 
-    apiChangeCart({ cartList: params }).then(res => console.log('购物车状态修改', res))
+    apiChangeCart({ cartList: params }).then((res: any) => console.log('购物车状态修改', res))
   }
+
+  if (netWorkErr) return <NetWorkErr reload={getCartList} />
 
   if (!userData.isLogin) {
     return (

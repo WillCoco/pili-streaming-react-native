@@ -15,7 +15,7 @@ export const timeoutHandler = (promise: any) => {
   return promise.then((result: any) => {
     // console.log(result, 'timeoutHandler')
     if (result && result.timeout) {
-      Toast.show("连接超时");
+      Toast.show("连接超时", { position: 0 });
       return Promise.reject(result);
     }
     return Promise.resolve(result);
@@ -49,7 +49,7 @@ export const restErrorHandler = (promise: any) => {
   return promise.then((result: any) => {
     // console.log(result, 'dataHandler')
     if (result && result.code !== 200 && result.code !== '203' && result.code !== '204') {
-      Toast.show(result.message);
+      Toast.show(result.message, { position: 0 });
       return Promise.reject(result);
     }
     return Promise.resolve(result);

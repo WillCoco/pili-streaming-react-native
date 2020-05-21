@@ -88,7 +88,7 @@ const LivingRoomScreen = (props: any) : any =>  {
           }
         }}
         onPressMsg={async (data: any) => {
-          const {userName, userId} = data.data;
+          const {userName, userId, userAvatar} = data.data;
           // 查询是否禁言
           const isSilent = await getUserSilent(userId);
 
@@ -99,8 +99,8 @@ const LivingRoomScreen = (props: any) : any =>  {
             payload: {
               type: Mask.ContentTypes.WithAvatar,
               data: {
-                avatar: livingInfo.anchorLogo,
-                name: livingInfo.anchorName,
+                avatar: userAvatar,
+                name: userName,
                 rightBtnText: title,
                 onPressRight: () => {
                   // 禁言或者取消禁言

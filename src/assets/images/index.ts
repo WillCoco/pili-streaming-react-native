@@ -352,11 +352,20 @@ const images : {
   get billIconInvite() {
     return require('./billInvite.png')
   },
+  get billIconBuyGoods() {
+    return require('./billBuyGoods.png')
+  },
+  get billIconOrderConfirm() {
+    return require('./billOrderConfirm.png')
+  },
   get billIconWithdraw() {
     return require('./billWithdraw.png')
   },
-  get billIconReceive() {
-    return require('./billReceive.png')
+  get billIconActivity() {
+    return require('./billActivity.png')
+  },
+  get billIconYunCoinExchange() {
+    return require('./billYunCoinExchange.png')
   },
   // 404页，网络错误页
   get errorPage() {

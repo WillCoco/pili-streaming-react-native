@@ -30,7 +30,6 @@ import CreateOrder from './src/pages/CreateOrder/CreateOrder'
 import CreateOrEditAddr from './src/pages/CreateOrEditAddr/CreateOrEditAddr'
 import AddressList from './src/pages/AddressList/AddressList'
 import OrderList from './src/pages/OrderList/OrderList'
-import AccountInfo from './src/pages/AccountInfo/AccountInfo'
 import CollectGoods from './src/pages/CollectGoods/CollectGoods'
 import LikeContent from './src/pages/LikeContent/LikeContent'
 import Coupon from './src/pages/Coupon/Coupon'
@@ -79,7 +78,7 @@ import AnchroBill from './src/pages/AnchorTabs/MyShopScreen/AnchroBill'
 import GoodEdit from './src/pages/AnchorTabs/MyShopScreen/GoodEdit'
 import BrandGoods from './src/pages/AnchorTabs/BrandGoods'
 import AnchorAgreement from './src/pages/AnchorTabs/AnchorAgreement'
-import AnchorLivingEndScreen from './src/pages/AnchorTabs/AnorchMeScreen/AnchorLivingEndScreen'
+import AnchorLivingEndScreen from './src/pages/AnchorTabs/AnchorLivingEndScreen'
 import BankCardBag from './src/pages/AnchorTabs/CardBag'
 import AddBankCard from './src/pages/AnchorTabs/AddBankCard'
 import Withdraw from './src/pages/AnchorTabs/Withdraw'
@@ -87,6 +86,7 @@ import Message from './src/pages/AnchorTabs/Message'
 import MaskProvider from './src/components/Mask/Provider';
 import RealName from './src/pages/RealName/RealName'
 import PayWebView from './src/pages/PayWebView/PayWebView'
+import AudienceEndScreen from './src/pages/Live/AudienceEndScreen'
 
 // 所有协议
 import AnchorEntryAgreement from './src/pages/Agreements/AnchorEntryAgreement'
@@ -173,7 +173,6 @@ export default function App(props: { skipLoadingScreen: any; }) {
                     <Stack.Screen name='SelectGoods' component={SelectGoods} />
                     <Stack.Screen name='SelectGoodsInfo' component={SelectGoodsInfo} />
                     <Stack.Screen name='OrderList' component={OrderList} />
-                    <Stack.Screen name='AccountInfo' component={AccountInfo} />
                     <Stack.Screen name='CollectGoods' component={CollectGoods} />
                     <Stack.Screen name='LikeContent' component={LikeContent} />
                     <Stack.Screen name='Coupon' component={Coupon} />
@@ -225,9 +224,11 @@ export default function App(props: { skipLoadingScreen: any; }) {
                     <Stack.Screen name='BrandGoods' component={BrandGoods} options={{ headerShown: false }} />
                     <Stack.Screen name='AnchorAgreement' component={AnchorAgreement} options={{ headerShown: false }} />
                     <Stack.Screen name='AnchorLivingEnd' component={AnchorLivingEndScreen} options={{ headerShown: false, gestureEnabled: false }} />
+                    <Stack.Screen name='AudienceLivingEnd' component={AudienceEndScreen} options={{ headerShown: false, gestureEnabled: false }} />
                     <Stack.Screen name='BankCardBag' component={BankCardBag} options={{ headerShown: false }} />
                     <Stack.Screen name='AddBankCard' component={AddBankCard} options={{ headerShown: false }} />
-                    <Stack.Screen name='Withdraw' component={Withdraw} options={{ headerShown: false }} />
+                    {/* <Stack.Screen name='Withdraw' component={Withdraw} options={{ headerShown: false }} /> */}
+                    <Stack.Screen name='Withdraw' component={AnchorLivingEndScreen} options={{ headerShown: false }} />
                     <Stack.Screen name='Message' component={Message} options={{ headerShown: false }} />
                     <Stack.Screen name='RealName' component={RealName} options={{ headerShown: false }} />
                     <Stack.Screen name='PrivacyPolicy' component={PrivacyPolicy} />

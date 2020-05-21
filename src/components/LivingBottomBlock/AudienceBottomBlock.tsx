@@ -7,6 +7,7 @@ import {
   View
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
+import {useFocusEffect} from '@react-navigation/native';
 import LiveMsg from '../LiveMsg';
 import {Audience as AudienceLiveToolBar} from '../LiveToolBar';
 import {pad} from '../../constants/Layout';
@@ -14,17 +15,31 @@ import {sendRoomMessage} from '../../actions/im';
 import {RoomMessageType, MessageType} from '../../reducers/im';
 import {apiLiveLike} from '../../service/api';
 import Poller from '../../utils/poller';
+import { isSucceed } from '../../utils/fetchTools';
 
 const BottomBlock = (props: any) : any =>  {
   const dispatch = useDispatch();
 
-  const [likeQuantity, setLikeQuantity] = React.useState(0); // 获取来的数量
+  // 是否有数据未提交
+  const needSubmit = React.useRef(false);
 
-  // 房间消息
-  const roomMessages = useSelector(state => state?.im?.roomMessages);
+  // 本地点击喜欢数量
+  const [likeQuantity, setLikeQuantity] = React.useState(0);
+    
+  // 喜欢数量
+  const likeSum = useSelector((state: any) => +state?.live?.livingInfo?.likeSum || 0);
 
-  // 房间信息
-  const room = useSelector(state => state?.im?.room);
+  // im房间消息
+  const roomMessages = useSelector((state: any) => state?.im?.roomMessages);
+
+  // im房间信息
+  const room = useSelector((state: any) => state?.im?.room);
+
+  // 直播房间信息 (退出会现执行外层useEffect, 清除liveID, 用memo保存)
+  const liveId = useSelector((state: any) => state?.live?.livingInfo?.liveId);
+  const liveIdPersist = React.useMemo(() => {
+    return liveId
+  }, [])
 
   // 发送消息
   const sendMessage = (text: string) => {
@@ -33,28 +48,33 @@ const BottomBlock = (props: any) : any =>  {
   
   // 喜欢
   const onPressLike = () => {
-    setLikeQuantity(quantity => ++quantity)
+    needSubmit.current = true;
+    setLikeQuantity((quantity: number) => ++quantity);
   }
   
   // 提交喜欢
   const submitLike = React.useCallback((quantity: number) => {
-    if (likeQuantity) {
+    if (needSubmit.current && likeQuantity > 0) {
       // 提交、返回新值
-      // alert(likeQuantity)
       const params = {
-        anchorId: props.anchorId,
-        likeNum: likeQuantity
+        liveId: liveId || liveIdPersist,
+        likeNum: quantity || likeQuantity
       }
-      apiLiveLike(params).then(res => {
-        // TODO:
-      })
+      apiLiveLike(params)
+        .then(res => {
+          if (isSucceed(res)) {
+            setLikeQuantity(0);
+          }
+          // 重置
+          needSubmit.current = false;
+        })
+        .catch(error => {
+          // 重置
+          needSubmit.current = false;
+          console.log(`apiLiveLike: ${error}`)
+        })
     }
-  }, [likeQuantity])
-  
-  // 发送消息
-  const onPressForward = () => {
-    
-  }
+  }, [likeQuantity, needSubmit.current]);
 
   /**
    * 轮询器
@@ -79,9 +99,21 @@ const BottomBlock = (props: any) : any =>  {
     poller.current.start();
     
     return () => {
+      /**
+       * 页面退出提交点赞
+       */
+      poller.current.execOnce();
       poller.current.stop();
     }
-  }, [likeQuantity])
+  }, [likeQuantity]);
+
+  /**
+   * 分享
+  */
+ const onPressForward = () => {
+
+ }
+
 
   // 观众
   return (
@@ -99,10 +131,9 @@ const BottomBlock = (props: any) : any =>  {
             isFollowed: props.isFollowed, // todo: 和主播是否关注
           }
         }}
-        // style={{maxHeight: 200, width: 200}}
       />
       <AudienceLiveToolBar
-        likeQuantity={props.likeQuantity || 0}
+        likeQuantity={(likeQuantity + likeSum) || 0}
         onPressShopBag={props.onPressShopBag}
         onSubmitEditing={sendMessage}
         onPressLike={onPressLike}

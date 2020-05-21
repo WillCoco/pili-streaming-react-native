@@ -26,6 +26,9 @@ import { Feather } from '@expo/vector-icons';
 import pxToDp from '../../../utils/px2dp';
 import { apiGetUserAssetsRecords } from '../../../service/api';
 import PagingList from '../../../components/PagingList';
+import formatSinglePrice from '../../../utils/formatGoodsPrice';
+import { isSucceed } from '../../../utils/fetchTools';
+import { EMPTY_ARR } from '../../../constants/freeze';
 
 const AnchroBill = props =>  {
 
@@ -76,32 +79,37 @@ const AnchroBill = props =>  {
       case 2:
         return images.billIconInvite;
       case 3: 
-        return images.bankIcon;
+        return images.billIconBuyGoods;
       case 4: 
-        return images.billIconReceive;
+        return images.billIconOrderConfirm;
       case 5: 
         return images.billIconWithdraw;
       case 6: 
-        return images.bankIcon;
+        return images.billIconActivity;
       case 7: 
-        return images.bankIcon;
+        return images.billIconYunCoinExchange;
       default:
-        return images.bankIcon;
+        return images.billIconWithdraw;
     }
   }
 
   /**
    * 改变时间
    */
-  const onDatePicker = (value: Date) => {
+  const onDatePicker =  (value: Date) => {
     setBillDate(value)
     apiGetUserAssetsRecords({
       pageNo: 1,
       pageSize: 10,
       searchTime: value
-    }).then(res => {
-      setData(res?.records)
     })
+      .then((res: any) => {
+        console.log(res);
+        setData(res?.data?.records)
+      })
+      .catch((err: any) => {
+          console.log('getUserAssetsRecords:', err);
+        })
   }
 
   /**
@@ -111,19 +119,37 @@ const AnchroBill = props =>  {
     const result = await apiGetUserAssetsRecords({
       pageNo: 1,
       pageSize: 10,
-      searchTime: new Date()
-    }).then(res => {
-      return res?.records
+      searchTime: billDate
     })
+    .catch((err: any) => {
+        console.log('getUserAssetsRecords:', err);
+      })
 
-    return Promise.resolve({result})
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.data?.records || EMPTY_ARR})
+    }
+
+    return Promise.resolve({result: EMPTY_ARR})
   }
 
   /**
    * 更多
    */
-  const onEndReached = () => {
-    
+  const onEndReached = async (pageNo: number, pageSize: number) => {
+    const result = await apiGetUserAssetsRecords({
+      pageNo,
+      pageSize,
+      searchTime: billDate
+    })
+    .catch((err: any) => {
+        console.log('getUserAssetsRecords:', err);
+      })
+
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.data?.records || EMPTY_ARR})
+    }
+
+    return Promise.resolve({result: EMPTY_ARR})
   }
 
   return (
@@ -165,7 +191,7 @@ const AnchroBill = props =>  {
                   title={item.desc}
                   subtitle={item.createTime}
                   subtitleStyle={{color: Colors.darkGrey, marginTop: pad}}
-                  rightTitle={(+item.amount > 0 ? '+' : '') + (item.amount / 100) + '¥'}
+                  rightTitle={(+item.amount > 0 ? '+' : '') + formatSinglePrice(item.amount) + '¥'}
                   rightTitleStyle={+item.amount > 0 ? {fontWeight: 'bold', color: Colors.darkBlack} : {fontWeight: 'bold', color: Colors.basicColor}}
                   bottomDivider
                 />

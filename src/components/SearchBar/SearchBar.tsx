@@ -6,7 +6,19 @@ import { connect } from 'react-redux'
 import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
 
-function SearchBar(props: any) {
+interface Props {
+  iconColor: string
+  searchKey: string
+  searchBarStyle: any
+  searchKeyStyle: any
+  hasSearchKey: boolean
+  isPlaceHolder: boolean
+  toSearchPage(): void
+  toSearch(searchKey: string): void
+  inputSearchKey(text: string): void
+}
+
+function SearchBar(props: Props) {
 
   const toSearchPage = () => props.toSearchPage()
 

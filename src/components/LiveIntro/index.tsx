@@ -14,7 +14,7 @@ import {
   ImageSourcePropType
 } from 'react-native';
 import {Toast} from '@ant-design/react-native'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {PrimaryText, SmallText} from 'react-native-normalization-text';
 import Avatar from '../Avatar';
@@ -24,9 +24,13 @@ import {pad} from '../../constants/Layout';
 // import {Colors} from '../../constants/Theme';
 import FollowButton from '../../components/FollowButton';
 import {apiAttentionAnchor, apiEnterLive} from '../../service/api';
-import {shorNum} from '../../utils/numeric';
+import {shortNum} from '../../utils/numeric';
 import defaultImages from '../../assets/default-image';
-
+import { isSucceed } from '../../utils/fetchTools';
+import { Attention, AttentionParams } from '../../liveTypes';
+import { updateLivingInfo } from '../../actions/live';
+import { sendRoomMessage } from '../../actions/im';
+import { MessageType } from '../../reducers/im';
 
 export type msgList = any[] | undefined;
 export type onMsgListResponse = (v: boolean) => any;
@@ -41,16 +45,18 @@ interface LiveMsgProps {
   style?: StyleProp<any>,
   onPress?: (anchorid: number) => any,
   ref?: any,
-  isFollow: boolean,
+  isFollowed: boolean,
   safeTop: number,
   name?: string,
   watchNum?: number,
   showFollowButton?: boolean,
+  onFollowPress?: (d: any) => any,
 }
 
 const LiveIntro = (props: LiveMsgProps) =>  {
 
   const {navigate} = useNavigation();
+  const dispatch = useDispatch();
 
   const livingInfo = useSelector((state: any) => {
     return state?.live?.livingInfo || EMPTY_OBJ
@@ -68,33 +74,52 @@ const LiveIntro = (props: LiveMsgProps) =>  {
     }
   }
 
-  /**
-   * 取消/关注 
-   */
-  // const onFollowPress = (isFollow: boolean) => {
-  //   console.log(isFollow, 'isFollow')
-
-  //   const params = {
-  //     anchorId: props?.anchorId,
-  //     attentionType: isFollow ? "2" : "1", // 1：关注；2：取关
-  //     userId: props?.userId,
-  //   }
-
-  //   apiAttentionAnchor(params).then(res => {
-  //     Toast.show(isFollow ? '取消关注成功' : '关注成功')
-  //   })
-  // }
-
   const watchNum = props.watchNum || livingInfo.watchNum;
   
   const name = props.name || livingInfo.anchorName;
 
-  const anchorId = useSelector((state: any) => state?.anchorData?.anchorInfo?.anchorId);
+  // 用户id
+  const userId = useSelector((state: any) => state?.userData?.userInfo?.userId) || '';
+
+  // 是否关注
+  const isFollowed = useSelector((state: any) => state?.live?.livingInfo?.isAttention);
+
+  const myAnchorId = useSelector((state: any) => state?.anchorData?.anchorInfo?.anchorId);
 
   /**
    * 是否显示关注按钮
    */
-  const showFollowButton = props.showFollowButton && (livingInfo.anchorId !== anchorId);
+  const showFollowButton = props.showFollowButton && (livingInfo.anchorId !== myAnchorId);
+
+  /**
+   * 取消/关注 
+   */
+  const onFollowPress = (isFollowed: boolean) => {
+    console.log(isFollowed, 'isFollow');
+
+    const params = {
+      anchorId: livingInfo.anchorId,
+      attentionType: !isFollowed ? AttentionParams.attention : AttentionParams.cancelAttention, // 1：关注；2：取关
+      userId: userId,
+    }
+
+    apiAttentionAnchor(params)
+      .then((res: any) => {
+        if (isSucceed(res)) {
+          Toast.show(isFollowed ? '取消关注成功' : '关注成功')
+          const isAttention = isFollowed ? Attention.notAttention : Attention.isAttention;
+          dispatch(updateLivingInfo({isAttention}));
+
+          // 发送消息
+          if (isFollowed) {
+            dispatch(sendRoomMessage({text: '关注了主播', type: MessageType.follow}))
+          }
+          return;
+        }
+        Toast.show(isFollowed ? '取消关注失败' : '关注失败')
+      })
+      .catch((error: any) => console.log(`apiAttentionAnchor: ${error}`))
+  }
 
   return (
     <TouchableOpacity
@@ -117,15 +142,14 @@ const LiveIntro = (props: LiveMsgProps) =>  {
           ellipsizeMode="tail"
           style={{color: '#ccc'}}
         >
-          {shorNum(watchNum) || 0} 观看
+          {shortNum(watchNum) || 0} 观看
         </SmallText>
       </View>
       {
         showFollowButton && (
-          <FollowButton 
-            isFollow={livingInfo.isAttention == '1'}
-            onPress={props?.onFollowPress}
-            // style={{marginLeft: pad}}
+          <FollowButton
+            isFollowed={isFollowed === Attention.isAttention}
+            onPress={onFollowPress}
           />
         )
       }

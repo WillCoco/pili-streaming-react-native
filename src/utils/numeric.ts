@@ -4,7 +4,7 @@
  * 10000 => 1w
  * @param number 
  */
-export const shorNum = (number: number) => {
+export const shortNum = (number: number) => {
   if (!number) {
     return number;
   };

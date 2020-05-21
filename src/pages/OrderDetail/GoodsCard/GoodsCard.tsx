@@ -6,23 +6,23 @@ import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
-export default function GoodsCard(props) {
+export default function GoodsCard(props: { detail: any }) {
   const navigation = useNavigation()
-  const { detail } = props
+  const { detail: orderInfo } = props
 
   /**
    * 进入品牌店铺
    */
   const toBrandShop = () => {
-    navigation.push('BrandShop', { id: detail.id })
+    navigation.push('BrandShop', { id: orderInfo.id })
   }
 
   /**
    * 退换
    */
   const refund = (item: any) => {
-    detail.goodsInfo = item
-    navigation.push('ApplyForAfterSales', { orderInfo: detail })
+    orderInfo.goodsInfo = item
+    navigation.push('ApplyForAfterSales', orderInfo)
   }
 
   /**
@@ -39,8 +39,8 @@ export default function GoodsCard(props) {
         {/* 店铺信息 */}
         <TouchableWithoutFeedback onPress={toBrandShop}>
           <View style={styles.shopHeader}>
-            <Image source={{ uri: detail.shopImg }} style={styles.shopLogo} />
-            <Text style={styles.shopName}>{detail.shopName}</Text>
+            <Image source={{ uri: orderInfo.shopImg }} style={styles.shopLogo} />
+            <Text style={styles.shopName}>{orderInfo.shopName}</Text>
             <Ionicons size={20} name='ios-arrow-forward' color={Colors.darkGrey} />
           </View>
         </TouchableWithoutFeedback>
@@ -48,7 +48,7 @@ export default function GoodsCard(props) {
         {/* 商品信息 */}
         <View style={styles.goodsList}>
           {
-            detail.goodsList && detail.goodsList.map((item: any, index: number) => {
+            orderInfo.goodsList && orderInfo.goodsList.map((item: any, index: number) => {
               return (
                 <View key={`goods-${index}`} style={styles.goodsItem}>
 
@@ -71,7 +71,7 @@ export default function GoodsCard(props) {
                       <Text style={styles.goodsNum}>x{item.goodsNum}</Text>
                     </View>
                     {
-                      (detail.orderStatus === 2 || detail.orderStatus === 4)
+                      (orderInfo.orderStatus === 2 || orderInfo.orderStatus === 4)
                       && item.afterSalesStatus === 0
                       && <TouchableWithoutFeedback onPress={() => refund(item)}>
                         <View style={[styles.goodsPrice, styles.refundBtn]}>
@@ -90,22 +90,22 @@ export default function GoodsCard(props) {
         </View>
       
         {/* 优惠信息 */}
-        <View style={styles.saleInfo}>
+        <View>
           <View style={styles.saleItem}>
             <Text style={styles.text}>商品总价</Text>
-            <Text style={styles.text}>¥{formatSinglePrice(detail.originTotalAmount)}</Text>
+            <Text style={styles.text}>¥{formatSinglePrice(orderInfo.originTotalAmount)}</Text>
           </View>
           <View style={styles.saleItem}>
             <Text style={styles.text}>运费</Text>
-            <Text style={styles.text}>¥{formatSinglePrice(detail.carriage)}</Text>
+            <Text style={styles.text}>¥{formatSinglePrice(orderInfo.carriage)}</Text>
           </View>
           <View style={styles.saleItem}>
             <Text style={styles.text}>金牌会员权益</Text>
-            <Text style={styles.text}>¥{formatSinglePrice(detail.saleDiscount)}</Text>
+            <Text style={styles.text}>¥{formatSinglePrice(orderInfo.saleDiscount)}</Text>
           </View>
           <View style={styles.saleItem}>
             <Text>订单总价</Text>
-            <Text>¥{formatSinglePrice(detail.totalAmount)}</Text>
+            <Text>¥{formatSinglePrice(orderInfo.totalAmount)}</Text>
           </View>
         </View>
       </View>
@@ -124,7 +124,7 @@ export default function GoodsCard(props) {
             fontSize: pxToDp(32),
             color: Colors.basicColor,
             fontWeight: '600'
-          }}>{formatSinglePrice(detail.totalAmount)}</Text>
+          }}>{formatSinglePrice(orderInfo.totalAmount)}</Text>
         </View>
       </View>
     </View>
@@ -226,9 +226,6 @@ const styles = StyleSheet.create({
     borderColor: Colors.borderColor,
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  saleInfo: {
-
   },
   saleItem: {
     flexDirection: 'row',

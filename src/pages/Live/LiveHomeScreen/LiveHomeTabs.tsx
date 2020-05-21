@@ -20,6 +20,10 @@ import {useDispatch} from 'react-redux';
 import {apiGetLiveStreamList} from '../../../service/api';
 import {useSelector} from 'react-redux';
 import images from '../../../assets/images';
+import {PrimaryText} from 'react-native-normalization-text'
+import pxToDp from '../../../utils/px2dp';
+import { EMPTY_ARR, EMPTY_OBJ } from '../../../constants/freeze';
+import { isSucceed } from '../../../utils/fetchTools';
 
 interface LiveBannerProps {
   style?: StyleProp<any>,
@@ -28,9 +32,10 @@ interface LiveBannerProps {
 
 const LiveBanner = (props: LiveBannerProps) : any =>  {
 
-  const userId = useSelector(state => state?.userData?.userInfo?.userId)
+  const userId = useSelector(state => state?.userData?.userInfo?.userId) || ''
   const [followList, setFollowList]: [Array<any>, any] = React.useState([]) // 关注列表
   const [selectList, setSelectlist]: [Array<any>, any] = React.useState([]) // 精选列表
+  const isLogin = useSelector(state => state?.userData?.isLogin) || false // 未登录不显示关注列表
 
   const mockList = [
     {
@@ -48,39 +53,12 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
     }
   ]
 
-  /**
-   * 进入页面获取数据
-   */
-  // React.useEffect(() => {
-  //   getDataList('1')
-  //   getDataList('2')
-  // }, [])
-
-  const renderItem = (d) => {
+  const renderItem = (d: any) => {
     return (
       <LiveSummaryBlock
         liveInfo={d.item}
       />
     )
-  }
-
-  /**
-   * 获取关注/精选列表
-   */
-  const getDataList = (type: string) => {
-    apiGetLiveStreamList({ // 直播类型不能为空（1：精选；2：关注
-      liveType: type,
-      page: 1,
-      pageSize: 10,
-      userId
-    }).then(res => {
-      if (type === '2') {
-        setFollowList(res?.records)
-      } else {
-        setSelectlist(res?.records)
-      }
-    })
-    .catch(console.warn)
   }
 
   /**
@@ -105,84 +83,116 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
       page: 1,
       pageSize: 20,
       userId
-    }).then(res => {
-      return res?.records
     })
-    
-    return Promise.resolve({result})
+    .catch((r: any) => {console.log(r, 'LiveStreamList')});
+
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.data?.records || EMPTY_ARR});
+    }
+
+    return Promise.resolve({result: EMPTY_ARR});
   };
 
   /**
    * 更多
    */
-  const onEndReached = () => {};
+  const onEndReached = async (page: number, pageSize: number, type: string) => {
+    const result = await apiGetLiveStreamList({
+      liveType: type,
+      pageSize,
+      page,
+      userId,
+    })
+    .catch((r: any) => {console.log(r, 'LiveStreamList')});
+
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.data?.records || EMPTY_ARR});
+    }
+    return Promise.resolve({result: EMPTY_ARR});
+  };
 
   return (
     <View
       style={StyleSheet.flatten([styles.wrapper, props.style])}
     >
-      <ScrollableTabView
-        initialPage={0}
-        // tabBarBackgroundColor="red"
-        tabBarTextStyle={{
-        }}
-        tabBarUnderlineStyle={{
-          backgroundColor: Colors.basicColor,
-          width: 50,
-          alignSelf: 'center',
-          left: vw(25) - 25,
-        }}
-        tabBarActiveTextColor="#000"
-        renderTabBar={(props) => {
-          return (
-            <ScrollableTab
-              {...props}
-              // tabsLength={4} // 分成几份
-              // style={{width: '50%'}} // 所有宽度
-            />
-          )
-        }}
-        onChangeTab={changeTab}
-      >
-        <PagingList
-          tabLabel="关注"
-          // initListData={followList}
-          size={20}
-          initListData={followList}
-          //item显示的布局
-          renderItem={(renderItem)}
-          //下拉刷新相关
-          onRefresh={() => onRefresh('2')}
-          //加载更多
-          onEndReached={onEndReached}
-          // ItemSeparatorComponent={separator}
-          keyExtractor={(item, index) => 'index' + index + item}
-          initialNumToRender={14}
-          numColumns={2}
-          columnWrapperStyle={{justifyContent: 'space-between'}}
-          style={{borderTopWidth: 4, borderColor: Colors.pageGreyBg}}
-          contentContainerStyle={{paddingHorizontal: pad}}
-        />
-        <PagingList
-          tabLabel="精选"
-          size={10}
-          // initListData={selectList}
-          //item显示的布局
-          renderItem={renderItem}
-          //下拉刷新相关
-          onRefresh={() => onRefresh('1')}
-          //加载更多
-          onEndReached={onEndReached}
-          // ItemSeparatorComponent={separator}
-          keyExtractor={(item, index) => 'index' + index + item}
-          initialNumToRender={14}
-          numColumns={2}
-          columnWrapperStyle={{justifyContent: 'space-between'}}
-          style={{borderTopWidth: 4, borderColor: Colors.pageGreyBg}}
-          contentContainerStyle={{paddingHorizontal: pad}}
-        />
-        
-      </ScrollableTabView>
+      {
+        isLogin 
+        &&
+        <ScrollableTabView
+          initialPage={0}
+          tabBarTextStyle={{
+          }}
+          tabBarUnderlineStyle={{
+            backgroundColor: Colors.basicColor,
+            width: 50,
+            alignSelf: 'center',
+            left: vw(25) - 25,
+          }}
+          tabBarActiveTextColor="#000"
+          onChangeTab={changeTab}
+        >
+          <PagingList
+            tabLabel={"关注"}
+            size={14}
+            // initListData={followList}
+            //item显示的布局
+            renderItem={(renderItem)}
+            //下拉刷新相关
+            onRefresh={() => onRefresh('2')}
+            //加载更多
+            onEndReached={(page, size) => onEndReached(page, size, '2')}
+            // ItemSeparatorComponent={separator}
+            keyExtractor={(item, index) => 'index' + index + item}
+            initialNumToRender={14}
+            numColumns={2}
+            columnWrapperStyle={{justifyContent: 'space-between'}}
+            style={{borderTopWidth: 4, borderColor: Colors.pageGreyBg}}
+            contentContainerStyle={{paddingHorizontal: pad}}
+          />
+          <PagingList
+            tabLabel={"精选"}
+            size={14}
+            // initListData={selectList}
+            //item显示的布局
+            renderItem={renderItem}
+            //下拉刷新相关
+            onRefresh={() => onRefresh('1')}
+            //加载更多
+            onEndReached={(page, size) => onEndReached(page, size, '1')}
+            // ItemSeparatorComponent={separator}
+            keyExtractor={(item, index) => 'index' + index + item}
+            initialNumToRender={14}
+            numColumns={2}
+            columnWrapperStyle={{justifyContent: 'space-between'}}
+            style={{borderTopWidth: 4, borderColor: Colors.pageGreyBg}}
+            contentContainerStyle={{paddingHorizontal: pad}}
+          />
+        </ScrollableTabView>
+        ||
+        <View style={{ flex: 1}}>
+          <View style={styles.selectorTitle}>
+            <PrimaryText style={{textAlign: 'center', fontWeight: 'bold',}}>精选</PrimaryText>
+          </View>
+          <PagingList
+            size={10}
+            // initListData={selectList}
+            //item显示的布局
+            renderItem={renderItem}
+            //下拉刷新相关
+            onRefresh={() => onRefresh('1')}
+            //加载更多
+            onEndReached={onEndReached}
+            // ItemSeparatorComponent={separator}
+            keyExtractor={(item, index) => 'index' + index + item}
+            initialNumToRender={14}
+            numColumns={2}
+            columnWrapperStyle={{justifyContent: 'space-between'}}
+            style={{borderTopWidth: 4, borderColor: Colors.pageGreyBg}}
+            contentContainerStyle={{paddingHorizontal: pad}}
+          />
+        </View>
+      }
+      
     </View>
   )
 };
@@ -195,11 +205,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     borderTopWidth: 4,
-    borderColor: Colors.pageGreyBg
+    borderColor: Colors.pageGreyBg,
   },
   image: {
     width: '100%',
     height: '100%',
+  },
+  selectorTitle: { // 精选列表标题
+    width: pxToDp(100),
+    height: pxToDp(100),
+    marginLeft: pad * 2,
+    borderBottomWidth: 4,
+    borderBottomColor: Colors.basicColor,
+    justifyContent: 'center',
   }
 });
 

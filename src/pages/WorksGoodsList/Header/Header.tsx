@@ -5,7 +5,6 @@ import { useNavigation } from '@react-navigation/native'
 import { Colors } from '../../../constants/Theme'
 import { Ionicons } from '@expo/vector-icons'
 import pxToDp from '../../../utils/px2dp'
-import { setSearchKey } from '../../../actions/home'
 
 function Header(props: { toSearch?: any; statusBarHeight?: any }) {
   const { statusBarHeight } = props

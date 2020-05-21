@@ -3,6 +3,7 @@ import { View, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'reac
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { apiGetWorksDetailInfo, apiGetMoreComment, apiFollowWorks, apiGetMoreReply } from '../../service/api'
+
 import Toast from 'react-native-tiny-toast'
 import pxToDp from '../../utils/px2dp'
 import { Ionicons } from '@expo/vector-icons'
@@ -12,32 +13,36 @@ import VideoPlayer from 'react-native-video-controls'
 
 import Header from './Header/Header'
 import Swiper from './Swiper/Swiper'
-import WorksCard from './WorksCard/WorksCard'
-import Comment from './Comment/Comment'
 import Footer from './Footer/Footer'
-import ActionSheet from '../../components/ActionSheet/ActionSheet'
+import Comment from './Comment/Comment'
+import WorksCard from './WorksCard/WorksCard'
 import GoodsCard from './GoodsCard/GoodsCard'
+import ActionSheet from '../../components/ActionSheet/ActionSheet'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+
+const commentPageSize = 10
 
 function FoundInfo(props: any) {
-  const commentPageSize = 10
-
-  const navigation = useNavigation()
-  const route = useRoute()
-  const { id: worksId, width, height } = route.params
   const { isLogin } = props.userData
-  const [worksInfo, setWorksInfo] = useState({})
-  const [swiperList, setSwiperList] = useState([])
-  const [commentList, setCommentList] = useState([])
-  const [navOpacity, setNavOpacity] = useState(0)
-  const [commentCount, setCommentCount] = useState(0)
-  const [showGoods, setShowGoods] = useState(false)
-  const [inputFocus, setInputFocus] = useState(false)
-  const [commentInfo, setCommentInfo] = useState({})
+  
+  const navigation: any = useNavigation()
+  const route: any = useRoute()
+  
   const [videoUrl, setVideoUrl] = useState('')
   const [isLoaded, setIsLoaded] = useState(false)
+  const [navOpacity, setNavOpacity] = useState(0)
   const [videoHeight, setVideoHeight] = useState(0)
+  const [showGoods, setShowGoods] = useState(false)
+  const [inputFocus, setInputFocus] = useState(false)
+  const [netWorkErr, setNetWorkErr] = useState(false)
+  const [commentCount, setCommentCount] = useState(0)
   let [commentPageNo, setCommentPageNo] = useState(1)
+  const [worksInfo, setWorksInfo]: any = useState({})
+  const [swiperList, setSwiperList]: Array<any> = useState([])
+  const [commentList, setCommentList]: Array<any> = useState([])
+  const [commentInfo, setCommentInfo]: Array<any> = useState({})
 
+  const { id: worksId, width, height } = route.params
 
   navigation.setOptions({
     headerShown: false
@@ -51,7 +56,7 @@ function FoundInfo(props: any) {
    * 获取作品信息
    */
   const getWorksInfo = (isInit: boolean) => {
-    let params = {
+    let params: any = {
       worksId
     }
 
@@ -61,6 +66,7 @@ function FoundInfo(props: any) {
 
     apiGetWorksDetailInfo(params).then((res: any) => {
       console.log('发现详情', res)
+      setNetWorkErr(false)
       if (!res) {
         Toast.show('作品不存在', {
           position: 0
@@ -82,6 +88,9 @@ function FoundInfo(props: any) {
       }
 
       setIsLoaded(true)
+    }).catch((err: any) => {
+      console.log('作品详情', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -113,7 +122,7 @@ function FoundInfo(props: any) {
    * 获取更多评论
    */
   const getMoreComment = () => {
-    const params = {
+    const params: any = {
       page: commentPageNo,
       pageSize: commentPageSize,
       worksId: worksInfo.worksId
@@ -121,7 +130,7 @@ function FoundInfo(props: any) {
 
     if (isLogin) params[`userId`] = props.userData.userInfo.userId
 
-    apiGetMoreComment(params).then((res) => {
+    apiGetMoreComment(params).then((res: any) => {
       console.log('获取更多评论', res)
       if (commentPageNo === 1) {
         initShowReplyList(res, false)
@@ -149,7 +158,7 @@ function FoundInfo(props: any) {
       return
     }
 
-    apiFollowWorks(params).then(res => {
+    apiFollowWorks(params).then((res: { isFollow: any }) => {
       console.log('关注or取消关注作品', res)
 
       worksInfo.isFollow = res.isFollow
@@ -218,7 +227,7 @@ function FoundInfo(props: any) {
       commentId: id,
     }
 
-    apiGetMoreReply(params).then(res => {
+    apiGetMoreReply(params).then((res: any) => {
       console.log('获取更多回复', res)
       commentList.forEach((item: any) => {
         if (item.commentId === id) {
@@ -281,7 +290,7 @@ function FoundInfo(props: any) {
   const updateCommentList = () => {
     setCommentPageNo(1)
 
-    commentList.forEach(item => {
+    commentList.forEach((item: { replyPageNo: number }) => {
       item.replyPageNo = 1
     })
 
@@ -312,9 +321,9 @@ function FoundInfo(props: any) {
     setCommentList(JSON.parse(JSON.stringify(commentList)))
   }
 
-  if (!isLoaded) {
-    return <></>
-  }
+  if (netWorkErr) return <NetWorkErr reload={() => getWorksInfo(false)} />
+
+  if (!isLoaded) return <></>
 
   return (
     <View style={styles.container}>
