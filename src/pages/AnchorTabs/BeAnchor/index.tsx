@@ -18,10 +18,16 @@ import withPage from '../../../components/HOCs/withPage'
 import pxToDp from '../../../utils/px2dp'
 import BeAnchorRow from './BeAnchorRow'
 import {apiAddAnchorUser} from'../../../service/api'
+import { useNavigation } from '@react-navigation/native'
+import CheckBox from '../../../components/CheckBox'
+import { Toast } from '@ant-design/react-native'
 
 const BeAnchor = (props) =>  {
+  const {navigate} = useNavigation()
   const beAnchorPrice = useSelector(state => state?.userData?.userInfo?.liveMoney) // 开通主播的价格
   const userId = useSelector(state => state?.userData?.userInfo?.userId) || ''
+  
+  const [checked, setChecked] = React.useState(false) // 勾选框
 
   const anchorRights = [
     {title: '直播权限', text: '一键直播、简单卖货', source: require('../../../assets/be-anchor-image/bg0.png')},
@@ -35,6 +41,11 @@ const BeAnchor = (props) =>  {
    * 开通
    */
   const submit = () => {
+    if (!checked) {
+      Toast.info('您还未同意服务协议')
+      return
+    }
+
     apiAddAnchorUser({userId}).then(res => {
       console.log(userId);
       console.log(res, 4231532152);
@@ -58,6 +69,14 @@ const BeAnchor = (props) =>  {
             />
           })
         }
+        <View style={{flexDirection: 'row'}}>
+          <CheckBox 
+            isChecked={checked}
+            onPress={() => {setChecked((c) =>  !c)}}
+            style={{paddingHorizontal: pad}}
+          />
+          <PrimaryText>同意<PrimaryText style={{color: Colors.blueColor}} onPress={() => navigate('AnchorEntryAgreement')}>《云闪播主播入驻服务协议》</PrimaryText></PrimaryText>
+        </View>
       </View>
       <View style={styles.beAnchorWrapper}>
         <Image source={images.beAnchorIcon} style={styles.beAnchorIconStyle}/>

@@ -18,24 +18,18 @@ import NoticeBubble from "../../components/NoticeBubble";
 import LiveIntro from "../LiveIntro";
 import LivingBottomBlock from "../LivingBottomBlock";
 import LivePuller from "../LivePuller";
-import L from "../../constants/Layout";
 import Iconcloselight from "../../components/Iconfont/Iconcloselight";
 import { pad } from "../../constants/Layout";
 import defaultImages from "../../assets/default-image";
 import { joinGroup, quitGroup } from "../../actions/im";
-import { MediaType } from "../../liveTypes";
 import AudienceShopCard from "../../components/LivingShopCard/AudienceShopCard";
 import { vw, vh } from "../../utils/metric";
 import { apiEnterLive, apiAttentionAnchor } from '../../service/api';
 import { updateLivingInfo } from '../../actions/live';
-import { clearLiveRoom } from '../../actions/im';
 import withPage from '../../components/HOCs/withPage';
 import { Toast } from "@ant-design/react-native";
 import { isSucceed } from '../../utils/fetchTools';
-import { Attention, AttentionParams } from '../../liveTypes';
-
-const { window } = L;
-const EMPTY_OBJ = {};
+import { EMPTY_OBJ } from '../../constants/freeze';
 
 interface LiveWindowProps {
   style?: StyleProp<any>;
@@ -210,7 +204,6 @@ const LiveWindow = (props: LiveWindowProps): any => {
           onPressShopBag={() => shopCardAnim(true)} 
         />
       </View>
-
       {!!noticeBubbleText ? <NoticeBubble text={noticeBubbleText} /> : null}
       <LiveIntro
         showFollowButton

@@ -8,7 +8,6 @@ import { UpdateParams } from './fetch/fetchOrigin';
 
 const HOST_PHP = __DEV__ ? 'https://php.quanpinlive.com' : ''
 const HOST_JAVA = __DEV__ ? 'https://app.quanpinlive.com' : ''
-const SHANDE_HOST_JAVA = __DEV__ ? 'http://129.211.104.84:7001' : ''
 
 /**
  * PHP 接口 ==================================================================
@@ -69,6 +68,8 @@ export const apiSearch = (data: any) => get1(`${HOST_PHP}/mobile/Goods/getGoodsL
 export const apiGetEnshrine = (data: any) => get1(`${HOST_PHP}/mobile/goods/getEnshrine`, data)
 // 我关注的店铺
 export const apiGetAttention = (data: any) => get1(`${HOST_PHP}/mobile/brand/getAttention`, data)
+// 实名认证
+export const apiRealName = (data: any) => post(`${HOST_PHP}/mobile/user/authentication`, data)
 
 /**
  * JAVA 接口 ==================================================================
@@ -161,8 +162,8 @@ export const apiQueryExpress = (data: any) => get1(`${HOST_JAVA}/order/queryExpr
 export const apiCreatePoster = (data: any) => get1(`${HOST_JAVA}/userShare/userGoodShare`, data)
 // 发布作品 上传文件
 export const apiWorkUpload = (data: any) => uploadWorkMedia(`${HOST_JAVA}/find/uploadFile`, data)
-// 杉德支付
-export const apiSandCreateOrder = (data: any) => post2(`${SHANDE_HOST_JAVA}/sandpay/createOrder`, data)
+// 查询订单支付状态
+export const apiQueryOrderPayStatus = (data: any) => get1(`${HOST_JAVA}/order/queryOrderPayStatus`, data) 
 
 
 /*
@@ -201,9 +202,9 @@ export const apiGetLiveList = (data: any) => get(`${HOST_JAVA}/anchor/getLiveLis
 // 分页查询寄回地址列表
 export const apiGetReturnAddressList = (data: any) => post(`${HOST_JAVA}/anchor/getReturnAddressList`, data)
 // 主播消息通知列表
-export const apiGetUserChatList = (data: any) => post(`${HOST_JAVA}/anchor/getUserChatList`, data)
+export const apiGetUserChatList = (data: any) => get2(`${HOST_JAVA}/anchor/getUserChatList`, data)
 // 主播我的主页信息
-export const apiAnchorHomePage = (data: any) => get(`${HOST_JAVA}/anchor/HomePage`, data)
+export const apiAnchorHomePage = (data: any) => get1(`${HOST_JAVA}/anchor/HomePage`, data)
 // 直播上传文件
 export const apiLiveUploadFile = (file: UpdateParams) => liveUpload(`${HOST_JAVA}/anchor/liveUploadFile`, file)
 // 直播发布预告
@@ -237,17 +238,17 @@ export const apiAttentionAnchor = (data: any) => post2(`${HOST_JAVA}/userLive/at
 // 点击进入直播间
 export const apiEnterLive = (data: any) => get2(`${HOST_JAVA}/userLive/enterLive`, data)
 // 获取精选/关注直播列表
-export const apiGetLiveStreamList = (data: any) => post(`${HOST_JAVA}/userLive/getLiveStreamList`, data)
+export const apiGetLiveStreamList = (data: any) => post2(`${HOST_JAVA}/userLive/getLiveStreamList`, data)
 // 直播间点亮红心
 export const apiLiveLike = (data: any) => get(`${HOST_JAVA}/userLive/liveLike`, data)
 // 我的关注列表
 export const apiMyAttentionList = (data: any) => get1(`${HOST_JAVA}/userLive/myAttentionList`, data)
 // 搜索直播列表
-export const apiSearchLiveStreamList = (data: any) => get(`${HOST_JAVA}/userLive/searchLiveStreamList`, data)
+export const apiSearchLiveStreamList = (data: any) => get1(`${HOST_JAVA}/userLive/searchLiveStreamList`, data)
 // 直播间的购物袋
 export const apiShoppingBag = (data: any) => get(`${HOST_JAVA}/userLive/shoppingBag`, data)
 // 用户直播列表轮播图
-export const apiUserLiveBanner = () => post2(`${HOST_JAVA}/userLive/userLiveBanner`)
+export const apiUserLiveBanner = () => post1(`${HOST_JAVA}/userLive/userLiveBanner`)
 // 上传用户头像本地base64
 export const apiUploadFile = (data: any) => post(`${HOST_JAVA}/user/uploadFile`, data)
 
@@ -257,10 +258,10 @@ export const apiUploadFile = (data: any) => post(`${HOST_JAVA}/user/uploadFile`,
 // 绑定银行卡
 export const apiBindingBankCard = (data: any) => post2(`${HOST_JAVA}/assets/bindingBankCard`, data)
 // 查询用户账单列表
-export const apiGetUserAssetsRecords = (data: any) => post(`${HOST_JAVA}/assets/getUserAssetsRecords`, data)
+export const apiGetUserAssetsRecords = (data: any) => post2(`${HOST_JAVA}/assets/getUserAssetsRecords`, data)
 // 查询用户资产信息
-export const apiGetUserAssetsStatistics = () => get(`${HOST_JAVA}/assets/getUserAssetsStatistics`)
+export const apiGetUserAssetsStatistics = () => get1(`${HOST_JAVA}/assets/getUserAssetsStatistics`)
 // 查询用户银行卡列表
-export const apiGetUserBankCards = () => get(`${HOST_JAVA}/assets/getUserBankCards`)
+export const apiGetUserBankCards = () => get1(`${HOST_JAVA}/assets/getUserBankCards`)
 // 发起提现申请
-export const apiWithdraw = (data: any) => post(`${HOST_JAVA}/assets/withdraw`, data)
+export const apiWithdraw = (data: any) => post2(`${HOST_JAVA}/assets/withdraw`, data)

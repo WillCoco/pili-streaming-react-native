@@ -3,22 +3,34 @@ import { View, Text, StyleSheet, Image } from 'react-native'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 
+export default function AnchorCard(props: any) {
 
-export default function AnchorCard() {
+  /**
+   * 直播状态
+   */
+
   return (
     <View style={styles.container}>
       <View style={{ flexDirection: 'row' }}>
-        <Image source={{ uri: '' }} style={styles.anchorImg} />
+        <Image source={{ uri: props?.livePic }} style={styles.anchorImg} />
         <View style={styles.anchorInfo}>
-          <Text style={styles.watchCount}>123人观看</Text>
+          <Text style={styles.watchCount}>{props?.viewsNum || 0}人观看</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image source={{ uri: '' }} style={styles.avatar} />
-            <Text style={styles.name}>峭壁罗甸下</Text>
+            <Image source={{ uri: props?.anchorLogo }} style={styles.avatar} />
+            <Text style={styles.name}>{props?.anchorName || '主播'}</Text>
           </View>
         </View>
       </View>
-      <View style={styles.state}>
-        <Text style={{ fontSize: pxToDp(28), color: Colors.whiteColor }}>直播中</Text>
+      <View style={StyleSheet.flatten([styles.state, props?.liveStatus !== 2 && {backgroundColor: Colors.yellowColor}])}>
+        <Text style={{ fontSize: pxToDp(28), color: Colors.whiteColor }}>
+          {
+            props?.liveStatus === 1 
+              ? '预告'
+              : props?.liveStatus === 2
+                ? '直播中'
+                : '回放'
+          }
+        </Text>
       </View>
     </View>
   )

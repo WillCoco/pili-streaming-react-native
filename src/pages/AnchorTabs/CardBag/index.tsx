@@ -40,9 +40,13 @@ const CardBag = (props: any) =>  {
    * 
    */
   React.useEffect(() => {
-    apiGetUserBankCards().then(res => {
-      dispatch(updateBankCards(res));
-    })
+    apiGetUserBankCards()
+      .then((res: any) => {
+        dispatch(updateBankCards(res));
+      })
+      .catch((err: any) => {
+        console.log('GetUserBankCards:', err);
+      })
   }, []);
 
   /**

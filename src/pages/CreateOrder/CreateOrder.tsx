@@ -3,29 +3,36 @@ import { View, Text, StyleSheet, ScrollView, Image, Platform, TouchableOpacity }
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { setAddressList } from '../../actions/address'
-import { Colors } from '../../constants/Theme'
-import pxToDp from '../../utils/px2dp'
-import { Ionicons } from '@expo/vector-icons'
-
-import AddressBar from './AddressBar/AddressBar'
-import ShopCard from './ShopCard/ShopCard'
-import ActionSheet from '../../components/ActionSheet/ActionSheet'
-import CouponList from './CouponList/CouponList'
-
 import { apiAddrList, apiGetOrderDiscountDetail, apiCreateOrder } from '../../service/api'
-import formatSinglePrice from '../../utils/formatGoodsPrice'
-import Toast from 'react-native-tiny-toast'
 
-function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] }) => void; choosedAddress: {} }) {
-  const route = useRoute()
-  const navigation = useNavigation()
-  const [tempOrderList, setTempOrderList]: any = useState([])
-  const [defaultAddress, setDefaultAddress]: any = useState([])
+import pxToDp from '../../utils/px2dp'
+import Toast from 'react-native-tiny-toast'
+import { Colors } from '../../constants/Theme'
+import formatSinglePrice from '../../utils/formatGoodsPrice'
+
+import ShopCard from './ShopCard/ShopCard'
+import CouponList from './CouponList/CouponList'
+import AddressBar from './AddressBar/AddressBar'
+import ActionSheet from '../../components/ActionSheet/ActionSheet'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+
+interface Props {
+  dispatch: (arg0: { type: string; payload: any[] }) => void
+  choosedAddress: {}
+}
+
+function CreateOrder(props: Props) {
+  const route: any = useRoute()
+  const navigation: any = useNavigation()
+
+  const [curShopId, setCurShopId] = useState(0)
+  const [netWorkErr, setNetWorkErr] = useState(false)
+  const [showCoupon, setShowCoupon] = useState(false)
   const [isEmptyAddr, setIsEmptyAddr] = useState(true)
   const [orderTotalCount, setOrderTotalCount] = useState(0)
   const [orderTotalPrice, setOrderTotalPrice] = useState(0)
-  const [showCoupon, setShowCoupon] = useState(false)
-  const [curShopId, setCurShopId] = useState(0)
+  const [tempOrderList, setTempOrderList]: Array<any> = useState([])
+  const [defaultAddress, setDefaultAddress]: Array<any> = useState([])
 
   navigation.setOptions({
     headerTitle: '确认订单',
@@ -87,6 +94,7 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
 
     apiGetOrderDiscountDetail(req).then((res: any) => {
       console.log('获取订单优惠信息', res)
+      setNetWorkErr(false)
 
       tempOrderList.forEach((item: {
         shop_info: {
@@ -137,6 +145,9 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
       })
 
       calcUsedCouponPrice(tempOrderList)
+    }).catch((err: any) => {
+      console.log('获取订单优惠信息', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -146,6 +157,7 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
   const getAddressList = () => {
     apiAddrList().then((res: any[]) => {
       console.log('获取收货地址列表', res)
+      setNetWorkErr(false)
       if (!res.length) {
         setIsEmptyAddr(true)
         return
@@ -156,6 +168,9 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
       setIsEmptyAddr(false)
 
       setDefaultAddress(res.filter((item: { is_default: number }) => item.is_default === 1)[0])
+    }).catch((err: any) => {
+      console.log('获取收货地址列表', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -263,7 +278,8 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
       item.selectedGoods.forEach((_item: any, _index: number) => {
         item.orderGoodsReqs.push({
           goodsNum: _item.goods_num,  // 商品数量
-          skuId: ~~_item.sku_id  // 规格 id
+          skuId: ~~_item.sku_id,  // 规格 id
+          shareUserId: route.params.shareUserId
         })
 
         cartIds.push(_item.cart_id)
@@ -282,8 +298,6 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
       }
     })
 
-    // route.params.shareUserId
-
     let params = {
       cartIds,
       payType: 2,  //  支付方式
@@ -293,6 +307,7 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
 
     apiCreateOrder(params).then((res: any) => {
       Toast.hide(loading)
+      setNetWorkErr(false)
       console.log('提交订单', res)
 
       if (res.code !== 200) {
@@ -300,16 +315,38 @@ function CreateOrder(props: { dispatch: (arg0: { type: string; payload: any[] })
         return
       }
 
+      route.params.onOrderCompleted && route.params.onOrderCompleted(params)
+
       let payURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
 
       for (let item in res.data) {
-        console.log(item)
         payURL += '&' + item + '=' + res.data[item]
       }
 
-      navigation.push('PayWebView', { url: payURL })
+      const params = {
+        url: payURL,
+        orderSn: res.data.orderSn,
+        payType: res.data.payType
+      }
+
+      console.log('创建订单路由参数', params)
+
+      navigation.push('PayWebView', params)
+    }).catch((err: any) => {
+      console.log('提交订单', err)
+      setNetWorkErr(true)
     })
   }
+
+  /**
+   * 网络异常 重新加载
+   */
+  const reload = () => {
+    getAddressList()
+    getOrderDiscountDetail()
+  }
+
+  if (netWorkErr) return <NetWorkErr reload={reload} />
 
   return (
     <View>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, PixelRatio, TouchableWithoutFeedback } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
@@ -7,10 +7,13 @@ import { Ionicons } from '@expo/vector-icons'
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
 import { apiAddrList } from '../../service/api'
+import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
-function AddressList(props) {
-  const navigation = useNavigation()
+function AddressList(props: { dispatch?: any; addressList?: any }) {
   const { addressList } = props
+
+  const navigation: any = useNavigation()
+  const [netWorkErr, setNetWorkErr] = useState(false)
 
   navigation.setOptions({
     headerTitle: '收货地址',
@@ -29,11 +32,15 @@ function AddressList(props) {
 
   const getAddressList = () => {
     apiAddrList().then((res: any) => {
+      setNetWorkErr(false)
       console.log('获取收货地址列表', res)
       if (!res.length) {
         return
       }
       props.dispatch(setAddressList(res))
+    }).catch((err: any)=> {
+      console.log('获取收货地址列表', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -59,8 +66,10 @@ function AddressList(props) {
     navigation.goBack()
   }
 
+  if (netWorkErr) return <NetWorkErr reload={getAddressList} />
+
   return (
-    <View>
+    <>
       <ScrollView style={styles.container}>
         {
           addressList && addressList.map((item: any, index: number) => {
@@ -96,7 +105,7 @@ function AddressList(props) {
         />
         <Text style={styles.addBtnText}>添加新地址</Text>
       </TouchableOpacity>
-    </View>
+    </>
   )
 }
 

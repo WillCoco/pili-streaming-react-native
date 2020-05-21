@@ -44,13 +44,17 @@ const Withdraw = (props: any) =>  {
   const accountMoney = useSelector(state => state?.asset?.anchorAssetsInfo?.accountMoney) || 0; // 可提现金额
 
   React.useEffect(() => {
-    apiGetUserBankCards().then(res => {
-      if (!curBankCard?.id) {
-        const defaultBankCard = res?.length !== 0 && res?.[0] || {};
-        // setDefaultBankCard(defaultBankCard);
-        dispatch(updateCurBankCards(defaultBankCard));
-      }
-    })
+    apiGetUserBankCards()
+      .then((res: any) => {
+        if (!curBankCard?.id) {
+          const defaultBankCard = res?.length !== 0 && res?.[0] || {};
+          dispatch(updateCurBankCards(defaultBankCard));
+        }
+      })
+      .catch((err: any) => {
+        console.log('apiGetUserBankCards:', err);
+      })
+
   }, []);
 
   /**
@@ -78,32 +82,39 @@ const Withdraw = (props: any) =>  {
    * 提交提现
    */
   const onSumbit = async () => {
-    // maskDispatch({
-    //   type: Mask.Actions.PUSH,
-    //   payload: {
-    //     type: Mask.ContentTypes.Normal,
-    //     data: {
-    //       text: '验证码错误，请重新输入!',
-    //       title: '提示',
-    //       rightBtnText: '确定',
-    //       onPressRight: () => {alert(421)}
-    //     }
-    //   }});
-    // Toast.showLoading('');
-    // // const success = await dispatch(addBankCard());
-    // await sleep(1000)
-    // Toast.hide('')
-    // Toast.show('提现成功')
-    // goBack();
+    
+    if (!(+withdrawNum) || (+withdrawNum > +accountMoney)) {
+      Toast.show('请输入正确的提现金额');
+      return;
+    }
+
+    if (verifyCode.length < 6) {
+      Toast.show('请输入正确的验证码')
+      return;
+    }
 
     const params = {
       "amount": withdrawNum,
-      "code": "string",
+      "code": verifyCode,
       "userBankCardId": curBankCard.id
     };
 
-    apiWithdraw(params).then(async res => {
-      await sleep(1000)
+    apiWithdraw(params).then( (res: any) => {
+      if (res?.message.indexOf('验证码')) {
+        maskDispatch({
+          type: Mask.Actions.PUSH,
+          payload: {
+            type: Mask.ContentTypes.Normal,
+            data: {
+              text: '验证码错误，请重新输入!',
+              title: '提示',
+              showLeftBtn: false,
+              rightBtnText: '确定',
+              onPressRight: () => {maskDispatch({type: Mask.Actions.REMOVE})}
+            }
+          }});
+        return;
+      }
       Toast.show('提现成功')
       goBack();
     });
@@ -141,14 +152,16 @@ const Withdraw = (props: any) =>  {
         }
         <FormRow 
           title={'提现金额'}
-          placeholder={`可提现金额¥${accountMoney}`}
+          placeholder={`可提现金额¥${accountMoney / 100}`}
           value={withdrawNum}
           onChangeText={setWithdrawNum}
+          keyboardType='numeric'
         />
         <FormRow 
           title={'验证码'}
           value={verifyCode}
           onChangeText={setVerifyCode}
+          keyboardType='numeric'
           rightTitle={
             showCountDown
             && <CountDown
@@ -162,7 +175,7 @@ const Withdraw = (props: any) =>  {
           }
           maxLength={6}
         />
-        <TinyText style={{padding: pad}}>每次提现将会收取1.00元手续费，建议减少提现次数，避免造成资金损失</TinyText>
+        <TinyText style={{padding: pad}}>每次提现将会收取0.50元手续费，建议减少提现次数，避免造成资金损失</TinyText>
       </View>
      
       <ButtonRadius

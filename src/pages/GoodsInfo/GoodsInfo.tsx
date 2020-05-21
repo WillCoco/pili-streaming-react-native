@@ -1,28 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { View, ScrollView, Dimensions, StyleSheet, Platform, Text, ImageBackground, Image } from 'react-native'
+import { View, ScrollView, Dimensions, StyleSheet, Platform, Text, ImageBackground, TouchableOpacity } from 'react-native'
 import { useRoute, useNavigation, useIsFocused } from '@react-navigation/native'
 import { connect } from 'react-redux'
+import { apiGoodInfo, apiGetUnclaimedCoupons, apiAddCart, apiGoodsIsLike } from '../../service/api'
+
+import pxToDp from '../../utils/px2dp'
+import WebView from 'react-native-webview'
 // import HTML from 'react-native-render-html'
 // import HTML from 'react-native-htmlview'
 import Toast from 'react-native-tiny-toast'
-import WebView from 'react-native-webview'
+import { Colors } from '../../constants/Theme'
+import { strDiscode } from '../../utils/discodeRichText'
 
-import ActionSheet from '../../components/ActionSheet/ActionSheet'
 import Swiper from './Swiper/Swiper'
+import Coupon from './Coupon/Coupon'
+import GoodsSku from './GoodsSku/GoodsSku'
+import ShareBar from './ShareBar/ShareBar'
 import GoodsCard from './GoodsCard/GoodsCard'
 import Advantage from './Advantage/Advantage'
 import BrandCard from './BrandCard/BrandCard'
-import ActivityBar from './ActivityBar/ActivityBar'
 import FooterBar from './FooterBar/FooterBar'
-import GoodsSku from './GoodsSku/GoodsSku'
-import Coupon from './Coupon/Coupon'
-import ShareBar from './ShareBar/ShareBar'
-
-import { apiGoodInfo, apiGetUnclaimedCoupons, apiAddCart, apiGoodsIsLike } from '../../service/api'
-import { Colors } from '../../constants/Theme'
-import { strDiscode } from '../../utils/discodeRichText'
-import pxToDp from '../../utils/px2dp'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import ActivityBar from './ActivityBar/ActivityBar'
+import ActionSheet from '../../components/ActionSheet/ActionSheet'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
 let timer: any
@@ -51,41 +50,42 @@ console.log(11)
 interface GoodsInfoParams {
   id: string | number,
   shareUserId: string | number,
-  onOrderCompleted: (orderInfo: {
-    quantity: number, // 下单数量
-    [key: string]: any,
-  }) => any
+  onOrderCompleted: (orderInfo: any) => any
 }
 
 function GoodsInfo(props: any) {
-  const route = useRoute()
-  const navigation = useNavigation()
-  const isFocused = useIsFocused()
   const { isLogin } = props
-  const { id: goodsId, shareUserId, onOrderCompleted }: GoodsInfoParams = route.params as GoodsInfoParams;
-  const [isLoadingComplete, setIsLoadingComplete] = useState(false)
-  const [swiperList, setSwiperList] = useState([])
-  const [goodsInfo, setGoodsInfo]: any = useState({})
-  const [goodsType, setGoodsType] = useState('')
-  const [goodsContent, setGoodsContent] = useState('')
-  const [goodsSku, setGoodsSku] = useState([])  // 规格列表
+
+  const goodsInfoRef: any = useRef()
+
+  const route: any = useRoute()
+  const navigation: any = useNavigation()
+  const isFocused: boolean = useIsFocused()
+
+  let [goodsNum, setGoodsNum] = useState(1)
   const [curSku, setCurSku] = useState('')  // 当前选中的规格
+  const [goodsType, setGoodsType] = useState('')
+  const [swiperList, setSwiperList]: Array<any> = useState([])
+  const [goodsInfo, setGoodsInfo]: any = useState({})
+  const [goodsContent, setGoodsContent] = useState('')
+  const [goodsSku, setGoodsSku]: Array<any> = useState([])  // 规格列表
+  const [isLoadingComplete, setIsLoadingComplete] = useState(false)
   const [curSkuInfo, setCurSkuInfo]: any = useState({})  // 当前选中规格的详细信息
   const [showGoodsSku, setShowGoodsSku] = useState(false)
   const [showCoupon, setShowCoupon] = useState(false)
   const [showShareBar, setShowShareBar] = useState(false)
   const [buttonType, setButtonType] = useState('')  // 商品规格操作面板购买按钮文字
   const [soldOut, setSoldOut] = useState(false)
-  let [goodsNum, setGoodsNum] = useState(1)
-  const [couponList, setCouponList] = useState([])
-  const [isErr, setIsErr] = useState(false)
+  const [couponList, setCouponList]: Array<any> = useState([])
+  const [netWorkErr, setNetWorkErr] = useState(false)
   const [webViewHeight, setWebViewHeight] = useState(0)
   const [countDownInfo, setCountDownInfo] = useState({
     hours: 0,
     min: 0,
     sec: 0
   })
-  const goodsInfoRef: any = useRef()
+  
+  const { id: goodsId, shareUserId, onOrderCompleted }: GoodsInfoParams = route.params as GoodsInfoParams;
 
   navigation.setOptions({
     headerTitle: '',
@@ -118,6 +118,7 @@ function GoodsInfo(props: any) {
     }).then((res: any) => {
       console.log('商品详情', res)
       Toast.hide(loading)
+      setNetWorkErr(false)
       if (!res) {
         setSoldOut(true)
         setIsLoadingComplete(false)
@@ -131,7 +132,6 @@ function GoodsInfo(props: any) {
 
       let content = strDiscode(res.goods_content).replace(/\<img/gi, '<img style="width: 100%; height: auto"')
       setGoodsContent(content)
-
 
       if (res.is_sale || res.is_snap_up) {
         setGoodsType(res.is_sale ? 'sale' : 'seckill')
@@ -162,7 +162,8 @@ function GoodsInfo(props: any) {
 
       if (isLogin) getGoodsCoupon(res.goods_id)
     }).catch((err: any) => {
-      setIsErr(true)
+      console.log('商品详情', err)
+      setNetWorkErr(true)
     })
   }
 
@@ -202,13 +203,14 @@ function GoodsInfo(props: any) {
   const getGoodsCoupon = (id: number) => {
     apiGetUnclaimedCoupons({ goodsId: id }).then((res: any) => {
       console.log('加载优惠券', res)
+      setNetWorkErr(false)
       setCouponList(JSON.parse(JSON.stringify(res)))
     }).catch((err: any) => {
       if (err.code === '203' || err.code === '204') {
         navigation.push('Login')
         return
       }
-      setIsErr(true)
+      setNetWorkErr(true)
     })
   }
 
@@ -395,10 +397,10 @@ function GoodsInfo(props: any) {
       type: is_collect ? 0 : 1
     }).then((res: any) => {
       console.log('收藏/取消收藏', res)
-
       goodsInfo.is_collect = is_collect ? 0 : 1
-
       setGoodsInfo(JSON.parse(JSON.stringify(goodsInfo)))
+    }).catch((err: any) => {
+      Toast.show(err.message)
     })
   }
 
@@ -414,9 +416,7 @@ function GoodsInfo(props: any) {
     setShowShareBar(true)
   }
 
-  if (isErr) {
-    return <NetWorkErr />
-  }
+  if (netWorkErr) return <NetWorkErr reload={getGoodsInfo} />
 
   if (soldOut) {
     return (

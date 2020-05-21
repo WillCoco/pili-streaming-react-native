@@ -31,6 +31,8 @@ const dataList = [
   {title: '总成交金额', data: '100,0000'},
 ]
 
+const data = new Map()
+
 const goodsInfo = {
   goodsImg: images.BOCIcon,
   goodsName: '耐克乔丹Air Jodan ',

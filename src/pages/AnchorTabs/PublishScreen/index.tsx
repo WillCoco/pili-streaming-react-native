@@ -30,14 +30,15 @@ const PublishScreen = (props: any) =>  {
   const userId = useSelector((state: any) => state?.userData?.userInfo?.userId)
 
   /**
-   * 获取主播详情
-   */
+ * 获取主播详情
+ */
   React.useEffect(() => {
     apiAnchorHomePage({userId})
-      .then(res => {
+      .then((res: any) => {
         dispatch(setAnchorInfo(res))
       })
-  }, [])
+      .catch(console.warn)
+  }, []);
 
   /**
    * tab的返回到 我的 

@@ -15,7 +15,7 @@ import {
 import Swiper from 'react-native-swiper';
 import images from '../../../assets/images';
 import {apiUserLiveBanner} from '../../../service/api';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useIsFocused} from '@react-navigation/native';
 
 interface LiveBannerProps {
   // bannerList?: any[],
@@ -27,13 +27,21 @@ const LiveBanner = (props: LiveBannerProps) : React.ReactElement =>  {
 
   const [bannerList, setBannerList] = React.useState([]);
   const {navigate} = useNavigation();
+  const isFocused = useIsFocused();
 
   React.useEffect(() => {
+    if (isFocused) {
+      initBanner();
+    }
+  }, [isFocused]);
+
+  const initBanner = () => {
     apiUserLiveBanner().then((res: any) => {
-      setBannerList(res?.data || [])
+      console.log(res, 'banner');
+      setBannerList(res || [])
     })
     .catch(console.warn)
-  }, [])
+  };
 
   return (
     <View

@@ -30,7 +30,6 @@ import CreateOrder from './src/pages/CreateOrder/CreateOrder'
 import CreateOrEditAddr from './src/pages/CreateOrEditAddr/CreateOrEditAddr'
 import AddressList from './src/pages/AddressList/AddressList'
 import OrderList from './src/pages/OrderList/OrderList'
-import AccountInfo from './src/pages/AccountInfo/AccountInfo'
 import CollectGoods from './src/pages/CollectGoods/CollectGoods'
 import LikeContent from './src/pages/LikeContent/LikeContent'
 import Coupon from './src/pages/Coupon/Coupon'
@@ -86,9 +85,14 @@ import Withdraw from './src/pages/AnchorTabs/Withdraw'
 import Message from './src/pages/AnchorTabs/Message'
 import MaskProvider from './src/components/Mask/Provider';
 import RealName from './src/pages/RealName/RealName'
-import PrivacyPolicy from './src/pages/RealName/PrivacyPolicy'
 import PayWebView from './src/pages/PayWebView/PayWebView'
 import AudienceEndScreen from './src/pages/Live/AudienceEndScreen'
+
+// 所有协议
+import AnchorEntryAgreement from './src/pages/Agreements/AnchorEntryAgreement'
+import LivePlatformStandard from './src/pages/Agreements/LivePlatformStandard'
+import UserAgreement from './src/pages/Agreements/UserAgreement'
+import PrivacyPolicy from './src/pages/Agreements/PrivacyPolicy'
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -155,7 +159,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 }
                 <NavigationContainer>
                   <Stack.Navigator>
-                    <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
+                    {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
                     <Stack.Screen name='Root' component={Root} />
                     <Stack.Screen name='HomeSearch' component={HomeSearch} />
                     <Stack.Screen name='FoundSearch' component={FoundSearch} />
@@ -169,7 +173,6 @@ export default function App(props: { skipLoadingScreen: any; }) {
                     <Stack.Screen name='SelectGoods' component={SelectGoods} />
                     <Stack.Screen name='SelectGoodsInfo' component={SelectGoodsInfo} />
                     <Stack.Screen name='OrderList' component={OrderList} />
-                    <Stack.Screen name='AccountInfo' component={AccountInfo} />
                     <Stack.Screen name='CollectGoods' component={CollectGoods} />
                     <Stack.Screen name='LikeContent' component={LikeContent} />
                     <Stack.Screen name='Coupon' component={Coupon} />
@@ -186,7 +189,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                     <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
                     <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false, gestureEnabled: false }} />
                     <Stack.Screen name='LiveSearchScreen' component={LiveSearch} />
-                    {/*<Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{ headerShown: false }} />*/}
+                    <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{ headerShown: false }} />
                     <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{ headerShown: false }} />
                     <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} options={{ headerShown: false }} />
                     <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{ headerShown: false }} />
@@ -224,7 +227,8 @@ export default function App(props: { skipLoadingScreen: any; }) {
                     <Stack.Screen name='AudienceLivingEnd' component={AudienceEndScreen} options={{ headerShown: false, gestureEnabled: false }} />
                     <Stack.Screen name='BankCardBag' component={BankCardBag} options={{ headerShown: false }} />
                     <Stack.Screen name='AddBankCard' component={AddBankCard} options={{ headerShown: false }} />
-                    <Stack.Screen name='Withdraw' component={Withdraw} options={{ headerShown: false }} />
+                    {/* <Stack.Screen name='Withdraw' component={Withdraw} options={{ headerShown: false }} /> */}
+                    <Stack.Screen name='Withdraw' component={AnchorLivingEndScreen} options={{ headerShown: false }} />
                     <Stack.Screen name='Message' component={Message} options={{ headerShown: false }} />
                     <Stack.Screen name='RealName' component={RealName} options={{ headerShown: false }} />
                     <Stack.Screen name='PrivacyPolicy' component={PrivacyPolicy} />
@@ -232,6 +236,9 @@ export default function App(props: { skipLoadingScreen: any; }) {
                     <Stack.Screen name='Service' component={Service} />
                     <Stack.Screen name='GoodsCart' component={GoodsCart} />
                     <Stack.Screen name='Result' component={Result} />
+                    <Stack.Screen name='UserAgreement' component={UserAgreement} />
+                    <Stack.Screen name='LivePlatformStandard' component={LivePlatformStandard} />
+                    <Stack.Screen name='AnchorEntryAgreement' component={AnchorEntryAgreement} />
                   </Stack.Navigator>
                 </NavigationContainer>
               </View>

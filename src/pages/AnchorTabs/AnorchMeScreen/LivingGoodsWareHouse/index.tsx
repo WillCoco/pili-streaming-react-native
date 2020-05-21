@@ -27,8 +27,8 @@ import {
     addGoods2WareHouse,
     getWareHouseGoods,
     delWareHouseGoods,
-    AddGroupHouseGoods,
-    DelGroupHouseGoods
+    addGroupHouseGoods,
+    delGroupHouseGoods
 } from '../../../../actions/shop';
 import {brandGoodAdapter} from '../../../../utils/dataAdapters';
 
@@ -274,7 +274,7 @@ const LivingGoodsWareHouse = (props: any) =>  {
       checkedList.forEach(item => {
           goodsIdArr.push(item.goodsId)
       });
-      const Bool = await dispatch(AddGroupHouseGoods({
+      const Bool = await dispatch(addGroupHouseGoods({
           goodsIdList: [...goodsIdArr]
       }));
       portal.remove(t);
@@ -290,7 +290,7 @@ const LivingGoodsWareHouse = (props: any) =>  {
   }
 
   const onPressAddShop = async (goodsId) => {
-      const Bool = await dispatch(AddGroupHouseGoods({
+      const Bool = await dispatch(addGroupHouseGoods({
           goodsIdList: [goodsId]
       }));
 
@@ -305,7 +305,7 @@ const LivingGoodsWareHouse = (props: any) =>  {
   };
 
   const onPressDelShop = async (goodsId) => {
-      const Bool = await dispatch(DelGroupHouseGoods({
+      const Bool = await dispatch(delGroupHouseGoods({
           goodsIdList: [goodsId]
       }));
       if(Bool) {

@@ -8,6 +8,7 @@ import {
   StyleSheet,
   FlatList,
   SafeAreaView,
+  ScrollView,
 } from 'react-native';
 import LiveHomeTabs from './LiveHomeTabs';
 import withPage from '../../../components/HOCs/withPage';
@@ -19,11 +20,12 @@ import SearchBar from '../../../components/SearchBar/SearchBar';
 import {apiSearchLiveStreamList} from '../../../service/api';
 import Empty from '../../../components/Empty';
 import images from '../../../assets/images';
+import PagingList from '../../../components/PagingList';
 import '../../../actions/im';
+import { EMPTY_ARR, EMPTY_OBJ } from '../../../constants/freeze';
+import { isSucceed } from '../../../utils/fetchTools';
 
 const LiveHomeScreen = (props: any) : React.ReactElement =>  {
-  console.log(props.safeTop, 'safeTop')
-  const [data] = React.useState(['1', '2'])
   const navgation = useNavigation();
 
   navgation.setOptions({
@@ -42,13 +44,9 @@ const LiveHomeScreen = (props: any) : React.ReactElement =>  {
     headerBackTitleVisible: false
   })
 
-  const pageSize = 20
+  const PAGE_SIZE = 20
   const [searchKey, setSearchKey] = useState('')
-  const [sortValue, setSortValue] = useState('sort')
-  const [isEmpty, setIsEmpty] = useState(false)
-  const [emptySearchKey, setEmptySearchKey] = useState('')
   const [livingRoomList, setLivingRoomList] = useState([])
-  let [pageNo, setPageNo] = useState(1)
 
   /**
    * 搜索
@@ -56,67 +54,86 @@ const LiveHomeScreen = (props: any) : React.ReactElement =>  {
    */
   const toSearch = (placeholderSearchKey: string) => {
     const params = {
-      pageSize,
+      pageSize: PAGE_SIZE,
       pageNo: 1,
       searchName: searchKey
     }
 
     apiSearchLiveStreamList(params).then((res: any) => {
       console.log('直播搜索', res)
-      setIsEmpty(!res.count)
-      if (!res.count) {
-        setEmptySearchKey(searchKey)
+      if (!res.total) {
+        setSearchKey('')
         return
       }
 
-      setLivingRoomList(res.list)
+      setLivingRoomList(res?.records)
     })
   }
 
   /**
-   * 列表尾部
+   * 刷新
    */
-  const ListFooterComponent = () => {
-    return (
-      livingRoomList.length 
-        && 
-        (
-          <View style={styles.listFooterWrapper}>
-            <Text>没有更多啦~</Text>
-          </View>
-        )
-        || <Text></Text>
-    );
-  }
+  const onRefresh = async () => {
+    const result = await apiSearchLiveStreamList({
+      searchName: searchKey,
+      pageSize: PAGE_SIZE,
+      pageNo: 1,
+    })
+    .catch((r: any) => {console.log(r, 'LiveStreamList')});
+
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.data?.records || EMPTY_ARR});
+    }
+
+    return Promise.resolve({result: EMPTY_ARR});
+  };
+
+  /**
+   * 加载更多
+   */
+  const onEndReached = async (pageNo: number, pageSize: number) => {
+    const result = await apiSearchLiveStreamList({
+      searchName: searchKey,
+      pageSize,
+      pageNo,
+    })
+    .catch((r: any) => {console.log(r, 'apiSearchLiveStreamList')});
+
+    console.log(result, 'result')
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.data?.records || EMPTY_ARR});
+    }
+    return Promise.resolve({result: EMPTY_ARR});
+  };
 
   return (
     <SafeAreaView
       style={StyleSheet.flatten([styles.wrapper])}
     >
-      {/* <View style={StyleSheet.flatten([styles.contentWrapper, {marginTop: props.safeTop}])}> */}
-      <View style={StyleSheet.flatten([styles.contentWrapper])}>
-        <FlatList
-          refreshing
-          data={livingRoomList}
-          initialNumToRender={props.initialNumToRender}
-          //item显示的布局
-          renderItem={(d) => <LiveSummaryBlock {...d} />}
-          // 空布局
-          ListEmptyComponent={
-            <Empty 
-              img={images.emptySearch}
-              text='对不起，没有找到你想要找的直播间，换一个关键词试试！'
-              textStyle={{width: '70%', textAlign: 'center'}}
-            />
-          }
-          ListFooterComponent={ListFooterComponent}
-          keyExtractor={(item: any, index: number) => 'index' + index + item}
-          numColumns={2}
-          columnWrapperStyle={styles.columnWrapperStyle}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={StyleSheet.flatten([props.contentContainerStyle, {flex: 1}])}
-        />
-      </View>
+      <PagingList
+        size={PAGE_SIZE}
+        data={livingRoomList}
+        //item显示的布局
+        renderItem={(d) => <LiveSummaryBlock liveInfo={d.item} />}
+        empty={
+          <Empty 
+            img={images.emptySearch}
+            text='对不起，没有找到你想要找的直播间，换一个关键词试试！'
+            textStyle={{width: '70%', textAlign: 'center'}}
+          />
+        }
+        //下拉刷新相关
+        onRefresh={onRefresh}
+        //加载更多
+        onEndReached={onEndReached}
+        // ItemSeparatorComponent={separator}
+        keyExtractor={(item, index) => 'index' + index + item}
+        initialNumToRender={PAGE_SIZE}
+        numColumns={2}
+        columnWrapperStyle={{justifyContent: 'space-between'}}
+        style={{borderTopWidth: 4, borderColor: Colors.pageGreyBg}}
+        contentContainerStyle={{paddingHorizontal: pad}}
+      />
     </SafeAreaView>
   )
 };
@@ -141,10 +158,15 @@ const styles = StyleSheet.create({
   contentWrapper: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingHorizontal: pad
+    paddingHorizontal: pad,
   },
   columnWrapperStyle: {
     justifyContent: 'space-between',
+  },
+  contentContainerStyle: {
+    flex: 1,
+    padding: pad,
+    borderWidth: 4
   }
 });
 

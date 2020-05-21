@@ -102,6 +102,7 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
       })}
     >
       <Image
+        defaultSource={require('../../assets/mine-image/logo.png')}
         source={
           (props.liveInfo?.livePic && props.liveInfo?.livePic !== '0')
             ? {uri: props.liveInfo?.livePic} 
@@ -163,10 +164,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     overflow: 'hidden',
-    marginVertical: pad,
+    marginVertical: pad / 2,
     borderRadius: radioLarge,
     elevation: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    borderWidth: .5,
+    borderColor: Colors.borderColor
   },
   liveTitleWrapper: {
     flexDirection: 'row',

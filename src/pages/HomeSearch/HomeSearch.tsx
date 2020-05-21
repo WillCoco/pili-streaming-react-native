@@ -3,18 +3,24 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { connect } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 
-import SearchBar from '../../components/SearchBar/SearchBar'
-import EmptyContent from './EmptyContent/EmptyContent'
-import GoodsCard from '../../components/GoodsCard/GoodsCard'
-
-import { Colors } from '../../constants/Theme'
 import { apiSearch, apiGetIndexGoodsList } from '../../service/api'
+
 import pxToDp from '../../utils/px2dp'
-import LoadMore from '../../components/LoadMore/LoadMore'
+import { Colors } from '../../constants/Theme'
 import checkIsBottom from '../../utils/checkIsBottom'
 
-function HomeSearch(props: { searchKey: React.ReactNode }) {
-  const navgation = useNavigation()
+import EmptyContent from './EmptyContent/EmptyContent'
+import LoadMore from '../../components/LoadMore/LoadMore'
+import SearchBar from '../../components/SearchBar/SearchBar'
+import GoodsCard from '../../components/GoodsCard/GoodsCard'
+
+const pageSize = 20
+
+function HomeSearch() {
+  const pageNoRef = useRef(1)
+  const hasMoreRef = useRef(true)
+
+  const navgation: any = useNavigation()
 
   navgation.setOptions({
     headerTitle: () => <SearchBar
@@ -31,15 +37,13 @@ function HomeSearch(props: { searchKey: React.ReactNode }) {
     headerTintColor: Colors.whiteColor,
     headerBackTitleVisible: false
   })
-
-  const pageSize = 20
+  
+  const [isEmpty, setIsEmpty] = useState(false)
   const [searchKey, setSearchKey] = useState('')
   const [sortValue, setSortValue] = useState('sort')
-  const [isEmpty, setIsEmpty] = useState(false)
   const [emptySearchKey, setEmptySearchKey] = useState('')
   const [goodsList, setGoodsList]: Array<any> = useState([])
-  const hasMoreRef = useRef(true)
-  const pageNoRef = useRef(1)
+  
 
   /**
    * 搜索
