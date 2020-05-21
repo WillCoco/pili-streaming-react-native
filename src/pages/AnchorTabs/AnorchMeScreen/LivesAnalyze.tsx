@@ -31,6 +31,7 @@ import { apiGetLiveDataList } from '../../../service/api';
 import {isIOS, isAndroid} from '../../../constants/DeviceInfo';
 import PagingList from '../../../components/PagingList';
 import ImagePickerBox from '../../../components/DatePicker';
+import Echart from '../../../components/Echart';
 
 const LiveInfoCard = (props: {
     addFavourite: number,
@@ -151,7 +152,7 @@ const LivesAnalyze = (props) =>  {
                 <View>
                     <View >
                         <View style={styles.cardSty}>
-                            {/*<PrimaryText>图表</PrimaryText>*/}
+                            <Echart />
                         </View>
                     </View>
                     <View style={{alignSelf: 'flex-start'}}>
