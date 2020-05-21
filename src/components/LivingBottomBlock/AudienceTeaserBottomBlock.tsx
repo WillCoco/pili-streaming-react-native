@@ -101,8 +101,8 @@ const BottomBlock = (props: any) : any =>  {
   }, [likeQuantity])
 
   /**
-   * 
-  */
+   * 退出提交
+   */
  React.useEffect(() => {
   return () => {
     submitLike(likeSumRef.current)

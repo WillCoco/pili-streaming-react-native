@@ -247,6 +247,33 @@ export const getAdvanceList = (params: GetAdvanceListParams) => {
 }
 
 /**
+ * 获取观看人数
+ */
+interface GetLiveViewNumParams {
+  liveId: string | number,
+}
+export const getLiveViewNum = (params: GetLiveViewNumParams) => {
+  alert(1)
+  return async function(dispatch: Dispatch, getState: any) {
+    const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
+
+    return api.apiGetLiveViewNum(params)
+    .then((r: any) => {
+      console.log(r, '获取观看人数')
+      if (isSucceed(r)) {
+        const {records} = r?.data || EMPTY_OBJ;
+        // return Promise.resolve(records || EMPTY_ARR);
+      }
+      // return Promise.resolve(EMPTY_ARR);
+    })
+    .catch((error: any) => {
+      console.log(`getLiveViewNum error: `, error)
+      // return Promise.resolve(EMPTY_ARR);
+    })
+  }
+}
+
+/**
  * 更新推流配置
  */
 export const updatePusherConfig = (pusherConfig: any) => {

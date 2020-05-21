@@ -57,7 +57,7 @@ const DEFAULT_OPTIONS: any = {
   // outputUrl: "rtmp.youzfx.cn",
   camera: {cameraId: 1, cameraFrontMirror: false},
   audio: {bitrate: 32000, profile: 1, samplerate: 44100},
-  video: {preset: 12, bitrate: 400000, profile: 1, fps: 15, videoFrontMirror: false},
+  video: {preset: 30, bitrate: 400000, profile: 1, fps: 60, videoFrontMirror: false},
   autopreview: true,
 };
 
