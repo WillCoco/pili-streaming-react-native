@@ -149,6 +149,8 @@ const AnchorTrailers = () =>  {
             smallPic,
             title,
             liveTime,
+            liveId,
+            anchorId,
             anchorLogo
           } = item || EMPTY_OBJ;
           return (
@@ -163,10 +165,9 @@ const AnchorTrailers = () =>  {
               onPress={() => {
                 navigate('LivingRoomScreen', {
                   mediaType: MediaType.teaser,
+                  liveId,
+                  anchorId
                 });
-
-                // 更新房间信息
-                dispatch(updateLivingInfo(item))
               }
               }
             />

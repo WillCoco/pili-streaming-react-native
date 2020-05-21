@@ -40,8 +40,9 @@ const goodsInfo = {
 
 
 const AnorchLivingEndScreen = (props: any) : any =>  {
-  const {dispatch: davDispatch} = useNavigation();
+  const {dispatch: davDispatch, goBack} = useNavigation();
   const dispatch = useDispatch();
+  
 
   React.useEffect(() => {
     return () => {
@@ -52,20 +53,22 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
 
   // 直接返回到主播tab
   const onPressClose = () => {
-    davDispatch((state: any) => {
-      const routes = state.routes.filter((r: any) => {
-        return !(r.name === 'LiveGoodsManage' || r.name === 'CreateLiveScreen' || r.name === 'AnchorLivingEnd');
-      });
-      console.log(routes, 111)
+    goBack()
 
-      console.log(11)
+    // davDispatch((state: any) => {
+    //   const routes = state.routes.filter((r: any) => {
+    //     return !(r.name === 'LiveGoodsManage' || r.name === 'CreateLiveScreen' || r.name === 'AnchorLivingEnd');
+    //   });
+    //   console.log(routes, 111)
 
-      return CommonActions.reset({
-        ...state,
-        routes,
-        index: routes.length - 1,
-      });
-    })
+    //   console.log(11)
+
+    //   return CommonActions.reset({
+    //     ...state,
+    //     routes,
+    //     index: routes.length - 1,
+    //   });
+    // })
   }
 
   return (

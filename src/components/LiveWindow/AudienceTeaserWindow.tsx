@@ -19,14 +19,19 @@ import LiveIntro from "../LiveIntro";
 import LivingBottomBlock from "../LivingBottomBlock";
 import Iconcloselight from "../Iconfont/Iconcloselight";
 import { pad } from "../../constants/Layout";
-import images from "../../assets/images";
+import defaultImages from "../../assets/default-image";
 import { MediaType } from "../../liveTypes";
 import AudienceShopCard from "../LivingShopCard/AudienceShopCard";
 import { vw, vh } from "../../utils/metric";
 import withPage from '../HOCs/withPage';
 import TrailerCountDown from '../TrailerCountDown';
 import { EMPTY_OBJ } from '../../constants/freeze';
-import { apiEnterLive } from '../../service/api';
+import { updateLivingInfo } from '../../actions/live';
+import { apiEnterLive, apiAttentionAnchor } from '../../service/api';
+import { Toast } from "@ant-design/react-native";
+import { isSucceed } from '../../utils/fetchTools';
+import { Attention, AttentionParams } from '../../liveTypes';
+import { Colors } from '../../constants/Theme';
 
 interface LiveVideoProps {
   style?: StyleProp<any>,
@@ -39,6 +44,7 @@ interface LiveWindowParams {
   liveId: string | number, // 直播id
   groupID: string, // im群组
   mediaType: MediaType, // 媒体类型
+  anchorId: string,
   // mediaSource: string, // 拉流地址、 video
 }
 
@@ -50,6 +56,7 @@ const LiveVideo = (props: LiveVideoProps): any => {
   const {
     liveId,
     mediaType,
+    anchorId,
   } : LiveWindowParams = (route.params || EMPTY_OBJ) as LiveWindowParams;
 
   // 用户id
@@ -57,8 +64,17 @@ const LiveVideo = (props: LiveVideoProps): any => {
 
   const backUrl = useSelector((state: any) => state?.live?.livingInfo?.backRtmp) || '';
 
-  // 主播信息
-  const [anchorInfo, setAnchorInfo]: [any, any] = React.useState({})
+  // 底图
+  const smallPic = useSelector((state: any) => state?.live?.livingInfo?.smallPic);
+
+  // 是否关注
+  const isAttention = useSelector((state: any) => state?.live?.livingInfo?.isAttention);
+
+  // 直播时间
+  const liveTime = useSelector((state: any) => state?.live?.livingInfo?.liveTime);
+
+  // 预告视频
+  const advance = useSelector((state: any) => state?.live?.livingInfo?.advance);
 
   console.log(backUrl, 'backUrl')
 
@@ -71,24 +87,15 @@ const LiveVideo = (props: LiveVideoProps): any => {
       userId
     }
 
-    // apiEnterLive(params)
-    //   .then((res: any) => {
-    //     // const safeRes = res || {};
-    //     console.log(res, '进入列表');
-    //     res.watchNum = res.watchNum -1; // 这里重新会重复加人数
-    //     dispatch(updateLivingInfo(res))
-    //     setAnchorInfo(res);
-    //   })
+  apiEnterLive(params)
+    .then((res: any) => {
+      if (isSucceed(res)) {
+        console.log(res, '进入列表');
+        dispatch(updateLivingInfo({...res?.data, liveId, anchorId}))
+      }
+    })
+    .catch((error: any) => console.log(`apiEnterLive:` + error))
   }, []);
-
-  /**
-   * [播放uri]
-   */
-
-  /**
-   * 预告倒计时组件
-   */
-
 
   /**
    * 播放器状态
@@ -112,20 +119,8 @@ const LiveVideo = (props: LiveVideoProps): any => {
    * 退出直播
    */
   const closeLive = () => {
-    // player.current?.stop(); // 停止播放器实例
     goBack();
   };
-
-  /**
-   *
-   */
-  React.useEffect(() => {
-    // 直播加群
-  
-    return () => {
-      // player.current?.stop(); // 返回时停止
-    };
-  }, []);
 
   /**
    * 商品卡可见
@@ -160,29 +155,48 @@ const LiveVideo = (props: LiveVideoProps): any => {
     setShopCardVisible(visiable);
   };
 
-  const bigPic = useSelector((state: any) => state?.live?.livingInfo?.bigPic) || '';
-
-  const liveTime = useSelector((state: any) => state?.live?.livingInfo?.liveTime) || '';
   
   // bigPic返回不对
-  const bgUri = bigPic ? {uri: bigPic} : images.livingbg
+  const bgUri = smallPic ? {uri: smallPic} : defaultImages.livingBg
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
-      <Image style={styles.imgBg} source={images.livingbg} resizeMode="cover" />
+      {
+        advance ? (
+          <VideoPlayer
+            source={{uri: advance}} // Can be a URL or a local file.
+            repeat
+            fullscreen
+            disableBack
+            disableVolume
+            disableFullscreen
+            // disableSeekbar
+            resizeMode="cover"
+            style={styles.video}
+            // controlsWrapper={{marginBottom: 50}}
+            seekbarWrapper={{marginBottom: 65}}
+            seekColor={Colors.basicColor}
+            seekBallColor="#fff"
+            bottomControlGroupStyle={{marginBottom: 0, height: 24}}
+          />
+        ) : (
+          <Image
+            source={bgUri}
+            resizeMode="cover"
+            style={styles.imgBg}
+          />
+        )
+      }
       <TrailerCountDown
         deadline={liveTime}
         style={styles.countDown}
       />
       <View style={styles.livingBottomBlock}>
         <LivingBottomBlock.AudienceTraser
-        
         />
       </View>
       <LiveIntro
         showFollowButton
-        // name=
-        isFollow={anchorInfo?.isAttention} // 是否关注(0:没关注；1：关注)
       />
       <TouchableOpacity
         onPress={closeLive}

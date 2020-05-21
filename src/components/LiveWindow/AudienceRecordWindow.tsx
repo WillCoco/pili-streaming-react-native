@@ -21,6 +21,7 @@ import L from "../../constants/Layout";
 import Iconcloselight from "../Iconfont/Iconcloselight";
 import { pad } from "../../constants/Layout";
 import images from "../../assets/images";
+import defaultImages from "../../assets/default-image";
 import { MediaType } from "../../liveTypes";
 import AudienceShopCard from "../LivingShopCard/AudienceShopCard";
 import { vw, vh } from "../../utils/metric";
@@ -31,6 +32,7 @@ import withPage from '../HOCs/withPage';
 import { Colors } from '../../constants/Theme';
 import { isSucceed } from '../../utils/fetchTools';
 import { EMPTY_OBJ } from '../../constants/freeze';
+import { clearLiveRoom } from '../../actions/im';
 
 const PAGE_SIZE = 14;
 const INIT_PAGE_NO = 1;
@@ -45,6 +47,7 @@ interface LiveWindowParams {
   liveId: string | number, // 直播id
   groupID: string, // im群组
   mediaType: MediaType, // 媒体类型
+  anchorId: string,
   // mediaSource: string, // 拉流地址、 video
 }
 
@@ -55,7 +58,7 @@ const LiveVideo = (props: LiveVideoProps): any => {
 
   const {
     liveId,
-    mediaType,
+    anchorId
   } : LiveWindowParams = (route.params || EMPTY_OBJ) as LiveWindowParams;
 
   // 房间信息
@@ -67,10 +70,8 @@ const LiveVideo = (props: LiveVideoProps): any => {
   // 用户id
   const userId = useSelector((state: any) => state?.userData?.userInfo?.userId) || '';
 
+  // 回放uri
   const backUrl = useSelector((state: any) => state?.live?.livingInfo?.backRtmp) || '';
-
-  // 主播信息
-  const [anchorInfo, setAnchorInfo]: [any, any] = React.useState({})
 
   /**
    * 进入直播间，获取拉流地址 TODO:
@@ -78,17 +79,20 @@ const LiveVideo = (props: LiveVideoProps): any => {
   React.useEffect(() => {
     const params = {
       liveId,
-      userId
+      userId,
     }
 
     apiEnterLive(params)
       .then((res: any) => {
+        if (isSucceed(res)) {
+          console.log(res, '进入列表');
+          res.watchNum = res.watchNum -1; // 这里重新会重复加人数
+          dispatch(updateLivingInfo({...res?.data, liveId, anchorId}))
+        }
         // const safeRes = res || {};
-        console.log(res, '进入列表');
-        res.watchNum = res.watchNum -1; // 这里重新会重复加人数
-        dispatch(updateLivingInfo(res))
-        setAnchorInfo(res);
+        
       })
+      .catch((error: any) => console.log(`apiEnterLive:` + error))
   }, []);
 
   /**
@@ -161,15 +165,18 @@ const LiveVideo = (props: LiveVideoProps): any => {
     setShopCardVisible(visiable);
   };
 
-  const bigPic = useSelector((state: any) => state?.live?.livingInfo) || '';
+  const smallPic = useSelector((state: any) => state?.live?.livingInfo?.smallPic);
 
   // bigPic返回不对
-  const bgUri = bigPic ? {uri: bigPic} : images.livingbg
+  const bgUri = smallPic ? {uri: smallPic} : defaultImages.livingBg
 
-  console.log(backUrl, 'backUrlbackUrlbackUrlbackUrl')
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
-      <Image style={styles.imgBg} source={images.livingbg} resizeMode="cover" />
+      <Image
+        source={bgUri}
+        resizeMode="cover"
+        style={styles.imgBg}
+      />
       {
         backUrl ? (
           <VideoPlayer
@@ -195,7 +202,6 @@ const LiveVideo = (props: LiveVideoProps): any => {
       </View>
       <LiveIntro
         showFollowButton
-        isFollow={anchorInfo?.isAttention} // 是否关注(0:没关注；1：关注)
       />
       <TouchableOpacity
         onPress={closeLive}

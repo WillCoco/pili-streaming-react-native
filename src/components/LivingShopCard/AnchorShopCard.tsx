@@ -154,7 +154,7 @@ const AnchorShopCard = (props: {
     const goodsIdList = Array.isArray(data) ? checkedList.map(d => d.goodsId) : [data?.goodsId];
     // const loading = Toast.loading('添加中');
     await dispatch(addGroupHouseGoods({goodsIdList}));
-    console.log(goodsIdList, 'goodsIdList')
+    // console.log(goodsIdList, 'goodsIdList')
     setDataList(changeIsExit(dataList, (item) => goodsIdList.indexOf(item.goodsId) !== -1, true))
     // Portal.remove(loading);
     Toast.success('添加成功');
@@ -167,10 +167,10 @@ const AnchorShopCard = (props: {
     const goodsIdList = Array.isArray(data) ? checkedList.map(d => d.goodsId) : [data?.goodsId];
     // const loading = Toast.loading('删除中');
     await dispatch(delGroupHouseGoods({goodsIdList}));
-    console.log(goodsIdList, 'goodsIdList')
+    // console.log(goodsIdList, 'goodsIdList')
     setDataList(changeIsExit(dataList, (item) => goodsIdList.indexOf(item.goodsId) !== -1, false))
     // Portal.remove(loading);
-    // Toast.show('成功');
+    Toast.success('删除成功');
   }
 
   /**
@@ -180,7 +180,7 @@ const AnchorShopCard = (props: {
     const newDataList = [...dataList];
     newDataList[index].isChecked = !newDataList[index].isChecked;
 
-    console.log(newDataList, '单选')
+    // console.log(newDataList, '单选')
     setDataList(newDataList);
   }
 
@@ -213,7 +213,7 @@ const AnchorShopCard = (props: {
     })
     .catch((r: any) => {console.log(r, 'selLiveGoods')});
 
-    console.log(result, 'result')
+    // console.log(result, 'result')
     if (isSucceed(result)) {
       return Promise.resolve({result: result?.data?.records || EMPTY_ARR});
     }

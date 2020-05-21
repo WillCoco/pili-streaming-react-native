@@ -104,7 +104,7 @@ export const  apiGetMoreComment = (data: any) => post1(`${HOST_JAVA}/find/getMor
 // 发现模块搜索
 export const apiSearchWork = (data: any) => post1(`${HOST_JAVA}/find/searchWorks`, data)
 // 创建订单
-export const apiCreateOrder = (data: any) => post2(`${HOST_JAVA}/order/create`, data, false)
+export const apiCreateOrder = (data: any) => post2(`${HOST_JAVA}/order/create`, data)
 // 获取订单列表
 export const apiGetOrderList = (data: any) => get1(`${HOST_JAVA}/order/getOrderList`, data)
 // 获取订单数量
@@ -114,7 +114,7 @@ export const apiCancelOrder = (data: any) => get1(`${HOST_JAVA}/order/cancelOrde
  // 确认收货
 export const apiConfirmReceiveGoods = (data: any) => get1(`${HOST_JAVA}/order/confirmReceiveGoods`, data)
 // 订单发起支付
-export const apiPayOrder = (data: any) => get2(`${HOST_JAVA}/order/payOrder`, data, false)
+export const apiPayOrder = (data: any) => get2(`${HOST_JAVA}/order/payOrder`, data)
 // 提醒发货
 export const apiReminderDeliverGoods = (data: any) => get1(`${HOST_JAVA}/order/reminderDeliverGoods`, data)
 // 延长收货
@@ -162,7 +162,7 @@ export const apiCreatePoster = (data: any) => get1(`${HOST_JAVA}/userShare/userG
 // 发布作品 上传文件
 export const apiWorkUpload = (data: any) => uploadWorkMedia(`${HOST_JAVA}/find/uploadFile`, data)
 // 杉德支付
-export const apiSandCreateOrder = (data: any) => post2(`${SHANDE_HOST_JAVA}/sandpay/createOrder`, data, false)
+export const apiSandCreateOrder = (data: any) => post2(`${SHANDE_HOST_JAVA}/sandpay/createOrder`, data)
 
 
 /*
@@ -233,9 +233,9 @@ export const apiAddOrderLiveId = (data: any) => get(`${HOST_JAVA}/userLive/addOr
 // 主播页详情
 export const apiAnchorParticular = (data: any) => get(`${HOST_JAVA}/userLive/anchorParticular`, data)
 // 关注/取关主播
-export const apiAttentionAnchor = (data: any) => post(`${HOST_JAVA}/userLive/attentionAnchor`, data)
+export const apiAttentionAnchor = (data: any) => post2(`${HOST_JAVA}/userLive/attentionAnchor`, data)
 // 点击进入直播间
-export const apiEnterLive = (data: any) => get1(`${HOST_JAVA}/userLive/enterLive`, data)
+export const apiEnterLive = (data: any) => get2(`${HOST_JAVA}/userLive/enterLive`, data)
 // 获取精选/关注直播列表
 export const apiGetLiveStreamList = (data: any) => post(`${HOST_JAVA}/userLive/getLiveStreamList`, data)
 // 直播间点亮红心

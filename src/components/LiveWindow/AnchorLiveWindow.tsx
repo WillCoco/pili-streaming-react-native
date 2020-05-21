@@ -29,7 +29,6 @@ import { anchorToLive, closeLive } from '../../actions/live';
 import Toast from 'react-native-tiny-toast';
 import { MessageType } from '../../reducers/im';
 
-const {window} = L;
 const EMPTY_OBJ = {};
 
 interface LiveWindowProps {
@@ -99,7 +98,6 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
    * 退出直播
    */
   const onPressClose = async () => {
-
     maskDispatch({
       type: Mask.Actions.PUSH,
       payload: {
@@ -135,8 +133,6 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
 
     // 获取推流地址
     dispatch(anchorToLive({liveId}))
-      .then((success?: boolean) => {
-      })
       .catch((err: any) => {
         console.log(err, 'err');
       });
@@ -232,10 +228,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       />
       {/*  backgroundColor: 'rgba(0,0,0,0.01)' 修复摄像上层气泡边缘显示问题 */}
       <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.01)', zIndex: 1}}>
-        <LiveIntro
-          // liveTitle="湖南卫视直播间"
-          // liveSubTitle={`123214`}
-        />
+        <LiveIntro />
         <LivingBottomBlock.Anchor
           onPressShopBag={() => shopCardAnim(true)}
           onPressBubble={onPressBubble}

@@ -33,6 +33,22 @@ export enum UserRole {
 }
 
 /**
+ * 是否关注
+ */
+export enum Attention {
+  notAttention = '0',
+  isAttention = '1',
+}
+
+/**
+ * 是否关注参数
+ */
+export enum AttentionParams {
+  attention = '1',
+  cancelAttention = '2',
+}
+
+/**
  * 用户等级
  */
 export enum UserLevel {

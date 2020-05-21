@@ -79,7 +79,7 @@ import AnchroBill from './src/pages/AnchorTabs/MyShopScreen/AnchroBill'
 import GoodEdit from './src/pages/AnchorTabs/MyShopScreen/GoodEdit'
 import BrandGoods from './src/pages/AnchorTabs/BrandGoods'
 import AnchorAgreement from './src/pages/AnchorTabs/AnchorAgreement'
-import AnchorLivingEndScreen from './src/pages/AnchorTabs/AnorchMeScreen/AnchorLivingEndScreen'
+import AnchorLivingEndScreen from './src/pages/AnchorTabs/AnchorLivingEndScreen'
 import BankCardBag from './src/pages/AnchorTabs/CardBag'
 import AddBankCard from './src/pages/AnchorTabs/AddBankCard'
 import Withdraw from './src/pages/AnchorTabs/Withdraw'
@@ -88,6 +88,7 @@ import MaskProvider from './src/components/Mask/Provider';
 import RealName from './src/pages/RealName/RealName'
 import PrivacyPolicy from './src/pages/RealName/PrivacyPolicy'
 import PayWebView from './src/pages/PayWebView/PayWebView'
+import AudienceEndScreen from './src/pages/Live/AudienceEndScreen'
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -154,7 +155,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 }
                 <NavigationContainer>
                   <Stack.Navigator>
-                    {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
+                    <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
                     <Stack.Screen name='Root' component={Root} />
                     <Stack.Screen name='HomeSearch' component={HomeSearch} />
                     <Stack.Screen name='FoundSearch' component={FoundSearch} />
@@ -220,6 +221,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                     <Stack.Screen name='BrandGoods' component={BrandGoods} options={{ headerShown: false }} />
                     <Stack.Screen name='AnchorAgreement' component={AnchorAgreement} options={{ headerShown: false }} />
                     <Stack.Screen name='AnchorLivingEnd' component={AnchorLivingEndScreen} options={{ headerShown: false, gestureEnabled: false }} />
+                    <Stack.Screen name='AudienceLivingEnd' component={AudienceEndScreen} options={{ headerShown: false, gestureEnabled: false }} />
                     <Stack.Screen name='BankCardBag' component={BankCardBag} options={{ headerShown: false }} />
                     <Stack.Screen name='AddBankCard' component={AddBankCard} options={{ headerShown: false }} />
                     <Stack.Screen name='Withdraw' component={Withdraw} options={{ headerShown: false }} />

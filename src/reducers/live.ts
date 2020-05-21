@@ -18,6 +18,14 @@ export enum AttentionTypes {
   notAttention = '1',
 }
 
+// interface AudienceLivingOverInfo {
+  
+// }
+
+// interface AnchorLivingOverInfo {
+  
+// }
+
 interface InitStateTypes {
   // 直播配置
   liveConfig: LiveConfig,
@@ -40,6 +48,7 @@ interface InitStateTypes {
     liveGoodsNum?: string, // 直播商品数量
   },
   isLiveOver: boolean | undefined, // 所在房间直播是否结束(观众端)
+  // livingOverInfo: AudienceLivingOverInfo | AnchorLivingOverInfo, // 结束时数据(观众端)
 }
 
 const DEFAULT_OPTIONS: any = {
@@ -58,7 +67,7 @@ const INITIAL_STATE: InitStateTypes = {
     title: '',
   },
   pusherConfig: DEFAULT_OPTIONS,
-  livingGoods: [1,2],
+  livingGoods: [],
   livingGoodsQuantity: 0,
   livingInfo: undefined,
   isLiveOver: undefined,

@@ -17,6 +17,7 @@ import {pad, radio, radioLarge} from '../../constants/Layout';
 import {Colors} from '../../constants/Theme';
 import Avatar from '../Avatar';
 import images from '../../assets/images';
+import defaultImages from '../../assets/default-image';
 import {MediaType} from '../../liveTypes';
 
 export type msgList = any[] | undefined;
@@ -89,7 +90,7 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
       </>
     );
   }
-
+  
   return (
     <TouchableOpacity
       style={StyleSheet.flatten([styles.wrapper, props.style])}
@@ -104,7 +105,7 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
         source={
           (props.liveInfo?.livePic && props.liveInfo?.livePic !== '0')
             ? {uri: props.liveInfo?.livePic} 
-            : {uri: 'https://goss.veer.com/creative/vcg/veer/800water/veer-302989341.jpg'}
+            : defaultImages.livingCover
         }
         style={styles.img}
         onError={(e) => onImageLoadError}
