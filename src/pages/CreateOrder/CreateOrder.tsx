@@ -7,6 +7,7 @@ import { apiAddrList, apiGetOrderDiscountDetail, apiCreateOrder } from '../../se
 
 import pxToDp from '../../utils/px2dp'
 import Toast from 'react-native-tiny-toast'
+import { Portal, Toast as AntToast } from '@ant-design/react-native'
 import { Colors } from '../../constants/Theme'
 import formatSinglePrice from '../../utils/formatGoodsPrice'
 
@@ -253,6 +254,15 @@ function CreateOrder(props: Props) {
   const submitOrder = () => {
     const addressInfo = Object.keys(props.choosedAddress).length ? props.choosedAddress : defaultAddress
 
+    console.log(addressInfo)
+
+    if (!addressInfo || !addressInfo.address_id) {
+      Toast.show('请选择收货地址', {
+        position: 0
+      })
+      return
+    }
+
     let shopReqs: {
       deliveryType: number // 配送方式
       remark: any // 备注
@@ -263,14 +273,7 @@ function CreateOrder(props: Props) {
     let cartIds: any[] = []
     let userCouponsId = ''
 
-    if (!addressInfo.address_id) {
-      Toast.show('请选择收货地址', {
-        position: 0
-      })
-      return
-    }
-
-    const loading = Toast.showLoading('')
+    const loading = AntToast.loading('')
 
     tempOrderList.forEach((item: any, index: number) => {
       item.orderGoodsReqs = []
@@ -302,11 +305,11 @@ function CreateOrder(props: Props) {
       cartIds,
       payType: 2,  //  支付方式
       shopReqs,
-      userAddressId: defaultAddress.address_id
+      userAddressId: addressInfo.address_id
     }
 
     apiCreateOrder(params).then((res: any) => {
-      Toast.hide(loading)
+      Portal.remove(loading)
       setNetWorkErr(false)
       console.log('提交订单', res)
 
@@ -334,6 +337,7 @@ function CreateOrder(props: Props) {
       navigation.push('PayWebView', params)
     }).catch((err: any) => {
       console.log('提交订单', err)
+      Portal.remove(loading)
       setNetWorkErr(true)
     })
   }
