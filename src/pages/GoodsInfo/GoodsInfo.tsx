@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { View, ScrollView, Dimensions, StyleSheet, Platform, Text, ImageBackground, TouchableOpacity } from 'react-native'
-import { useRoute, useNavigation, useIsFocused } from '@react-navigation/native'
+import { useRoute, useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { apiGoodInfo, apiGetUnclaimedCoupons, apiAddCart, apiGoodsIsLike } from '../../service/api'
 
@@ -9,6 +9,7 @@ import WebView from 'react-native-webview'
 // import HTML from 'react-native-render-html'
 // import HTML from 'react-native-htmlview'
 import Toast from 'react-native-tiny-toast'
+import { Portal, Toast as AntToast } from '@ant-design/react-native'
 import { Colors } from '../../constants/Theme'
 import { strDiscode } from '../../utils/discodeRichText'
 
@@ -20,11 +21,10 @@ import GoodsCard from './GoodsCard/GoodsCard'
 import Advantage from './Advantage/Advantage'
 import BrandCard from './BrandCard/BrandCard'
 import FooterBar from './FooterBar/FooterBar'
+import PostCard from './PosterCard/PosterCard'
 import ActivityBar from './ActivityBar/ActivityBar'
-import ActionSheet from '../../components/ActionSheet/ActionSheet'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
-
-let timer: any
+import ActionSheet from '../../components/ActionSheet/ActionSheet'
 
 // const BaseScript = `(function () {
 //                       var height = null;
@@ -60,7 +60,6 @@ function GoodsInfo(props: any) {
 
   const route: any = useRoute()
   const navigation: any = useNavigation()
-  const isFocused: boolean = useIsFocused()
 
   let [goodsNum, setGoodsNum] = useState(1)
   const [curSku, setCurSku] = useState('')  // 当前选中的规格
@@ -76,14 +75,12 @@ function GoodsInfo(props: any) {
   const [showShareBar, setShowShareBar] = useState(false)
   const [buttonType, setButtonType] = useState('')  // 商品规格操作面板购买按钮文字
   const [soldOut, setSoldOut] = useState(false)
+  const [showPosterCard, setShowPosterCard] = useState(false)
   const [couponList, setCouponList]: Array<any> = useState([])
   const [netWorkErr, setNetWorkErr] = useState(false)
   const [webViewHeight, setWebViewHeight] = useState(0)
-  const [countDownInfo, setCountDownInfo] = useState({
-    hours: 0,
-    min: 0,
-    sec: 0
-  })
+  const [posterPath, setPosterPath] = useState('')
+  const [posterType, setPosterType] = useState(0)
   
   const { id: goodsId, shareUserId, onOrderCompleted }: GoodsInfoParams = route.params as GoodsInfoParams;
 
@@ -102,22 +99,17 @@ function GoodsInfo(props: any) {
   useEffect(() => {
     getGoodsInfo()
   }, [])
-
-  useEffect(() => {
-    if (!isFocused) clearInterval(timer)
-  }, [isFocused])
-
   /**
    * 加载商品详情
    */
   const getGoodsInfo = () => {
-    let loading = Toast.showLoading('')
+    let loading = AntToast.loading('')
 
     apiGoodInfo({
       goods_id: goodsId
     }).then((res: any) => {
       console.log('商品详情', res)
-      Toast.hide(loading)
+      Portal.remove(loading)
       setNetWorkErr(false)
       if (!res) {
         setSoldOut(true)
@@ -135,24 +127,6 @@ function GoodsInfo(props: any) {
 
       if (res.is_sale || res.is_snap_up) {
         setGoodsType(res.is_sale ? 'sale' : 'seckill')
-
-        if (res.is_snap_up) {
-          const curHour = new Date().getHours()
-          let seckillCountdown: number
-
-          if (curHour >= 20) {  // 当天 0 点之前
-            seckillCountdown = new Date().setHours(23, 59, 59, 999) + 1 - new Date().getTime()
-          } else if (curHour >= 0 && curHour < 10) {  // 当天 0 点到 10 点之间
-            seckillCountdown = new Date().setHours(10, 0, 0, 0) - new Date().getTime()
-          } else {
-            seckillCountdown = new Date().setHours(20, 0, 0, 0) - new Date().getTime()
-          }
-
-          timer = setInterval(() => {
-            seckillCountdown -= 1000
-            countDown(seckillCountdown)
-          }, 1000)
-        }
       }
 
       initGoodsSku(res.sku)  // 初始化商品规格信息
@@ -163,38 +137,9 @@ function GoodsInfo(props: any) {
       if (isLogin) getGoodsCoupon(res.goods_id)
     }).catch((err: any) => {
       console.log('商品详情', err)
+      Portal.remove(loading)
       setNetWorkErr(true)
     })
-  }
-
-  /**
-   * 倒计时
-   */
-  const countDown = (seckillCountdown: number) => {
-    let diff = seckillCountdown / 1000
-
-    if (diff <= 0) {
-      return false
-    }
-
-    const time = {
-      hours: 0,
-      min: 0,
-      sec: 0
-    }
-
-    if (diff >= 3600) {
-      time.hours = Math.floor(diff / 3600)
-      diff -= time.hours * 3600
-    }
-    if (diff >= 60) {
-      time.min = Math.floor(diff / 60)
-      diff -= time.min * 60
-    }
-
-    time.sec = diff
-
-    setCountDownInfo(time)
   }
 
   /**
@@ -416,6 +361,15 @@ function GoodsInfo(props: any) {
     setShowShareBar(true)
   }
 
+  /**
+   * 限时海报内容
+   */
+  const showPoster = (img: string, type: number) => {
+    setPosterPath(`data:image/png;base64,${img}`)
+    setPosterType(type)
+    setShowPosterCard(true)
+  }
+
   if (netWorkErr) return <NetWorkErr reload={getGoodsInfo} />
 
   if (soldOut) {
@@ -441,7 +395,7 @@ function GoodsInfo(props: any) {
           {/* 轮播图 */}
           <Swiper swiperList={swiperList} />
           {
-            !!goodsType && <ActivityBar type={goodsType} goodsInfo={goodsInfo} countDownInfo={countDownInfo} />
+            !!goodsType && <ActivityBar type={goodsType} goodsInfo={goodsInfo} />
           }
           {/* 商品信息 */}
           <GoodsCard
@@ -528,11 +482,20 @@ function GoodsInfo(props: any) {
         {/* 分享弹窗 */}
         <ActionSheet isShow={showShareBar}>
           <ShareBar
-            hideShareBar={() => setShowShareBar(false)}
-            userId={props.userInfo.userId}
             goodsId={goodsId}
+            userId={props.userInfo.userId}
+            hideShareBar={() => setShowShareBar(false)}
+            setPosterPath={(img: string, type: number) => showPoster(img, type)}
           />
         </ActionSheet>
+
+        {/* 海报 */}
+        <PostCard
+          show={showPosterCard}
+          type={posterType}
+          path={posterPath}
+          hidePosterCard={() => setShowPosterCard(false)}
+        />
       </View>
     )
   }

@@ -6,7 +6,7 @@ import { Colors } from '../../../constants/Theme'
 import * as ImagePicker from 'expo-image-picker'
 import { Ionicons } from '@expo/vector-icons'
 import Toast from 'react-native-tiny-toast'
-import { apiLiveUploadFile, apiWorkUpload } from '../../../service/api'
+import { apiWorkUpload } from '../../../service/api'
 import { setMediaList } from '../../../actions/works'
 
 function ImgPicker(props: any) {
