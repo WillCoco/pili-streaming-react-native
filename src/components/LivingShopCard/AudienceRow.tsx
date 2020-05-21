@@ -17,6 +17,7 @@ import DiscountPrice from '..//DiscountPrice';
 import Iconremove from '../Iconfont/Iconremove';
 import CheckBox from '../CheckBox';
 import images from '../../assets/images/index';
+import defaultImages from '../../assets/default-image';
 import ButtonRadius from '../Buttons/ButtonRadius';
 import {Colors} from '../../constants/Theme';
 
@@ -45,7 +46,7 @@ const AudienceRow = (props: AudienceRowProps) =>  {
     <TouchableWithoutFeedback>
       <View style={StyleSheet.flatten([styles.style, props.style])}>
         <View>
-          <Image source={data.img ? {uri: data.img} : images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
+          <Image source={data.img ? {uri: data.img} : defaultImages.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
           <T3 style={styles.index}>{props.index}</T3>
         </View>
         <View style={styles.contentWrapper}>

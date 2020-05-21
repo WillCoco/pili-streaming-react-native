@@ -91,7 +91,7 @@ const CardBag = (props: any) =>  {
       <TouchableOpacity onPress={() => navigate('AddBankCard')} style={styles.footer}>
         <ImageBackground source={images.addBankButton} style={StyleSheet.flatten([styles.addButton, {marginBottom: props.safeBottom}])}>
           <Image source={images.addBankCardIcon} style={styles.addIcon} />
-          <PrimaryText >添加银行卡</PrimaryText>
+          <PrimaryText>添加银行卡</PrimaryText>
         </ImageBackground>
       </TouchableOpacity>
     </View>
