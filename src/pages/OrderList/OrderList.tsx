@@ -165,12 +165,14 @@ export default function OrderList() {
    * 取消订单
    */
   const cancelOrder = (id: number) => {
-    console.log(id)
     apiCancelOrder({ orderId: id }).then(() => {
+      orderList.forEach((item: any, index: number) => {
+        if (item.id === id) {
+          orderList.splice(index, 1)
+        }
+      })
+      setOrderList(JSON.parse(JSON.stringify(orderList)))
       Toast.success('已取消该订单')
-      orderListRef.current = []
-      setOrderList(orderListRef.current)
-      getOrderList(indexRef.current)
     }).catch((err: any) => {
       console.log(err.message)
     })
