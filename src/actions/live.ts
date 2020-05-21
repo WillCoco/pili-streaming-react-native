@@ -174,7 +174,7 @@ export const closeLive = (params: CloseLiveParams) => {
     .then((r: any) => {
       console.log(r, 'closeLive')
       if (isSucceed(r)) {
-        return Promise.resolve(r?.data?.liveId);
+        return Promise.resolve(r.data);
       }
       return Promise.resolve(false);
     })
@@ -253,18 +253,13 @@ interface GetLiveViewNumParams {
   liveId: string | number,
 }
 export const getLiveViewNum = (params: GetLiveViewNumParams) => {
-  alert(1)
   return async function(dispatch: Dispatch, getState: any) {
-    const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
-
     return api.apiGetLiveViewNum(params)
     .then((r: any) => {
-      console.log(r, '获取观看人数')
+      // console.log(r, '获取观看人数')
       if (isSucceed(r)) {
-        const {records} = r?.data || EMPTY_OBJ;
-        // return Promise.resolve(records || EMPTY_ARR);
+        dispatch(updateLivingInfo({watchNum: r?.data}))
       }
-      // return Promise.resolve(EMPTY_ARR);
     })
     .catch((error: any) => {
       console.log(`getLiveViewNum error: `, error)
@@ -292,4 +287,11 @@ export const updateLivingInfo = (livingInfo: any) => {
  */
 export function updateLivingStatus(isLiveOver: boolean) {
   return {type: liveActionType.UPDATE_LIVING_STATUS, payload: {isLiveOver}}
+}
+
+/**
+ * 更新主播端房间直播状态(是否禁播)
+ */
+export function updateAnchorLivingStatus(isAnchorLiveOver: boolean) {
+  return {type: liveActionType.UPDATE_ANCHOR_LIVING_STATUS, payload: {isAnchorLiveOver}}
 }

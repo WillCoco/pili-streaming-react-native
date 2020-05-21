@@ -63,7 +63,6 @@ const LiveVideo = (props: LiveVideoProps): any => {
   // 回放uri
   const backUrl = useSelector((state: any) => state?.live?.livingInfo?.backRtmp) || '';
 
-
   /**
    * 轮询器
    */

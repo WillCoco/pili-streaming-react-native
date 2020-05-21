@@ -51,7 +51,8 @@ const BottomBlock = (props: any) : any =>  {
       apiLiveLike(params)
         .then(res => {
           if (isSucceed(res)) {
-            setLikeQuantity(0);
+            // setLikeQuantity(0);
+            likeSumRef.current = 0;
           }
           // 重置
           needSubmit.current = false;
@@ -105,7 +106,9 @@ const BottomBlock = (props: any) : any =>  {
    */
  React.useEffect(() => {
   return () => {
-    submitLike(likeSumRef.current)
+    if (likeSumRef.current) {
+      submitLike(likeSumRef.current)
+    }
   }
  }, [])
 
@@ -116,6 +119,7 @@ const BottomBlock = (props: any) : any =>  {
         likeQuantity={(likeQuantity + likeSum) || 0}
         onPressLike={onPressLike}
         onPressForward={onPressForward}
+        style={{marginTop: 28}}
       />
     </View>
   )

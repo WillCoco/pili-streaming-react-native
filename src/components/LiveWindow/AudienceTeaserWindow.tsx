@@ -30,8 +30,9 @@ import { updateLivingInfo } from '../../actions/live';
 import { apiEnterLive, apiAttentionAnchor } from '../../service/api';
 import { Toast } from "@ant-design/react-native";
 import { isSucceed } from '../../utils/fetchTools';
-import { Attention, AttentionParams } from '../../liveTypes';
 import { Colors } from '../../constants/Theme';
+import Poller from '../../utils/poller';
+import { getLiveViewNum } from '../../actions/live';
 
 interface LiveVideoProps {
   style?: StyleProp<any>,
@@ -68,7 +69,7 @@ const LiveVideo = (props: LiveVideoProps): any => {
   const smallPic = useSelector((state: any) => state?.live?.livingInfo?.smallPic);
 
   // 是否关注
-  const isAttention = useSelector((state: any) => state?.live?.livingInfo?.isAttention);
+  // const isAttention = useSelector((state: any) => state?.live?.livingInfo?.isAttention);
 
   // 直播时间
   const liveTime = useSelector((state: any) => state?.live?.livingInfo?.liveTime);
@@ -77,6 +78,15 @@ const LiveVideo = (props: LiveVideoProps): any => {
   const advance = useSelector((state: any) => state?.live?.livingInfo?.advance);
 
   console.log(backUrl, 'backUrl')
+
+  /**
+   * 轮询器
+   */
+  const poller = React.useRef(new Poller({
+    interval: 1000 * 10,
+    initExec: false,
+    callback: () => dispatch(getLiveViewNum({liveId})),
+  }));
 
   /**
    * 进入直播间，获取拉流地址 TODO:
@@ -95,6 +105,13 @@ const LiveVideo = (props: LiveVideoProps): any => {
       }
     })
     .catch((error: any) => console.log(`apiEnterLive:` + error))
+
+    // 请求观看人数
+    poller.current.start();
+
+    return () => {
+      poller.current.stop();
+    }
   }, []);
 
   /**

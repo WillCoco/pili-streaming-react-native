@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    paddingRight: 4
+    paddingRight: 4,
   },
   input: {
     height: scale(35),

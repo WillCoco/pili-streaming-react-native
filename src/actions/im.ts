@@ -9,7 +9,8 @@ import {RoomType, MessageType, RoomMessageType} from '../reducers/im';
 import Toast from 'react-native-tiny-toast';
 import {store} from '../store';
 import {safeParse} from '../utils/saftyFn';
-import {updateLivingStatus} from './live';
+import {updateLivingStatus, updateAnchorLivingStatus} from './live';
+import { Attention } from '../liveTypes';
 
 const {tim, TIM, userSig, getUserSig: getUserSigLocal} = timModlue;
 
@@ -94,6 +95,7 @@ function handleRoomInfoMsg(message: any) {
     const {operationType, groupProfile, newGroupProfile, memberNum} = message?.payload || {};
     const {groupID} = groupProfile || {};
     const {notification} = newGroupProfile || {};
+    
 
     // 不是所在的room 不处理
     if (groupID !== getState().im?.room?.groupID) {
@@ -128,7 +130,7 @@ function handleRoomInfoMsg(message: any) {
 function handleSysMsg(message: any) {
   return function(dispatch: Dispatch<any>, getState: any) {
     const {groupID} = message?.payload?.groupProfile || {};
-    const {operationType} = message?.payload || {};
+    const {operationType, userDefinedField} = message?.payload || {};
 
     // 不是所在的room 不处理
     if (groupID !== getState().im?.room?.groupID) {
@@ -143,6 +145,19 @@ function handleSysMsg(message: any) {
       // 清空房间相关数据
       store.dispatch(clearLiveRoom());
     }
+
+    // 自定义
+    if (operationType === 255) {
+      // 主播被下线
+      const msgData = safeParse(userDefinedField);
+      console.log(msgData, 'msgData?.typemsgData?.typemsgData?.type');
+      console.log(msgData?.type, 'msgData?.typemsgData?.typemsgData?.type');
+
+      if (msgData?.type === '1') {
+        store.dispatch(updateAnchorLivingStatus(true));
+      }
+    }
+    operationType
   }
 }
 
@@ -277,10 +292,11 @@ export const dismissGroup = (id?: string) => {
       .then(async function(imResponse: any) {
         const groupID = imResponse?.data?.groupID;
         if (groupID) {
-        
           console.log(imResponse.data, 'dismissGroup'); // 登出成功
           // 清除store
           dispatch(clearLiveRoom('ANCHOR'));
+
+          return Promise.resolve(true);
         }
       })
       .catch(function(imError: any) {
@@ -498,14 +514,17 @@ function makeMsg({type, text}: {
     const userInfo = getState().userData?.userInfo;
     const userName = userInfo?.nickName;
     const userAvatar = userInfo?.userAvatar;
+    const isFollowed = getState()?.live?.livingInfo?.isAttention === Attention.isAttention;
+
     const dataString = JSON.stringify({
       text,
       userName: userName || '游客',
       userAvatar,
       userId,
-      isFollowed: false,
+      isFollowed,
       type
     })
+
     return {
       data: dataString,
       description: "",
