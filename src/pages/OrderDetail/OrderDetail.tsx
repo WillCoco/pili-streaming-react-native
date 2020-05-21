@@ -15,9 +15,9 @@ export default function OrderDetail() {
   const route: any = useRoute()
   const navigation: any = useNavigation()
 
-  const { id } = route
+  const { id } = route.params
 
-  const [, setNetWorkErr] = useState(false)
+  const [netWorkErr, setNetWorkErr] = useState(false)
   const [orderDetail, setOrderDetail]: any = useState({})
   const [expressList, setExpressList]: Array<any> = useState([])
 
@@ -157,7 +157,7 @@ export default function OrderDetail() {
     navigation.push('GoodsInfo', { id })
   }
 
-  if (NetWorkErr) return <NetWorkErr reload={getOrderDetail} />
+  if (netWorkErr) return <NetWorkErr reload={getOrderDetail} />
 
   return (
     <ScrollView>
