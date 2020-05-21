@@ -5,10 +5,9 @@
  */
 import * as React from 'react';
 import { Colors } from '../../constants/Theme';
-import Iconchecked from '../../components/Iconfont/Iconchecked';
 import { PrimaryText, SmallText} from 'react-native-normalization-text';
-import Iconarrowright from '../Iconfont/Iconarrowright';
 import images from '../../assets/images/index';
+import defaultImages from '../../assets/default-image';
 import { radio } from '../../constants/Layout';
 import {
   View,
@@ -26,8 +25,6 @@ interface GoodCheckRowProps {
 
 const GoodCheckRow = (props: GoodCheckRowProps) =>  {
   const checkImg = props.isChecked ? images.checkedYellowIcon : images.uncheckedIcon
-
-
   return (
     <TouchableOpacity style={styles.style} onPress={props.onPress}>
       <TouchableOpacity onPress={props.onPress}>
@@ -38,13 +35,12 @@ const GoodCheckRow = (props: GoodCheckRowProps) =>  {
         />
       </TouchableOpacity>
       <View>
-        <Image style={styles.img} source={props.good?.img || images.goodCover} />
+        <Image style={styles.img} source={props.good?.img ? {uri: props.good?.img} : defaultImages.goodCover} />
       </View>
       <View style={styles.contentWrapper}>
         <PrimaryText>{props.good?.title}</PrimaryText>
         <SmallText>数量: {props.good?.quantity}</SmallText>
       </View>
-      {/* <Iconarrowright size={30} style={styles.arrow} /> */}
     </TouchableOpacity>
   )
 };

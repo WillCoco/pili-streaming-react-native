@@ -18,6 +18,7 @@ import Iconremove from '../../components/Iconfont/Iconremove';
 import ButtonRadius from '../../components/Buttons/ButtonRadius';
 import CheckBox from '../../components/CheckBox';
 import images from '../../assets/images/index';
+import defaultImages from '../../assets/default-image';
 import { Colors } from '../../constants/Theme';
 import { EMPTY_OBJ } from '../../constants/freeze';
 
@@ -45,7 +46,7 @@ const AnchorRowManageRow = (props: AnchorRowManageRowProps) =>  {
         onPress={props.onPressCheck}
         style={{height: '100%', paddingHorizontal: pad}}
       />
-      <Image source={data.img ? {uri: data.img} : images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
+      <Image source={data.img ? {uri: data.img} : defaultImages.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
       <View style={styles.contentWrapper}>
         <View style={styles.titleWrapper}>
           <PrimaryText numberOfLines={2} style={{flex: 1}}>{data.title}</PrimaryText>

@@ -25,6 +25,7 @@ import GoodCheckBlock from '../../../components/GoodCheckBlock';
 import Iconcartlight from '../../../components/Iconfont/Iconcartlight';
 import {getPlatformBrands, AddGoodsTargetType} from '../../../actions/shop';
 import images from '../../../assets/images/index';
+import defaultImages from '../../../assets/default-image';
 
 const emptyList: [] = [];
 
@@ -94,7 +95,7 @@ const GoodsSupply = (props: any) =>  {
                         <View style={styles.imgWrapper}>
                           <Image
                             style={styles.img}
-                            source={!!props.good?.brandLogo? {uri: props.good?.brandLogo} : images.goodCover}
+                            source={!!props.good?.brandLogo? {uri: props.good?.brandLogo} : defaultImages.goodCover}
                             resizeMode="cover"
                           />
                         </View>
