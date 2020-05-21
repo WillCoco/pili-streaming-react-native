@@ -20,6 +20,7 @@
     "@react-navigation/bottom-tabs": "^5.2.6",
     "@react-navigation/native": "^5.1.5",
     "@react-navigation/stack": "^5.2.10",
+    "@types/react-native-htmlview": "^0.12.2",
     "@types/react-native-scrollable-tab-view": "^0.10.1",
     "@types/react-native-share": "^3.1.0",
     "beeshell": "^2.0.11",
@@ -34,6 +35,7 @@
     "expo-permissions": "^8.1.0",
     "expo-updates": "~0.1.0",
     "moment": "^2.24.0",
+    "native-echarts": "git+http://47.114.76.40/frontend/react-native-echarts.git",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "~0.61.5",
@@ -70,8 +72,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "rn-fetch-blob": "^0.12.0",
-    "tim-js-sdk": "^2.6.2",
-    "native-echarts": "git+http://47.114.76.40/frontend/react-native-echarts.git"
+    "tim-js-sdk": "^2.6.2"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
