@@ -23,6 +23,7 @@
 		F69E631024692A760073B935 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E630F24692A760073B935 /* libsqlite3.0.tbd */; };
 		F69E631224692A820073B935 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E631124692A820073B935 /* libc++.tbd */; };
 		F69E631424692A8B0073B935 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E631324692A8B0073B935 /* libz.tbd */; };
+		8A7BAC7FA0C54067BCC91E69 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A738254A1174C949203ACAE /* SplashScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
+		0446BFC324766E8100B22621 /* championAppRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = championAppRelease.entitlements; path = championApp/championAppRelease.entitlements; sourceTree = "<group>"; };
 		056F63395CAC2B8C2DC048FE /* Pods-championApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-championApp.debug.xcconfig"; path = "Target Support Files/Pods-championApp/Pods-championApp.debug.xcconfig"; sourceTree = "<group>"; };
 		07287ACC2432831900C893F0 /* app.manifest */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = app.manifest; path = championApp/Supporting/app.manifest; sourceTree = "<group>"; };
 		07287ACD2432831900C893F0 /* app.bundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = app.bundle; path = championApp/Supporting/app.bundle; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 		F69E630F24692A760073B935 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		F69E631124692A820073B935 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		F69E631324692A8B0073B935 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		4A738254A1174C949203ACAE /* SplashScreen.storyboard */ = {isa = PBXFileReference; name = "SplashScreen.storyboard"; path = "championApp/SplashScreen.storyboard"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = file.storyboard; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +89,7 @@
 		13B07FAE1A68108700A75B9A /* championApp */ = {
 			isa = PBXGroup;
 			children = (
+				0446BFC324766E8100B22621 /* championAppRelease.entitlements */,
 				18BFFF0C246A99F200EB52FB /* championAppDebug.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -97,6 +101,7 @@
 				0731D3BB24204D9B009CAE85 /* Expo.plist */,
 				07287ACD2432831900C893F0 /* app.bundle */,
 				07287ACC2432831900C893F0 /* app.manifest */,
+				4A738254A1174C949203ACAE /* SplashScreen.storyboard */,
 			);
 			name = championApp;
 			sourceTree = "<group>";
@@ -259,6 +264,7 @@
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				74D35D4FE55C46E98F63B34B /* antfill.ttf in Resources */,
 				449261313F0C4E4881FF5D5F /* antoutline.ttf in Resources */,
+				8A7BAC7FA0C54067BCC91E69 /* SplashScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,8 +381,9 @@
 			baseConfigurationReference = E40B1F720DE0D29BF6B90074 /* Pods-championApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = championApp/championAppRelease.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5Y23DL99NP;
+				DEVELOPMENT_TEAM = ADA66625XJ;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = championApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -385,7 +392,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.championApp;
 				PRODUCT_NAME = championApp;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

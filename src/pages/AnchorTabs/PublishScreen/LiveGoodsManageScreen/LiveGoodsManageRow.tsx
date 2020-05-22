@@ -59,8 +59,8 @@ const LiveGoodsManageRow = (props: LiveGoodsManageRowProps) =>  {
           </TouchableOpacity> */}
         </View>
         <View style={styles.rowBetween}>
-          <SmallText color="grey" profit={111} style={{flex: -1}}>总库存:  {data.storeCount}</SmallText>
-          <ShareProfit profit={111} style={{flex: -1}} />
+          <SmallText color="grey" style={{flex: -1}}>总库存:  {data.storeCount}</SmallText>
+          <ShareProfit profit={data.rebate} style={{flex: -1}} />
         </View>
         <View style={styles.rowBetween}>
           <DiscountPrice discountPrice={data.discountPrice} price={data.pirce} />

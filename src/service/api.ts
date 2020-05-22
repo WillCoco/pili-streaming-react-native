@@ -240,15 +240,17 @@ export const apiEnterLive = (data: any) => get2(`${HOST_JAVA}/userLive/enterLive
 // 获取精选/关注直播列表
 export const apiGetLiveStreamList = (data: any) => post2(`${HOST_JAVA}/userLive/getLiveStreamList`, data)
 // 直播间点亮红心
-export const apiLiveLike = (data: any) => get(`${HOST_JAVA}/userLive/liveLike`, data)
+export const apiLiveLike = (data: any) => get2(`${HOST_JAVA}/userLive/liveLike`, data)
 // 我的关注列表
 export const apiMyAttentionList = (data: any) => get1(`${HOST_JAVA}/userLive/myAttentionList`, data)
 // 搜索直播列表
 export const apiSearchLiveStreamList = (data: any) => get1(`${HOST_JAVA}/userLive/searchLiveStreamList`, data)
 // 直播间的购物袋
-export const apiShoppingBag = (data: any) => get(`${HOST_JAVA}/userLive/shoppingBag`, data)
+export const apiShoppingBag = (data: any) => get2(`${HOST_JAVA}/userLive/shoppingBag`, data)
 // 用户直播列表轮播图
 export const apiUserLiveBanner = () => post1(`${HOST_JAVA}/userLive/userLiveBanner`)
+// 获取观看人数
+export const apiGetLiveViewNum = (data: any) => get2(`${HOST_JAVA}/userLive/getLiveViewNum`, data)
 // 上传用户头像本地base64
 export const apiUploadFile = (data: any) => post(`${HOST_JAVA}/user/uploadFile`, data)
 

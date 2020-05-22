@@ -15,8 +15,6 @@ export default function PayWebview() {
 
   const { orderSn, payType } = route.params
 
-  const [path, setPath] = useState(route?.params?.url)
-
   navigation.setOptions({
     headerTitle: '支付' || route?.params?.title,
     headerStyle: {
@@ -27,8 +25,6 @@ export default function PayWebview() {
     headerTintColor: Colors.whiteColor,
     headerBackTitleVisible: false,
   })
-
-  console.log(path)
 
   useEffect(() => {
     AppState.addEventListener('change', handleAppStateChange)
@@ -52,7 +48,7 @@ export default function PayWebview() {
   return (
     <WebView
       ref={webViewRef}
-      source={{ uri: path }}
+      source={{ uri: route?.params?.url }}
     />
   )
 }

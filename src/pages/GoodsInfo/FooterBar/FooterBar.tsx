@@ -4,18 +4,27 @@ import { useNavigation } from '@react-navigation/native'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
+import { Toast } from '@ant-design/react-native'
 const starIcon = require('../../../assets/goods-image/icon_star.png')
 const unstarIcon = require('../../../assets/goods-image/icon_unstar.png')
 
 
 export default function FooterBar(props: any) {
-  const { goodsInfo, shareUserId } = props
-  const navigation = useNavigation()
+  const { goodsInfo, shareUserId, servicePath } = props
+  const navigation: any = useNavigation()
+
+  const toService = () => {
+    if (!servicePath) {
+      Toast.fail('未开通客服功能')
+      return
+    }
+    navigation.push('Service', servicePath)
+  }
 
   return (
     <View style={styles.container}>
 
-      <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.push('Service')}>
+      <TouchableOpacity style={styles.iconContainer} onPress={toService}>
         <Image source={require('../../../assets/goods-image/icon_kefu.png')} style={styles.icon} />
         <Text style={{ color: Colors.lightBlack }}>客服</Text>
       </TouchableOpacity>

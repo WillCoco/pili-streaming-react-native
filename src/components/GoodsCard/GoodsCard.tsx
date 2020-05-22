@@ -18,7 +18,7 @@ import formatGoodsPrice from '../../utils/formatGoodsPrice'
 
 function GoodsCard(props: { isLogin?: any; style?: any; tapGoodsCard?: any; goodsInfo?: any }) {
   const { goodsInfo } = props
-  const navigation = useNavigation()
+  const navigation: any = useNavigation()
 
   const toShare = async () => {
     if (!props.isLogin) {

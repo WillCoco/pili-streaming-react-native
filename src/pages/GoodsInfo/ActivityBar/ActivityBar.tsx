@@ -8,10 +8,9 @@ import SeckillCountDown from '../../../components/SeckillCountDown/SeckillCountD
 
 export default function ActivityBar(props: {
   type: string,
-  goodsInfo: any,
-  countDownInfo: any
+  goodsInfo: any
 }) {
-  const { type, goodsInfo, countDownInfo } = props
+  const { type, goodsInfo } = props
 
   const containerBgi =
     type === 'sale'

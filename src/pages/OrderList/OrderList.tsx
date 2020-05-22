@@ -12,7 +12,8 @@ import {
 } from '../../service/api'
 
 import pxToDp from '../../utils/px2dp'
-import Toast from 'react-native-tiny-toast'
+// import Toast from 'react-native-tiny-toast'
+import { Portal, Toast } from '@ant-design/react-native'
 import { Colors } from '../../constants/Theme'
 import checkIsBottom from '../../utils/checkIsBottom'
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view'
@@ -88,7 +89,7 @@ export default function OrderList() {
    * 获取订单列表
    */
   const getOrderList = (index: number) => {
-    const loading = Toast.showLoading('')
+    const loading = Toast.loading('')
 
     const params = index
       ? {
@@ -103,7 +104,7 @@ export default function OrderList() {
 
     apiGetOrderList(params).then((res: any) => {
       setNetWorkErr(false)
-      Toast.hide(loading)
+      Portal.remove(loading)
 
       console.log('获取订单列表', res)
 
@@ -117,6 +118,7 @@ export default function OrderList() {
     }).catch((err: any) => {
       console.log('获取订单列表')
       setNetWorkErr(true)
+      Portal.remove(loading)
     })
   }
 
@@ -124,13 +126,13 @@ export default function OrderList() {
    * 获取售后订单列表
    */
   const getReturnOrderList = () => {
-    const loading = Toast.showLoading('')
+    const loading = Toast.loading('')
 
     apiGetReturnOrderList({
       pageSize,
       pageNo: pageNoRef.current
     }).then((res: any) => {
-      Toast.hide(loading)
+      Portal.remove(loading)
       setNetWorkErr(false)
       console.log('售后订单列表', res)
       res.records.forEach((item: any) => {
@@ -155,6 +157,7 @@ export default function OrderList() {
     }).catch((err: any) => {
       console.log('售后订单列表')
       setNetWorkErr(true)
+      Portal.remove(loading)
     })
   }
 
@@ -162,12 +165,14 @@ export default function OrderList() {
    * 取消订单
    */
   const cancelOrder = (id: number) => {
-    console.log(id)
     apiCancelOrder({ orderId: id }).then(() => {
-      Toast.showSuccess('已取消该订单')
-      orderListRef.current = []
-      setOrderList(orderListRef.current)
-      getOrderList(indexRef.current)
+      orderList.forEach((item: any, index: number) => {
+        if (item.id === id) {
+          orderList.splice(index, 1)
+        }
+      })
+      setOrderList(JSON.parse(JSON.stringify(orderList)))
+      Toast.success('已取消该订单')
     }).catch((err: any) => {
       console.log(err.message)
     })
@@ -178,7 +183,7 @@ export default function OrderList() {
    */
   const remindDelivery = (id: number) => {
     apiReminderDeliverGoods({ orderId: id }).then(() => {
-      Toast.showSuccess('已提醒卖家')
+      Toast.success('已提醒卖家')
     }).catch((err: any) => {
       console.log(err.message)
     })
@@ -189,7 +194,7 @@ export default function OrderList() {
    */
   const confirmTheGoods = (id: number) => {
     apiConfirmReceiveGoods({ orderId: id }).then(() => {
-      Toast.showSuccess('已完成收货')
+      Toast.success('已完成收货')
     }).catch((err: any) => {
       console.log(err.message)
     })
@@ -199,14 +204,14 @@ export default function OrderList() {
    * 去支付
    */
   const toPay = (id: number) => {
-    let loading = Toast.showLoading('')
+    let loading = Toast.loading('')
     apiPayOrder({ id, payType: 2 }).then((res: any) => {
-      Toast.hide(loading)
+      Portal.remove(loading)
 
       console.log('去支付', res)
 
       if (res.code !== 200) {
-        Toast.show('创建订单失败')
+        Toast.fail('创建订单失败')
         return
       }
 
@@ -216,9 +221,16 @@ export default function OrderList() {
         payURL += '&' + item + '=' + res.data[item]
       }
 
-      navigation.push('PayWebView', { url: payURL })
+      const params = {
+        url: payURL,
+        orderSn: res.data.orderSn,
+        payType: res.data.payType
+      }
+
+      navigation.push('PayWebView', params)
     }).catch((err: any) => {
       console.log(err.message)
+      Portal.remove(loading)
     })
   }
 
@@ -227,7 +239,7 @@ export default function OrderList() {
    */
   const extendReceiveGoods = (id: number) => {
     apiExtendReceiveGoods({ orderId: id }).then(() => {
-      Toast.showSuccess('已延长收货时间')
+      Toast.success('已延长收货时间')
     }).catch((err: any) => {
       console.log(err.message)
     })

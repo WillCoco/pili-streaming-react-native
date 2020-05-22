@@ -4,7 +4,7 @@ import { useRoute, useNavigation } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
 import { apiGetOrderDetail, apiCancelOrder, apiReminderDeliverGoods, apiConfirmReceiveGoods, apiExtendReceiveGoods, apiQueryExpress, apiPayOrder } from '../../service/api'
 import pxToDp from '../../utils/px2dp'
-import Toast from 'react-native-tiny-toast'
+import { Portal, Toast } from '@ant-design/react-native'
 
 import GoodsCard from './GoodsCard/GoodsCard'
 import OrderCard from './OrderCard/OrderCard'
@@ -15,9 +15,9 @@ export default function OrderDetail() {
   const route: any = useRoute()
   const navigation: any = useNavigation()
 
-  const { id } = route
+  const { id } = route.params
 
-  const [, setNetWorkErr] = useState(false)
+  const [netWorkErr, setNetWorkErr] = useState(false)
   const [orderDetail, setOrderDetail]: any = useState({})
   const [expressList, setExpressList]: Array<any> = useState([])
 
@@ -59,7 +59,7 @@ export default function OrderDetail() {
    */
   const cancelOrder = () => {
     apiCancelOrder({ orderId: orderDetail.id }).then(() => {
-      Toast.showSuccess('已取消该订单')
+      Toast.success('已取消该订单')
       setTimeout(() => {
         navigation.goBack()
       }, 1500)
@@ -72,14 +72,14 @@ export default function OrderDetail() {
    * 去付款
    */
   const toPay = () => {
-    let loading = Toast.showLoading('')
+    let loading = Toast.loading('')
     apiPayOrder({ id, payType: 2 }).then((res: any) => {
-      Toast.hide(loading)
+      Portal.remove(loading)
 
       console.log('去支付', res)
 
       if (res.code !== 200) {
-        Toast.show('创建订单失败')
+        Toast.fail('创建订单失败')
         return
       }
 
@@ -92,6 +92,7 @@ export default function OrderDetail() {
       navigation.push('PayWebView', { url: payURL })
     }).catch((err: any) => {
       console.log(err.message)
+      Portal.remove(loading)
     })
   }
 
@@ -100,7 +101,7 @@ export default function OrderDetail() {
    */
   const remindDelivery = () => {
     apiReminderDeliverGoods({ orderId: orderDetail.id }).then(() => {
-      Toast.showSuccess('已提醒卖家')
+      Toast.success('已提醒卖家')
     }).catch((err: any) => {
       console.log(err)
     })
@@ -111,7 +112,7 @@ export default function OrderDetail() {
    */
   const extendReceiveGoods = () => {
     apiExtendReceiveGoods({ orderId: orderDetail.id }).then(() => {
-      Toast.showSuccess('已延长收货时间')
+      Toast.success('已延长收货时间')
     }).catch((err: any) => {
       console.log(err)
     })
@@ -140,7 +141,7 @@ export default function OrderDetail() {
    */
   const confirmTheGoods = () => {
     apiConfirmReceiveGoods({ orderId: orderDetail.id }).then(() => {
-      Toast.showSuccess('已完成收货')
+      Toast.success('已完成收货')
       setTimeout(() => {
         navigation.goBack()
       }, 1500)
@@ -157,7 +158,7 @@ export default function OrderDetail() {
     navigation.push('GoodsInfo', { id })
   }
 
-  if (NetWorkErr) return <NetWorkErr reload={getOrderDetail} />
+  if (netWorkErr) return <NetWorkErr reload={getOrderDetail} />
 
   return (
     <ScrollView>

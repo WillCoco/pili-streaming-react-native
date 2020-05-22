@@ -1,7 +1,5 @@
 import React from 'react'
-import { Image, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { Carousel } from '@ant-design/react-native'
+import { Image, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import Swiper from 'react-native-swiper'
 
 import { Colors } from '../../../constants/Theme'
@@ -16,11 +14,6 @@ interface Props {
 
 function HomeSwiper(props: Props) {
   const { swiperList } = props
-  const navigation = useNavigation()
-
-  const changSwiper = () => {
-    console.log(1)
-  }
 
   const tapSwiper = (item: any) => {
     if (item.goods_id) {
