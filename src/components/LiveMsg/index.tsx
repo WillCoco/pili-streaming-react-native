@@ -70,7 +70,9 @@ const LiveMsg = (props: LiveMsgProps) : any =>  {
   React.useEffect(() => {
     if (!isScrolling.current && isButtom.current) {
       // 滚动到底部
-      scroll.current?.scrollToEnd()
+      requestAnimationFrame(() => {
+        scroll.current?.scrollToEnd({animated: false})
+      })
       isButtom.current = true;
       isScrolling.current = false;
     }
@@ -161,12 +163,12 @@ const styles = StyleSheet.create({
     maxHeight: DEFAULT_HEIGTH,
     width: DEFAULT_WIDTH,
     justifyContent: 'flex-end',
-    borderWidth: 1,
   },
   scrollerWrapper: {
   },
   scrollContentWrapper: {
     justifyContent: 'flex-end',
+    alignItems: 'flex-start'
   }
 })
 

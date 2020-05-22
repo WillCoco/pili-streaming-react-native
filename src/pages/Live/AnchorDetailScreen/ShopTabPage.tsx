@@ -54,8 +54,6 @@ const AnorchDetailAvatar = (props: {
       selType: AddGoodsTargetType.showcaseGoods
     }) || EMPTY_ARR;
 
-    console.log(goods, 1234325215);
-
     return {result: goods?.records}
   };
 

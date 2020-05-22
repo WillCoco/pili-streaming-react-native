@@ -65,6 +65,9 @@ const LiveWindow = (props: LiveWindowProps): any => {
   // 用户id
   const userId = useSelector((state: any) => state?.userData?.userInfo?.userId);
 
+  // 我的主播id
+  const myAnchorId = useSelector((state: any) => state?.anchorData?.anchorInfo?.anchorId);
+
   // 拉流
   const pullUrl = useSelector((state: any) => state?.live?.livingInfo?.pullUrl) || '';
 
@@ -102,7 +105,10 @@ const LiveWindow = (props: LiveWindowProps): any => {
    */
   const closeLive = () => {
     // player.current?.stop(); // 停止播放器实例
-    dispatch(quitGroup()); // 退im群
+    // 我不是这场直播的主播
+    if (myAnchorId !== anchorId) {
+      dispatch(quitGroup()); // 退im群
+    }
     goBack();
   };
 
@@ -214,7 +220,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
       />
       <View style={styles.livingBottomBlock}>
         <LivingBottomBlock.Audience 
-          onPressShopBag={() => shopCardAnim(true)} 
+          onPressShopBag={() => shopCardAnim(true)}
         />
       </View>
       {!!noticeBubbleText ? <NoticeBubble text={noticeBubbleText} /> : null}
@@ -252,7 +258,6 @@ const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
     right: 0,
-    borderColor: "red",
   },
   scrollerWrapper: {},
   contentWrapper: {

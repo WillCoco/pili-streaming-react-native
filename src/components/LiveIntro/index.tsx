@@ -4,13 +4,9 @@
 import React from 'react';
 import {
   View,
-  Text,
-  ScrollView,
   TouchableOpacity,
   StyleSheet,
   StyleProp,
-  TouchableWithoutFeedback,
-  PanResponder,
   ImageSourcePropType
 } from 'react-native';
 import {Toast} from '@ant-design/react-native'

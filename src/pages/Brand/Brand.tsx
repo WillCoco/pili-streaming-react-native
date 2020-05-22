@@ -29,7 +29,7 @@ export default function Brand() {
   const pageType = route.params.type
 
   navgation.setOptions({
-    headerTitle: pageType === 'default' ? '圈品超级品牌' : '品牌关注',
+    headerTitle: pageType === 'default' ? '超级品牌' : '品牌关注',
     headerStyle: {
       backgroundColor: Colors.basicColor,
       elevation: 0,  // 去除安卓状态栏底部阴影

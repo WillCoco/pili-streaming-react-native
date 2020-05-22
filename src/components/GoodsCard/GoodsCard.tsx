@@ -50,7 +50,11 @@ function GoodsCard(props: { isLogin?: any; style?: any; tapGoodsCard?: any; good
         <Image source={{ uri: goodsInfo.original_img || goodsInfo.originalImg}} style={styles.goodsImg} />
       </TouchableWithoutFeedback>
       <View style={styles.goodsInfo}>
-        <Text style={styles.goodsName} numberOfLines={2} onPress={() => props.tapGoodsCard(goodsInfo.goods_id || goodsInfo.goodsId)}>
+        <Text 
+          style={styles.goodsName} 
+          numberOfLines={2} 
+          onPress={() => props.tapGoodsCard(goodsInfo.goods_id || goodsInfo.goodsId)}
+        >
           {goodsInfo.goods_name || goodsInfo.goodsName}
         </Text>
         <View style={styles.goodsShare}>

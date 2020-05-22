@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Platform, StatusBar, View, NativeModules, Text } from 'react-native';
-import { SplashScreen, AppLoading } from 'expo'
+import { AppLoading } from 'expo'
+import * as SplashScreen from 'expo-splash-screen'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons'
+import { navigationRef } from './src/navigation/RootNavgation';
 
 import { Provider as AntdProvider } from '@ant-design/react-native'
 import { Provider } from 'react-redux'
@@ -105,7 +107,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
     async function loadResourcesAndDataAsync() {
       try {
 
-        SplashScreen.preventAutoHide()
+        SplashScreen.preventAutoHideAsync()
 
         await Font.loadAsync({
           ...Ionicons.font,
@@ -127,7 +129,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
         }
 
         // FIXME:
-        // SplashScreen.hide()
+        SplashScreen.hideAsync()
       }
     }
 
@@ -143,7 +145,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return null
-    // return <AppLoading /> // tofix: 在android上报错
+    // return Platform.OS === 'ios' ? <AppLoading /> : null
   } else {
     return (
       <MaskProvider>
@@ -155,9 +157,11 @@ export default function App(props: { skipLoadingScreen: any; }) {
             >
               <View style={{ flex: 1 }}>
                 {
-                  Platform.OS !== 'ios' && <StatusBar barStyle='light-content' translucent={true} backgroundColor='transparent' />
+                  Platform.OS === 'ios'
+                  ? <StatusBar barStyle='light-content' />
+                  : <StatusBar barStyle='light-content' translucent={true} backgroundColor='transparent' />
                 }
-                <NavigationContainer>
+                <NavigationContainer ref={navigationRef as any}>
                   <Stack.Navigator>
                     {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
                     <Stack.Screen name='Root' component={Root} />

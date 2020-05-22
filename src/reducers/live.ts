@@ -48,7 +48,7 @@ interface InitStateTypes {
     liveGoodsNum?: string, // 直播商品数量
   },
   isLiveOver: boolean | undefined, // 所在房间直播是否结束(观众端)
-  // livingOverInfo: AudienceLivingOverInfo | AnchorLivingOverInfo, // 结束时数据(观众端)
+  isAnchorLiveOver: boolean | undefined, // 所在房间直播是否结束(主播端违规等后台)
 }
 
 const DEFAULT_OPTIONS: any = {
@@ -57,7 +57,7 @@ const DEFAULT_OPTIONS: any = {
   // outputUrl: "rtmp.youzfx.cn",
   camera: {cameraId: 1, cameraFrontMirror: false},
   audio: {bitrate: 32000, profile: 1, samplerate: 44100},
-  video: {preset: 30, bitrate: 400000, profile: 1, fps: 60, videoFrontMirror: false},
+  video: {preset: 30, bitrate: 400000, profile: 1, fps: 30, videoFrontMirror: false},
   autopreview: true,
 };
 
@@ -71,6 +71,7 @@ const INITIAL_STATE: InitStateTypes = {
   livingGoodsQuantity: 0,
   livingInfo: undefined,
   isLiveOver: undefined,
+  isAnchorLiveOver: undefined,
 }
 
 export default function live(state = INITIAL_STATE, action: any) {
@@ -86,6 +87,8 @@ export default function live(state = INITIAL_STATE, action: any) {
       return {...state, livingInfo: {...state.livingInfo, ...action.payload.livingInfo}};
     case liveActionTypes.UPDATE_LIVING_STATUS:
       return {...state, isLiveOver: action.payload.isLiveOver};
+    case liveActionTypes.UPDATE_ANCHOR_LIVING_STATUS:
+      return {...state, isAnchorLiveOver: action.payload.isAnchorLiveOver};
     default:
       return state;
   }

@@ -21,10 +21,11 @@ import {apiBuyAnchor} from'../../../service/api'
 import { useNavigation } from '@react-navigation/native'
 import CheckBox from '../../../components/CheckBox'
 import { Toast } from '@ant-design/react-native'
+import formatGoodsPrice from '../../../utils/formatGoodsPrice'
 
-const BeAnchor = (props) =>  {
+const BeAnchor = (props: any) =>  {
   const {navigate} = useNavigation()
-  const beAnchorPrice = useSelector(state => state?.userData?.userInfo?.liveMoney) // 开通主播的价格
+  const beAnchorPrice = useSelector((state: any) => state?.userData?.userInfo?.liveMoney) // 开通主播的价格
   // const userId = useSelector(state => state?.userData?.userInfo?.userId) || ''
   
   const [checked, setChecked] = React.useState(false) // 勾选框
@@ -103,7 +104,7 @@ const BeAnchor = (props) =>  {
       <View style={styles.beAnchorWrapper}>
         <Image source={images.beAnchorIcon} style={styles.beAnchorIconStyle}/>
         <View>
-          <PrimaryText style={styles.price}>圈品主播套餐¥{beAnchorPrice / 100 || ('0.00')}/年</PrimaryText>
+          <PrimaryText style={styles.price}>云闪播主播套餐¥{formatGoodsPrice(beAnchorPrice)}/年</PrimaryText>
           <ButtonRadius 
             text="立即开通"
             onPress={submit}

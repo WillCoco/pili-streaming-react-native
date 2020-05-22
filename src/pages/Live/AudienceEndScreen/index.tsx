@@ -14,6 +14,7 @@ import withPage from '../../../components/HOCs/withPage';
 import {EMPTY_OBJ} from '../../../constants/freeze';
 import {MediaType} from '../../../liveTypes';
 import {clearLiveRoom} from '../../../actions/im';
+import {updateLivingStatus} from '../../../actions/live';
 import defaultImages from '../../../assets/default-image';
 import { Colors } from '../../../constants/Theme';
 import Avatar from '../../../components/Avatar';
@@ -32,6 +33,9 @@ const LivingEnd = (props: any) : any =>  {
   React.useEffect(() => {
     // 清除该场直播数据
     dispatch(clearLiveRoom('AUDIENCE'));
+
+    // 清除结束状态
+    dispatch(updateLivingStatus());
   }, [])
 
   const livingBg = livingInfo ? {uri: livingInfo.smallPic} : defaultImages.livingBg

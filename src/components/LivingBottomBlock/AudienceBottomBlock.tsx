@@ -16,6 +16,7 @@ import {RoomMessageType, MessageType} from '../../reducers/im';
 import {apiLiveLike} from '../../service/api';
 import Poller from '../../utils/poller';
 import { isSucceed } from '../../utils/fetchTools';
+import { Attention } from '../../liveTypes';
 
 const BottomBlock = (props: any) : any =>  {
   const dispatch = useDispatch();
@@ -55,7 +56,7 @@ const BottomBlock = (props: any) : any =>  {
   
   // 提交喜欢
   const submitLike = React.useCallback((quantity: number) => {
-    if (needSubmit.current && likeQuantity > 0) {
+    if (needSubmit.current && (likeQuantity > 0 || quantity > 0)) {
       // 提交、返回新值
       const params = {
         liveId: liveId || liveIdPersist,
@@ -64,7 +65,8 @@ const BottomBlock = (props: any) : any =>  {
       apiLiveLike(params)
         .then(res => {
           if (isSucceed(res)) {
-            setLikeQuantity(0);
+            // setLikeQuantity(0);
+            likeSumRef.current = 0;
           }
           // 重置
           needSubmit.current = false;
@@ -122,7 +124,9 @@ const BottomBlock = (props: any) : any =>  {
    */
   React.useEffect(() => {
     return () => {
-      submitLike(likeSumRef.current);
+      if (likeSumRef.current) {
+        submitLike(likeSumRef.current)
+      }
     }
   }, [])
 
@@ -134,13 +138,13 @@ const BottomBlock = (props: any) : any =>  {
         msgList={roomMessages}
         msgAdapter={(msg: RoomMessageType): any => {
           const {data} = msg || {};
-          const {userName, text, userId, type} = data || {};
+          const {userName, text, userId, type, isFollowed} = data || {};
           return {
             name: userName,
             id: userId,
             text,
             type,
-            isFollowed: props.isFollowed, // todo: 和主播是否关注
+            isFollowed, // todo: 和主播是否关注
           }
         }}
       />
@@ -150,6 +154,7 @@ const BottomBlock = (props: any) : any =>  {
         onSubmitEditing={sendMessage}
         onPressLike={onPressLike}
         onPressForward={onPressForward}
+        style={{marginTop: 28}}
       />
     </View>
   )

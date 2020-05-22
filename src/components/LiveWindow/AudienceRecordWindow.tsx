@@ -58,11 +58,10 @@ const LiveVideo = (props: LiveVideoProps): any => {
   } : LiveWindowParams = (route.params || EMPTY_OBJ) as LiveWindowParams;
 
   // 用户id
-  const userId = useSelector((state: any) => state?.userData?.userInfo?.userId) || '';
+  const userId = useSelector((state: any) => state?.userData?.userInfo?.userId);
 
   // 回放uri
   const backUrl = useSelector((state: any) => state?.live?.livingInfo?.backRtmp) || '';
-
 
   /**
    * 轮询器
