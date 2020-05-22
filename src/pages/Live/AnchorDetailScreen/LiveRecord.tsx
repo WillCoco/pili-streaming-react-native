@@ -27,12 +27,12 @@ const LiveRecord = (props: {
   return (
     <View style={styles.style}>
       <TouchableOpacity onPress={props.onPress}>
-        <Image source={props.img} style={styles.img} />
+        <Image source={{uri: props.img}} style={styles.img} />
       </TouchableOpacity>
       <View style={styles.contentWrapper}>
         <PrimaryText style={styles.title} numberOfLines={2} ellipsizeMode="tail">{props.title}</PrimaryText>
         <SmallText style={styles.timeText}>{props.time}</SmallText>
-        <SmallText style={styles.line3Text}>{props.viewTimes}次观看 | {props.goodsQuantity}件宝贝</SmallText>
+        <SmallText style={styles.line3Text}>{props.viewTimes || 0}次观看 | {props.goodsQuantity || 0}件宝贝</SmallText>
       </View>
     </View>
   )

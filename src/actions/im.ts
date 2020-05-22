@@ -9,9 +9,10 @@ import {RoomType, MessageType, RoomMessageType} from '../reducers/im';
 import Toast from 'react-native-tiny-toast';
 import {store} from '../store';
 import {safeParse} from '../utils/saftyFn';
-import {updateLivingStatus, updateAnchorLivingStatus} from './live';
+import {updateLivingStatus, updateLivingInfo} from './live';
 import {clearLoginStatus} from './user';
 import { Attention } from '../liveTypes';
+import anchorData from '../reducers/anchor';
 
 const {tim, TIM, userSig, getUserSig: getUserSigLocal} = timModlue;
 
@@ -110,17 +111,17 @@ function handleRoomInfoMsg(message: any) {
       // 更新公告气泡
       const oldRoomInfo = getState().im?.room;
       const newRoomInfo = {...oldRoomInfo, notification};
-      store.dispatch(updateRoom(newRoomInfo));
+      dispatch(updateRoom(newRoomInfo));
     } else if (operationType === TIM.TYPES.GRP_TIP_MBR_JOIN) {
       // 加群
       const {memberNum} = message?.payload || {};
       // 更新群人数
-      store.dispatch(updateRoomMemberNum(memberNum));
+      dispatch(updateRoomMemberNum(memberNum));
     } else if (operationType === TIM.TYPES.GRP_TIP_MBR_QUIT) {
       // 退群
       const {memberNum} = message?.payload || {};
       // 更新群人数
-      store.dispatch(updateRoomMemberNum(memberNum));
+      dispatch(updateRoomMemberNum(memberNum));
     }
   }
 }
@@ -157,8 +158,18 @@ function handleSysMsg(message: any) {
       if (msgData?.type === '1') {
         // store.dispatch(updateAnchorLivingStatus(true));
 
-        // 清除房间
-        dispatch(clearLoginStatus());
+        const myAnchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
+
+        const livingAnchorId = getState()?.live?.livingInfo.anchorId; // 在播id
+
+        // 我是本场主播
+        if (myAnchorId === livingAnchorId) {
+          // 清除登录状态、退出登录
+          dispatch(clearLoginStatus());
+          dispatch(clearLiveRoom('ANCHOR'));
+          dispatch(updateLivingInfo());
+        }
+        //  观众稍后在收到结束直播时处理
       }
     }
     operationType

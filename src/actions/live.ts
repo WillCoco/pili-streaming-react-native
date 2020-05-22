@@ -278,7 +278,7 @@ export const updatePusherConfig = (pusherConfig: any) => {
 /**
  * 更新直播
  */
-export const updateLivingInfo = (livingInfo: any) => {
+export const updateLivingInfo = (livingInfo?: any) => {
   return {type: liveActionType.UPDATE_LIVING_INFO, payload: {livingInfo}}
 }
 

@@ -12,7 +12,10 @@ export default function ToolBar() {
   const isLogin = useSelector((state: any) => state.userData.isLogin)
 
   const toLive = () => {
-    // userRole可能为undefined, 空指针  @hicks
+    if (!isLogin) {
+      navigation.push('Login')
+      return
+    }
     if (userRole.indexOf('2') > -1) { // 是主播，前往直播首页
       navigation.push('AnchorTabs')
     } else { // 不是主播，去开通

@@ -53,11 +53,17 @@ function GoodsCard(props: Props) {
 
   return (
     <View style={[styles.container, props.style]}>
-      <TouchableWithoutFeedback onPress={() => props.tapGoodsCard(goodsInfo.goods_id)}>
-        <Image source={{ uri: goodsInfo.original_img }} style={styles.goodsImg} />
+      <TouchableWithoutFeedback onPress={() => props.tapGoodsCard(goodsInfo.goods_id || goodsInfo.goodsId)}>
+        <Image source={{ uri: goodsInfo.original_img || goodsInfo.originalImg}} style={styles.goodsImg} />
       </TouchableWithoutFeedback>
       <View style={styles.goodsInfo}>
-        <Text style={styles.goodsName} numberOfLines={2} onPress={() => props.tapGoodsCard(goodsInfo.goods_id)}>{goodsInfo.goods_name}</Text>
+        <Text 
+          style={styles.goodsName} 
+          numberOfLines={2} 
+          onPress={() => props.tapGoodsCard(goodsInfo.goods_id || goodsInfo.goodsId)}
+        >
+          {goodsInfo.goods_name || goodsInfo.goodsName}
+        </Text>
         <View style={styles.goodsShare}>
           {/* {
             goodsInfo.is_proprietary
@@ -69,14 +75,14 @@ function GoodsCard(props: Props) {
           <TouchableWithoutFeedback onPress={toShare}>
             <View style={styles.shareCard}>
               <Text style={styles.shareText}>分享</Text>
-              <Text style={styles.sharePrice}>¥{formatGoodsPrice(goodsInfo.MyDiscounts)}</Text>
+              <Text style={styles.sharePrice}>¥{formatGoodsPrice(goodsInfo.MyDiscounts || goodsInfo.rebate)}</Text>
             </View>
           </TouchableWithoutFeedback>
         </View>
         <View style={styles.goodsPrice}>
           <Text style={styles.rmbIcon}>¥</Text>
-          <Text style={styles.salePrice}>{formatGoodsPrice(goodsInfo.shop_price)}</Text>
-          <Text style={styles.originalPrice}>¥{formatGoodsPrice(goodsInfo.market_price)}</Text>
+          <Text style={styles.salePrice}>{formatGoodsPrice(goodsInfo.shop_price || goodsInfo.shopPrice)}</Text>
+          <Text style={styles.originalPrice}>¥{formatGoodsPrice(goodsInfo.market_price || goodsInfo.marketPrice)}</Text>
         </View>
       </View>
     </View>

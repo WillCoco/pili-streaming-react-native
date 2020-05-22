@@ -17,15 +17,16 @@ import {useSelector} from 'react-redux'
 import withPage from '../../../components/HOCs/withPage'
 import pxToDp from '../../../utils/px2dp'
 import BeAnchorRow from './BeAnchorRow'
-import {apiAddAnchorUser} from'../../../service/api'
+import {apiBuyAnchor} from'../../../service/api'
 import { useNavigation } from '@react-navigation/native'
 import CheckBox from '../../../components/CheckBox'
 import { Toast } from '@ant-design/react-native'
+import formatGoodsPrice from '../../../utils/formatGoodsPrice'
 
-const BeAnchor = (props) =>  {
+const BeAnchor = (props: any) =>  {
   const {navigate} = useNavigation()
-  const beAnchorPrice = useSelector(state => state?.userData?.userInfo?.liveMoney) // 开通主播的价格
-  const userId = useSelector(state => state?.userData?.userInfo?.userId) || ''
+  const beAnchorPrice = useSelector((state: any) => state?.userData?.userInfo?.liveMoney) // 开通主播的价格
+  // const userId = useSelector(state => state?.userData?.userInfo?.userId) || ''
   
   const [checked, setChecked] = React.useState(false) // 勾选框
 
@@ -46,10 +47,32 @@ const BeAnchor = (props) =>  {
       return
     }
 
-    apiAddAnchorUser({userId}).then(res => {
-      console.log(userId);
-      console.log(res, 4231532152);
+    apiBuyAnchor(2).then((res: any) => {
+
+      if (res.code !== 200) {
+        Toast.show('创建订单失败')
+        return
+      }
+
+      let payURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
+
+      for (let item in res.data) {
+        payURL += '&' + item + '=' + res.data[item]
+      }
+
+      const params = {
+        url: payURL,
+        orderSn: res.data.orderSn,
+        payType: res.data.payType,
+        nextBtnText: '重试',
+        nextRoute: 'BeAnchor',
+      }
+
+      console.log('成为主播', params)
+
+      navigate('PayWebView', params)
     })
+      .catch(console.warn)
   }
  
   return (
@@ -81,7 +104,7 @@ const BeAnchor = (props) =>  {
       <View style={styles.beAnchorWrapper}>
         <Image source={images.beAnchorIcon} style={styles.beAnchorIconStyle}/>
         <View>
-          <PrimaryText style={styles.price}>云闪播主播套餐¥{beAnchorPrice}/年</PrimaryText>
+          <PrimaryText style={styles.price}>云闪播主播套餐¥{formatGoodsPrice(beAnchorPrice)}/年</PrimaryText>
           <ButtonRadius 
             text="立即开通"
             onPress={submit}

@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons'
 
 interface Props {
   title: string;
-  subTitle: string;
+  subTitle?: string;
   nextAction: ((event: import("react-native").GestureResponderEvent) => void) | undefined
 }
 

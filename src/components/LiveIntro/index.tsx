@@ -90,7 +90,7 @@ const LiveIntro = (props: LiveMsgProps) =>  {
    */
   const onFollowPress = (isFollowed: boolean) => {
     console.log(isFollowed, 'isFollow');
-
+    
     const params = {
       anchorId: livingInfo.anchorId,
       attentionType: !isFollowed ? AttentionParams.attention : AttentionParams.cancelAttention, // 1：关注；2：取关
