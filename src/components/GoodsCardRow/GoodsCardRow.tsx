@@ -6,9 +6,14 @@ import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
 import formatGoodsPrice from '../../utils/formatGoodsPrice'
 
-export default function GoodsCardRow(props: any) {
+interface Props {
+  style?: any;
+  goodsInfo?: any;
+}
+
+export default function GoodsCardRow(props: Props) {
   const { goodsInfo } = props
-  const navigation = useNavigation()
+  const navigation: any = useNavigation()
 
   const toGoodsInfo = () => {
     const { goods_id: id } = goodsInfo
@@ -24,13 +29,13 @@ export default function GoodsCardRow(props: any) {
       <View style={styles.goodsInfo}>
         <Text style={styles.goodsName} numberOfLines={2} onPress={toGoodsInfo}>{goodsInfo.goods_name}</Text>
         <View style={styles.goodsShare}>
-          {
+          {/* {
             goodsInfo.is_proprietary
               ? <ImageBackground source={require('../../assets/home-image/badge_bg.png')} style={styles.badgeBg}>
                 <Text style={styles.badgeText}>自营</Text>
               </ImageBackground>
               : <Text />
-          }
+          } */}
           <View style={styles.shareCard}>
             <Text style={styles.shareText}>分享</Text>
             <Text style={styles.sharePrice}>¥{formatGoodsPrice(goodsInfo.MyDiscounts)}</Text>

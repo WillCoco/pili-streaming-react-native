@@ -6,7 +6,7 @@ import { Colors } from '../../../constants/Theme'
 export default function Advantage() {
   const advList = [
     {
-      text: '官方正品',
+      text: '正品保障',
       image: require('../../../assets/goods-image/icon_zhengpin.png')
     }, {
       text: '售后无忧',
@@ -15,7 +15,7 @@ export default function Advantage() {
       text: '全国包邮',
       image: require('../../../assets/goods-image/icon_baoyou.png')
     }, {
-      text: '闪电发货',
+      text: '48小时发货',
       image: require('../../../assets/goods-image/icon_fahuo.png')
     }
   ]
@@ -42,13 +42,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.whiteColor,
     marginTop: pxToDp(10),
     marginBottom: pxToDp(10),
-    paddingLeft: pxToDp(70),
-    paddingRight: pxToDp(70),
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
   },
   advItem: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
   },

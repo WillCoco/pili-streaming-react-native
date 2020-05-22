@@ -6,16 +6,16 @@ import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
 import formatSinglePrice from '../../utils/formatGoodsPrice'
 
-interface Props { 
-  cartItemAllSelect?: any
-  goodsSelect?: any
-  minusGoodsNum?: any
-  addGoodsNum?: any
-  cartInfo?: any
+interface Props {
+  cartInfo: any
+  cartItemAllSelect(shop_id: number): void
+  addGoodsNum(shop_id: number, cart_id: number): void
+  goodsSelect(shop_id: number, cart_id: number): void
+  minusGoodsNum(shop_id: number, cart_id: number): void
 }
 
 export default function CartItem(props: Props) {
-  const navigation = useNavigation()
+  const navigation: any = useNavigation()
   const { cartInfo } = props
 
   const toBrandShop = (id: number) => {
@@ -64,7 +64,7 @@ export default function CartItem(props: Props) {
                 <Image source={{ uri: item.original_img }} style={styles.goodsImg} />
               </TouchableWithoutFeedback>
 
-              <View style={styles.goodsInfo}>
+              <View>
 
                 <TouchableWithoutFeedback onPress={() => toGoodsInfo(item.goods_id)}>
                   <Text style={styles.goodName} numberOfLines={2}>{item.goods_name}</Text>

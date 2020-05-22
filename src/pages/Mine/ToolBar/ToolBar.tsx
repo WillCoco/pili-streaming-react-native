@@ -4,11 +4,12 @@ import { useNavigation } from '@react-navigation/native'
 import CardTitle from '../../../components/CardTitle/CardTitle'
 import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 
 export default function ToolBar() {
-  const navigation = useNavigation()
-  const userRole = useSelector(state => state?.userData?.userInfo?.userRole) || '' // 用户角色
+  const navigation: any = useNavigation()
+  const userRole = useSelector((state: any) => state?.userData?.userInfo?.userRole) || '' // 用户角色
+  const isLogin = useSelector((state: any) => state.userData.isLogin)
 
   const toLive = () => {
     // userRole可能为undefined, 空指针  @hicks
@@ -35,10 +36,13 @@ export default function ToolBar() {
           <Image source={require('../../../assets/mine-image/icon_xieyi.png')} style={styles.icon} />
           <Text style={styles.text}>云闪播协议</Text>
         </TouchableOpacity> */}
-        <TouchableOpacity style={styles.item} onPress={toLive}>
-          <Image source={require('../../../assets/mine-image/icon_live.png')} style={styles.icon} />
-          <Text style={styles.text}>去直播</Text>
-        </TouchableOpacity>
+        {
+          isLogin && <TouchableOpacity style={styles.item} onPress={toLive}>
+            <Image source={require('../../../assets/mine-image/icon_live.png')} style={styles.icon} />
+            <Text style={styles.text}>去直播</Text>
+          </TouchableOpacity>
+        }
+
       </View>
     </View>
   )
