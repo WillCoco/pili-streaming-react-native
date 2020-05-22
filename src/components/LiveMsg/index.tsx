@@ -168,6 +168,7 @@ const styles = StyleSheet.create({
   },
   scrollContentWrapper: {
     justifyContent: 'flex-end',
+    alignItems: 'flex-start'
   }
 })
 

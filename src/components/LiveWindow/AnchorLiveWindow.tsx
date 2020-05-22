@@ -235,17 +235,18 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
   );
 
   // 直播强制结束
-  if (isAnchorLiveOver) {
-    dispatch(closeLive({liveId}))
-      .then((data: any) => {
-        if (data) {
-          dispatch(clearLoginStatus());
-          return;
-        }
-        Toast.show('关闭失败');
-      })
-      .catch((r: any) => console.log('closeLive', r));
-  }
+  // if (isAnchorLiveOver) {
+  //   console.log('isAnchorLiveOver')
+  //   dispatch(dismissGroup(groupID))
+  //     .then((data: any) => {
+  //       if (data) {
+  //         dispatch(clearLoginStatus());
+  //         return;
+  //       }
+  //       Toast.show('关闭失败');
+  //     })
+  //     .catch((r: any) => console.log('closeLive', r));
+  // }
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>

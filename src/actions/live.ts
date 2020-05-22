@@ -179,7 +179,7 @@ export const closeLive = (params: CloseLiveParams) => {
       return Promise.resolve(false);
     })
     .catch((error: any) => {
-      console.log(`isWorkLiveNow error: ${error}`)
+      console.log(`isWorkLiveNow error:`, error)
       return Promise.resolve();
     })
   }
@@ -285,7 +285,7 @@ export const updateLivingInfo = (livingInfo: any) => {
 /**
  * 更新观众端房间直播状态
  */
-export function updateLivingStatus(isLiveOver: boolean) {
+export function updateLivingStatus(isLiveOver?: boolean) {
   return {type: liveActionType.UPDATE_LIVING_STATUS, payload: {isLiveOver}}
 }
 

@@ -10,6 +10,7 @@ import Toast from 'react-native-tiny-toast';
 import {store} from '../store';
 import {safeParse} from '../utils/saftyFn';
 import {updateLivingStatus, updateAnchorLivingStatus} from './live';
+import {clearLoginStatus} from './user';
 import { Attention } from '../liveTypes';
 
 const {tim, TIM, userSig, getUserSig: getUserSigLocal} = timModlue;
@@ -140,21 +141,24 @@ function handleSysMsg(message: any) {
     // 群组被解散
     if (operationType === 5) {
       // 设置直播状态, 显示结束页
-      store.dispatch(updateLivingStatus(true));
+      dispatch(updateLivingStatus(true));
       
       // 清空房间相关数据
-      store.dispatch(clearLiveRoom());
+      dispatch(clearLiveRoom());
     }
 
     // 自定义
     if (operationType === 255) {
-      // 主播被下线
       const msgData = safeParse(userDefinedField);
       console.log(msgData, 'msgData?.typemsgData?.typemsgData?.type');
       console.log(msgData?.type, 'msgData?.typemsgData?.typemsgData?.type');
 
+      // 主播被下线, 冻结账号
       if (msgData?.type === '1') {
-        store.dispatch(updateAnchorLivingStatus(true));
+        // store.dispatch(updateAnchorLivingStatus(true));
+
+        // 清除房间
+        dispatch(clearLoginStatus());
       }
     }
     operationType

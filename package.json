@@ -8,6 +8,7 @@
     "test": "jest",
     "textManager": "node node_modules/react-native-normalization-text/scripts/makeConfig.js",
     "genIcons": "npx iconfont-rn",
+    "splash": "node_modules/.bin/expo-splash-screen '#FFFFFF'",
     "postinstall": "yarn textManager --update"
   },
   "dependencies": {
@@ -32,8 +33,10 @@
     "expo-linear-gradient": "^8.1.0",
     "expo-linking": "^1.0.1",
     "expo-permissions": "^8.1.0",
+    "expo-splash-screen": "^0.2.3",
     "expo-updates": "~0.1.0",
     "moment": "^2.24.0",
+    "native-echarts": "git+http://47.114.76.40/frontend/react-native-echarts.git",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "~0.61.5",
@@ -70,8 +73,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "rn-fetch-blob": "^0.12.0",
-    "tim-js-sdk": "^2.6.2",
-    "native-echarts": "git+http://47.114.76.40/frontend/react-native-echarts.git"
+    "tim-js-sdk": "^2.6.2"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

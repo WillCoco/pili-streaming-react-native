@@ -23,6 +23,7 @@
 		F69E631024692A760073B935 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E630F24692A760073B935 /* libsqlite3.0.tbd */; };
 		F69E631224692A820073B935 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E631124692A820073B935 /* libc++.tbd */; };
 		F69E631424692A8B0073B935 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E631324692A8B0073B935 /* libz.tbd */; };
+		8A7BAC7FA0C54067BCC91E69 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A738254A1174C949203ACAE /* SplashScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		F69E630F24692A760073B935 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		F69E631124692A820073B935 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		F69E631324692A8B0073B935 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		4A738254A1174C949203ACAE /* SplashScreen.storyboard */ = {isa = PBXFileReference; name = "SplashScreen.storyboard"; path = "championApp/SplashScreen.storyboard"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = file.storyboard; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +99,7 @@
 				0731D3BB24204D9B009CAE85 /* Expo.plist */,
 				07287ACD2432831900C893F0 /* app.bundle */,
 				07287ACC2432831900C893F0 /* app.manifest */,
+				4A738254A1174C949203ACAE /* SplashScreen.storyboard */,
 			);
 			name = championApp;
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				74D35D4FE55C46E98F63B34B /* antfill.ttf in Resources */,
 				449261313F0C4E4881FF5D5F /* antoutline.ttf in Resources */,
+				8A7BAC7FA0C54067BCC91E69 /* SplashScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

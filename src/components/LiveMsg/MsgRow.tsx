@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     paddingVertical: 2,
     borderRadius: 16,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   userLvImg: {
     height: scale(14),
@@ -119,9 +119,8 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start'
   },
   text: {
-    flex: 1,
     paddingHorizontal: 6,
-    lineHeight: scale(16)
+    lineHeight: scale(16),
   },
   userName: {
     color: Colors.yellowColor,

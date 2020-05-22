@@ -43,13 +43,9 @@ export const clearLoginStatus = (options: {
       console.log(navigation, 'navigation')
       navigation.dispatch(
         CommonActions.reset({
-          index: 1,
+          index: 0,
           routes: [
-            { name: 'Home' },
-            {
-              name: 'Profile',
-              params: { user: 'jane' },
-            },
+            { name: 'Login' },
           ],
         })
       );
