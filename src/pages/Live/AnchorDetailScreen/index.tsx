@@ -24,21 +24,54 @@ import {pad} from '../../../constants/Layout';
 import {apiAnchorParticular} from '../../../service/api';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
-import {EMPTY_OBJ} from '../../../constants/freeze';
+import {EMPTY_OBJ, EMPTY_ARR} from '../../../constants/freeze';
+import {useDispatch} from 'react-redux';
+import {apiAttentionAnchor} from '../../../service/api';
+import { Attention, AttentionParams } from '../../../liveTypes';
+import {isSucceed} from '../../../utils/fetchTools';
+import {Toast} from '@ant-design/react-native'
+import { updateLivingInfo } from '../../../actions/live';
 
-const AnchorDetail = () =>  {
-  const isLiving = true;
+const AnchorDetail = (props: any) =>  {
   const bgUrl = 'https://goss.veer.com/creative/vcg/veer/800water/veer-302989341.jpg';
-  const trailers = [1, 2]
-  const liveRecords = [1, 2, 3]
-  const route = useRoute()
+  const route = useRoute();
+  const dispatch = useDispatch();
   const anchorId = route?.params?.anchorId || ''
-  const userId = useSelector(state => state?.userData?.userInfo?.userId) || ''
-  const [anchorDetail, setAnchorDetail] = React.useState(EMPTY_OBJ)
-  const PAGE_SIZE = 14
+  const userId = useSelector((state: any) => state?.userData?.userInfo?.userId) || ''
+  const isFollowed = useSelector((state: any) => state?.live?.livingInfo?.isAttention);
+  const [anchorDetail, setAnchorDetail]: [any, any] = React.useState(EMPTY_OBJ); // 主播详情
+  const [liveList, setLiveList]: [any, any] = React.useState(EMPTY_ARR); // 主播tab
+  const PAGE_SIZE = 14;
 
-  const onFollowPress = (isFollow: boolean) => {
-    console.log(isFollow, 'isFollow');
+  
+
+  /**
+   * 点击关注按钮
+   */
+  const onFollowPress = (isFollowed: boolean) => {
+    console.log(isFollowed, 'isFollow');
+    const params = {
+      anchorId: anchorId,
+      attentionType: !isFollowed ? AttentionParams.attention : AttentionParams.cancelAttention, // 1：关注；2：取关
+      userId: userId,
+    }
+
+    apiAttentionAnchor(params)
+      .then((res: any) => {
+        if (isSucceed(res)) {
+          Toast.show(isFollowed ? '取消关注成功' : '关注成功')
+          const isAttention = isFollowed ? Attention.notAttention : Attention.isAttention;
+          dispatch(updateLivingInfo({isAttention}));
+
+          // 发送关注消息
+          // if (!isFollowed) {
+          //   dispatch(sendRoomMessage({text: '关注了主播', type: MessageType.follow}))
+          // }
+          return;
+        }
+        Toast.show(isFollowed ? '取消关注失败' : '关注失败')
+      })
+      .catch((error: any) => console.log(`apiAttentionAnchor: ${error}`))
   }
 
   React.useEffect(() => {
@@ -51,15 +84,15 @@ const AnchorDetail = () =>  {
 
     apiAnchorParticular(params)
       .then((res: any) => {
-        console.log(res, 124231532152315)
         setAnchorDetail(res?.data);
+        setLiveList(res?.data?.liveList?.records)
       })
       .catch(console.warn);
   }, []);
 
   return (
     <View
-      style={styles.wrapper}
+      style={StyleSheet.flatten([styles.wrapper, {marginBottom: props.safeBottom}])}
     >
       <View style={styles.headerBlcokWrapper}>
         <View style={styles.headerWrapper}>
@@ -77,7 +110,7 @@ const AnchorDetail = () =>  {
             <PrimaryText style={styles.anchorInfo}>直播: {anchorDetail?.liveNum || 0}</PrimaryText>
           </View>
           <FollowButton
-            isFollow={anchorDetail?.isAttention}
+            isFollowed={isFollowed === Attention.isAttention}
             onPress={onFollowPress}
             style={{paddingHorizontal: 40, marginTop: pad}}
             size={{width: 200, height: 26}}
@@ -102,12 +135,15 @@ const AnchorDetail = () =>  {
       >
         <LiveTabPage
           tabLabel="直播"
-          isLiving={isLiving}
-          trailers={trailers}
-          liveRecords={liveRecords}
+          isLiving={anchorDetail?.liveStatus === 2}
+          // trailers={trailers}
+          liveRecords={liveList}
+          anchorId={anchorId}
+          userId={userId}
         />
         <ShopTabPage
           tabLabel="店铺"
+          anchorId={anchorId}
         />
       </ScrollableTabView>
     </View>

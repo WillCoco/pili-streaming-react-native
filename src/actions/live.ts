@@ -253,7 +253,6 @@ interface GetLiveViewNumParams {
   liveId: string | number,
 }
 export const getLiveViewNum = (params: GetLiveViewNumParams) => {
-  alert(1)
   return async function(dispatch: Dispatch, getState: any) {
     const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
 
