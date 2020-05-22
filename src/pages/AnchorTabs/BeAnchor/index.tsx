@@ -81,7 +81,7 @@ const BeAnchor = (props) =>  {
       <View style={styles.beAnchorWrapper}>
         <Image source={images.beAnchorIcon} style={styles.beAnchorIconStyle}/>
         <View>
-          <PrimaryText style={styles.price}>圈品主播套餐¥{beAnchorPrice}/年</PrimaryText>
+          <PrimaryText style={styles.price}>云闪播主播套餐¥{beAnchorPrice}/年</PrimaryText>
           <ButtonRadius 
             text="立即开通"
             onPress={submit}

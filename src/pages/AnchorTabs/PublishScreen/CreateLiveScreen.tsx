@@ -131,7 +131,7 @@ const CreateLiveScreen = (props: any) =>  {
             style={{color: Colors.yellowColor}}
             onPress={() => navigation.navigate('AnchorAgreement')}
           >
-            《圈品主播入驻协议》
+            《云闪播主播入驻协议》
           </SmallText>
         </SmallText>
       </View>

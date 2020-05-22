@@ -293,9 +293,9 @@ function Home(props: HomeProps) {
                           }
                         </View>
                       </View>
-                      {/* 圈品热卖 */}
+                      {/* 云闪播热卖 */}
                       <View style={styles.recommendGoodsList}>
-                        <CardTitle title='圈品热卖' />
+                        <CardTitle title='云闪播热卖' />
                         <View style={styles.recommendGoodsListContainer}>
                           {
                             categoryData.shopGoods && categoryData.shopGoods.map((item: any, index: any) => <GoodsCard key={`recommend-${index}`}

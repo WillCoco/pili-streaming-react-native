@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Platform, StatusBar, View, NativeModules, Text } from 'react-native';
-import { SplashScreen, AppLoading } from 'expo'
+import { AppLoading } from 'expo'
+import * as SplashScreen from 'expo-splash-screen'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import * as Font from 'expo-font';
@@ -106,7 +107,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
     async function loadResourcesAndDataAsync() {
       try {
 
-        SplashScreen.preventAutoHide()
+        SplashScreen.preventAutoHideAsync()
 
         await Font.loadAsync({
           ...Ionicons.font,
@@ -128,7 +129,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
         }
 
         // FIXME:
-        // SplashScreen.hide()
+        SplashScreen.hideAsync()
       }
     }
 
@@ -144,7 +145,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return null
-    // return <AppLoading /> // tofix: 在android上报错
+    // return Platform.OS === 'ios' ? <AppLoading /> : null
   } else {
     return (
       <MaskProvider>
@@ -156,7 +157,9 @@ export default function App(props: { skipLoadingScreen: any; }) {
             >
               <View style={{ flex: 1 }}>
                 {
-                  Platform.OS !== 'ios' && <StatusBar barStyle='light-content' translucent={true} backgroundColor='transparent' />
+                  Platform.OS === 'ios'
+                  ? <StatusBar barStyle='light-content' />
+                  : <StatusBar barStyle='light-content' translucent={true} backgroundColor='transparent' />
                 }
                 <NavigationContainer ref={navigationRef as any}>
                   <Stack.Navigator>

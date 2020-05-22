@@ -2,8 +2,9 @@
   "name": "championApp",
   "displayName": "championApp",
   "expo": {
-    "name": "championApp",
+    "name": "云闪播",
     "slug": "championApp",
+    "description": "云闪播电商直播平台",
     "version": "1.0.0",
     "platforms": [
       "ios",
@@ -12,6 +13,9 @@
     ],
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android": {
+      "package": "com.hengju.championapp"
+    }
   }
 }

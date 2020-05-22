@@ -17,13 +17,13 @@
 		449261313F0C4E4881FF5D5F /* antoutline.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C936887AC8C54FCE8A1AA2A0 /* antoutline.ttf */; };
 		74D35D4FE55C46E98F63B34B /* antfill.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09292F97975645E386F0AE05 /* antfill.ttf */; };
 		7B0C5784998A29E517983E0C /* libPods-championApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2502ACF51380E8237829647D /* libPods-championApp.a */; };
+		8A7BAC7FA0C54067BCC91E69 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A738254A1174C949203ACAE /* SplashScreen.storyboard */; };
 		F69E630A24692A3D0073B935 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E630924692A3D0073B935 /* WebKit.framework */; };
 		F69E630C24692A570073B935 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E630B24692A570073B935 /* SystemConfiguration.framework */; };
 		F69E630E24692A620073B935 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E630D24692A620073B935 /* CoreTelephony.framework */; };
 		F69E631024692A760073B935 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E630F24692A760073B935 /* libsqlite3.0.tbd */; };
 		F69E631224692A820073B935 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E631124692A820073B935 /* libc++.tbd */; };
 		F69E631424692A8B0073B935 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E631324692A8B0073B935 /* libz.tbd */; };
-		8A7BAC7FA0C54067BCC91E69 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A738254A1174C949203ACAE /* SplashScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +54,7 @@
 		18BFFF0C246A99F200EB52FB /* championAppDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = championAppDebug.entitlements; path = championApp/championAppDebug.entitlements; sourceTree = "<group>"; };
 		2502ACF51380E8237829647D /* libPods-championApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-championApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A738254A1174C949203ACAE /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = championApp/SplashScreen.storyboard; sourceTree = "<group>"; };
 		C936887AC8C54FCE8A1AA2A0 /* antoutline.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = antoutline.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antoutline.ttf"; sourceTree = "<group>"; };
 		E40B1F720DE0D29BF6B90074 /* Pods-championApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-championApp.release.xcconfig"; path = "Target Support Files/Pods-championApp/Pods-championApp.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -65,7 +66,6 @@
 		F69E630F24692A760073B935 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		F69E631124692A820073B935 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		F69E631324692A8B0073B935 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		4A738254A1174C949203ACAE /* SplashScreen.storyboard */ = {isa = PBXFileReference; name = "SplashScreen.storyboard"; path = "championApp/SplashScreen.storyboard"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = file.storyboard; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
