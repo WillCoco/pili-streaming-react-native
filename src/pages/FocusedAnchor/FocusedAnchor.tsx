@@ -9,11 +9,12 @@ import Empty from '../../components/Empty'
 import withPage from '../../components/HOCs/withPage'
 import { useSelector } from 'react-redux'
 import images from '../../assets/images'
+import { isSucceed } from '../../utils/fetchTools'
+import { EMPTY_ARR } from '../../constants/freeze'
 
-function FocusedAnchor() {
+function FocusedAnchor(props: any) {
   const navigation = useNavigation()
   const userId = useSelector(state => state?.userData?.userInfo?.userId)
-  const [myAttentionList, setMyAttentionList] = useState([])
 
   navigation.setOptions({
     headerTitle: '关注的主播',
@@ -29,46 +30,51 @@ function FocusedAnchor() {
   /**
    * 获取关注列表
    */
-  const getMyAttentionList = async () => {
+  const onRefresh = async () => {
     let params = {
       pageNo: 1,
       pageSize: 10,
       userId
     }
     
-    const result = await apiMyAttentionList(params).then(res => {
-      setMyAttentionList(res?.records)
-      return res?.records
-    })
+    const result = await apiMyAttentionList(params)
 
-    return Promise.resolve({result})
-  }
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.data?.records || EMPTY_ARR})
+    }
 
-  /**
-   * 刷新
-   */
-  const onRefresh = async () => {
-    const result = await getMyAttentionList()
-    return Promise.resolve({result})
+    return Promise.resolve({EMPTY_ARR})
   }
 
   /**
    * 更多
    */
-  const onEndReached = () => {
+  const onEndReached = async (pageNo: number, pageSize: number) => {
+    let params = {
+      pageNo,
+      pageSize,
+      userId
+    }
     
+    const result = await apiMyAttentionList(params)
+
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.data?.records || EMPTY_ARR})
+    }
+
+    return Promise.resolve({EMPTY_ARR})
   }
 
   return (
-    <View style={styles.container}>
+    <View style={StyleSheet.flatten([styles.container, {marginBottom: props.safeBottom}])}>
       <PagingList
         // data={myAttentionList}
         // setData={setMyAttentionList}
-        size={10}
+        size={14}
         // initListData={warehouseGoods}
         renderItem={({item, index}: any) => {
           return (
-            <AnchorCard key={`anchor-${index}`} props={item}/>
+            <AnchorCard key={`anchor-${index}`} item={item}/>
           )
         }}
         empty={
@@ -84,7 +90,6 @@ function FocusedAnchor() {
         initialNumToRender={14}
         numColumns={1}
         columnWrapperStyle={{justifyContent: 'space-between'}}
-        contentContainerStyle={{flex: 1}}
       />
     </View>
   )
@@ -92,7 +97,7 @@ function FocusedAnchor() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
 })
 
