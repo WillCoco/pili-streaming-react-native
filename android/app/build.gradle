@@ -159,7 +159,7 @@ android {
                 keyAlias MYAPP_RELEASE_KEY_ALIAS
                 keyPassword MYAPP_RELEASE_KEY_PASSWORD
             }
-            
+
         }
     }
     buildTypes {
@@ -199,6 +199,8 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:support-annotations:28.0.0"
+
+    implementation project(':pili-streaming-react-native')
 
     addUnimodulesDependencies()
 

@@ -7,19 +7,19 @@ import {
 } from 'react-native';
 import Toast from 'react-native-tiny-toast';
 import {useSelector, useDispatch} from 'react-redux';
-import {PrimaryText, SmallText} from 'react-native-normalization-text';
+import {PrimaryText, SmallText,scale} from 'react-native-normalization-text';
 import {useNavigation} from '@react-navigation/native';
 import withPage from '../../../components/HOCs/withPage';
 // import NavBar from '../../../../components/NavBar'
 // import LiveWindow from '../../../../components/LiveWindow'
 import LiveReadyCard from '../../../components/LiveReadyCard';
-import LivePusher from '../../../components/LivePusher';
+import LivePusher from '../../../components/LivePusherNew';
 import {vw} from '../../../utils/metric';
 import {Colors} from '../../../constants/Theme';
 import images from '../../../assets/images/index';
 import usePermissions from '../../../hooks/usePermissions';
 import { pad } from '../../../constants/Layout';
-import {updateLiveConfig} from '../../../actions/live';
+import {updateLiveConfig,faceBeautyParams,updateFaceSetting} from '../../../actions/live';
 import * as api from '../../../service/api';
 
 const CreateLiveScreen = (props: any) =>  {
@@ -103,9 +103,10 @@ const CreateLiveScreen = (props: any) =>  {
 
   return (
     <View style={StyleSheet.flatten([styles.style, {paddingBottom: props.safeBottom}])}>
-      <LivePusher
-        ref={(c: any) => camera.current = c}
-      />
+      {/*<LivePusher*/}
+        {/*ref={(c: any) => camera.current = c}*/}
+      {/*/>*/}
+      <LivePusher />
       <View style={styles.contentWrapper}>
         <View style={StyleSheet.flatten([styles.liveReadyCardWrapper, {marginTop: props.safeTop + 80}])}>
           <LiveReadyCard
@@ -114,12 +115,20 @@ const CreateLiveScreen = (props: any) =>  {
           />
         </View>
         <View style={styles.functionBtnWrapper}>
-          <TouchableOpacity>
-            <PrimaryText color="white">美颜</PrimaryText>
+          <TouchableOpacity onPress={() => {dispatch(updateFaceSetting(faceBeautyParams.beautyLevel))}}>
+              <Image
+                  source={images.faceBeautyIcon}
+                  style={styles.img}
+              />
+            <PrimaryText color="white">美白</PrimaryText>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={images.userDefaultAvatar} />
-            <PrimaryText color="white">滤镜</PrimaryText>
+          <TouchableOpacity onPress={() => {dispatch(updateFaceSetting(faceBeautyParams.whiten))}}>
+              <Image style={styles.img} source={images.filterIcon} />
+              <PrimaryText color="white">磨皮</PrimaryText>
+          </TouchableOpacity>
+          <TouchableOpacity  onPress={() => {dispatch(updateFaceSetting(faceBeautyParams.redden))}}>
+            <Image style={styles.img} source={images.filterIcon} />
+            <PrimaryText color="white">红润</PrimaryText>
           </TouchableOpacity>
         </View>
         <TouchableOpacity onPress={onNextPress} style={styles.button}>
@@ -190,7 +199,21 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 24,
     marginBottom: 8,
-  }
+  },
+    cellsWrapper: {
+        flexDirection: 'row',
+        width: vw(60),
+        justifyContent: 'space-between'
+    },
+    cell: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    img: {
+        width: scale(35),
+        height: scale(35),
+    }
 });
 
 export default withPage(CreateLiveScreen, {

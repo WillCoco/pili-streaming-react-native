@@ -25,7 +25,7 @@ const emptyList: [] = [];
 const LivingRoomScreen = (props: any) : any =>  {
   const dispatch = useDispatch();
   const [maskList, maskDispatch] = React.useContext(Mask.context);
-  
+
   // 房间消息
   const roomMessages = useSelector((state: any) => state?.im?.roomMessages);
 
@@ -122,10 +122,12 @@ const LivingRoomScreen = (props: any) : any =>  {
         onPressBubble={props.onPressBubble}
         onPressShare={props.onPressShare}
         onPressFaceBeauty={props.onPressFaceBeauty}
+        onPressWhiten={props.onPressWhiten}
+        onPressRedden={props.onPressRedden}
         onPressFilter={props.onPressFilter}
       />
     </View>
-    
+
   )
 };
 

@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Nullable;
 
+import com.qiniu.pili.droid.rnpili.PiliPackage;
 
 public class MainApplication extends Application implements ReactApplication {
   private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(
@@ -47,6 +48,7 @@ public class MainApplication extends Application implements ReactApplication {
       List<ReactPackage> packages = new PackageList(this).getPackages();
       packages.add(new ModuleRegistryAdapter(mModuleRegistryProvider));
       packages.add(new WeChatPackage());
+      packages.add(new PiliPackage());
       return packages;
     }
 

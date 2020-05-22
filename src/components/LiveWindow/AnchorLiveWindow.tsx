@@ -15,7 +15,7 @@ import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/nativ
 import {useDispatch, useSelector} from 'react-redux'
 import LiveIntro from '../LiveIntro';
 import LivingBottomBlock from '../LivingBottomBlock';
-import LivePusher from '../LivePusher';
+import LivePusher from '../LivePusherNew';
 import L from '../../constants/Layout';
 import Iconcloselight from '../../components/Iconfont/Iconcloselight';
 import Iconchangecamera from '../../components/Iconfont/Iconchangecamera';
@@ -25,7 +25,7 @@ import AnchorShopCard from '../../components/LivingShopCard/AnchorShopCard';
 import withPage from '../../components/HOCs/withPage';
 import {pad} from '../../constants/Layout';
 import { joinGroup, dismissGroup, updateGroupProfile, sendRoomMessage, } from '../../actions/im';
-import { anchorToLive, closeLive } from '../../actions/live';
+import { anchorToLive, closeLive, updatecamera, updateFaceSetting, faceBeautyParams } from '../../actions/live';
 import Toast from 'react-native-tiny-toast';
 import { MessageType } from '../../reducers/im';
 
@@ -69,9 +69,8 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
    * 切换摄像头
    */
   const switchCamera = () => {
-    camera.current.switchCamera()
-    console.log(camera)
-  }
+      dispatch(updatecamera())
+  };
 
   /**
    * 所在房间信息
@@ -110,14 +109,14 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
         }
       }});
   };
-  
+
   /**
    * 商品卡可见
    */
   const [shopCardVisible,  setShopCardVisible]: [boolean | undefined, any] = React.useState(false);
 
   /**
-   * 
+   *
    */
   React.useEffect(() => {
     // 加群
@@ -136,31 +135,31 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       .catch((err: any) => {
         console.log(err, 'err');
       });
-    
+
     return () => {
       // dispatch(dismissGroup()); // 退im群
       // todo 晴空room消息、message、livegoods
-      camera.current.stopPreview();
-      Toast.hide('');
+      // camera.current.stopPreview();
+      // Toast.hide('');
     }
   }, [])
-  
-  React.useEffect(() => {
-    if (camera.current) {
-      camera.current.start()
-    }
-    // 获取主播推流地址
 
-    return () => {
-      camera.current.stop()
-    }
-  }, [camera.current])
+  // React.useEffect(() => {
+  //   if (camera.current) {
+  //     camera.current.start()
+  //   }
+  //   // 获取主播推流地址
+  //
+  //   return () => {
+  //     camera.current.stop()
+  //   }
+  // }, [camera.current])
 
   /**
    * 公告气泡
    */
   const noticeBubbleText = room?.notification;
-  
+
   const onPressBubble = () => {
     if (room?.groupID) {
       // 显示输入框
@@ -223,9 +222,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
-      <LivePusher 
-        ref={(c: any) => camera.current = c}
-      />
+      <LivePusher />
       {/*  backgroundColor: 'rgba(0,0,0,0.01)' 修复摄像上层气泡边缘显示问题 */}
       <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.01)', zIndex: 1}}>
         <LiveIntro />
@@ -234,14 +231,23 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
           onPressBubble={onPressBubble}
           onPressShare={() =>alert('余组货')}
           onPressFaceBeauty={() => {
-            requestAnimationFrame(() => {
-              dispatch(sendRoomMessage({text: '下单了2件', type: MessageType.order}))
-            })
+               return dispatch(updateFaceSetting(faceBeautyParams.beautyLevel))
+            // requestAnimationFrame(() => {
+            //   // dispatch(sendRoomMessage({text: '下单了2件', type: MessageType.order}))
+            //
+            // })
           }}
-          onPressFilter={() => {
-            requestAnimationFrame(() => {
-              dispatch(sendRoomMessage({text: '关注了主播', type: MessageType.follow}))
-            })
+          onPressWhiten={() => {
+              return dispatch(updateFaceSetting(faceBeautyParams.whiten))
+              // requestAnimationFrame(() => {
+              //     dispatch(sendRoomMessage({text: '关注了主播', type: MessageType.follow}))
+              // })
+          }}
+          onPressRedden={() => {
+              return dispatch(updateFaceSetting(faceBeautyParams.redden))
+            // requestAnimationFrame(() => {
+            //   dispatch(sendRoomMessage({text: '关注了主播', type: MessageType.follow}))
+            // })
           }}
         />
         <TouchableOpacity onPress={switchCamera} style={StyleSheet.flatten([styles.camera, {top: props.safeTop + (pad * 2)}])}>

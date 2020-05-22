@@ -27,6 +27,8 @@ interface LiveToolBarProps {
   onPressBubble: () => any,
   onPressShare: () => any,
   onPressFaceBeauty: () => any,
+  onPressWhiten: () => any,
+  onPressRedden: () => any,
   onPressFilter: () => any,
 }
 
@@ -48,16 +50,24 @@ const LiveToolBar = (props: LiveToolBarProps) : any =>  {
             style={styles.img}
             resizeMode="contain"
           />
-          <SmallText color="white">美颜</SmallText>
+          <SmallText color="white">美白</SmallText>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.cell} onPress={props.onPressFilter}>
+        <TouchableOpacity style={styles.cell} onPress={props.onPressWhiten}>
           <Image
             source={images.filterIcon}
             style={styles.img}
             resizeMode="contain"
           />
-          <SmallText color="white">滤镜</SmallText>
+          <SmallText color="white">磨皮</SmallText>
         </TouchableOpacity>
+          <TouchableOpacity style={styles.cell} onPress={props.onPressRedden}>
+              <Image
+                  source={images.filterIcon}
+                  style={styles.img}
+                  resizeMode="contain"
+              />
+              <SmallText color="white">红润</SmallText>
+          </TouchableOpacity>
         <TouchableOpacity onPress={props.onPressBubble} style={styles.cell}>
           <Image
             source={images.editBubbleIcon}
