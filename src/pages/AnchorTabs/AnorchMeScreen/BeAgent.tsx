@@ -13,7 +13,6 @@ import {
   Clipboard,
   TouchableOpacity
 } from 'react-native'
-import { CheckBox } from 'react-native-elements'
 import images from '../../../assets/images'
 import NavBar from '../../../components/NavBar'
 import { vw, vh } from '../../../utils/metric'
@@ -27,57 +26,71 @@ import Toast from 'react-native-tiny-toast'
 import ButtonOutLine from '../../../components/Buttons/ButtonOutLine'
 import { useNavigation } from '@react-navigation/native'
 import pxToDp from '../../../utils/px2dp'
-import { apiSandCreateOrder } from '../../../service/api'
+import { apiBuyBroker, apiGetAgentInfo } from '../../../service/api'
 import { useSelector, useDispatch } from 'react-redux'
 import { setUserInfo } from '../../../actions/user'
 import { apiGetUserData } from '../../../service/api'
 import withPage from '../../../components/HOCs/withPage'
+import { EMPTY_OBJ } from '../../../constants/freeze'
 
-const BeAgent = props => {
+const BeAgent = (props: any) => {
   const {navigate} = useNavigation()
   const {goBack} = useNavigation()
-  const [agree, setAgree] = React.useState(false) // 是否同意
+  const [agree, setAgree] = React.useState(true) // 是否同意
   const [pass, setPass] = React.useState(false) // 是否符合升级条件
   const dispatch = useDispatch()
+  const [agentRequire, setAgentRequire] = React.useState({
+    "anchorInviteDemand": 0,
+    "anchorInviteInfo": 0,
+    "currentLevel": 3,
+    "middleAgentInviteDemand": 0,
+    "middleAgentInviteInfo": 0,
+    "payInfo": 0,
+    "primaryAgentInviteDemand": 0,
+    "primaryAgentInviteInfo": 0,
+    "wxCSStaff": ''
+  }) // 成为经纪人条件
 
   useEffect(() => {
-    getUserInfo()
+    apiGetAgentInfo()
+      .then((res: any) => {
+        console.log(res)
+        setAgentRequire(res?.data)
+      })
+      .catch((err: any) => {
+        console.log(err)
+      })
   }, [])
 
   // 经纪人等级
   const agentList = [
-    { level: 1, name: '初级经纪人', },
-    { level: 2, name: '中级经纪人', },
-    { level: 3, name: '高级经纪人', },
+    { level: 3, name: '初级经纪人', },
+    { level: 4, name: '中级经纪人', },
+    { level: 5, name: '高级经纪人', },
   ]
-
-  const curAgentLevel = 1
 
   // 成为经纪人条件
-  const beAgentRequireList = [
-    {title: '缴费6000元', curProgress: 4000, totalProgress: 6000, needButton: true},
-    {title: '邀请20位主播加入', curProgress: 20, totalProgress: 20, needButton: false},
-    {title: '邀请3位初级经纪人', curProgress: 2, totalProgress: 3, needButton: false},
-    {title: '邀请3位中级经纪人', curProgress: 1, totalProgress: 3, needButton: false},
-  ]
+  const beAgentRequireList = {
+    3: [
+        {title: `缴费${agentRequire?.payInfo / 100}元`, curProgress: 0, totalProgress: agentRequire?.payInfo, needButton: true},
+        {title: `邀请${agentRequire?.anchorInviteDemand}位主播加入`, curProgress: agentRequire?.anchorInviteInfo, totalProgress: agentRequire?.anchorInviteDemand, needButton: false},
+    ],
+    4: [
+      {title: `邀请${agentRequire?.anchorInviteDemand}位主播加入`, curProgress: agentRequire?.anchorInviteInfo, totalProgress: agentRequire?.anchorInviteDemand, needButton: false},
+      {title: `邀请${agentRequire?.primaryAgentInviteDemand}位初级经纪人`, curProgress: agentRequire?.primaryAgentInviteInfo, totalProgress: agentRequire?.primaryAgentInviteDemand, needButton: false},
+    ],
+    5: [
+      {title: `邀请${agentRequire?.anchorInviteDemand}位主播加入`, curProgress: agentRequire?.anchorInviteInfo, totalProgress: agentRequire?.anchorInviteDemand, needButton: false},
+      {title: `邀请${agentRequire?.middleAgentInviteDemand}位中级经纪人`, curProgress: agentRequire?.middleAgentInviteInfo, totalProgress: agentRequire?.middleAgentInviteDemand, needButton: false},
+    ]
+  }
 
   /**
    * 复制
    */
   const copy = () => {
-    Clipboard.setString(props.wxNumber)
+    Clipboard.setString(props.wxCSStaff)
     Toast.show('复制成功')
-  }
-
-  /**
-   * 获取用户信息
-   */
-  const getUserInfo = () => {
-
-    apiGetUserData().then((res: any) => {
-      console.log('获取用户信息', res)
-      dispatch(setUserInfo(res))
-    })
   }
 
   /**
@@ -86,27 +99,33 @@ const BeAgent = props => {
   const userId = useSelector(state => state?.userData?.userInfo?.userId)
   const state = useSelector(state => state)
   const toPay = () => {
-    apiGetUserData().then((res: any) => {
-      console.log('获取用户信息', res)
-      dispatch(setUserInfo(res))
-    })
 
-    const baseURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
-    let URL = baseURL
+    apiBuyBroker(2).then((res: any) => {
 
-    apiSandCreateOrder({
-      "goodsDesc": "4321532153215213",
-      "orderSn": "stri23532153253215123ng",
-      "receivedAddress": "fsdafsa",
-      "totalPay": "1",
-      "userId": userId
-    }).then((res: any) => {
-      for (let item in res) {
-        URL += '&' + item + '=' + res[item]
+      if (res.code !== 200) {
+        Toast.show('创建订单失败')
+        return
       }
-      console.log(URL)
-    // navigate('PayWebView', {url: URL})
+
+      let payURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
+
+      for (let item in res.data) {
+        payURL += '&' + item + '=' + res.data[item]
+      }
+
+      const params = {
+        url: payURL,
+        orderSn: res.data.orderSn,
+        payType: res.data.payType,
+        nextBtnText: '重试',
+        nextRoute: 'BeAgent',
+      }
+
+      console.log('成为主播', params)
+
+      navigate('PayWebView', params)
     })
+      .catch(console.warn)
   }
 
   /**
@@ -173,7 +192,7 @@ const BeAgent = props => {
               <SmallText style={{color: Colors.brownColor}}>客服微信</SmallText>
             </View>
             <View style={styles.serviceRight}>
-              <SmallText style={styles.colorLightBrown}>{props.wxNumber}</SmallText>
+              <SmallText style={styles.colorLightBrown}>{agentRequire?.wxCSStaff}</SmallText>
               <PrimaryText 
                 style={styles.colorLightBrown}
                 onPress={copy}
@@ -190,8 +209,8 @@ const BeAgent = props => {
                 agentList.map((item, index) => {
                 return (
                   <View key={item.name} style={styles.tabItem}>
-                    <PrimaryText style={StyleSheet.flatten([styles.tabText, (item.level === curAgentLevel) && styles.activeTabText])}>{item.name}</PrimaryText>
-                    <View style={(item.level === curAgentLevel) && styles.tabUnderLine}></View>
+                    <PrimaryText style={StyleSheet.flatten([styles.tabText, (item.level === agentRequire?.currentLevel) && styles.activeTabText])}>{item.name}</PrimaryText>
+                    <View style={(item.level === agentRequire?.currentLevel) && styles.tabUnderLine}></View>
                   </View>
                 )
               })
@@ -201,11 +220,15 @@ const BeAgent = props => {
             style={styles.tabWrapper}
           >
             {
-              beAgentRequireList.map((item, index) => {
+              beAgentRequireList[agentRequire?.currentLevel || 3].map((item, index) => {
                 return renderAgentRequireRow(item)
               })
             }
-            <TinyText style={styles.beAgentTip}>任意一条件达成即可成为经纪人</TinyText>
+            <TinyText style={styles.beAgentTip}>
+              {
+                agentRequire?.currentLevel === 0 ? '任意一条件达成即可成为经纪人' : '达成所有条件升级经纪人'
+              }
+            </TinyText>
           </View>
         </ImageBackground>
         <View style={styles.checkLine}>
@@ -239,8 +262,15 @@ const BeAgent = props => {
 }
 
 BeAgent.defaultProps = {
-  // TODO:
-  wxNumber: 'haduia81237'
+  "anchorInviteDemand": 0,
+  "anchorInviteInfo": 0,
+  "currentLevel": 5,
+  "middleAgentInviteDemand": 0,
+  "middleAgentInviteInfo": 0,
+  "payInfo": 0,
+  "primaryAgentInviteDemand": 0,
+  "primaryAgentInviteInfo": 0,
+  "wxCSStaff": ""
 }
 
 export default withPage(BeAgent)
@@ -327,7 +357,7 @@ const styles = StyleSheet.create({
   requireRow: {
     flexDirection: 'row', 
     alignItems: 'center', 
-    marginVertical: pad,
+    marginVertical: pad * 2,
   },
   tabUnderLine: {
     width: pxToDp(70),  

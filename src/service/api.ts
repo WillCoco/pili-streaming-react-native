@@ -170,7 +170,11 @@ export const apiQueryOrderPayStatus = (data: any) => get1(`${HOST_JAVA}/order/qu
  * 主播相关接口 ==========================================================================================
  */
 // 成为主播
-export const apiAddAnchorUser = (data: any) => post2(`${HOST_JAVA}/anchor/addAnchorUser`, data)
+export const apiBuyAnchor = (data: any) => post2(`${HOST_JAVA}/order/buyAnchor`, data)
+// 成为经纪人
+export const apiBuyBroker = (data: any) => post2(`${HOST_JAVA}/order/buyBroker`, data)
+// 获取经纪人信息
+export const apiGetAgentInfo = () => get2(`${HOST_JAVA}/user/getAgentInfo`)
 // 主播添加商品到主播店铺
 export const apiAddAnchorGoods = (data: any) => post2(`${HOST_JAVA}/anchor/addAnchorGoods`, data)
 // 主播添加商品到主播预组货
@@ -232,7 +236,7 @@ export const apiDelAnchorGoods = (data: any) => post2(`${HOST_JAVA}/anchor/delAn
 // 添加订单的直播间id
 export const apiAddOrderLiveId = (data: any) => get(`${HOST_JAVA}/userLive/addOrderLiveId`, data)
 // 主播页详情
-export const apiAnchorParticular = (data: any) => get(`${HOST_JAVA}/userLive/anchorParticular`, data)
+export const apiAnchorParticular = (data: any) => get2(`${HOST_JAVA}/userLive/anchorParticular`, data)
 // 关注/取关主播
 export const apiAttentionAnchor = (data: any) => post(`${HOST_JAVA}/userLive/attentionAnchor`, data)
 // 点击进入直播间

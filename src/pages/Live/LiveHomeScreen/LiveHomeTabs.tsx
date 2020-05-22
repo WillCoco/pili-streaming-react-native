@@ -174,14 +174,13 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
             <PrimaryText style={{textAlign: 'center', fontWeight: 'bold',}}>精选</PrimaryText>
           </View>
           <PagingList
-            size={10}
-            // initListData={selectList}
+            size={14}
             //item显示的布局
             renderItem={renderItem}
             //下拉刷新相关
             onRefresh={() => onRefresh('1')}
             //加载更多
-            onEndReached={onEndReached}
+            onEndReached={(page, size) => onEndReached(page, size, '1')}
             // ItemSeparatorComponent={separator}
             keyExtractor={(item, index) => 'index' + index + item}
             initialNumToRender={14}

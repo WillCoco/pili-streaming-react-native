@@ -13,7 +13,9 @@ export default function PayWebview() {
   const route: any = useRoute()
   const navigation: any = useNavigation()
 
-  const { orderSn, payType } = route.params
+  // const { orderSn, payType } = route.params
+  const { orderSn, payType, nextBtnText, nextRoute } = route.params
+
 
   const [path, setPath] = useState(route?.params?.url)
 
@@ -41,7 +43,9 @@ export default function PayWebview() {
       console.log('前台')
       const params = {
         orderSn,
-        payType
+        payType,
+        nextBtnText,
+        nextRoute,
       }
 
       navigation.push('Result', params)

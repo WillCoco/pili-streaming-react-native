@@ -21,16 +21,42 @@ import {vw} from '../../../utils/metric';
 import ScrollableTab from '../../../components/ScrollableTab';
 import FollowButton from '../../../components/FollowButton';
 import {pad} from '../../../constants/Layout';
+import {apiAnchorParticular} from '../../../service/api';
+import {useRoute, useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import {EMPTY_OBJ} from '../../../constants/freeze';
 
 const AnchorDetail = () =>  {
   const isLiving = true;
   const bgUrl = 'https://goss.veer.com/creative/vcg/veer/800water/veer-302989341.jpg';
   const trailers = [1, 2]
   const liveRecords = [1, 2, 3]
+  const route = useRoute()
+  const anchorId = route?.params?.anchorId || ''
+  const userId = useSelector(state => state?.userData?.userInfo?.userId) || ''
+  const [anchorDetail, setAnchorDetail] = React.useState(EMPTY_OBJ)
+  const PAGE_SIZE = 14
 
   const onFollowPress = (isFollow: boolean) => {
     console.log(isFollow, 'isFollow');
   }
+
+  React.useEffect(() => {
+    const params = {
+      anchorId,
+      pageNo: 1,
+      pageSize: PAGE_SIZE,
+      userId
+    }
+
+    apiAnchorParticular(params)
+      .then((res: any) => {
+        console.log(res, 124231532152315)
+        setAnchorDetail(res?.data);
+      })
+      .catch(console.warn);
+  }, []);
+
   return (
     <View
       style={styles.wrapper}
@@ -39,18 +65,19 @@ const AnchorDetail = () =>  {
         <View style={styles.headerWrapper}>
           <Image style={styles.headerBg} source={{uri: bgUrl}} resizeMode="cover" resizeMethod="resize" />
           <AnorchDetailAvatar
-            isLiving={isLiving}
+            isLiving={anchorDetail?.liveStatus === 2}
             onPress={() => {}}
             style={{marginTop: 36}}
+            source={anchorDetail?.anchorLogo}
           />
-          <T3 style={styles.nickName}>主播昵称</T3>
+          <T3 style={styles.nickName}>{anchorDetail?.anchorName || '主播'}</T3>
           <View style={styles.row}>
-            <PrimaryText style={styles.anchorInfo}>粉丝: 100</PrimaryText>
+            <PrimaryText style={styles.anchorInfo}>粉丝: {anchorDetail?.fansNum || 0}</PrimaryText>
             <View style={styles.strip} />
-            <PrimaryText style={styles.anchorInfo}>直播: 20</PrimaryText>
+            <PrimaryText style={styles.anchorInfo}>直播: {anchorDetail?.liveNum || 0}</PrimaryText>
           </View>
           <FollowButton
-            isFollow={false}
+            isFollow={anchorDetail?.isAttention}
             onPress={onFollowPress}
             style={{paddingHorizontal: 40, marginTop: pad}}
             size={{width: 200, height: 26}}

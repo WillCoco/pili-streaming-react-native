@@ -225,8 +225,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                     <Stack.Screen name='AnchorLivingEnd' component={AnchorLivingEndScreen} options={{ headerShown: false, gestureEnabled: false }} />
                     <Stack.Screen name='BankCardBag' component={BankCardBag} options={{ headerShown: false }} />
                     <Stack.Screen name='AddBankCard' component={AddBankCard} options={{ headerShown: false }} />
-                    {/* <Stack.Screen name='Withdraw' component={Withdraw} options={{ headerShown: false }} /> */}
-                    <Stack.Screen name='Withdraw' component={AnchorLivingEndScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name='Withdraw' component={Withdraw} options={{ headerShown: false }} />
                     <Stack.Screen name='Message' component={Message} options={{ headerShown: false }} />
                     <Stack.Screen name='RealName' component={RealName} options={{ headerShown: false }} />
                     <Stack.Screen name='PrivacyPolicy' component={PrivacyPolicy} />
