@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { View, ScrollView, Dimensions, StyleSheet, Platform, Text, ImageBackground, TouchableOpacity } from 'react-native'
+import { View, ScrollView, Dimensions, StyleSheet, Platform, Text, ImageBackground, TouchableOpacity, Image } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { apiGoodInfo, apiGetUnclaimedCoupons, apiAddCart, apiGoodsIsLike } from '../../service/api'
 
 import pxToDp from '../../utils/px2dp'
-import WebView from 'react-native-webview'
-// import HTML from 'react-native-render-html'
-// import HTML from 'react-native-htmlview'
+import AndroidHTML from 'react-native-render-html'
+import HTML from 'react-native-htmlview'
 import Toast from 'react-native-tiny-toast'
 import { Portal, Toast as AntToast } from '@ant-design/react-native'
 import { Colors } from '../../constants/Theme'
@@ -20,32 +19,12 @@ import ShareBar from './ShareBar/ShareBar'
 import GoodsCard from './GoodsCard/GoodsCard'
 import Advantage from './Advantage/Advantage'
 import BrandCard from './BrandCard/BrandCard'
+import RenderImg from './RenderImg/RenderImg'
 import FooterBar from './FooterBar/FooterBar'
 import PostCard from './PosterCard/PosterCard'
 import ActivityBar from './ActivityBar/ActivityBar'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 import ActionSheet from '../../components/ActionSheet/ActionSheet'
-
-// const BaseScript = `(function () {
-//                       var height = null;
-//                       function changeHeight() {
-//                         console.log('11111')
-//                         if (document.body.scrollHeight != height) {
-//                           height = document.body.scrollHeight;
-//                           if (window.postMessage) {
-//                             window.postMessage(JSON.stringify({
-//                               type: 'setHeight',
-//                               height: height,
-//                             }))
-//                           }
-//                         }
-//                       }
-//                       setTimeout(changeHeight, 300);
-//                   } ())`
-
-const BaseScript = `
-console.log(11)
-`
 
 interface GoodsInfoParams {
   id: string | number,
@@ -78,10 +57,9 @@ function GoodsInfo(props: any) {
   const [showPosterCard, setShowPosterCard] = useState(false)
   const [couponList, setCouponList]: Array<any> = useState([])
   const [netWorkErr, setNetWorkErr] = useState(false)
-  const [webViewHeight, setWebViewHeight] = useState(0)
   const [posterPath, setPosterPath] = useState('')
   const [posterType, setPosterType] = useState(0)
-  
+
   const { id: goodsId, shareUserId, onOrderCompleted }: GoodsInfoParams = route.params as GoodsInfoParams;
 
   navigation.setOptions({
@@ -120,10 +98,10 @@ function GoodsInfo(props: any) {
       goodsInfoRef.current = res
       setGoodsInfo(goodsInfoRef.current)
       setSwiperList(res.goods_images_list)
-      // setGoodsContent(strDiscode(res.goods_content))
+      setGoodsContent(strDiscode(res.goods_content))
 
-      let content = strDiscode(res.goods_content).replace(/\<img/gi, '<img style="width: 100%; height: auto"')
-      setGoodsContent(content)
+      // let content = strDiscode(res.goods_content).replace(/\<img/gi, '<img style="width: 100%"')
+      // setGoodsContent(content)
 
       if (res.is_sale || res.is_snap_up) {
         setGoodsType(res.is_sale ? 'sale' : 'seckill')
@@ -409,41 +387,21 @@ function GoodsInfo(props: any) {
           <BrandCard goodsInfo={goodsInfo} />
           {/* 商品详情 */}
           <View style={{ marginTop: pxToDp(10) }}>
-            {/* <HTML
-              html={goodsContent}
-              imagesMaxWidth={Dimensions.get('window').width}
-            /> */}
-            {/* <HTML
-              value={goodsContent}
-              renderNode={(node, index, siblings, parent, defaultRenderer) => {
-                if (node.name == 'img') {
-                  const a = node.attribs;
-                  return (<Image resizeMode='cover' style={{ flex: 1, width: Dimensions.get('window').width }} source={{ uri: a.src }} />)
-                }
-              }}
-            /> */}
-            <WebView
-              injectedJavaScript={`console.log(111)`}
-              style={{
-                width: Dimensions.get('window').width,
-                height: 1000
-              }}
-              source={{ html: goodsContent }}
-              decelerationRate='normal'
-              onMessage={(event) => {
-                console.log(event, '====')
-                try {
-                  const action = JSON.parse(event.nativeEvent.data)
-                  if (action.type === 'setHeight' && action.height > 0) {
-                    setWebViewHeight(action.height)
-                  }
-                } catch (error) {
-                  // pass
-                  console.log(error)
-                }
-              }}
-            />
-
+            {
+              Platform.OS !== 'ios'
+                ? <AndroidHTML
+                  html={goodsContent}
+                  imagesMaxWidth={Dimensions.get('window').width}
+                />
+                : <HTML
+                  value={goodsContent}
+                  renderNode={(node: any, index: number) => {
+                    if (node.name == 'img') {
+                      return <RenderImg key={`img-${index}`} node={node} />
+                    }
+                  }}
+                />
+            }
           </View>
         </ScrollView>
         {/* 底部操作栏 */}
@@ -452,6 +410,7 @@ function GoodsInfo(props: any) {
           showGoodsSkuActionSheet={(type: string) => showGoodsSkuActionSheet(type)}
           toggleStarGoods={toggleStarGoods}
           shareUserId={shareUserId}
+          servicePath={goodsInfo.supplier_service || ''}
         />
         {/* 商品属性弹窗 */}
         <ActionSheet isShow={showGoodsSku}>

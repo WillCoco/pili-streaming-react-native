@@ -1414,6 +1414,14 @@
   version "6.9.1"
   resolved "https://registry.npm.taobao.org/@types/qs/download/@types/qs-6.9.1.tgz#937fab3194766256ee09fcd40b781740758617e7"
 
+"@types/react-native-htmlview@^0.12.2":
+  version "0.12.2"
+  resolved "https://registry.yarnpkg.com/@types/react-native-htmlview/-/react-native-htmlview-0.12.2.tgz#f4875fcb6cb214d0ccbf7670d8a41ccdc8790187"
+  integrity sha512-r5lWdZcZmcxLrfhIAAzBCEpDUuDFRiB5V9d0QvCqhTRh9vorlEjXgyZ5K8/HzbIOuvGb9/mQJPK0rItEAQk0dw==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
 "@types/react-native-scrollable-tab-view@^0.10.1":
   version "0.10.1"
   resolved "https://registry.npm.taobao.org/@types/react-native-scrollable-tab-view/download/@types/react-native-scrollable-tab-view-0.10.1.tgz#086c7021c24337ca60b4ce659486611c1669963d"

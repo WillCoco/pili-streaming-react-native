@@ -4,7 +4,7 @@ import { WebView } from 'react-native-webview'
 import { Colors } from '../../constants/Theme'
 
 export default function Service() {
-  const route = useRoute()
+  const route: any = useRoute()
   const navigation = useNavigation()
 
   navigation.setOptions({
@@ -19,7 +19,6 @@ export default function Service() {
   })
 
   return (
-    // <WebView source={{ uri: route.params.url }} />
-    <WebView source={{ uri: 'https://cschat-ccs.aliyun.com/index.htm?tntInstId=_1r0MG9g&scene=SCE00006973' }} />
+    <WebView source={{ uri: route.params }} />
   )
 }

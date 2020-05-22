@@ -58,7 +58,7 @@ export default function Result() {
     })
   }
 
-  if (completed) return <></>
+  if (!completed) return <></>
 
   return (
     <View style={styles.container}>
