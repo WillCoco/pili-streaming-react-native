@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Platform, StatusBar, View, NativeModules, Text } from 'react-native';
-import { AppLoading } from 'expo'
-import * as SplashScreen from 'expo-splash-screen'
+// import { AppLoading } from 'expo'
+// import * as SplashScreen from 'expo-splash-screen'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import * as Font from 'expo-font';
@@ -107,7 +107,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
     async function loadResourcesAndDataAsync() {
       try {
 
-        SplashScreen.preventAutoHideAsync()
+        // SplashScreen.preventAutoHide()
 
         await Font.loadAsync({
           ...Ionicons.font,
@@ -129,7 +129,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
         }
 
         // FIXME:
-        SplashScreen.hideAsync()
+        // SplashScreen.hide()
       }
     }
 

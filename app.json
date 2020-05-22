@@ -16,6 +16,9 @@
     ],
     "android": {
       "package": "com.hengju.championapp"
+    },
+    "ios": {
+      "bundleIdentifier": "org.reactjs.native.championApp"
     }
   }
 }
