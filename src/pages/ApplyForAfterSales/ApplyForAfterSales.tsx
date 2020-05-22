@@ -26,8 +26,6 @@ export default function ApplyForAfterSales() {
     { value: '换货', type: 3, active: false }
   ])
 
-  console.log(orderInfo)
-
   navigation.setOptions({
     headerTitle: `申请售后`,
     headerStyle: {
@@ -67,7 +65,7 @@ export default function ApplyForAfterSales() {
       type: typeList.filter(item => item.active)[0].type
     }
 
-    apiCreateReturnOrder(params).then(res => {
+    apiCreateReturnOrder(params).then((res: any) => {
       console.log(res, '申请退款')
       if (res) {
         Toast.showSuccess('已提交申请')

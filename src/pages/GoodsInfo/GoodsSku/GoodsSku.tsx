@@ -8,7 +8,20 @@ import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
-export default function GoodsSKu(props: any) {
+interface Props {
+  curSku: string;
+  sku: Array<any>;
+  curSkuInfo: any;
+  goodsNum: number;
+  buttonType: string;
+  addCount(): void;
+  nextAction(): void;
+  minusCount(): void;
+  hideGoodsSkuActionSheet(): void;
+  changeSku(key: string, index: number): void;
+}
+
+export default function GoodsSKu(props: Props) {
   const { sku, curSku, curSkuInfo, goodsNum, buttonType } = props
 
   return (

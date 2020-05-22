@@ -11,12 +11,12 @@ interface Props {
     shop_info: any
     selectedGoods: any
   }
-  showCoupon: (arg0: any) => void
+  showCoupon: (arg0: number) => void
   inputMemo: (arg0: string, arg1: any) => void
 }
 
 export default function ShopCard(props: Props) {
-  const navigation = useNavigation()
+  const navigation: any = useNavigation()
   const { shop_info, selectedGoods } = props.shopInfo
 
   const toBrandShop = () => {

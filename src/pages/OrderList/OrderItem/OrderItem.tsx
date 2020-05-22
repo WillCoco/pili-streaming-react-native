@@ -6,7 +6,16 @@ import { Colors } from '../../../constants/Theme'
 import { Ionicons } from '@expo/vector-icons'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
-export default function OrderItem(props:any) {
+interface Props {
+  orderInfo: any;
+  toPay(id: number | string): void;
+  cancelOrder(id: number | string): void;
+  remindDelivery(id: number | string): void;
+  confirmTheGoods(id: number | string): void;
+  extendReceiveGoods(id: number | string): void;
+}
+
+export default function OrderItem(props: Props) {
   const navigation: any = useNavigation()
   const { orderInfo } = props
 

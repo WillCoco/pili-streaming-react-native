@@ -6,7 +6,12 @@ import { Colors } from '../../../constants/Theme'
 const emptyImg = require('../../../assets/default-image/empty_cart.png')
 const notLoginImg = require('../../../assets/default-image/cart_not_login.png')
 
-export default function DefaultContent(props) {
+interface Props {
+  type: string
+  nextAction(): void;
+}
+
+export default function DefaultContent(props: Props) {
   const { type } = props
 
   return (

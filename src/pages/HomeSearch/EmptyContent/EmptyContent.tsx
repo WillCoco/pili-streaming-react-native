@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 
-export default function EmptyContent(props: any) {
+export default function EmptyContent(props: { emptyText: React.ReactNode }) {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>抱歉，没有找到与“<Text style={{ color: Colors.basicColor }}>{props.emptyText}</Text>”相关的商品</Text>

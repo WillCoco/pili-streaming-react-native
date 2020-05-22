@@ -3,7 +3,12 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme' 
 
-export default function ClassifyTab(props: { changeTab: any; tabs: any }) {
+interface Props {
+  tabs: Array<any>;
+  changeTab(index: number): void;
+}
+
+export default function ClassifyTab(props: Props) {
   const { tabs } = props
 
   return (

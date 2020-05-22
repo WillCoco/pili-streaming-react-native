@@ -14,7 +14,7 @@ interface Props {
   show: boolean
   type: number
   path: string
-  hidePosterCard(): any
+  hidePosterCard(): void
 }
 
 function PosterCard(props: Props) {

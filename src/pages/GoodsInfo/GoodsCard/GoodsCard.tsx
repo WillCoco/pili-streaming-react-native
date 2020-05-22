@@ -7,9 +7,9 @@ import formatSinglePrice from '../../../utils/formatGoodsPrice'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 export default function GoodsCard(props: {
-  showCouponActionSheet?: any
-  showShareBar?: any
-  goodsInfo?: any
+  goodsInfo: any
+  showShareBar(): void
+  showCouponActionSheet(): void
 }) {
   const { goodsInfo } = props
 

@@ -10,7 +10,11 @@ import pxToDp from '../../utils/px2dp'
 import { apiEditAddr, apiAddrList, apiAddAddr, apiDelAddr } from '../../service/api'
 import Toast from 'react-native-tiny-toast'
 
-function CreateOrEditAddr(props: { dispatch: (arg0: { type: string; payload: any[] }) => void }) {
+interface Props {
+  dispatch: (arg0: { type: string; payload: any[] }) => void
+}
+
+function CreateOrEditAddr(props: Props) {
   const navigation: any = useNavigation()
   const route: any = useRoute()
 

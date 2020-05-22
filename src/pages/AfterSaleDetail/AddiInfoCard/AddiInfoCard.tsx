@@ -6,7 +6,7 @@ import pxToDp from '../../../utils/px2dp'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 import moment from 'moment'
 
-export default function AddiInfoCard(props) {
+export default function AddiInfoCard(props: { orderInfo: any }) {
   const { orderInfo } = props
 
   return (

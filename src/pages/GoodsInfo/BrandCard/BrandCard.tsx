@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons'
 
 export default function BrandCard(props: { goodsInfo: any }) {
   const { goodsInfo } = props
-  const navigation = useNavigation()
+  const navigation: any = useNavigation()
 
   const toBrandShop = () => {
     const { supplier_id: id } = goodsInfo

@@ -10,13 +10,20 @@ import { apiGetCoupon } from '../../../service/api'
 const couponHasBgi = require('../../../assets/goods-image/coupon_has.png')
 const couponNotHaveBgi = require('../../../assets/goods-image/coupon_not_have.png')
 
-export default function Coupon(props: any) {
+interface Props {
+  goodsInfo: any;
+  couponList: Array<any>;
+  getGoodsCoupon(): void;
+  hideCouponActionSheet(): void; 
+}
+
+export default function Coupon(props: Props) {
   const { goodsInfo, couponList } = props
 
   const getCoupon = (item: any) => {
     if (item.isReceived) return
 
-    apiGetCoupon({ couponsId: item.id }).then(res => {
+    apiGetCoupon({ couponsId: item.id }).then((res: any) => {
       console.log('领取优惠券', res)
       if (res) {
         props.getGoodsCoupon()

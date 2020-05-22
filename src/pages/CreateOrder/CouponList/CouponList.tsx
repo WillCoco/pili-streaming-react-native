@@ -5,10 +5,21 @@ import { Colors } from '../../../constants/Theme'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 import { Ionicons } from '@expo/vector-icons'
 
-export default function CouponList(props) {
+interface Props {
+  curShopId: number;
+  orderList: Array<any>;
+  hideCoupon(): void;
+  chooseCoupon(shopId: number, couponId: number): void;
+}
+
+export default function CouponList(props: Props) {
   const { orderList, curShopId } = props
 
-  const orderInfo = orderList.filter(item => item.shop_info.shop_id === curShopId)[0]
+  const orderInfo = orderList.filter((item: {
+    shop_info: {
+      shop_id: number
+    }
+  }) => item.shop_info.shop_id === curShopId)[0]
 
   return (
     <View style={styles.container}>

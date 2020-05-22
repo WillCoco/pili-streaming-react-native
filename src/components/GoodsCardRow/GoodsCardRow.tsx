@@ -36,9 +36,10 @@ export default function GoodsCardRow(props: Props) {
               </ImageBackground>
               : <Text />
           } */}
+          <Text />
           <View style={styles.shareCard}>
             <Text style={styles.shareText}>分享</Text>
-            <Text style={styles.sharePrice}>¥{formatGoodsPrice(goodsInfo.MyDiscounts)}</Text>
+            <Text style={styles.sharePrice}>¥{formatGoodsPrice(goodsInfo.MyDiscounts || 0)}</Text>
           </View>
         </View>
         <View style={styles.goodsPrice}>

@@ -18,10 +18,10 @@ import { setUserInfo } from '../../../actions/user'
 import { Portal, Toast as AntToast } from '@ant-design/react-native'
 
 interface Props {
-  userId?: any;
-  goodsId?: any;
-  dispatch?: any;
-  hideShareBar?: any;
+  dispatch: any;
+  userId: number;
+  goodsId: number;
+  hideShareBar(): void;
   setPosterPath(img: string, type: number): any;
 }
 

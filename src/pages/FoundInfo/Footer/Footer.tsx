@@ -7,13 +7,24 @@ import Toast from 'react-native-tiny-toast'
 
 import { apiPublishWorksComment, apiPublishWorksReply } from '../../../service/api'
 
-const heartSolidIcon = require('../../../assets/works-image/heart.png')
 const heartIcon = require('../../../assets/works-image/heart2.png')
+const heartSolidIcon = require('../../../assets/works-image/heart.png')
 
-export default function Footer(props: any) {
+interface Props {
+  worksInfo: any;
+  commentInfo: any;
+  isLogin: boolean;
+  inputFocus: boolean;
+  showGoodsActionSheet: boolean;
+  inputBlur(): void;
+  followWorks(): void;
+  updateCommentList(): void;
+}
+
+export default function Footer(props: Props) {
   const { worksInfo, inputFocus, commentInfo, isLogin } = props
   const [inputValue, setInputValue] = useState('')
-  const inputRef = useRef()
+  const inputRef: any = useRef()
   const navigation = useNavigation()
 
   useEffect(() => {

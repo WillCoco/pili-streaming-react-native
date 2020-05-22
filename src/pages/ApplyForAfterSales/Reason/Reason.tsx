@@ -7,7 +7,12 @@ import { Ionicons } from '@expo/vector-icons'
 import Toast from 'react-native-tiny-toast'
 import { apiLiveUploadFile } from '../../../service/api'
 
-export default function Reason(props: { setImageList: (arg0: any[]) => void; inputReason: (arg0: string) => void }) {
+interface Props {
+  setImageList: (arg0: any[]) => void;
+  inputReason: (arg0: string) => void;
+}
+
+export default function Reason(props: Props) {
   const [imageList, setImageList] = useState([
     { uri: require('../../../assets/order-image/add.png') }
   ])

@@ -4,7 +4,7 @@ import pxToDp from '../../../utils/px2dp'
 import moment from 'moment'
 import { Colors } from '../../../constants/Theme'
 
-export default function ReturnSchedule(props) {
+export default function ReturnSchedule(props: { scheduleList: Array<any> }) {
   const { scheduleList } = props
 
   return (

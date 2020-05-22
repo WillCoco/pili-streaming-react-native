@@ -16,8 +16,13 @@ import CartFooterAction from '../../components/CartFooterAction/CartFooterAction
 import CartHeaderButton from '../../components/CartHeaderButton/CartHeaderButton'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
+interface Props {
+  cartData: any;
+  dispatch?: any;
+  userData?: any;
+}
 
-function Cart(props: any) {
+function Cart(props: Props) {
   const { userData, cartData } = props
   const { isLogin } = userData
   const { cartList } = cartData

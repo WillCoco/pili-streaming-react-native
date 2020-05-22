@@ -158,16 +158,13 @@ function Logion(props: any) {
       />
 
       <Form
-        telNum={telNum}
-        verCode={verCode}
-        invCode={invCode}
-        disabledSendBtn={disabled}
         countDown={countDown}
         hasRegister={hasRegister}
+        disabledSendBtn={disabled}
+        sendMsg={sendMsg}
         changeTelNum={(value: string) => changeTelNum(value)}
         changeVerCode={(value: string) => changeVerCode(value)}
         changeInvCode={(value: string) => changeInvCode(value)}
-        sendMsg={sendMsg}
       />
 
       <TouchableOpacity style={styles.loginBtnContainer} onPress={toLogin}>

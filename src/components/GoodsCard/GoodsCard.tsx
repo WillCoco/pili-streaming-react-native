@@ -72,10 +72,11 @@ function GoodsCard(props: Props) {
               </ImageBackground>
               : <Text />
           } */}
+          <Text />
           <TouchableWithoutFeedback onPress={toShare}>
             <View style={styles.shareCard}>
               <Text style={styles.shareText}>分享</Text>
-              <Text style={styles.sharePrice}>¥{formatGoodsPrice(goodsInfo.MyDiscounts || goodsInfo.rebate)}</Text>
+              <Text style={styles.sharePrice}>¥{formatGoodsPrice(goodsInfo.MyDiscounts || goodsInfo.rebate || 0)}</Text>
             </View>
           </TouchableWithoutFeedback>
         </View>

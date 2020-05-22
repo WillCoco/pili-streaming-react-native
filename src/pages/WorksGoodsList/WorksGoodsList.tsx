@@ -9,7 +9,13 @@ import Header from './Header/Header'
 import GoodsCard from '../../components/WorksGoodsCard/WorksGoodsCard'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
-function WorksGoodsList(props: any) {
+interface Props {
+  dispatch?: any;
+  goodsList: Array<any>;
+  addedGoodsList?: Array<any>;
+}
+
+function WorksGoodsList(props: Props) {
   const { goodsList, addedGoodsList } = props
 
   const navigation: any = useNavigation()

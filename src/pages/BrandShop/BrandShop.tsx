@@ -16,7 +16,7 @@ import GoodsCardRow from '../../components/GoodsCardRow/GoodsCardRow'
 
 const pageSize = 20
 
-function BrandShop(props: any) {
+function BrandShop(props: { isLogin: boolean }) {
   const { isLogin } = props
 
   const pageNoRef = useRef(1)

@@ -5,9 +5,14 @@ import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
-export default function GoodsCard(props: any) {
+interface Props {
+  goodsInfo: any;
+  hiddenGoods(): void;
+}
+
+export default function GoodsCard(props: Props) {
   const { goodsInfo } = props
-  const navigation = useNavigation()
+  const navigation: any = useNavigation()
 
   const toShare = () => {
 

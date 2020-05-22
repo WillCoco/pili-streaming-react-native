@@ -20,10 +20,10 @@ const defaultAvatar = require('../../../assets/mine-image/default_avatar.png')
 interface Props {
   userData: {
     userInfo: any
-    isLogin: any
+    isLogin: boolean
   }
   publicData: {
-    statusBarHeight: any
+    statusBarHeight: number
   }
 }
 
