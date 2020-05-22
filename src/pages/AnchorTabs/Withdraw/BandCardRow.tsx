@@ -27,6 +27,7 @@ import DiscountPrice from '../../../components/DiscountPrice';
 import Iconremove from '../../../components/Iconfont/Iconremove';
 import {getPlatformBrands} from '../../../actions/shop';
 import images from '../../../assets/images/index';
+import defaultImages from '../../../assets/default-image';
 
 interface BrandGoodRowProps {
   data: any,
@@ -60,7 +61,7 @@ const BrandGoodRow = (props: BrandGoodRowProps) =>  {
     <TouchableOpacity
       style={StyleSheet.flatten([styles.style, props.style])}
     >
-      <Image source={data.img || images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
+      <Image source={data.img || defaultImages.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
       <View style={styles.contentWrapper}>
         <PrimaryText numberOfLines={1} style={{}}>{data.bank}</PrimaryText>
         <PrimaryText numberOfLines={1} style={{}}>{data.cardType}</PrimaryText>
@@ -72,9 +73,9 @@ const BrandGoodRow = (props: BrandGoodRowProps) =>  {
 
 BrandGoodRow.defaultProps = {
   data: {
-    bank: '银行?',
-    cardType: '储蓄卡?',
-    cardId: '1231231231231?'
+    bank: '',
+    cardType: '',
+    cardId: ''
   },
   disabled: false,
   actionText: '添加'

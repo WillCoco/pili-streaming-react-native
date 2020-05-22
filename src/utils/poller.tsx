@@ -64,6 +64,10 @@ class Poll {
     })
   }
 
+  execOnce() {
+    this.callback();
+  }
+
   getPollingStatus() {
     return this.isPolling
   }

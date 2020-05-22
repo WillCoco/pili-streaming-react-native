@@ -33,8 +33,6 @@ const LiveWindow = React.forwardRef((props: LiveWindowProps, ref: any) : any => 
    */
   const player = React.useRef();
 
-  console.log(status, 'statusstatusstatus')
-
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
       <NodePlayerView

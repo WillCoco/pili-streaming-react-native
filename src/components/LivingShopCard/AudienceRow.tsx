@@ -17,6 +17,7 @@ import DiscountPrice from '..//DiscountPrice';
 import Iconremove from '../Iconfont/Iconremove';
 import CheckBox from '../CheckBox';
 import images from '../../assets/images/index';
+import defaultImages from '../../assets/default-image';
 import ButtonRadius from '../Buttons/ButtonRadius';
 import {Colors} from '../../constants/Theme';
 
@@ -40,20 +41,21 @@ interface AudienceRowProps {
 const AudienceRow = (props: AudienceRowProps) =>  {
   const data = (props.dataAdapter ? props.dataAdapter(props.data) : props.data) || {};
 
+  console.log(data, '11233123123123123123')
   return (
     <TouchableWithoutFeedback>
       <View style={StyleSheet.flatten([styles.style, props.style])}>
         <View>
-          <Image source={data.img ? {uri: data.img} : images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
+          <Image source={data.img ? {uri: data.img} : defaultImages.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
           <T3 style={styles.index}>{props.index}</T3>
         </View>
         <View style={styles.contentWrapper}>
           <View style={styles.titleWrapper}>
             <PrimaryText numberOfLines={2} style={{flex: 1}}>{data.title}</PrimaryText>
           </View>
-          <ShareProfit profit={111} style={{flex: -1}} />
+          <ShareProfit profit={data.profit} style={{flex: -1}} />
             <View style={styles.rowBetween}>
-              <DiscountPrice discountPrice={120} price={110} />
+              <DiscountPrice discountPrice={data.discountPrice} price={data.price} />
               <ButtonRadius
                 text="去购买"
                 size={30}

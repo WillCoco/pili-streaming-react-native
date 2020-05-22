@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons'
 import Toast from 'react-native-tiny-toast'
 import { apiLiveUploadFile } from '../../../service/api'
 
-export default function Reason(props) {
+export default function Reason(props: { setImageList: (arg0: any[]) => void; inputReason: (arg0: string) => void }) {
   const [imageList, setImageList] = useState([
     { uri: require('../../../assets/order-image/add.png') }
   ])
@@ -44,7 +44,7 @@ export default function Reason(props) {
   const upLoadImage = (imgUri: string) => {
     apiLiveUploadFile({
       fileType: 'PICTURE',
-      size: '2',
+      size: '5',
       unit: 'M',
       file: getImageInfo(imgUri),
     }).then((res: any) => {
@@ -53,8 +53,10 @@ export default function Reason(props) {
         setImageList([...imageList, ...[res.data]])
         props.setImageList([...imageList, ...[res.data]])
       } else {
-        Toast.show(res.data)
+        Toast.show(res.message, { position: 0 })
       }
+    }).catch((err: any) => {
+      console.log('上传文件错误', err)
     })
   }
 
@@ -87,7 +89,7 @@ export default function Reason(props) {
                 <TouchableOpacity onPress={() => chooseImage(index)} key={`imag-${index}`}>
                   <ImageBackground
                     style={styles.img}
-                    source={index ? { uri: item.uri } : item.uri}
+                    source={index ? { uri: item } : item.uri}
                   />
                 </TouchableOpacity>
                 {

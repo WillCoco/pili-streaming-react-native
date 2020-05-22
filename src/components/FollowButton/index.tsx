@@ -13,8 +13,8 @@ import { Colors } from '../../constants/Theme';
 import { pad } from '../../constants/Layout';
 
 interface FollowButtonPropsType {
-  isFollow: boolean,
-  onPress: (isFollow: boolean) => void,
+  isFollowed: boolean,
+  onPress: (isFollow?: boolean) => void,
   textStyle?: StyleProp<any>,
   followWrapperStyle?: StyleProp<any>,
   unFollowWrapperStyle?: StyleProp<any>,
@@ -24,10 +24,10 @@ interface FollowButtonPropsType {
 
 const FollowButton = (props: FollowButtonPropsType) =>  {
   const editFollow = () => {
-    props.onPress(!props.isFollow)
+    props.onPress(props.isFollowed)
   }
 
-  const wrapperStyle = props.isFollow ?
+  const wrapperStyle = props.isFollowed ?
     (props.followWrapperStyle || styles.followWrapper) :
     (props.unFollowWrapperStyle || styles.unFollowWrapper);
 
@@ -39,14 +39,14 @@ const FollowButton = (props: FollowButtonPropsType) =>  {
           height: props.size?.height,
           width: props.size?.width ? props.size?.width : 'auto',
           borderRadius: (props?.size?.height || 0) / 2,
-          backgroundColor: props.isFollow ? '#fff' : Colors.basicColor
+          backgroundColor: props.isFollowed ? '#fff' : Colors.basicColor
         },
         props.style
       ])}
       onPress={editFollow}
     >
         {
-          props.isFollow ?
+          props.isFollowed ?
             <SmallText style={StyleSheet.flatten([styles.followText, {color: Colors.basicColor}, props.textStyle])}>取消关注</SmallText> :
             <SmallText style={StyleSheet.flatten([styles.followText, {color: '#fff'}, props.textStyle])}>关注</SmallText>
         }

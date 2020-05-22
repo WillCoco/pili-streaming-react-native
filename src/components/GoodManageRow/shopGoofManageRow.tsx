@@ -129,12 +129,12 @@ const GoodManageRow = (props: GoodManageRowProps) =>  {
 GoodManageRow.defaultProps = {
   dataAdapter: (data: any) => ({
     isOnSale: data.isOnSale,
-    img: data.img || images.goodCover,
-    title: data.title || 'Nike耐克男鞋AJ',
-    SKUQuantity: data.SKUQuantity || 1, // 库存
-    saleQuantity: data.salesQuantity || 123, // 销量
+    img: data.img,
+    title: data.title || '',
+    SKUQuantity: data.SKUQuantity || 0, // 库存
+    saleQuantity: data.salesQuantity || '', // 销量
     priceSign: data.priceSign || '¥ ', // 销量
-    price: data.price || 't123.33', // 销量
+    price: data.price || '', // 销量
   }),
 };
 

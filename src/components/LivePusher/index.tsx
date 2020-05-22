@@ -64,12 +64,16 @@ const LivePusher = React.forwardRef((props: LivePusherProps, ref: any) : any => 
    */
   const pushUrl = useSelector((state: any) => state?.live?.livingInfo?.pushUrl)
 
-  console.log(pusherConfig, 'pusherConfig')
-
   /**
    * 加载推流的条件
    */
-  const showPusher = isPermissionGranted && pushUrl
+  const showPusher = isPermissionGranted && pushUrl;
+
+
+  console.log(isPermissionGranted, 'b01_isPermissionGranted')
+  console.log(pusherConfig, 'b01_pusherConfig')
+  console.log(pushUrl, 'b01_pushUrl')
+  console.log(showPusher, 'b01_showPushershowPusher')
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>

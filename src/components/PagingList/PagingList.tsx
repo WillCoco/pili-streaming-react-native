@@ -28,6 +28,7 @@ interface PageListProps {
   renderItem: (data?: any) => JSX.Element,
   onRefresh: () => Promise<any> | undefined | null,
   onEndReached: (page: number, size: number) => Promise<any> | undefined | null,
+  contentHeight: number, // 内容区域高度, 用于显示空时展开
 }
 
 const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
@@ -136,7 +137,8 @@ const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
    */
   const DefaultListEmptyComponent = () => {
     if (empty) {
-      return <Empty style={{height: contentHeight}} />;
+      let height = (contentHeight || props.contentHeight || 0) - 32; // footer
+      return <Empty style={{height}} />;
     }
     return null;
   };

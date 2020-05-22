@@ -8,7 +8,9 @@ import rootReducer from '../reducers'
 const persistConfig = {
   key: 'store',
   storage: AsyncStorage,
-  blacklist: ['shop', 'im', 'asset', 'live']
+  blacklist: ['shop', 'im', 'asset', 'live'],
+  // whiteList: ['userData'],
+  timeout: null
 }
 
 const middleware = [thunkMiddleware, logger]

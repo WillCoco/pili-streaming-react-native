@@ -127,17 +127,19 @@ export const updateShowcaseGoods = (showcaseGoods: any) => {
  * 获取平台分类品牌
  */
 export const getPlatformBrands = () => {
-  Toast.showLoading('');
   return async function(dispatch: Dispatch<any>, getState: any) {
     const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
     return api.apiGetCatBrandAll({anchorId})
-      .then((r: any) => {
-        const platformBrands = r || [];
-        dispatch(updatePlatformBrand(platformBrands));
-        Toast.hide('');
+      .then((res: any) => {
+        if (isSucceed(res)) {
+          const platformBrands = res?.data || [];
+          dispatch(updatePlatformBrand(platformBrands));
+
+        }
       })
-      .catch(err => {
-        console.log(`getPlatformBrands error: ${err}`)
+      .catch((err: any) => {
+        console.log(`apiGetCatBrandAll error:`)
+        console.log(err)
       })
   }
 }

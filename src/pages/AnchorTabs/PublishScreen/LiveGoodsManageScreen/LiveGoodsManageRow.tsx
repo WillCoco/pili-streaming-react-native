@@ -18,6 +18,7 @@ import Iconremove from '../../../../components/Iconfont/Iconremove';
 import ButtonRadius from '../../../../components/Buttons/ButtonRadius';
 import CheckBox from '../../../../components/CheckBox';
 import images from '../../../../assets/images/index';
+import defaultImages from '../../../../assets/default-image';
 import { Colors } from '../../../../constants/Theme';
 
 interface LiveGoodsManageRowProps {
@@ -41,7 +42,7 @@ const LiveGoodsManageRow = (props: LiveGoodsManageRowProps) =>  {
 
   const btnText = data.canAdd ? '添加店铺' : '取消添加';
   const btnBg = data.canAdd ? Colors.basicColor : Colors.lightGrey;
-
+  
   return (
     <View style={StyleSheet.flatten([styles.style, props.style])}>
       <CheckBox 
@@ -49,7 +50,7 @@ const LiveGoodsManageRow = (props: LiveGoodsManageRowProps) =>  {
         onPress={props.onPressCheck}
         style={{height: '100%', paddingHorizontal: pad}}
       />
-      <Image source={data.img ? {uri: data.img} : images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
+      <Image source={data.img ? {uri: data.img} : defaultImages.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
       <View style={styles.contentWrapper}>
         <View style={styles.titleWrapper}>
           <PrimaryText numberOfLines={2} style={{flex: 1}}>{data.title}</PrimaryText>
@@ -58,11 +59,11 @@ const LiveGoodsManageRow = (props: LiveGoodsManageRowProps) =>  {
           </TouchableOpacity> */}
         </View>
         <View style={styles.rowBetween}>
-          <SmallText color="grey" profit={111} style={{flex: -1}}>总库存:  {data.skuQuantity}</SmallText>
+          <SmallText color="grey" profit={111} style={{flex: -1}}>总库存:  {data.storeCount}</SmallText>
           <ShareProfit profit={111} style={{flex: -1}} />
         </View>
         <View style={styles.rowBetween}>
-          <DiscountPrice discountPrice={120} price={110} />
+          <DiscountPrice discountPrice={data.discountPrice} price={data.pirce} />
           <ButtonRadius
             text={btnText}
             size={20}
@@ -77,8 +78,8 @@ const LiveGoodsManageRow = (props: LiveGoodsManageRowProps) =>  {
 
 LiveGoodsManageRow.defaultProps = {
   data: {
-    title: '标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题',
-    skuQuantity: '11'
+    title: '',
+    skuQuantity: ''
   }
 };
 

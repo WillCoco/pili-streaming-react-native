@@ -15,7 +15,8 @@ import {
 import { T3, PrimaryText, SmallText, scale } from 'react-native-normalization-text';
 import Iconarrowright from '../Iconfont/Iconarrowright';
 import ButtonOutLine from '../../components/Buttons/ButtonOutLine';
-import images from '../../assets/images/index';
+// import defaultImages from '../../assets/images/default-images';
+import defaultImages from '../../assets/default-image';
 import { pad, radio } from '../../constants/Layout';
 import DiscountPrice from '../../components/DiscountPrice';
 
@@ -42,7 +43,7 @@ const GoodManageRow = (props: GoodManageRowProps) =>  {
         <View style={styles.imgWrapper}>
           <Image
             resizeMode="cover"
-            source={{uri: data.originalImg}}
+            source={data.originalImg ? {uri: data.originalImg} : defaultImages.goodCover}
             style={styles.img}
           />
         </View>

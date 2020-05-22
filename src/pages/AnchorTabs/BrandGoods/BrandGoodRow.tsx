@@ -26,7 +26,7 @@ import ShareProfit from '../../../components/ShareProfit';
 import DiscountPrice from '../../../components/DiscountPrice';
 import Iconremove from '../../../components/Iconfont/Iconremove';
 import {getPlatformBrands} from '../../../actions/shop';
-import images from '../../../assets/images/index';
+import defaultImages from '../../../assets/default-image';
 
 interface BrandGoodRowProps {
   data: any,
@@ -58,12 +58,8 @@ const BrandGoodRow = (props: BrandGoodRowProps) =>  {
   }
 
   return (
-    <View
-      // disabled={!props.onPressRow || props.disabled}
-      // onPress={props.onPressRow}
-      style={StyleSheet.flatten([styles.style, props.style])}
-    >
-      <Image source={data.img ? {uri: data.img} : images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
+    <View style={StyleSheet.flatten([styles.style, props.style])}>
+      <Image source={data.img ? {uri: data.img} : defaultImages.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
       <View style={styles.contentWrapper}>
         <View style={styles.titleWrapper}>
           <PrimaryText numberOfLines={2} style={{flex: 1, marginRight: pad * 2}}>{data.title}</PrimaryText>
@@ -84,7 +80,7 @@ const BrandGoodRow = (props: BrandGoodRowProps) =>  {
 
 BrandGoodRow.defaultProps = {
   data: {
-    title: '标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题asd',
+    title: '',
   },
   disabled: false,
   actionText: '添加'

@@ -28,11 +28,6 @@ const LivingRoomScreen = (props: any) : any =>  {
     mediaType,
   } : LiveWindowParams = (route.params || EMPTY_OBJ) as LiveWindowParams;
 
-  React.useEffect(() => {
-    // 清空直播房间相关信息
-    dispatch(clearLiveRoom('AUDIENCE'));
-  }, [])
-
 
   // 直播
   if (mediaType === MediaType.living) {

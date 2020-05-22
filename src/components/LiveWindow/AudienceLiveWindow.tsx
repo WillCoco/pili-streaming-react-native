@@ -13,28 +13,25 @@ import {
   Keyboard,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import Video from "react-native-video";
 import { useDispatch, useSelector } from "react-redux";
 import NoticeBubble from "../../components/NoticeBubble";
 import LiveIntro from "../LiveIntro";
 import LivingBottomBlock from "../LivingBottomBlock";
 import LivePuller from "../LivePuller";
-import L from "../../constants/Layout";
 import Iconcloselight from "../../components/Iconfont/Iconcloselight";
 import { pad } from "../../constants/Layout";
-import images from "../../assets/images";
+import defaultImages from "../../assets/default-image";
 import { joinGroup, quitGroup } from "../../actions/im";
-import { MediaType } from "../../liveTypes";
 import AudienceShopCard from "../../components/LivingShopCard/AudienceShopCard";
 import { vw, vh } from "../../utils/metric";
-import { PrimaryText } from "react-native-normalization-text";
 import { apiEnterLive, apiAttentionAnchor } from '../../service/api';
 import { updateLivingInfo } from '../../actions/live';
 import withPage from '../../components/HOCs/withPage';
 import { Toast } from "@ant-design/react-native";
-
-const { window } = L;
-const EMPTY_OBJ = {};
+import { isSucceed } from '../../utils/fetchTools';
+import { EMPTY_OBJ } from '../../constants/freeze';
+import { MessageType } from "../../reducers/im";
+import { sendRoomMessage } from '../../actions/im';
 
 interface LiveWindowProps {
   style?: StyleProp<any>;
@@ -45,6 +42,7 @@ interface LiveWindowProps {
 interface LiveWindowParams {
   liveId: string | number, // 直播id
   groupID: string, // im群组
+  anchorId: string, // 主播id
 }
 
 const LiveWindow = (props: LiveWindowProps): any => {
@@ -55,39 +53,23 @@ const LiveWindow = (props: LiveWindowProps): any => {
   const {
     liveId,
     groupID,
+    anchorId,
   } : LiveWindowParams = (route.params || EMPTY_OBJ) as LiveWindowParams;
 
   // 房间信息
   const room = useSelector((state: any) => state?.im?.room);
 
   // 直播结束
-  const isLiveOver = useSelector((state: any) => state?.im?.isLiveOver);
+  const isLiveOver = useSelector((state: any) => state?.live?.isLiveOver);
 
   // 用户id
-  const userId = useSelector((state: any) => state?.userData?.userInfo?.userId) || '';
+  const userId = useSelector((state: any) => state?.userData?.userInfo?.userId);
 
+  // 拉流
   const pullUrl = useSelector((state: any) => state?.live?.livingInfo?.pullUrl) || '';
 
-  // 主播信息
-  const [anchorInfo, setAnchorInfo]: [any, any] = React.useState({});
-
-  /**
-   * 进入直播间，获取拉流地址 TODO:
-   */
-  React.useEffect(() => {
-    const params = {
-      liveId,
-      userId
-    }
-    apiEnterLive(params)
-      .then((res: any) => {
-        // const safeRes = res || {};
-        console.log(res, '进入列表');
-        res.watchNum = res.watchNum - 1; // 这里重新会重复加人数
-        dispatch(updateLivingInfo({...res, liveId}))
-        setAnchorInfo(res);
-      })
-  }, []);
+  // 底图
+  const smallPic = useSelector((state: any) => state?.live?.livingInfo?.smallPic);
 
   /**
    * 播放器状态
@@ -125,66 +107,6 @@ const LiveWindow = (props: LiveWindowProps): any => {
   };
 
   /**
-   *
-   */
-  React.useEffect(() => {
-    // 直播加群
-    dispatch(joinGroup({
-      groupID
-    }))
-      .then((success?: boolean) => {
-        setIsIMJoinSecceed(!!success);
-      })
-      .catch((err: any) => {
-        console.log(err, "err");
-        // 找不到指定群组 显示结束
-        setIsIMJoinSecceed(false);
-      });
-    
-    return () => {
-      // player.current?.stop(); // 返回时停止
-    };
-  }, []);
-
-  /**
-   * 取消/关注 
-   */
-  const onFollowPress = (isFollow) => {
-    console.log(isFollow, 'isFollow');
-
-    const params = {
-      anchorId: route?.params?.anchorId,
-      attentionType: isFollow ? "2" : "1", // 1：关注；2：取关
-      userId: userId,
-    }
-
-    apiAttentionAnchor(params).then(res => {
-
-      apiEnterLive({
-        liveId,
-        userId
-      })
-        .then((res: any) => {
-          res.watchNum = res.watchNum - 1; // 这里重新会重复加人数
-          dispatch(updateLivingInfo(res))
-          setAnchorInfo(res);
-        })
-      Toast.show(isFollow ? '取消关注成功' : '关注成功')
-    })
-
-    apiEnterLive({liveId,userId})
-      .then((res: any) => {
-        // const safeRes = res || {};
-        console.log(res, '进入列表');
-        res.watchNum = res.watchNum - 1; // 这里重新会重复加人数
-        dispatch(updateLivingInfo(res))
-        setAnchorInfo(res);
-      })
-
-    Toast.show(isFollow ? '取消关注成功' : '关注成功');
-  }
-
-  /**
    * 公告气泡
    */
   const noticeBubbleText = room?.notification;
@@ -197,6 +119,41 @@ const LiveWindow = (props: LiveWindowProps): any => {
     any
   ] = React.useState();
 
+  React.useEffect(() => {
+    // 进入直播间，获取拉流地址等房间信息
+    const params = {
+      liveId,
+      userId
+    }
+    apiEnterLive(params)
+      .then((res: any) => {
+        if (isSucceed(res)) {
+          console.log(res, '进入列表');
+          res.watchNum = res.watchNum - 1; // 这里重新会重复加人数
+          dispatch(updateLivingInfo({...res?.data, liveId, anchorId}));
+          return;
+        }
+        // 错误返回
+        goBack();
+      })
+      .catch((err: any) => {
+        // 错误返回
+        goBack();
+        console.log(`apiEnterLive: ${err}`)
+      })
+
+    // 直播加群
+    dispatch(joinGroup({groupID}))
+      .then((success?: boolean) => {
+        setIsIMJoinSecceed(!!success);
+      })
+      .catch((err: any) => {
+        console.log(err, "err");
+        // 找不到指定群组 显示结束
+        setIsIMJoinSecceed(false);
+      });
+  }, []);
+  
   /**
    * 卡片动画
    */
@@ -222,16 +179,33 @@ const LiveWindow = (props: LiveWindowProps): any => {
     setShopCardVisible(visiable);
   };
 
-  console.log(isLiveOver, 'isLiveEnd')
+  // console.log(isLiveOver, 'isLiveEnd')
+
+  /**
+   * 点击关注, 发送关注消息
+   */
+  const onFollowPress = (isFollowed: boolean) => {
+    // 发送关注消息
+    if (!isFollowed) {
+      dispatch(sendRoomMessage({text: '关注了主播', type: MessageType.follow}))
+    }
+  }
+
   // 直播结束
   if (isLiveOver) {
-    replace('AnchorLivingEnd');
-    // return <PrimaryText>直播结束</PrimaryText>;
+    console.log(12312312312312)
+    replace('AudienceLivingEnd');
   }
+
+  // console.log( 'anchorInfoanchorInfoanchorInfo');
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
-      <Image style={styles.imgBg} source={anchorInfo?.anchorLogo && {uri: anchorInfo?.anchorLogo} || images.livingbg} resizeMode="cover" />
+      <Image
+        source={smallPic ? {uri: smallPic} : defaultImages.livingBg}
+        resizeMode="cover"
+        style={styles.imgBg}
+      />
       <LivePuller
         ref={player}
         inputUrl={pullUrl}
@@ -240,15 +214,13 @@ const LiveWindow = (props: LiveWindowProps): any => {
       />
       <View style={styles.livingBottomBlock}>
         <LivingBottomBlock.Audience 
-          likeQuantity={anchorInfo?.likeSum}
           onPressShopBag={() => shopCardAnim(true)} 
         />
       </View>
       {!!noticeBubbleText ? <NoticeBubble text={noticeBubbleText} /> : null}
       <LiveIntro
         showFollowButton
-        isFollow={anchorInfo?.isAttention} // 是否关注(0:没关注；1：关注)
-        onFollowPress={() => {onFollowPress(anchorInfo?.isAttention)}}
+        onFollowPress={onFollowPress}
       />
 
       <TouchableOpacity

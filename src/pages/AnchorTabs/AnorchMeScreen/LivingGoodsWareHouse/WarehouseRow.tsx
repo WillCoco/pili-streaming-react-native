@@ -17,6 +17,7 @@ import DiscountPrice from '../../../../components/DiscountPrice';
 import Iconremove from '../../../../components/Iconfont/Iconremove';
 import CheckBox from '../../../../components/CheckBox';
 import images from '../../../../assets/images/index';
+import defaultImages from '../../../../assets/default-image';
 import ButtonRadius from '../../../../components/Buttons/ButtonRadius';
 import {Colors} from '../../../../constants/Theme';
 
@@ -41,7 +42,6 @@ interface WarehouseRowProps {
 
 const WarehouseRow = (props: WarehouseRowProps) =>  {
   const data = (props.dataAdapter ? props.dataAdapter(props.data) : props.data) || {};
-    console.log(data, '88888')
   const btnText = !data.isAdded ? '添加店铺' : '取消添加';
   const btnBg = !data.isAdded ? Colors.basicColor : Colors.lightGrey;
   const btnFn = !data.isAdded ? props.onPressAddShop : props.onPressDelShop;
@@ -53,7 +53,7 @@ const WarehouseRow = (props: WarehouseRowProps) =>  {
         onPress={props.onPressCheck}
         style={{height: '100%', paddingHorizontal: pad}}
       />
-      <Image source={data.img ? {uri: data.img} : images.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
+      <Image source={data.img ? {uri: data.img} : defaultImages.goodCover} style={StyleSheet.flatten([styles.img, props.imgStyle])} resizeMode="cover" />
       <View style={styles.contentWrapper}>
         <View style={styles.titleWrapper}>
           <PrimaryText numberOfLines={2} style={{flex: 1, marginRight: pad * 2}}>{data.title}</PrimaryText>

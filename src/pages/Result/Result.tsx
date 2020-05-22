@@ -6,6 +6,7 @@ import { apiQueryOrderPayStatus } from '../../service/api'
 
 import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
+import formatSinglePrice from '../../utils/formatGoodsPrice'
 
 const successIcon = require('../../assets/order-image/pay_success.png')
 const failedIcon = require('../../assets/order-image/pay_failed.png')
@@ -14,12 +15,14 @@ export default function Result() {
   const route: any = useRoute()
   const navigation = useNavigation()
 
-  const [paySuccess, setPaySuccess]= useState(false)
+  const [orderPrice, setOrderPrice] = useState(0)
+  const [completed, setCompleted] = useState(false)
+  const [paySuccess, setPaySuccess] = useState(false)
 
   const { orderSn, payType, nextBtnText, nextRoute } = route.params
 
   navigation.setOptions({
-    headerTitle: `支付成功`,
+    headerTitle: `支付结果`,
     headerStyle: {
       backgroundColor: Colors.basicColor,
       elevation: 0,  // 去除安卓状态栏底部阴影
@@ -27,7 +30,7 @@ export default function Result() {
     headerTitleAlign: 'center',
     headerTintColor: Colors.whiteColor,
     headerBackTitleVisible: false,
-    headerLeft: () => {},
+    headerLeft: () => { },
     gesturesEnabled: false
   })
 
@@ -45,20 +48,24 @@ export default function Result() {
     }
 
     apiQueryOrderPayStatus(params).then((res: any) => {
-      console.log('订单支付成功', res)
+      setCompleted(true)
       setPaySuccess(true)
+      console.log('订单支付成功', res)
     }).catch((err: any) => {
+      setCompleted(true)
       setPaySuccess(false)
       console.log('订单支付失败', err)
     })
   }
+
+  if (!completed) return <></>
 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <Image source={paySuccess ? successIcon : failedIcon} style={styles.icon} />
         <Text style={styles.statusText}>{paySuccess ? '支付成功' : '支付失败'}</Text>
-        { paySuccess && <Text style={styles.price}>¥888.88</Text>}
+        {paySuccess && <Text style={styles.price}>¥{formatSinglePrice(orderPrice)}</Text>}
       </View>
       <TouchableOpacity style={styles.completeBtn} onPress={() => navigation.navigate(nextRoute || '首页')}>
         <Text style={styles.text}>{nextBtnText || '继续购物'}</Text>

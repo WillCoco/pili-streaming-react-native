@@ -27,6 +27,7 @@ import {getWareHouseGoods, AddGoodsTargetType, goodsCheckedFormat} from '../../.
 // import Toast from 'react-native-tiny-toast';
 import {Toast, Portal} from '@ant-design/react-native';
 import {brandGoodAdapter} from '../../../../utils/dataAdapters';
+import { nanoid } from 'nanoid/non-secure';
 
 const emptyList: [] = [];
 const emptyObj: {} = {};
@@ -160,39 +161,6 @@ const LiveGoodsManage = (props: any) =>  {
   }
 
   /**
-   * 加工原数据
-   * 加上isChecked字段
-   * @params: {Array} dataList - 预组货列表原数据
-   * @params: {Array} checkList - 本地操作选择的
-   */
-  // const dataFormat = (dataList: Array<any>, checkList?: Array<any>) => {
-  //   // 本地选择过之后刷新, format数据
-  //   if (checkList) {
-  //     const checked = checkList.filter(c => c.isChecked)
-  //     const result: Array<any> = [];
-
-  //     dataList.forEach(d => {
-  //       const matchedGood = checked.find(o => (o.id === d.id && !!o.id)) // todo: 标识
-  //       if (matchedGood) {
-  //         result.push({...d, isChecked: matchedGood.isChecked})
-  //       } else {
-  //         result.push(d)
-  //       }
-  //     })
-
-  //     return result;
-  //   }
-
-  //   // 本地没有选择过, format数据默认未选中
-  //   return dataList.map((d: any) => {
-  //     return {
-  //       ...d,
-  //       isChecked: false
-  //     }
-  //   });
-  // }
-
-  /**
    * 刷新
    */
   const onRefresh = async () => {
@@ -249,12 +217,28 @@ const LiveGoodsManage = (props: any) =>  {
       // 重置开播参数
       dispatch(updateLiveConfig())
 
-      // 跳转
-      navigate(nextNav, {
-        groupID: r?.groupId,
-        liveId: r?.liveId,
-        roomName: r?.roomName,// 房间名称
-      });
+      // 跳转并缩短路由
+      navDisPatch((state: any) => {
+      // Remove the home route from the stack
+        const routes = state.routes.filter((r: any) => (
+          !(r.name === 'CreateLiveScreen' || r.name === 'LiveGoodsManage')
+        ));
+        routes.push({
+          key: `${nextNav}-${nanoid()}`,
+          name: nextNav,
+          params: {
+            groupID: r?.groupId,
+            liveId: r?.liveId,
+            roomName: r?.roomName,// 房间名称
+          }
+        })
+
+        return CommonActions.reset({
+            ...state,
+            routes,
+            index: routes.length - 1,
+          });
+        });
     }
   }
 

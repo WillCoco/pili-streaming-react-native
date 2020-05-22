@@ -54,6 +54,7 @@ function Cart(props: any) {
         return
       }
 
+      setIsEmpty(false)
       calcAllGoodsInfo(res)
       props.dispatch(setCartList(res))
     }).catch((err: any) => {
