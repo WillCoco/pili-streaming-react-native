@@ -6,8 +6,13 @@ import pxToDp from '../../../utils/px2dp'
 
 import CardTitle from '../../../components/CardTitle/CardTitle'
 
-export default function OrdersContent(props) {
-  const navigation = useNavigation()
+interface Props {
+  orderCount: any;
+  isLogin: boolean;
+}
+
+export default function OrdersContent(props: Props) {
+  const navigation: any = useNavigation()
   const { orderCount, isLogin } = props
 
   const toOrderList = (index: number) => {

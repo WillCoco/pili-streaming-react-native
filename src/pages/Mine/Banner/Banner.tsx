@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 
-function Banner(props) {
+function Banner(props: { userInfo: any }) {
   const { userInfo } = props
 
   return (

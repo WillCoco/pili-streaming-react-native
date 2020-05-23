@@ -9,7 +9,17 @@ import moment from 'moment'
 const likeIcon = require('../../../assets/works-image/like.png')
 const notLikeIcon = require('../../../assets/works-image/not_like.png')
 
-export default function Comment(props: any) {
+interface Props {
+  isLogin: boolean;
+  commentCount: number;
+  commentInfoList: Array<any>;
+  toReply(item: any): void;
+  toggleCommentCount(): void;
+  giveLaud(commentInfo: any): void;
+  toggleReplyCount(id: string): void;
+}
+
+export default function Comment(props: Props) {
   const { commentInfoList, commentCount, isLogin } = props
 
   const formatDate = (time: number) => {
@@ -30,7 +40,7 @@ export default function Comment(props: any) {
       type: 'COMMENT'
     }
 
-    apiGiveLaud(params).then(res => {
+    apiGiveLaud(params).then((res: any) => {
       console.log('点赞评论', res)
       if (res) {
         props.giveLaud(commentInfo)

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Platform, StatusBar, View, NativeModules, Text } from 'react-native';
-import { SplashScreen, AppLoading } from 'expo'
+// import { AppLoading } from 'expo'
+// import * as SplashScreen from 'expo-splash-screen'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import * as Font from 'expo-font';
@@ -106,7 +107,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
     async function loadResourcesAndDataAsync() {
       try {
 
-        SplashScreen.preventAutoHide()
+        // SplashScreen.preventAutoHide()
 
         await Font.loadAsync({
           ...Ionicons.font,
@@ -144,7 +145,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return null
-    // return <AppLoading /> // tofix: 在android上报错
+    // return Platform.OS === 'ios' ? <AppLoading /> : null
   } else {
     return (
       <MaskProvider>
@@ -156,11 +157,13 @@ export default function App(props: { skipLoadingScreen: any; }) {
             >
               <View style={{ flex: 1 }}>
                 {
-                  Platform.OS !== 'ios' && <StatusBar barStyle='light-content' translucent={true} backgroundColor='transparent' />
+                  Platform.OS === 'ios'
+                  ? <StatusBar barStyle='light-content' />
+                  : <StatusBar barStyle='light-content' translucent={true} backgroundColor='transparent' />
                 }
                 <NavigationContainer ref={navigationRef as any}>
                   <Stack.Navigator>
-                     {/*<Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />*/}
+                    <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
                     <Stack.Screen name='Root' component={Root} />
                     <Stack.Screen name='HomeSearch' component={HomeSearch} />
                     <Stack.Screen name='FoundSearch' component={FoundSearch} />
@@ -190,7 +193,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                     <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
                     <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false, gestureEnabled: false }} />
                     <Stack.Screen name='LiveSearchScreen' component={LiveSearch} />
-                    <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{ headerShown: false }} />
+                    {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{ headerShown: false }} /> */}
                     <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{ headerShown: false }} />
                     <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} options={{ headerShown: false }} />
                     <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{ headerShown: false }} />
@@ -228,8 +231,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                     <Stack.Screen name='AudienceLivingEnd' component={AudienceEndScreen} options={{ headerShown: false, gestureEnabled: false }} />
                     <Stack.Screen name='BankCardBag' component={BankCardBag} options={{ headerShown: false }} />
                     <Stack.Screen name='AddBankCard' component={AddBankCard} options={{ headerShown: false }} />
-                    {/* <Stack.Screen name='Withdraw' component={Withdraw} options={{ headerShown: false }} /> */}
-                    <Stack.Screen name='Withdraw' component={AnchorLivingEndScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name='Withdraw' component={Withdraw} options={{ headerShown: false }} />
                     <Stack.Screen name='Message' component={Message} options={{ headerShown: false }} />
                     <Stack.Screen name='RealName' component={RealName} options={{ headerShown: false }} />
                     <Stack.Screen name='PrivacyPolicy' component={PrivacyPolicy} />

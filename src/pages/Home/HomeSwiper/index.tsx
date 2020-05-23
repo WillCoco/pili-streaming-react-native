@@ -8,8 +8,8 @@ import pxToDp from '../../../utils/px2dp'
 interface Props {
   swiperList?: Array<any>  // 传入的轮播图列表
   swiperStyle?: any  // 轮播图样式
-  showDots?: any
-  tapSwiper?: any
+  showDots: boolean
+  tapSwiper(id: number | string): void
 }
 
 function HomeSwiper(props: Props) {

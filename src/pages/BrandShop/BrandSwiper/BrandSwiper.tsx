@@ -4,12 +4,12 @@ import Swiper from 'react-native-swiper'
 import pxToDp from '../../../utils/px2dp'
 
 
-export default function BrandSwiper(props) {
+export default function BrandSwiper(props: { swiperList: Array<any> }) {
   const { swiperList } = props
 
   return (
     <View style={styles.swiperContainer}>
-      <Swiper style={styles.wrapper}>
+      <Swiper>
         {
           swiperList && swiperList.map((item: any, index: number) => {
             return (

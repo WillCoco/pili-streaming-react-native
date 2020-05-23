@@ -22,24 +22,14 @@ import {vw} from '../../../utils/metric';
 import {pad} from '../../../constants/Layout';
 import {updateLivingStatus} from '../../../actions/live';
 
-const dataList = [
-  {title: '直播时长', data: '1h34min'},
-  {title: '获得点赞数', data: '9900000'},
-  {title: '观众总数', data: '400000'},
-  {title: '新增粉丝数', data: '30000'},
-  {title: '下单数量', data: '900'},
-  {title: '总成交金额', data: '100,0000'},
+  const dataList = [
+  {title: '直播时长', key: 'liveDuration',},
+  {title: '获得点赞数', key: 'liveSum',},
+  {title: '观众总数', key: 'watchSum',},
+  {title: '新增粉丝数', key: 'addFavourite',},
+  {title: '下单数量', key: 'orderSum',},
+  {title: '总成交金额', key: 'moneySum',},
 ]
-
-const data = new Map()
-
-const goodsInfo = {
-  goodsImg: images.BOCIcon,
-  goodsName: '耐克乔丹Air Jodan ',
-  goodsSku: '1000   红黑',
-  goodsPrice: '234,242',
-}
-
 
 const AnorchLivingEndScreen = (props: any) : any =>  {
   const {dispatch: davDispatch, goBack} = useNavigation();
@@ -76,12 +66,12 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
   return (
     <ScrollView>
       <ImageBackground source={images.liveEndBg} style={StyleSheet.flatten([styles.wrapper, ])}>
-      <View style={{paddingTop: props.safeTop}}>
-          <TouchableOpacity style={styles.close}>
-            <Icon name="close" color={Colors.whiteColor} onPress={onPressClose} />
+        <View style={{paddingTop: props.safeTop}}>
+          <TouchableOpacity style={styles.close} onPress={onPressClose} >
+            <Icon name="close" color={Colors.whiteColor}/>
           </TouchableOpacity>
           <Image source={images.liveEndTitle} style={styles.title} />
-          <PrimaryText color="white" style={{textAlign: 'center', paddingVertical: pad * 1.5}}>直播ID:7777777</PrimaryText>
+          <PrimaryText color="white" style={{textAlign: 'center', paddingVertical: pad * 1.5}}>直播ID:{props?.anchorId || 0}</PrimaryText>
           <View style={styles.dataWrapper}>
             <View style={styles.subTitleLine}>
               <Image source={images.liveEndData} style={styles.subIcon} />
@@ -93,8 +83,8 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
                 dataList.map(item => {
                   return (
                     <View style={styles.dataItem} key={item.title}>
-                      <Text>{item.title}</Text>
-                      <Text style={{color: Colors.darkGrey}}>{item.data}</Text>
+                      <Text>{props[item.key] || 0}</Text>
+                      <Text style={{color: Colors.darkGrey}}>{item.title}</Text>
                     </View>
                   )
                 })
@@ -106,13 +96,13 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
               <T4 style={styles.subTitle}>本场销量最佳商品</T4>
             </View>
             <ListItem
-              leftAvatar={{ source: goodsInfo.goodsImg }}
-              title={goodsInfo.goodsName}
-              subtitle={goodsInfo.goodsSku}
+              leftAvatar={{ source: props?.bestSellGoodsRes?.originalImg, rounded: false}}
+              title={props?.bestSellGoodsRes?.goodsName}
+              subtitle={props?.bestSellGoodsRes?.goodsSku}
               subtitleStyle={{color: Colors.darkGrey, paddingVertical: pad}}
               rightTitle={
                 <PrimaryText style={styles.fontYellow}>
-                  {goodsInfo.goodsPrice}<TinyText style={styles.fontYellow}> 元</TinyText>
+                  {props?.bestSellGoodsRes?.totalNum}<TinyText style={styles.fontYellow}> 元</TinyText>
                 </PrimaryText>
               }
             />
@@ -122,9 +112,9 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
               <T4 style={styles.subTitle}>本场销量人气商品</T4>
             </View>
             <ListItem
-              leftAvatar={{ source: goodsInfo.goodsImg }}
-              title={goodsInfo.goodsName}
-              rightTitle={goodsInfo.goodsPrice}
+              leftAvatar={{source: props?.bestBrowseGoodsRes?.originalImg, rounded: false}}
+              title={props?.bestBrowseGoodsRes?.goodsName}
+              rightTitle={props?.bestBrowseGoodsRes?.totalNum}
               rightTitleStyle={{color: Colors.yellowColor}}
               rightSubtitle={'最高观看人数'}
               rightSubtitleStyle={{fontSize: 12}}
@@ -137,6 +127,18 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
 };
 
 AnorchLivingEndScreen.defaultProps = {
+  bestSellGoodsRes: {
+    originalImg: images.shoppingIcon,
+    goodsName: '商品',
+    goodsSku: '规格',
+    totalNum: '0',
+  },
+  bestBrowseGoodsRes: {
+    originalImg: images.shoppingIcon,
+    goodsName: '商品',
+    goodsSku: '规格',
+    totalNum: '0',
+  }
 };
 
 const styles = StyleSheet.create({

@@ -91,6 +91,7 @@ function Logion(props: any) {
         }
       }, 1000)
     }).catch((err: any) => {
+      Toast.fail('发送失败，请稍后再试')
       console.log('发送验证码', err)
     })
   }
@@ -157,16 +158,13 @@ function Logion(props: any) {
       />
 
       <Form
-        telNum={telNum}
-        verCode={verCode}
-        invCode={invCode}
-        disabledSendBtn={disabled}
         countDown={countDown}
         hasRegister={hasRegister}
+        disabledSendBtn={disabled}
+        sendMsg={sendMsg}
         changeTelNum={(value: string) => changeTelNum(value)}
         changeVerCode={(value: string) => changeVerCode(value)}
         changeInvCode={(value: string) => changeInvCode(value)}
-        sendMsg={sendMsg}
       />
 
       <TouchableOpacity style={styles.loginBtnContainer} onPress={toLogin}>

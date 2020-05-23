@@ -19,7 +19,7 @@ export default function Result() {
   const [completed, setCompleted] = useState(false)
   const [paySuccess, setPaySuccess] = useState(false)
 
-  const { orderSn, payType } = route.params
+  const { orderSn, payType, nextBtnText, nextRoute } = route.params
 
   navigation.setOptions({
     headerTitle: `支付结果`,
@@ -67,8 +67,8 @@ export default function Result() {
         <Text style={styles.statusText}>{paySuccess ? '支付成功' : '支付失败'}</Text>
         {paySuccess && <Text style={styles.price}>¥{formatSinglePrice(orderPrice)}</Text>}
       </View>
-      <TouchableOpacity style={styles.completeBtn} onPress={() => navigation.navigate('首页')}>
-        <Text style={styles.text}>继续购物</Text>
+      <TouchableOpacity style={styles.completeBtn} onPress={() => navigation.navigate(nextRoute || '首页')}>
+        <Text style={styles.text}>{nextBtnText || '继续购物'}</Text>
       </TouchableOpacity>
     </View>
   )

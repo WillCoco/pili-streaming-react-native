@@ -22,7 +22,7 @@ import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
 const commentPageSize = 10
 
-function FoundInfo(props: any) {
+function FoundInfo(props: { userData: { userInfo?: any; isLogin?: boolean } }) {
   const { isLogin } = props.userData
   
   const navigation: any = useNavigation()

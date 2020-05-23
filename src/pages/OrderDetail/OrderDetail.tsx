@@ -89,6 +89,8 @@ export default function OrderDetail() {
         payURL += '&' + item + '=' + res.data[item]
       }
 
+      console.log(payURL, 423532153416125135);
+
       navigation.push('PayWebView', { url: payURL })
     }).catch((err: any) => {
       console.log(err.message)

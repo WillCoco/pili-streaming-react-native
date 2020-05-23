@@ -7,11 +7,11 @@ import { setWorkGoodsList, setAddedGoodsList } from '../../actions/works'
 import formatSinglePrice from '../../utils/formatGoodsPrice'
 
 function GoodsCard(props: {
-  type?: any
+  type: string
   dispatch?: any
   goodsInfo?: any
-  goodsList?: any
-  addedGoodsList?: any
+  goodsList: Array<any>
+  addedGoodsList: Array<any>
 }) {
   const { goodsInfo, goodsList, addedGoodsList, type } = props
 

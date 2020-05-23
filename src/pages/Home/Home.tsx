@@ -41,6 +41,16 @@ import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
 const pageSize = 20
 
+interface HomeProps {
+  dispatch: any
+  homeData?: any
+  publicData?: any
+  swiperList: Array<any>
+  selectedGoodsInfo: any
+  seckillList: Array<any>
+  activityList: Array<any>
+}
+
 function Home(props: HomeProps) {
   const { statusBarHeight } = props.publicData
   let { swiperList, activityList, selectedGoodsInfo, seckillList } = props.homeData
@@ -229,9 +239,9 @@ function Home(props: HomeProps) {
     getRecommendGoodsList(false)
   }
 
-  if (netWorkErr) return <NetWorkErr reload={reload} />
+  // if (netWorkErr) return <NetWorkErr reload={reload} />
 
-  if (!isComplete) return <></>
+  // if (!isComplete) return <></>
 
   return (
     <>
@@ -293,9 +303,9 @@ function Home(props: HomeProps) {
                           }
                         </View>
                       </View>
-                      {/* 圈品热卖 */}
+                      {/* 云闪播热卖 */}
                       <View style={styles.recommendGoodsList}>
-                        <CardTitle title='圈品热卖' />
+                        <CardTitle title='云闪播热卖' />
                         <View style={styles.recommendGoodsListContainer}>
                           {
                             categoryData.shopGoods && categoryData.shopGoods.map((item: any, index: any) => <GoodsCard key={`recommend-${index}`}
@@ -566,13 +576,3 @@ const styles = StyleSheet.create({
 export default connect(
   (state: any) => state
 )(withPage(Home))
-
-interface HomeProps {
-  dispatch?: any
-  swiperList?: any
-  activityList?: any
-  selectedGoodsInfo?: any
-  seckillList?: any
-  homeData?: any
-  publicData?: any
-}

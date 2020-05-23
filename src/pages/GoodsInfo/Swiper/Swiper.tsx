@@ -4,8 +4,7 @@ import Swiper from 'react-native-swiper'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 
-
-export default function GoodsSwiper(props: { swiperList: any }) {
+export default function GoodsSwiper(props: { swiperList: Array<any> }) {
   const { swiperList } = props
 
   return (

@@ -32,7 +32,12 @@ interface GoodsInfoParams {
   onOrderCompleted: (orderInfo: any) => any
 }
 
-function GoodsInfo(props: any) {
+interface Props {
+  userInfo: any;
+  isLogin: boolean;
+}
+
+function GoodsInfo(props: Props) {
   const { isLogin } = props
 
   const goodsInfoRef: any = useRef()

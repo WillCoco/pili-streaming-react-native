@@ -9,7 +9,9 @@
     "textManager": "node node_modules/react-native-normalization-text/scripts/makeConfig.js",
     "genIcons": "npx iconfont-rn",
     "splash": "node_modules/.bin/expo-splash-screen '#FFFFFF'",
-    "postinstall": "yarn textManager --update"
+    "postinstall": "yarn textManager --update",
+    "bundleAndroid": "react-native bundle --entry-file index.js --bundle-output ./android/app/src/main/assets/index.android.jsbundle --platform android --assets-dest ./android/app/src/main/res/ --dev false",
+    "jetify": "npx jetify"
   },
   "dependencies": {
     "@ant-design/react-native": "^3.3.0",

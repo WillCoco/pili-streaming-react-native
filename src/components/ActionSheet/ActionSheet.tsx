@@ -3,22 +3,20 @@ import { View, Modal, Animated, StyleSheet, Dimensions } from 'react-native'
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
 
-export default function ActionSheet(props: any) {
+interface Props {
+  isShow: boolean;
+  children: React.ReactNode;
+  close: () => void;
+}
+
+export default function ActionSheet(props: Props) {
   const sheetAnim = new Animated.Value(300)
 
   useEffect(() => {
-    if (props.isShow) {
-      Animated.timing(sheetAnim, {
-        toValue: 0,
-        duration: 250
-      }).start()
-    } else {
-      Animated.timing(sheetAnim, {
-        toValue: 300,
-        duration: 150
-      }).start()
-    }
-
+    Animated.timing(sheetAnim, {
+      toValue: props.isShow ? 0 : 300,
+      duration: props.isShow ? 250 : 150
+    }).start()
   }, [props.isShow])
 
   return (

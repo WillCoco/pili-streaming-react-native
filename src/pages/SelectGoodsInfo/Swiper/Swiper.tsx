@@ -5,7 +5,7 @@ import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 
 
-export default function BrandSwiper(props: { swiperList: any }) {
+export default function BrandSwiper(props: { swiperList: Array<any> }) {
   const { swiperList } = props
 
   return (

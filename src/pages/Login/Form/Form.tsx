@@ -3,7 +3,17 @@ import { View, Text, StyleSheet, Dimensions, Image, PixelRatio, TextInput } from
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 
-export default function Form(props: any) {
+interface Props {
+  countDown: number;
+  hasRegister: boolean;
+  disabledSendBtn: boolean;
+  sendMsg(): void;
+  changeTelNum(value: string): void;
+  changeVerCode(value: string): void;
+  changeInvCode(value: string): void;
+}
+
+export default function Form(props: Props) {
   const { disabledSendBtn: disabled, countDown } = props
 
   return (

@@ -168,7 +168,6 @@ const GoodsManage = () =>  {
                 size={14}
                 initListData={goodsOnSale}
                 renderItem={({item, index}) => {
-                  console.log(item,1112322)
                   return (
                     <GoodManageRow
                       key={`goodsOnSale_${index}`}

@@ -8,9 +8,9 @@ import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
-function Account(props) {
+function Account(props: { userInfo?: {} | any; isLogin: boolean }) {
   const { userInfo = {}, isLogin } = props
-  const navigation = useNavigation()
+  const navigation: any = useNavigation()
 
   const toAccountInfo = () => {
     if (!isLogin) {

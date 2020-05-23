@@ -24,7 +24,7 @@ import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
 const pageSize = 20
 
-function Found(props: any) {
+function Found(props: { isLogin: boolean }) {
   const { isLogin } = props
 
   const pageNoRef = useRef(1)
@@ -36,7 +36,7 @@ function Found(props: any) {
   const [maxHeight, setMaxHeight] = useState(0)
   const [loading, setLoading] = useState(false)
   const [showMask, setShowMask] = useState(false)
-  const [workList, setWorkList]: any = useState([])
+  const [workList, setWorkList]: Array<any> = useState([])
   const [netWorkErr, setNetWorkErr] = useState(false)
 
   useEffect(() => {

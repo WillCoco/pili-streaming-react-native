@@ -5,7 +5,7 @@ import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
 import HTML from 'react-native-render-html'
 
-export default function WorksCard(props: any) {
+export default function WorksCard(props: { worksInfo: any }) {
   const { worksInfo } = props
 
   return (

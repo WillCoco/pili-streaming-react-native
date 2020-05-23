@@ -6,8 +6,13 @@ import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import GoodsCard from '../../../components/WorksGoodsCard/WorksGoodsCard'
 
-function GoodsList(props: any) {
-  const navigation = useNavigation()
+interface Props {
+  addedGoodsList: Array<any>;
+  publish(): void;
+}
+
+function GoodsList(props: Props) {
+  const navigation: any = useNavigation()
   const { addedGoodsList } = props
 
   return (

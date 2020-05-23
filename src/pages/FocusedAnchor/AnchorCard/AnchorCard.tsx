@@ -9,24 +9,28 @@ export default function AnchorCard(props: any) {
    * 直播状态
    */
 
+  console.log(props, 3142532153125346);
+
+  const {item} = props
+
   return (
     <View style={styles.container}>
       <View style={{ flexDirection: 'row' }}>
-        <Image source={{ uri: props?.livePic }} style={styles.anchorImg} />
+        <Image source={{ uri: item?.livePic }} style={styles.anchorImg} />
         <View style={styles.anchorInfo}>
-          <Text style={styles.watchCount}>{props?.viewsNum || 0}人观看</Text>
+          <Text style={styles.watchCount}>{item?.viewsNum || 0}人观看</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image source={{ uri: props?.anchorLogo }} style={styles.avatar} />
-            <Text style={styles.name}>{props?.anchorName || '主播'}</Text>
+            <Image source={{ uri: item?.anchorLogo }} style={styles.avatar} />
+            <Text style={styles.name}>{item?.anchorName || '主播'}</Text>
           </View>
         </View>
       </View>
-      <View style={StyleSheet.flatten([styles.state, props?.liveStatus !== 2 && {backgroundColor: Colors.yellowColor}])}>
+      <View style={StyleSheet.flatten([styles.state, item?.liveStatus !== 2 && {backgroundColor: Colors.yellowColor}])}>
         <Text style={{ fontSize: pxToDp(28), color: Colors.whiteColor }}>
           {
-            props?.liveStatus === 1 
+            item?.liveStatus === 1 
               ? '预告'
-              : props?.liveStatus === 2
+              : item?.liveStatus === 2
                 ? '直播中'
                 : '回放'
           }

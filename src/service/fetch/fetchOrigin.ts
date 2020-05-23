@@ -39,9 +39,9 @@ interface Options {
  */
 export const get = (path: any, data?: any, options: Options = {}) => {
   // 加token
-  const { userData } = store.getState();
-  if (userData.token) {
-    headers["authentication"] = userData.token;
+  const token = store.getState()?.userData?.token;
+  if (token) {
+    headers["authentication"] = token;
   }
 
   // 处理参数
@@ -49,7 +49,7 @@ export const get = (path: any, data?: any, options: Options = {}) => {
     path = `${path}?${getParam(data)}`;
   }
 
-  console.log("%cToken:", "color: red; font-size: 20px; ", userData.token);
+  console.log("%cToken:", "color: red; font-size: 20px; ", token);
   console.log("%cPath:", "color: red; font-size: 20px; ", path);
   console.log("%cParams:", "color: red; font-size: 20px; ", data);
 
@@ -74,9 +74,9 @@ export const get = (path: any, data?: any, options: Options = {}) => {
  */
 export const post = (path: RequestInfo, data: any, options: Options = {}) => {
   // 加token
-  const { userData } = store.getState();
-  if (userData.token) {
-    headers["authentication"] = userData.token;
+  const token = store.getState()?.userData?.token;
+  if (token) {
+    headers["authentication"] = token;
   }
 
   console.log("%cPath:", "color: red; font-size: 20px; ", path);
@@ -116,15 +116,15 @@ export const uploadWorkMedia = (
   formData.append("fileType", params.fileType);
   formData.append("file", params.file as any);
 
-  const { userData } = store.getState();
-
   const headers = {
     authentication: "",
     platform: "app",
   };
 
-  if (userData.token) {
-    headers["authentication"] = userData.token;
+  // 加token
+  const token = store.getState()?.userData?.token;
+  if (token) {
+    headers["authentication"] = token;
   }
 
   const fn = fetch(path, {
@@ -163,10 +163,10 @@ export const liveUpload = (path: RequestInfo, params: UpdateParams, options: Opt
     platform: "app",
   };
 
-  const { userData } = store.getState();
-
-  if (userData.token) {
-    headers["authentication"] = userData.token;
+  // 加token
+  const token = store.getState()?.userData?.token;
+  if (token) {
+    headers["authentication"] = token;
   }
 
   const fn = fetch(path, {

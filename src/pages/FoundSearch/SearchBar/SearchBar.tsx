@@ -5,7 +5,12 @@ import { Ionicons } from '@expo/vector-icons'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 
-export default function SearchBar(props: any) {
+interface Props {
+  toSearch: ((e: import("react-native").NativeSyntheticEvent<import("react-native").TextInputSubmitEditingEventData>) => void) | undefined
+  inputSearchKey: (arg0: string) => void;
+}
+
+export default function SearchBar(props: Props) {
   return (
     <View style={[styles.placeholderSearchBar, styles.searchBar]}>
       <Ionicons
