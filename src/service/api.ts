@@ -6,8 +6,8 @@ import { UpdateParams } from './fetch/fetchOrigin';
 // const HOST_PHP = __DEV__ ? 'https://php.quanpinrtmp.com' : ''
 // const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''
 
-const HOST_PHP = __DEV__ ? 'https://php.quanpinlive.com' : ''
-const HOST_JAVA = __DEV__ ? 'https://app.quanpinlive.com' : ''
+const HOST_PHP = __DEV__ ? 'http://47.114.160.8' : ''
+const HOST_JAVA = __DEV__ ? 'http://47.114.160.8:2333' : ''
 
 /**
  * PHP 接口 ==================================================================
@@ -227,7 +227,8 @@ export const apiAnchorToLive= (data: any) => get2(`${HOST_JAVA}/anchor/anchorToL
 export const apiIsWorkLiveNow = (data: any) => get2(`${HOST_JAVA}/anchor/isWorkLiveNow`, data)
 // 主播在预组货取消添加店铺商品
 export const apiDelAnchorGoods = (data: any) => post2(`${HOST_JAVA}/anchor/delAnchorBrandGoods`, data)
-
+// 获取imUserSig
+export const apiGetUserSig = (data: any) => get2(`${HOST_JAVA}/anchor/getUserSig`, data)
 
 
 /**
@@ -256,7 +257,7 @@ export const apiUserLiveBanner = () => post1(`${HOST_JAVA}/userLive/userLiveBann
 // 获取观看人数
 export const apiGetLiveViewNum = (data: any) => get2(`${HOST_JAVA}/userLive/getLiveViewNum`, data)
 // 上传用户头像本地base64
-export const apiUploadFile = (data: any) => post(`${HOST_JAVA}/user/uploadFile`, data)
+export const apiUploadFile = (data: any) => post1(`${HOST_JAVA}/user/uploadFile`, data)
 
 /**
  * 资产相关的接口 ==============================================================

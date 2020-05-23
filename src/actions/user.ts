@@ -40,11 +40,12 @@ export const clearLoginStatus = (options: {
 
     if (options.reset2Login) {
       const navigation: any = getNavigation();
-      console.log(navigation, 'navigation')
+      // console.log(navigation, 'navigation')
       navigation.dispatch(
         CommonActions.reset({
-          index: 0,
+          index: 1,
           routes: [
+            { name: 'Root' },
             { name: 'Login' },
           ],
         })
