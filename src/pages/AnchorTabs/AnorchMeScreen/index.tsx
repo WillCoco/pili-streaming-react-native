@@ -84,19 +84,19 @@ const AnorchMeScreen = () =>  {
         title="" 
         style={styles.navWrapper} 
         onLeftPress={onBackPress} 
-        right={
-          () => {
-            return (
-              <TouchableOpacity onPress={() => {navigate('Message')}}>
-                <Image 
-                  style={styles.messageIcon} 
-                  source={images.liveMessageIcon} 
-                  resizeMode="stretch" 
-                />
-              </TouchableOpacity>
-            )
-          }
-        }
+        // right={
+        //   () => {
+        //     return (
+        //       <TouchableOpacity onPress={() => {navigate('Message')}}>
+        //         <Image 
+        //           style={styles.messageIcon} 
+        //           source={images.liveMessageIcon} 
+        //           resizeMode="stretch" 
+        //         />
+        //       </TouchableOpacity>
+        //     )
+        //   }
+        // }
       />
       <View style={styles.headerWrapper}>
         <Image style={styles.imgBg} source={images.anchorMeBg} resizeMode='stretch' />

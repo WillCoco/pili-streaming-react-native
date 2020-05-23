@@ -1,62 +1,53 @@
 {
   "images" : [
     {
-      "filename" : "云闪播logo-40.png",
       "idiom" : "iphone",
-      "scale" : "2x",
-      "size" : "20x20"
+      "size" : "20x20",
+      "scale" : "2x"
     },
     {
-      "filename" : "云闪播logo-60.png",
       "idiom" : "iphone",
-      "scale" : "3x",
-      "size" : "20x20"
+      "size" : "20x20",
+      "scale" : "3x"
     },
     {
-      "filename" : "云闪播logo-58.png",
       "idiom" : "iphone",
-      "scale" : "2x",
-      "size" : "29x29"
+      "size" : "29x29",
+      "scale" : "2x"
     },
     {
-      "filename" : "云闪播logo-87.png",
       "idiom" : "iphone",
-      "scale" : "3x",
-      "size" : "29x29"
+      "size" : "29x29",
+      "scale" : "3x"
     },
     {
-      "filename" : "云闪播logo-80.png",
       "idiom" : "iphone",
-      "scale" : "2x",
-      "size" : "40x40"
+      "size" : "40x40",
+      "scale" : "2x"
     },
     {
-      "filename" : "云闪播logo-120.png",
       "idiom" : "iphone",
-      "scale" : "3x",
-      "size" : "40x40"
+      "size" : "40x40",
+      "scale" : "3x"
     },
     {
-      "filename" : "云闪播logo-121.png",
       "idiom" : "iphone",
-      "scale" : "2x",
-      "size" : "60x60"
+      "size" : "60x60",
+      "scale" : "2x"
     },
     {
-      "filename" : "云闪播logo-180.png",
       "idiom" : "iphone",
-      "scale" : "3x",
-      "size" : "60x60"
+      "size" : "60x60",
+      "scale" : "3x"
     },
     {
-      "filename" : "云闪播logo-1024.png",
       "idiom" : "ios-marketing",
-      "scale" : "1x",
-      "size" : "1024x1024"
+      "size" : "1024x1024",
+      "scale" : "1x"
     }
   ],
   "info" : {
-    "author" : "xcode",
-    "version" : 1
+    "version" : 1,
+    "author" : "xcode"
   }
 }
