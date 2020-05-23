@@ -9,7 +9,13 @@ import Toast from 'react-native-tiny-toast'
 import { apiWorkUpload } from '../../../service/api'
 import { setMediaList } from '../../../actions/works'
 
-function ImgPicker(props: any) {
+interface Props {
+  dispatch?: any;
+  pageType: string;
+  mediaList: Array<any>
+}
+
+function ImgPicker(props: Props) {
   const { pageType, mediaList } = props
 
   const chooseImage = async (index: number) => {

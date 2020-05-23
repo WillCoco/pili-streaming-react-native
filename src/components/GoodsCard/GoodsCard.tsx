@@ -16,7 +16,14 @@ import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
 import formatGoodsPrice from '../../utils/formatGoodsPrice'
 
-function GoodsCard(props: { isLogin?: any; style?: any; tapGoodsCard?: any; goodsInfo?: any }) {
+interface Props {
+  style?: any;
+  goodsInfo?: any;
+  isLogin?: boolean;
+  tapGoodsCard(id: number): void;
+}
+
+function GoodsCard(props: Props) {
   const { goodsInfo } = props
   const navigation: any = useNavigation()
 
@@ -58,17 +65,18 @@ function GoodsCard(props: { isLogin?: any; style?: any; tapGoodsCard?: any; good
           {goodsInfo.goods_name || goodsInfo.goodsName}
         </Text>
         <View style={styles.goodsShare}>
-          {
+          {/* {
             goodsInfo.is_proprietary
               ? <ImageBackground source={require('../../assets/home-image/badge_bg.png')} style={styles.badgeBg}>
                 <Text style={styles.badgeText}>自营</Text>
               </ImageBackground>
               : <Text />
-          }
+          } */}
+          <Text />
           <TouchableWithoutFeedback onPress={toShare}>
             <View style={styles.shareCard}>
               <Text style={styles.shareText}>分享</Text>
-              <Text style={styles.sharePrice}>¥{formatGoodsPrice(goodsInfo.MyDiscounts || goodsInfo.rebate)}</Text>
+              <Text style={styles.sharePrice}>¥{formatGoodsPrice(goodsInfo.MyDiscounts || goodsInfo.rebate || 0)}</Text>
             </View>
           </TouchableWithoutFeedback>
         </View>

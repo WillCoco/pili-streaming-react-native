@@ -6,9 +6,9 @@ import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import { useSelector } from 'react-redux'
 
-export default function Form(props) {
-  const navigation = useNavigation()
-  const realname = useSelector(state => state?.userData?.userInfo?.identityName)
+export default function Form() {
+  const navigation: any = useNavigation()
+  const realname = useSelector((state: any) => state?.userData?.userInfo?.identityName)
 
   const contactService = () => {
     navigation.push('Service')

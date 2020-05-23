@@ -4,7 +4,7 @@ import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import moment from 'moment'
 
-export default function WorkCard(props) {
+export default function WorkCard(props: { workAction?: any; workInfo?: any }) {
   const { workInfo } = props
 
   return (

@@ -6,9 +6,14 @@ import { Colors } from '../../../constants/Theme'
 
 import formatGoodsPrice from '../../../utils/formatGoodsPrice'
 
-export default function GoodsList(props: { goodsList: any, type: string }) {
+interface Props {
+  type: string;
+  goodsList: Array<any>;
+}
+
+export default function GoodsList(props: Props) {
   const { goodsList, type } = props
-  const navigation = useNavigation()
+  const navigation: any = useNavigation()
 
   const toGoodsInfo = (id: number) => {
     navigation.push('GoodsInfo', { id })

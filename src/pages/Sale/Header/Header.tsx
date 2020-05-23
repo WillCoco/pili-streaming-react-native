@@ -7,9 +7,16 @@ import formatGoodsPrice from '../../../utils/formatGoodsPrice'
 import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
 
-export default function Sale(props: { goodsList: any, type: string, timeList: Array<any> }) {
+interface Props {
+  type: string;
+  timeList: Array<any>;
+  goodsList: Array<any>;
+  changeTimeQuantum(index: number): void;
+}
+
+export default function Sale(props: Props) {
   const { goodsList, type, timeList } = props
-  const navigation = useNavigation()
+  const navigation: any = useNavigation()
 
   const toGoodsInfo = (id: number) => {
     navigation.push('GoodsInfo', { id })

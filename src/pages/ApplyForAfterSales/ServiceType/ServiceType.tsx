@@ -3,7 +3,12 @@ import { View, Text, StyleSheet } from 'react-native'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 
-export default function ServiceType(props) {
+interface Props  {
+  typeList: Array<any>;
+  setTypeList(typeList: Array<any>): any;
+}
+
+export default function ServiceType(props: Props) {
   const { typeList } = props
 
   const toggleType = (index: number) => {

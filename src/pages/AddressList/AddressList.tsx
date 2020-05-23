@@ -9,7 +9,12 @@ import pxToDp from '../../utils/px2dp'
 import { apiAddrList } from '../../service/api'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
-function AddressList(props: { dispatch?: any; addressList?: any }) {
+interface Props {
+  dispatch?: any;
+  addressList?: any
+}
+
+function AddressList(props: Props) {
   const { addressList } = props
 
   const navigation: any = useNavigation()

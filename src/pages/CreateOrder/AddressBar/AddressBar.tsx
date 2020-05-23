@@ -5,10 +5,16 @@ import { useNavigation } from '@react-navigation/native'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 
-export default function AddressBar(props) {
+interface Props {
+  isEmpty: boolean;
+  choosedAddress?: any;
+  defaultAddress?: any;
+}
+
+export default function AddressBar(props: Props) {
   const { isEmpty } = props
-  const addressInfo = props.choosedAddredd || props.defaultAddress
-  const navigation = useNavigation()
+  const addressInfo = props.choosedAddress || props.defaultAddress
+  const navigation: any = useNavigation()
 
   /**
    * 点击地址栏

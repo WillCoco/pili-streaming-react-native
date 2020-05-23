@@ -4,7 +4,12 @@ import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import calcStrLength from '../../../utils/calcStrLength'
 
-export default function Form(props: any) {
+interface Props {
+  inputTitle: (arg0: string) => void;
+  inputContent: (arg0: string) => void;
+}
+
+export default function Form(props: Props) {
   const [textLength, setTextLength] = useState(40)
 
   const inputTitle = (text: string) => {

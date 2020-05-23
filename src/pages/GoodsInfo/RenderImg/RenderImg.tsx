@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Image, Dimensions, ActivityIndicator } from 'react-native'
 
 
-export default function renderImg(props: any) {
+export default function renderImg(props: { node: any }) {
   const { node } = props
 
   let imgWidth = Dimensions.get('window').width
@@ -19,7 +19,6 @@ export default function renderImg(props: any) {
       },
       () => { }
     )
-    console.log(111)
   }, [])
 
   if (!complete) return <ActivityIndicator />

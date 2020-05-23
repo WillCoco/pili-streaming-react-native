@@ -6,7 +6,7 @@ import { Colors } from '../../constants/Theme'
 
 export default function WorkCard(props: { workInfo: any }) {
   const { workInfo } = props
-  const navigation = useNavigation()
+  const navigation: any = useNavigation()
 
   const toFoundInfo = () => {
     const params = {

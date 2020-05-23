@@ -7,8 +7,14 @@ import { Colors } from '../../../constants/Theme'
 
 import formatGoodsPrice from '../../../utils/formatGoodsPrice'
 
-function BrandCard(props: { focusBrandShop?: any; brandInfo?: any; isLogin?: any }) {
-  const navigation = useNavigation()
+interface Props {
+  brandInfo: any;
+  isLogin: boolean;
+  focusBrandShop(brandInfo: any): any;
+}
+
+function BrandCard(props: Props) {
+  const navigation: any = useNavigation()
   const { brandInfo, isLogin } = props
 
   const toGoodsInfo = (id: number) => {

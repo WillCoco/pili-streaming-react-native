@@ -18,8 +18,8 @@ import ActionSheet from '../../components/ActionSheet/ActionSheet'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
 interface Props {
-  dispatch: (arg0: { type: string; payload: any[] }) => void
   choosedAddress: {}
+  dispatch: (arg0: { type: string; payload: any[] }) => void
 }
 
 function CreateOrder(props: Props) {

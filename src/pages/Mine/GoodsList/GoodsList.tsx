@@ -8,8 +8,8 @@ import CardTitle from '../../../components/CardTitle/CardTitle'
 import GoodsCard from '../../../components/GoodsCard/GoodsCard'
 import LoadMore from '../../../components/LoadMore/LoadMore'
 
-export default function GoodsList(props: { list: any, hasMore: boolean }) {
-  const navigation = useNavigation()
+export default function GoodsList(props: { list: Array<any>, hasMore: boolean }) {
+  const navigation: any = useNavigation()
   const { list, hasMore } = props
 
   const toGoodsInfo = (id: number) => {

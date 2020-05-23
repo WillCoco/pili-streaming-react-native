@@ -1,10 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
 
-export default function Stepper(props: { minusCount?: any; addCount?: any; goodsNum?: any }) {
+interface Props {
+  goodsNum: number;
+  addCount(): any;
+  minusCount(): any;
+}
+
+export default function Stepper(props: Props) {
   const { goodsNum } = props
 
   return (

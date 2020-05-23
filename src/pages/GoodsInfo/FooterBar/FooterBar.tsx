@@ -8,8 +8,15 @@ import { Toast } from '@ant-design/react-native'
 const starIcon = require('../../../assets/goods-image/icon_star.png')
 const unstarIcon = require('../../../assets/goods-image/icon_unstar.png')
 
+interface Props {
+  goodsInfo: any
+  shareUserId: number
+  servicePath: string
+  toggleStarGoods(): void
+  showGoodsSkuActionSheet(arg0: string): void
+}
 
-export default function FooterBar(props: any) {
+export default function FooterBar(props: Props) {
   const { goodsInfo, shareUserId, servicePath } = props
   const navigation: any = useNavigation()
 
