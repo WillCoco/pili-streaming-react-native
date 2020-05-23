@@ -370,6 +370,10 @@ const images : {
   // 404页，网络错误页
   get errorPage() {
     return require('../default-image/err_network.png')
+  },
+  // 主播详情背景图
+  get anchorDetail() {
+    return require('./anchorDetailBg.png')
   }
 }
 

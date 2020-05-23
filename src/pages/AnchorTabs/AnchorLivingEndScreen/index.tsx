@@ -13,8 +13,8 @@ import {
 } from 'react-native';
 import {Icon, Divider, ListItem} from 'react-native-elements';
 import {PrimaryText, SmallText, T4, TinyText} from 'react-native-normalization-text';
-import {useDispatch} from 'react-redux';
-import { useNavigation, CommonActions } from '@react-navigation/native'
+import {useDispatch, useSelector} from 'react-redux';
+import { useNavigation, CommonActions, useRoute } from '@react-navigation/native'
 import withPage from '../../../components/HOCs/withPage';
 import images from '../../../assets/images';
 import {Colors} from '../../../constants/Theme';
@@ -34,8 +34,13 @@ import {updateLivingStatus} from '../../../actions/live';
 const AnorchLivingEndScreen = (props: any) : any =>  {
   const {dispatch: davDispatch, goBack} = useNavigation();
   const dispatch = useDispatch();
-  
+  const anchorId = useSelector((state: any) => state?.anchorData?.anchorInfo?.anchorId) || ''
+  const route = useRoute();
 
+  console.log(route?.params, 'liveendliveendliveendliveendliveend');
+
+  const endData = route?.params
+  
   React.useEffect(() => {
     return () => {
       // 重置观看端 结束字段
@@ -71,7 +76,7 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
             <Icon name="close" color={Colors.whiteColor}/>
           </TouchableOpacity>
           <Image source={images.liveEndTitle} style={styles.title} />
-          <PrimaryText color="white" style={{textAlign: 'center', paddingVertical: pad * 1.5}}>直播ID:{props?.anchorId || 0}</PrimaryText>
+          <PrimaryText color="white" style={{textAlign: 'center', paddingVertical: pad * 1.5}}>直播ID:{anchorId}</PrimaryText>
           <View style={styles.dataWrapper}>
             <View style={styles.subTitleLine}>
               <Image source={images.liveEndData} style={styles.subIcon} />
@@ -83,7 +88,7 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
                 dataList.map(item => {
                   return (
                     <View style={styles.dataItem} key={item.title}>
-                      <Text>{props[item.key] || 0}</Text>
+                      <Text>{endData[item.key] || 0}</Text>
                       <Text style={{color: Colors.darkGrey}}>{item.title}</Text>
                     </View>
                   )
@@ -96,13 +101,13 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
               <T4 style={styles.subTitle}>本场销量最佳商品</T4>
             </View>
             <ListItem
-              leftAvatar={{ source: props?.bestSellGoodsRes?.originalImg, rounded: false}}
-              title={props?.bestSellGoodsRes?.goodsName}
-              subtitle={props?.bestSellGoodsRes?.goodsSku}
+              leftAvatar={{ source: {uri: endData?.bestSellGoodsRes?.originalImg || ''}, rounded: false}}
+              title={endData?.bestSellGoodsRes?.goodsName}
+              subtitle={endData?.bestSellGoodsRes?.goodsSku}
               subtitleStyle={{color: Colors.darkGrey, paddingVertical: pad}}
               rightTitle={
                 <PrimaryText style={styles.fontYellow}>
-                  {props?.bestSellGoodsRes?.totalNum}<TinyText style={styles.fontYellow}> 元</TinyText>
+                  {endData?.bestSellGoodsRes?.totalNum}<TinyText style={styles.fontYellow}> 元</TinyText>
                 </PrimaryText>
               }
             />
@@ -112,9 +117,9 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
               <T4 style={styles.subTitle}>本场销量人气商品</T4>
             </View>
             <ListItem
-              leftAvatar={{source: props?.bestBrowseGoodsRes?.originalImg, rounded: false}}
-              title={props?.bestBrowseGoodsRes?.goodsName}
-              rightTitle={props?.bestBrowseGoodsRes?.totalNum}
+              leftAvatar={{ source: {uri: endData?.bestBrowseGoodsRes?.originalImg}, rounded: false}}
+              title={endData?.bestBrowseGoodsRes?.goodsName}
+              rightTitle={endData?.bestBrowseGoodsRes?.totalNum}
               rightTitleStyle={{color: Colors.yellowColor}}
               rightSubtitle={'最高观看人数'}
               rightSubtitleStyle={{fontSize: 12}}
@@ -127,18 +132,7 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
 };
 
 AnorchLivingEndScreen.defaultProps = {
-  bestSellGoodsRes: {
-    originalImg: images.shoppingIcon,
-    goodsName: '商品',
-    goodsSku: '规格',
-    totalNum: '0',
-  },
-  bestBrowseGoodsRes: {
-    originalImg: images.shoppingIcon,
-    goodsName: '商品',
-    goodsSku: '规格',
-    totalNum: '0',
-  }
+
 };
 
 const styles = StyleSheet.create({

@@ -12,10 +12,12 @@ import {pad} from '../../constants/Layout';
 import Poller from '../../utils/poller';
 import {apiLiveLike} from '../../service/api';
 import { isSucceed } from '../../utils/fetchTools';
+import { useNavigation } from '@react-navigation/native';
 
 const BottomBlock = (props: any) : any =>  {
   const dispatch = useDispatch();
-
+  const {navigate} = useNavigation();
+  const isLogin = useSelector((state: any) => state?.userData?.isLogin);
 
   // 是否有数据未提交
   const needSubmit = React.useRef(false);
@@ -29,6 +31,10 @@ const BottomBlock = (props: any) : any =>  {
 
   // 点击喜欢
   const onPressLike = () => {
+    if (!isLogin) {
+      navigate('Login');
+      return;
+    }
     needSubmit.current = true;
     setLikeQuantity(quantity => ++quantity);
   }
@@ -67,7 +73,10 @@ const BottomBlock = (props: any) : any =>  {
   
   // 转发分享
   const onPressForward = () => {
-    
+    if (!isLogin) {
+      navigate('Login');
+      return;
+    }
   }
 
   /**

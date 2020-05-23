@@ -63,7 +63,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
   const isLiveOver = useSelector((state: any) => state?.live?.isLiveOver);
 
   // 用户id
-  const userId = useSelector((state: any) => state?.userData?.userInfo?.userId);
+  const userId = useSelector((state: any) => state?.userData?.userInfo?.userId) || '';
 
   // 我的主播id
   const myAnchorId = useSelector((state: any) => state?.anchorData?.anchorInfo?.anchorId);
@@ -129,7 +129,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
     // 进入直播间，获取拉流地址等房间信息
     const params = {
       liveId,
-      userId
+      userId,
     }
     apiEnterLive(params)
       .then((res: any) => {

@@ -23,6 +23,7 @@ import {apiGetGroupGoods} from '../../../service/api';
 import {useDispatch} from 'react-redux';
 import { EMPTY_ARR } from '../../../constants/freeze';
 import { useNavigation } from '@react-navigation/native';
+import {isSucceed} from '../../../utils/fetchTools';
 
 const INIT_PAGE_NO = 1;
 const PAGE_SIZE = 10;
@@ -47,26 +48,35 @@ const AnorchDetailAvatar = (props: {
    * 获取主播商品
    */
   const onRefresh = async () => {
-    const goods: any = await apiGetGroupGoods({
+    const result: any = await apiGetGroupGoods({
       anchorId: props?.anchorId,
       pageNo: INIT_PAGE_NO,
       pageSize: PAGE_SIZE,
       selType: AddGoodsTargetType.showcaseGoods
-    }) || EMPTY_ARR;
+    })
+      .catch((err: any) => {console.log(err, 'getGroupGoods')})
 
-    return {result: goods?.records}
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.records || EMPTY_ARR});
+    }
+
+    return {result: result?.records}
   };
 
 
   const onEndReached = async (pageNo: number, pageSize: number) => {
-    const goods: any = await apiGetGroupGoods({
+    const result: any = await apiGetGroupGoods({
       anchorId: props?.anchorId,
       pageNo: pageNo,
       pageSize: pageSize,
       selType: AddGoodsTargetType.showcaseGoods
-    }) || EMPTY_ARR;
+    }) 
 
-    return {result: goods?.records}
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.records || EMPTY_ARR});
+    }
+
+    return {result: result?.records}
   };
 
   return (

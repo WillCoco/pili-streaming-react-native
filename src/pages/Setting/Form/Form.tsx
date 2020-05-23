@@ -58,7 +58,7 @@ export default function Form() {
           <Text style={styles.title}>实名认证</Text>
           {
             realname 
-              && <Text>{realname}</Text> 
+              && <Text>已实名</Text> 
               || <Ionicons size={20} name='ios-arrow-forward' color={Colors.darkGrey} />
           }
         </View>
