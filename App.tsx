@@ -160,7 +160,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 }
                 <NavigationContainer ref={navigationRef as any}>
                   <Stack.Navigator>
-                    {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
+                     {/*<Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />*/}
                     <Stack.Screen name='Root' component={Root} />
                     <Stack.Screen name='HomeSearch' component={HomeSearch} />
                     <Stack.Screen name='FoundSearch' component={FoundSearch} />

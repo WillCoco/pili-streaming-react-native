@@ -38,9 +38,9 @@ import share from '../../../utils/share';
 import usePermissions from '../../../hooks/usePermissions';
 import RNFS from 'react-native-fs'
 import { Toast, portal } from '@ant-design/react-native';
+import { EMPTY_ARR, EMPTY_OBJ } from '../../../constants/freeze';
+import { isSucceed } from '../../../utils/fetchTools';
 
-const PAGE_SIZE = 10;
-const INIT_PAGE_NO = 1;
 
 const RecordsCard = (props: {
   smallPic: any,
@@ -85,15 +85,9 @@ const RecordsCard = (props: {
       </View>
     </View>
   )
-}
-const AnchorRecords = (props) => {
+};
 
-  /*
-  * 获取可写权限
-  * */
-  const isPermissionGranted = usePermissions([
-      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-  ]);
+const AnchorRecords = (props) => {
 
   const {anchorInfo = {}} = props;
   const [liveList, setLiveList] = useState([]);
@@ -105,34 +99,41 @@ const AnchorRecords = (props) => {
   }, []);
 
   /**
-   * 获取直播列表
-   */
-  const getLiveListFn = (page,size) => {
+   * 下拉刷新
+   * */
+  const onRefresh = async (pageNo: number, pageSize: number) => {
       const {anchorId} = anchorInfo;
       const params = {
           anchorId,
-          pageNo: page,
-          pageSize: size
+          pageNo: pageNo,
+          pageSize: pageSize
       };
-      apiGetLiveList(params).then(res => {
-          console.log(res, 'sync get liveList')
-          const {records = []} = res;
-          records.length !== 0 &&  setLiveList(records)
-      })
-  };
-
-  /**
-   * 下拉刷新
-   * */
-  const onRefresh = (page, size) => {
-      getLiveListFn(page,size)
+      const result = await apiGetLiveList(params)
+          .catch((err: any) => console.log(err))
+      if(isSucceed(result)) {
+          const records = result?.data?.records || EMPTY_ARR;
+          const noBackArr = records.filter(o => o.isBack === 1);
+          return Promise.resolve({result: noBackArr});
+      }
+      return Promise.resolve({result: EMPTY_ARR});
   };
 
   /**
    * 上拉刷新
    */
-  const onEndReached = (page, size) => {
-      getLiveListFn(page,size)
+  const onEndReached = async (pageNo: number, pageSize: number) => {
+      const {anchorId} = anchorInfo;
+      const params = {
+          anchorId,
+          pageNo: pageNo,
+          pageSize: pageSize
+      };
+      const result = await apiGetLiveList(params)
+          .catch((err: any) => console.log(err))
+      if(isSucceed(result)) {
+          return Promise.resolve({result: result?.data?.records || EMPTY_ARR});
+      }
+      return Promise.resolve({result: EMPTY_ARR});
   };
 
   /**
@@ -150,44 +151,49 @@ const AnchorRecords = (props) => {
   /**
    * 点击下载按钮
    */
-  const onDownloadPress = (url) => {
-      const t = Toast.loading('');
-      if(url) {
-          // const saveImageUrl = 'https://gslb.miaopai.com/stream/9Q5ADAp2v5NHtQIeQT7t461VkNPxvC2T.mp4?vend=miaopai&';
-          if(Platform.OS === 'ios') {
-              CameraRoll.saveToCameraRoll(url).then(function(result) {
-                  portal.remove(t)
-                  Toast.success("视频已保存至相册")
-              }).catch(function(error) {
-                  console.log(error, '67890')
-                  portal.remove(t)
-                  Toast.fail("视频保存失败")
-              });
-          }else {
-              const storeLocation = `${RNFS.DocumentDirectoryPath}`;
-              let pathName = new Date().getTime() + ".mp4";
-              let downloadDest = `${storeLocation}/${pathName}`;
-              const ret = RNFS.downloadFile({fromUrl:url,toFile:downloadDest});
-              ret.promise.then(res => {
-                  if(res && res.statusCode === 200){
-                      if(isPermissionGranted) {
-                          CameraRoll.saveToCameraRoll("file://" + downloadDest).then(function(result) {
-                              portal.remove(t)
-                              Toast.success("视频已保存至相册")
-                          }).catch(function(error) {
-                              portal.remove(t)
-                              Toast.fail("视频保存失败")
-                          });
-                      }
-                  }
-              })
+  const onDownloadPress = async (url) => {
+      const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+      )
+
+      if(granted === PermissionsAndroid.RESULTS.GRANTED) {
+          const t = Toast.loading('已在后台下载...');
+          if(!url) {
+              portal.remove(t)
+              Toast.fail("视频不存在");
+              return;
           }
-      }else {
-          portal.remove(t)
-          Toast.fail("视频不存在")
+          // const saveImageUrl = 'https://gslb.miaopai.com/stream/9Q5ADAp2v5NHtQIeQT7t461VkNPxvC2T.mp4?vend=miaopai&';
+
+          const dirs = Platform.OS === 'ios' ? RNFS.LibraryDirectoryPath : RNFS.DocumentDirectoryPath;
+          const pathName = new Date().getTime() + '.mp4';
+          const downloadDest = Platform.OS === 'ios' ? `${dirs}/${pathName}` : `file://${dirs}/${pathName}`;
+          const option = {
+              fromUrl: url,
+              toFile: downloadDest
+          };
+          const ret = RNFS.downloadFile(option);
+          ret.promise.then(res => {
+              if(res && res.statusCode === 200) {
+                  CameraRoll.saveToCameraRoll(downloadDest).then(function(result) {
+                      portal.remove(t)
+                      Toast.success("视频已保存至相册")
+                  }).catch(function(error) {
+                      portal.remove(t)
+                      Toast.fail("视频保存失败")
+                  });
+              }
+          });
       }
 
   };
+
+  // /*
+  // * 跳转回放
+  // * */
+  // const navigateFn = () => {
+  //
+  // };
 
   return (
     <View style={styles.style}>
@@ -196,7 +202,6 @@ const AnchorRecords = (props) => {
             size={10}
             data={liveList}
             setData={setLiveList}
-            initListData={liveList}
             renderItem={({item, index}) => {
                 return (
                     <RecordsCard
