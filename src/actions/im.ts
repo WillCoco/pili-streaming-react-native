@@ -12,12 +12,13 @@ import {safeParse} from '../utils/saftyFn';
 import {updateLivingStatus, updateLivingInfo} from './live';
 import {clearLoginStatus} from './user';
 import { Attention } from '../liveTypes';
-import anchorData from '../reducers/anchor';
+import * as api from '../service/api';
+import { isSucceed } from '../utils/fetchTools';
 
-const {tim, TIM, userSig, getUserSig: getUserSigLocal} = timModlue;
+const {tim, TIM, getUserSig: getUserSigLocal} = timModlue;
 
-console.log(userSig, 'userss2')
-console.log(store, 'store')
+// console.log(userSig, 'userss2')
+// console.log(store, 'store')
 
 tim.on(TIM.EVENT.MESSAGE_RECEIVED, onMessageReceived);
 
@@ -82,7 +83,7 @@ function handleCustomMsg(message: any) {
 
     // 更新观看次数
     if (type === MessageType.enter) {
-      store.dispatch(addLivingWatchNum());
+      dispatch(addLivingWatchNum());
     }
 
     dispatch(updateMessage2Store(newRoomMessage))
@@ -172,7 +173,6 @@ function handleSysMsg(message: any) {
         //  观众稍后在收到结束直播时处理
       }
     }
-    operationType
   }
 }
 
@@ -187,48 +187,47 @@ tim.on(TIM.EVENT.SDK_READY, onReadyHandler);
 /**
  * 获取im userSig
  */
-export const getUserSig = (userID: string) => {
+export const getUserSig = (userId: string) => {
   return async function(dispatch: Dispatch, getState: any) {
-    const stateUserSig = getState()?.im?.userSig;
-
-    if (stateUserSig) {
-      return Promise.resolve(stateUserSig);
-    }
-
-    // todo fetch 获取userSig
-    // updateUserStatus({userSig})
-    return getUserSigLocal(userID);
+    // const stateUserSig = getState()?.im?.userSig;
+    // return getUserSigLocal(userID)
+    console.log(222222)
+    return api.apiGetUserSig({userId})
+      .then(r => {
+        console.log(r, '11111')
+        if (isSucceed(r)) {
+          dispatch(updateUserStatus({userId, userSig: r?.data}));
+          return Promise.resolve(r?.data);
+        }
+        dispatch(updateUserStatus({userId}));
+        return Promise.resolve();
+      })
+      .catch(err => {console.log('getUserSig', err)})
   }
 }
 
 /**
  * 登录im
  */
-export function login(params?: {
-  userID?: string,
-}) {
+export function login() {
   return async function(dispatch: Dispatch<any>, getState: any) {
-    const userID = (params && params.userID) || getUniqueId();
-    const userSig = await dispatch(getUserSig(getUniqueId()));
-    console.log(userID, '设备唯一表示1')
-    console.log(userID, 'userID');
+    const userId = getState()?.im?.userId || getUniqueId();
+    const userSig = await dispatch(getUserSig(userId));
+    console.log(userId, '设备唯一表示1')
+    console.log(userSig, 'userSig');
 
-    tim.login({userID, userSig})
+    // alert(userSig)
+    if (!userSig) {
+      return;
+    }
+
+    tim.login({userID: userId, userSig})
       .then(function(imResponse: any) {
         if (imResponse?.actionStatus === 'OK') {
-          updateUserStatus({isOnLine: true}) // tinyID
+          dispatch(updateUserStatus({isOnLine: true})); // tinyID
         }
+        dispatch(updateUserStatus({isOnLine: false})); // tinyID
         console.log(imResponse.data, 'loginIm'); // 登录成功
-        // if (imResponse.data.repeatLogin === true) {
-        //   // 标识账号已登录，本次登录操作为重复登录。v2.5.1 起支持
-        //   console.log(imResponse.data.errorInfo);
-        // }
-
-        // 手动
-        // setTimeout(() => {
-        //   dispatch(getGroupList())
-        // }, 3000)
-
       })
       .catch(function(imError: any) {
         console.warn('login error:', imError); // 登录失败的相关信息
@@ -679,10 +678,11 @@ export function updateIMSdkStatus(isReady: boolean) {
 /**
  * 更新用户登录状态
  */
-interface paramsType {isOnLine?: boolean, userSig?: string};
+interface paramsType {isOnLine?: boolean, userSig?: string, userId?: string};
 export function updateUserStatus(params: paramsType) {
   const payload: paramsType = {};
   params.isOnLine && (payload.isOnLine = params.isOnLine);
+  params.userId && (payload.userId = params.userId);
   params.userSig && (payload.userSig = params.userSig);
 
   return {type: imActionType.UPDATE_USER_IM_STATUS, payload}

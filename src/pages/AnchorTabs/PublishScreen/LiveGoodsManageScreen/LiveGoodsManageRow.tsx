@@ -40,8 +40,8 @@ const LiveGoodsManageRow = (props: LiveGoodsManageRowProps) =>  {
 
   const data = (props.dataAdapter ? props.dataAdapter(props.data) : props.data) || {};
 
-  const btnText = data.canAdd ? '添加店铺' : '取消添加';
-  const btnBg = data.canAdd ? Colors.basicColor : Colors.lightGrey;
+  const btnText = data.isAdded ? '添加店铺' : '取消添加';
+  const btnBg = data.isAdded ? Colors.basicColor : Colors.lightGrey;
   
   return (
     <View style={StyleSheet.flatten([styles.style, props.style])}>
@@ -60,7 +60,7 @@ const LiveGoodsManageRow = (props: LiveGoodsManageRowProps) =>  {
         </View>
         <View style={styles.rowBetween}>
           <SmallText color="grey" style={{flex: -1}}>总库存:  {data.storeCount}</SmallText>
-          <ShareProfit profit={data.rebate} style={{flex: -1}} />
+          <ShareProfit profit={data.profit} style={{flex: -1}} />
         </View>
         <View style={styles.rowBetween}>
           <DiscountPrice discountPrice={data.discountPrice} price={data.pirce} />
