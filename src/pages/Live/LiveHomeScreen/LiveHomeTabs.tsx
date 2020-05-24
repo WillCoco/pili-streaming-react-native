@@ -24,6 +24,7 @@ import {PrimaryText} from 'react-native-normalization-text'
 import pxToDp from '../../../utils/px2dp';
 import { EMPTY_ARR, EMPTY_OBJ } from '../../../constants/freeze';
 import { isSucceed } from '../../../utils/fetchTools';
+import {useIsFocused} from '@react-navigation/native';
 
 interface LiveBannerProps {
   style?: StyleProp<any>,
@@ -33,6 +34,7 @@ interface LiveBannerProps {
 const LiveBanner = (props: LiveBannerProps) : any =>  {
 
   const userId = useSelector(state => state?.userData?.userInfo?.userId) || ''
+  const isFocused = useIsFocused()
   const [followList, setFollowList]: [Array<any>, any] = React.useState([]) // 关注列表
   const [selectList, setSelectlist]: [Array<any>, any] = React.useState([]) // 精选列表
   const isLogin = useSelector(state => state?.userData?.isLogin) || false // 未登录不显示关注列表
@@ -62,6 +64,16 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
   }
 
   /**
+   * 从直播间返回刷新数据
+   */
+  React.useEffect(() => {
+    if (isFocused) {
+      onRefresh('1')
+      onRefresh('2')
+    }
+  }, [isFocused])
+
+  /**
    * 切换tab
    */
   const changeTab = (e) => {
@@ -87,6 +99,11 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
     .catch((r: any) => {console.log(r, 'LiveStreamList')});
 
     if (isSucceed(result)) {
+      if (type == '1') {
+        setSelectlist(result?.data?.records || EMPTY_ARR)
+      } else {
+        setFollowList(result?.data?.records || EMPTY_ARR)
+      }
       return Promise.resolve({result: result?.data?.records || EMPTY_ARR});
     }
 
@@ -134,7 +151,7 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
           <PagingList
             tabLabel={"关注"}
             size={14}
-            // initListData={followList}
+            initListData={followList}
             //item显示的布局
             renderItem={(renderItem)}
             //下拉刷新相关
@@ -152,7 +169,7 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
           <PagingList
             tabLabel={"精选"}
             size={14}
-            // initListData={selectList}
+            initListData={selectList}
             //item显示的布局
             renderItem={renderItem}
             //下拉刷新相关

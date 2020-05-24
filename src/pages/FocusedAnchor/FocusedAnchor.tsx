@@ -81,6 +81,7 @@ function FocusedAnchor(props: any) {
           <Empty 
             img={images.emptyAttention}
             text='暂无关注的主播'
+            style={{marginTop: '20%'}}
             textStyle={{width: '70%', textAlign: 'center'}}
           />
         }

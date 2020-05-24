@@ -7,7 +7,7 @@ import {
   View
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import LiveMsg from '../LiveMsg';
 import {Audience as AudienceLiveToolBar} from '../LiveToolBar';
 import {pad} from '../../constants/Layout';
@@ -20,6 +20,8 @@ import { Attention } from '../../liveTypes';
 
 const BottomBlock = (props: any) : any =>  {
   const dispatch = useDispatch();
+  const {navigate} = useNavigation();
+  const isLogin = useSelector((state: any) => state?.userData?.isLogin);
 
   // 是否有数据未提交
   const needSubmit = React.useRef(false);
@@ -50,6 +52,11 @@ const BottomBlock = (props: any) : any =>  {
   
   // 喜欢
   const onPressLike = () => {
+    if (!isLogin) {
+      navigate('Login');
+      return;
+    }
+    
     needSubmit.current = true;
     setLikeQuantity((quantity: number) => ++quantity);
   }
@@ -116,7 +123,10 @@ const BottomBlock = (props: any) : any =>  {
    * 分享
    */
  const onPressForward = () => {
-
+    if (!isLogin) {
+      navigate('Login');
+      return;
+    }
  }
 
   /**

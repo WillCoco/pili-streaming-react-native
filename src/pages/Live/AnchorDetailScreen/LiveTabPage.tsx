@@ -113,8 +113,6 @@ const LiveTabPage = (props: {
 }) =>  {
   const {navigate} = useNavigation();
 
-  console.log(props.liveRecords);
-
   /**
    * 下拉刷新
    */
@@ -169,9 +167,8 @@ const LiveTabPage = (props: {
   /**
    * 渲染行
    */
-  const renderRow = (item: any) => {
+  const renderRow = (item: any, index: number) => {
     item = item.item
-    let index = item.index
     if (item.liveStatus == 2) {
       return (
         <Row
@@ -206,8 +203,7 @@ const LiveTabPage = (props: {
           onPress={() => toLiveingRoom(item)}
         />
       )
-    }
-    
+    } 
   }
 
 
@@ -216,7 +212,7 @@ const LiveTabPage = (props: {
       <PagingList
         data={props?.liveRecords}
         size={PAGE_SIZE}
-        renderItem={renderRow}
+        renderItem={(item: any, index: number) => renderRow(item, index)}
         onRefresh={onRefresh}
         onEndReached={onEndReached}
         initialNumToRender={PAGE_SIZE}
@@ -235,6 +231,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderTopWidth: 4,
     borderColor: Colors.pageGreyBg,
+    paddingHorizontal: pad
   },
   rowWrapper: {
     paddingVertical: 9,

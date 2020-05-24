@@ -31,19 +31,18 @@ import { Attention, AttentionParams } from '../../../liveTypes';
 import {isSucceed} from '../../../utils/fetchTools';
 import {Toast} from '@ant-design/react-native'
 import { updateLivingInfo } from '../../../actions/live';
+import images from '../../../assets/images';
 
 const AnchorDetail = (props: any) =>  {
   const bgUrl = 'https://goss.veer.com/creative/vcg/veer/800water/veer-302989341.jpg';
   const route = useRoute();
   const dispatch = useDispatch();
-  const anchorId = route?.params?.anchorId || ''
   const userId = useSelector((state: any) => state?.userData?.userInfo?.userId) || ''
   const isFollowed = useSelector((state: any) => state?.live?.livingInfo?.isAttention);
   const [anchorDetail, setAnchorDetail]: [any, any] = React.useState(EMPTY_OBJ); // 主播详情
   const [liveList, setLiveList]: [any, any] = React.useState(EMPTY_ARR); // 主播tab
   const PAGE_SIZE = 14;
-
-  
+  const {anchorId, hideFollowButton} = route?.params
 
   /**
    * 点击关注按钮
@@ -96,7 +95,7 @@ const AnchorDetail = (props: any) =>  {
     >
       <View style={styles.headerBlcokWrapper}>
         <View style={styles.headerWrapper}>
-          <Image style={styles.headerBg} source={{uri: bgUrl}} resizeMode="cover" resizeMethod="resize" />
+          <Image style={styles.headerBg} source={images.anchorDetail} resizeMode="cover" resizeMethod="resize" />
           <AnorchDetailAvatar
             isLiving={anchorDetail?.liveStatus === 2}
             onPress={() => {}}
@@ -109,12 +108,15 @@ const AnchorDetail = (props: any) =>  {
             <View style={styles.strip} />
             <PrimaryText style={styles.anchorInfo}>直播: {anchorDetail?.liveNum || 0}</PrimaryText>
           </View>
-          <FollowButton
-            isFollowed={isFollowed === Attention.isAttention}
-            onPress={onFollowPress}
-            style={{paddingHorizontal: 40, marginTop: pad}}
-            size={{width: 200, height: 26}}
-          />
+          {
+            !hideFollowButton && 
+            <FollowButton
+              isFollowed={isFollowed === Attention.isAttention}
+              onPress={onFollowPress}
+              style={{paddingHorizontal: 40, marginTop: pad}}
+              size={{width: 200, height: 26}}
+            />
+          }
         </View>
       </View>
       <ScrollableTabView
