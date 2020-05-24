@@ -21,40 +21,102 @@ import {vw} from '../../../utils/metric';
 import ScrollableTab from '../../../components/ScrollableTab';
 import FollowButton from '../../../components/FollowButton';
 import {pad} from '../../../constants/Layout';
+import {apiAnchorParticular} from '../../../service/api';
+import {useRoute, useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import {EMPTY_OBJ, EMPTY_ARR} from '../../../constants/freeze';
+import {useDispatch} from 'react-redux';
+import {apiAttentionAnchor} from '../../../service/api';
+import { Attention, AttentionParams } from '../../../liveTypes';
+import {isSucceed} from '../../../utils/fetchTools';
+import {Toast} from '@ant-design/react-native'
+import { updateLivingInfo } from '../../../actions/live';
+import images from '../../../assets/images';
 
-const AnchorDetail = () =>  {
-  const isLiving = true;
+const AnchorDetail = (props: any) =>  {
   const bgUrl = 'https://goss.veer.com/creative/vcg/veer/800water/veer-302989341.jpg';
-  const trailers = [1, 2]
-  const liveRecords = [1, 2, 3]
+  const route = useRoute();
+  const dispatch = useDispatch();
+  const userId = useSelector((state: any) => state?.userData?.userInfo?.userId) || ''
+  const isFollowed = useSelector((state: any) => state?.live?.livingInfo?.isAttention);
+  const [anchorDetail, setAnchorDetail]: [any, any] = React.useState(EMPTY_OBJ); // 主播详情
+  const [liveList, setLiveList]: [any, any] = React.useState(EMPTY_ARR); // 主播tab
+  const PAGE_SIZE = 14;
+  const {anchorId, hideFollowButton} = route?.params
 
-  const onFollowPress = (isFollow: boolean) => {
-    console.log(isFollow, 'isFollow');
+  /**
+   * 点击关注按钮
+   */
+  const onFollowPress = (isFollowed: boolean) => {
+    console.log(isFollowed, 'isFollow');
+    const params = {
+      anchorId: anchorId,
+      attentionType: !isFollowed ? AttentionParams.attention : AttentionParams.cancelAttention, // 1：关注；2：取关
+      userId: userId,
+    }
+
+    apiAttentionAnchor(params)
+      .then((res: any) => {
+        if (isSucceed(res)) {
+          Toast.show(isFollowed ? '取消关注成功' : '关注成功')
+          const isAttention = isFollowed ? Attention.notAttention : Attention.isAttention;
+          dispatch(updateLivingInfo({isAttention}));
+
+          // 发送关注消息
+          // if (!isFollowed) {
+          //   dispatch(sendRoomMessage({text: '关注了主播', type: MessageType.follow}))
+          // }
+          return;
+        }
+        Toast.show(isFollowed ? '取消关注失败' : '关注失败')
+      })
+      .catch((error: any) => console.log(`apiAttentionAnchor: ${error}`))
   }
+
+  React.useEffect(() => {
+    const params = {
+      anchorId,
+      pageNo: 1,
+      pageSize: PAGE_SIZE,
+      userId
+    }
+
+    apiAnchorParticular(params)
+      .then((res: any) => {
+        setAnchorDetail(res?.data);
+        setLiveList(res?.data?.liveList?.records)
+      })
+      .catch(console.warn);
+  }, []);
+
   return (
     <View
-      style={styles.wrapper}
+      style={StyleSheet.flatten([styles.wrapper, {marginBottom: props.safeBottom}])}
     >
       <View style={styles.headerBlcokWrapper}>
         <View style={styles.headerWrapper}>
-          <Image style={styles.headerBg} source={{uri: bgUrl}} resizeMode="cover" resizeMethod="resize" />
+          <Image style={styles.headerBg} source={images.anchorDetail} resizeMode="cover" resizeMethod="resize" />
           <AnorchDetailAvatar
-            isLiving={isLiving}
+            isLiving={anchorDetail?.liveStatus === 2}
             onPress={() => {}}
             style={{marginTop: 36}}
+            source={anchorDetail?.anchorLogo}
           />
-          <T3 style={styles.nickName}>主播昵称</T3>
+          <T3 style={styles.nickName}>{anchorDetail?.anchorName || '主播'}</T3>
           <View style={styles.row}>
-            <PrimaryText style={styles.anchorInfo}>粉丝: 100</PrimaryText>
+            <PrimaryText style={styles.anchorInfo}>粉丝: {anchorDetail?.fansNum || 0}</PrimaryText>
             <View style={styles.strip} />
-            <PrimaryText style={styles.anchorInfo}>直播: 20</PrimaryText>
+            <PrimaryText style={styles.anchorInfo}>直播: {anchorDetail?.liveNum || 0}</PrimaryText>
           </View>
-          <FollowButton
-            isFollow={false}
-            onPress={onFollowPress}
-            style={{paddingHorizontal: 40, marginTop: pad}}
-            size={{width: 200, height: 26}}
-          />
+          {
+            !hideFollowButton && 
+            <FollowButton
+              isFollowed={isFollowed === Attention.isAttention}
+              onPress={onFollowPress}
+              style={{paddingHorizontal: 40, marginTop: pad}}
+              size={{width: 200, height: 26}}
+            />
+          }
         </View>
       </View>
       <ScrollableTabView
@@ -75,12 +137,15 @@ const AnchorDetail = () =>  {
       >
         <LiveTabPage
           tabLabel="直播"
-          isLiving={isLiving}
-          trailers={trailers}
-          liveRecords={liveRecords}
+          isLiving={anchorDetail?.liveStatus === 2}
+          // trailers={trailers}
+          liveRecords={liveList}
+          anchorId={anchorId}
+          userId={userId}
         />
         <ShopTabPage
           tabLabel="店铺"
+          anchorId={anchorId}
         />
       </ScrollableTabView>
     </View>

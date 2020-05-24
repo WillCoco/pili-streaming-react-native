@@ -6,10 +6,16 @@ import { Colors } from '../../../constants/Theme'
 import * as ImagePicker from 'expo-image-picker'
 import { Ionicons } from '@expo/vector-icons'
 import Toast from 'react-native-tiny-toast'
-import { apiLiveUploadFile, apiWorkUpload } from '../../../service/api'
+import { apiWorkUpload } from '../../../service/api'
 import { setMediaList } from '../../../actions/works'
 
-function ImgPicker(props: any) {
+interface Props {
+  dispatch?: any;
+  pageType: string;
+  mediaList: Array<any>
+}
+
+function ImgPicker(props: Props) {
   const { pageType, mediaList } = props
 
   const chooseImage = async (index: number) => {

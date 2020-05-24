@@ -9,12 +9,16 @@ import {RoomType, MessageType, RoomMessageType} from '../reducers/im';
 import Toast from 'react-native-tiny-toast';
 import {store} from '../store';
 import {safeParse} from '../utils/saftyFn';
-import {updateLivingStatus} from './live';
+import {updateLivingStatus, updateLivingInfo} from './live';
+import {clearLoginStatus} from './user';
+import { Attention } from '../liveTypes';
+import * as api from '../service/api';
+import { isSucceed } from '../utils/fetchTools';
 
-const {tim, TIM, userSig, getUserSig: getUserSigLocal} = timModlue;
+const {tim, TIM, getUserSig: getUserSigLocal} = timModlue;
 
-console.log(userSig, 'userss2')
-console.log(store, 'store')
+// console.log(userSig, 'userss2')
+// console.log(store, 'store')
 
 tim.on(TIM.EVENT.MESSAGE_RECEIVED, onMessageReceived);
 
@@ -79,7 +83,7 @@ function handleCustomMsg(message: any) {
 
     // 更新观看次数
     if (type === MessageType.enter) {
-      store.dispatch(addLivingWatchNum());
+      dispatch(addLivingWatchNum());
     }
 
     dispatch(updateMessage2Store(newRoomMessage))
@@ -94,6 +98,7 @@ function handleRoomInfoMsg(message: any) {
     const {operationType, groupProfile, newGroupProfile, memberNum} = message?.payload || {};
     const {groupID} = groupProfile || {};
     const {notification} = newGroupProfile || {};
+    
 
     // 不是所在的room 不处理
     if (groupID !== getState().im?.room?.groupID) {
@@ -107,17 +112,17 @@ function handleRoomInfoMsg(message: any) {
       // 更新公告气泡
       const oldRoomInfo = getState().im?.room;
       const newRoomInfo = {...oldRoomInfo, notification};
-      store.dispatch(updateRoom(newRoomInfo));
+      dispatch(updateRoom(newRoomInfo));
     } else if (operationType === TIM.TYPES.GRP_TIP_MBR_JOIN) {
       // 加群
       const {memberNum} = message?.payload || {};
       // 更新群人数
-      store.dispatch(updateRoomMemberNum(memberNum));
+      dispatch(updateRoomMemberNum(memberNum));
     } else if (operationType === TIM.TYPES.GRP_TIP_MBR_QUIT) {
       // 退群
       const {memberNum} = message?.payload || {};
       // 更新群人数
-      store.dispatch(updateRoomMemberNum(memberNum));
+      dispatch(updateRoomMemberNum(memberNum));
     }
   }
 }
@@ -128,7 +133,7 @@ function handleRoomInfoMsg(message: any) {
 function handleSysMsg(message: any) {
   return function(dispatch: Dispatch<any>, getState: any) {
     const {groupID} = message?.payload?.groupProfile || {};
-    const {operationType} = message?.payload || {};
+    const {operationType, userDefinedField} = message?.payload || {};
 
     // 不是所在的room 不处理
     if (groupID !== getState().im?.room?.groupID) {
@@ -138,10 +143,35 @@ function handleSysMsg(message: any) {
     // 群组被解散
     if (operationType === 5) {
       // 设置直播状态, 显示结束页
-      store.dispatch(updateLivingStatus(true));
+      dispatch(updateLivingStatus(true));
       
       // 清空房间相关数据
-      store.dispatch(clearLiveRoom());
+      dispatch(clearLiveRoom());
+    }
+
+    // 自定义
+    if (operationType === 255) {
+      const msgData = safeParse(userDefinedField);
+      console.log(msgData, 'msgData?.typemsgData?.typemsgData?.type');
+      console.log(msgData?.type, 'msgData?.typemsgData?.typemsgData?.type');
+
+      // 主播被下线, 冻结账号
+      if (msgData?.type === '1') {
+        // store.dispatch(updateAnchorLivingStatus(true));
+
+        const myAnchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
+
+        const livingAnchorId = getState()?.live?.livingInfo.anchorId; // 在播id
+
+        // 我是本场主播
+        if (myAnchorId === livingAnchorId) {
+          // 清除登录状态、退出登录
+          dispatch(clearLoginStatus());
+          dispatch(clearLiveRoom('ANCHOR'));
+          dispatch(updateLivingInfo());
+        }
+        //  观众稍后在收到结束直播时处理
+      }
     }
   }
 }
@@ -157,48 +187,47 @@ tim.on(TIM.EVENT.SDK_READY, onReadyHandler);
 /**
  * 获取im userSig
  */
-export const getUserSig = (userID: string) => {
+export const getUserSig = (userId: string) => {
   return async function(dispatch: Dispatch, getState: any) {
-    const stateUserSig = getState()?.im?.userSig;
-
-    if (stateUserSig) {
-      return Promise.resolve(stateUserSig);
-    }
-
-    // todo fetch 获取userSig
-    // updateUserStatus({userSig})
-    return getUserSigLocal(userID);
+    // const stateUserSig = getState()?.im?.userSig;
+    // return getUserSigLocal(userID)
+    console.log(222222)
+    return api.apiGetUserSig({userId})
+      .then(r => {
+        console.log(r, '11111')
+        if (isSucceed(r)) {
+          dispatch(updateUserStatus({userId, userSig: r?.data}));
+          return Promise.resolve(r?.data);
+        }
+        dispatch(updateUserStatus({userId}));
+        return Promise.resolve();
+      })
+      .catch(err => {console.log('getUserSig', err)})
   }
 }
 
 /**
  * 登录im
  */
-export function login(params?: {
-  userID?: string,
-}) {
+export function login() {
   return async function(dispatch: Dispatch<any>, getState: any) {
-    const userID = (params && params.userID) || getUniqueId();
-    const userSig = await dispatch(getUserSig(getUniqueId()));
-    console.log(userID, '设备唯一表示1')
-    console.log(userID, 'userID');
+    const userId = getState()?.im?.userId || getUniqueId();
+    const userSig = await dispatch(getUserSig(userId));
+    console.log(userId, '设备唯一表示1')
+    console.log(userSig, 'userSig');
 
-    tim.login({userID, userSig})
+    // alert(userSig)
+    if (!userSig) {
+      return;
+    }
+
+    tim.login({userID: userId, userSig})
       .then(function(imResponse: any) {
         if (imResponse?.actionStatus === 'OK') {
-          updateUserStatus({isOnLine: true}) // tinyID
+          dispatch(updateUserStatus({isOnLine: true})); // tinyID
         }
+        dispatch(updateUserStatus({isOnLine: false})); // tinyID
         console.log(imResponse.data, 'loginIm'); // 登录成功
-        // if (imResponse.data.repeatLogin === true) {
-        //   // 标识账号已登录，本次登录操作为重复登录。v2.5.1 起支持
-        //   console.log(imResponse.data.errorInfo);
-        // }
-
-        // 手动
-        // setTimeout(() => {
-        //   dispatch(getGroupList())
-        // }, 3000)
-
       })
       .catch(function(imError: any) {
         console.warn('login error:', imError); // 登录失败的相关信息
@@ -277,10 +306,11 @@ export const dismissGroup = (id?: string) => {
       .then(async function(imResponse: any) {
         const groupID = imResponse?.data?.groupID;
         if (groupID) {
-        
           console.log(imResponse.data, 'dismissGroup'); // 登出成功
           // 清除store
           dispatch(clearLiveRoom('ANCHOR'));
+
+          return Promise.resolve(true);
         }
       })
       .catch(function(imError: any) {
@@ -498,14 +528,17 @@ function makeMsg({type, text}: {
     const userInfo = getState().userData?.userInfo;
     const userName = userInfo?.nickName;
     const userAvatar = userInfo?.userAvatar;
+    const isFollowed = getState()?.live?.livingInfo?.isAttention === Attention.isAttention;
+
     const dataString = JSON.stringify({
       text,
       userName: userName || '游客',
       userAvatar,
       userId,
-      isFollowed: false,
+      isFollowed,
       type
     })
+
     return {
       data: dataString,
       description: "",
@@ -645,10 +678,11 @@ export function updateIMSdkStatus(isReady: boolean) {
 /**
  * 更新用户登录状态
  */
-interface paramsType {isOnLine?: boolean, userSig?: string};
+interface paramsType {isOnLine?: boolean, userSig?: string, userId?: string};
 export function updateUserStatus(params: paramsType) {
   const payload: paramsType = {};
   params.isOnLine && (payload.isOnLine = params.isOnLine);
+  params.userId && (payload.userId = params.userId);
   params.userSig && (payload.userSig = params.userSig);
 
   return {type: imActionType.UPDATE_USER_IM_STATUS, payload}

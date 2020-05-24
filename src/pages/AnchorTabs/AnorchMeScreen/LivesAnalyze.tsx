@@ -27,11 +27,12 @@ import withPage from '../../../components/HOCs/withPage';
 import { pad } from '../../../constants/Layout';
 import images from '../../../assets/images'
 import NavBar from '../../../components/NavBar';
-import { apiGetLiveDataList } from '../../../service/api';
+import { apiGetLiveDataList, apiGetLiveListAll } from '../../../service/api';
 import {isIOS, isAndroid} from '../../../constants/DeviceInfo';
 import PagingList from '../../../components/PagingList';
 import ImagePickerBox from '../../../components/DatePicker';
 import Echart from '../../../components/Echart';
+import { isSucceed } from '../../../utils/fetchTools';
 
 const LiveInfoCard = (props: {
     addFavourite: number,
@@ -89,14 +90,30 @@ const LivesAnalyze = (props) =>  {
 
     const [liveInfoList, setLiveInfoList] = useState([]);
 
-    useEffect(() => {
-
-    });
-
     /*
     *  获取直播数据
     * */
     const [time, setTime] = useState();
+    const [echartDate, setEchartDate] = useState([]);
+
+    /*
+    *  k线数据
+    * */
+    const getDataListMonth = async (time: string) => {
+        const {anchorId} = anchorInfo;
+        const result = await apiGetLiveListAll({
+            anchorId,
+            dateScope: time
+        }).catch(err => console.log(err, 'error'));
+        if(isSucceed(result)) {
+            setEchartDate(result?.data || [])
+        }
+    };
+
+    useEffect(() => {
+        getDataListMonth(time)
+    }, [time]);
+
 
     const getDataListFn = (date: string) => {
         const t = Toast.loading('加载中');
@@ -113,6 +130,7 @@ const LivesAnalyze = (props) =>  {
             const {records = []} = res;
             setLiveInfoList(records)
         }).catch(err => {
+            portal.remove(t)
             Toast.fail('获取数据失败');
             console.log(err, 'error')
         });
@@ -152,12 +170,11 @@ const LivesAnalyze = (props) =>  {
                 <View>
                     <View >
                         <View style={styles.cardSty}>
-                            <Echart />
+                            <Echart data={echartDate} />
                         </View>
                     </View>
                     <View style={{alignSelf: 'flex-start'}}>
-                        <ImagePickerBox
-                            onPicked={getDataListFn}
+                        <ImagePickerBox onPicked={getDataListFn}
                         />
                     </View>
                 </View>
@@ -207,7 +224,8 @@ const styles = StyleSheet.create({
         width: 345,
         height: 219,
         borderRadius: 12,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        overflow: 'hidden'
     },
     card: {
         width: 345,

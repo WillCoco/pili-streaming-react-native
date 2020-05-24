@@ -4,27 +4,29 @@ import {
   Text,
   Share,
   Image,
-  Platform,
   StyleSheet,
-  TouchableOpacity,
-  PermissionsAndroid
+  TouchableOpacity
 } from 'react-native'
-import CameraRoll from '@react-native-community/cameraroll'
-import RNFetchBlob from 'rn-fetch-blob'
-import RNFS from 'react-native-fs'
+
 import { connect } from 'react-redux'
 import pxToDp from '../../../utils/px2dp'
 import { AntDesign } from '@expo/vector-icons'
 import { Colors } from '../../../constants/Theme'
-import * as WeChat from 'react-native-wechat-lib'
+// import * as WeChat from 'react-native-wechat-lib'
 import { apiCreatePoster, apiGetUserData } from '../../../service/api'
 import { setUserInfo } from '../../../actions/user'
-import Toast from 'react-native-tiny-toast'
+import { Portal, Toast as AntToast } from '@ant-design/react-native'
 
-function ShareBar(props: { hideShareBar?: any; dispatch?: any; goodsId?: any; userId?: any }) {
-  const [progress, setProgress] = useState(0)
+interface Props {
+  dispatch: any;
+  userId: number;
+  goodsId: number;
+  hideShareBar(): void;
+  setPosterPath(img: string, type: number): any;
+}
+
+function ShareBar(props: Props) {
   const { goodsId, userId } = props
-  const [posterPath, setPosterPath] = useState('')
 
   /**
    * 分享到微信
@@ -74,6 +76,7 @@ function ShareBar(props: { hideShareBar?: any; dispatch?: any; goodsId?: any; us
    */
   const createPoster = async (shareType: number) => {
     let userInfo: any = {}
+    let loading = AntToast.loading('正在生成海报')
 
     if (!userId) {
       userInfo = await apiGetUserData()
@@ -87,59 +90,13 @@ function ShareBar(props: { hideShareBar?: any; dispatch?: any; goodsId?: any; us
     }
 
     apiCreatePoster(params).then((res: any) => {
-      download(res, () => {
-        Toast.show('已保存至相册')
-        props.hideShareBar()
-      }, () => {
-        console.log('error')
-      })
+      Portal.remove(loading)
+      props.setPosterPath(res, shareType)
+      props.hideShareBar()
+    }).catch((err: any) => {
+      Portal.remove(loading)
+      console.log(err)
     })
-  }
-
-  const download = (base64Img: string, success: any, fail: any) => {
-    const dirs =
-      Platform.OS === 'ios'
-        ? RNFS.LibraryDirectoryPath
-        : RNFS.ExternalDirectoryPath; // 外部文件，共享目录的绝对路径（仅限android）
-    const downloadDest = `${dirs}/${((Math.random() * 10000000) | 0)}.png`;
-    const imageData = base64Img;
-
-    // 报错了 先注释
-    RNFetchBlob.fs.writeFile(downloadDest, imageData, 'base64').then(async () => {
-      try {
-        if (Platform.OS !== 'ios') {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-            {
-              title: "请求",
-              message: "允许存储文件到手机",
-              buttonNeutral: "稍后询问",
-              buttonNegative: "取消",
-              buttonPositive: "确认"
-            }
-          )
-
-          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            CameraRoll.saveToCameraRoll(downloadDest).then((res) => {
-              console.log('saveSuccess', res)
-              success && success()
-            }).catch((err) => {
-              Toast.show('保存失败')
-            })
-          }
-        } else {
-          CameraRoll.saveToCameraRoll(downloadDest).then((res) => {
-            console.log('saveSuccess', res)
-            success && success()
-          }).catch((err) => {
-            Toast.show('保存失败')
-          })
-        }
-      } catch (err) {
-        console.log('catch', err)
-        fail && fail()
-      }
-    });
   }
 
   return (
@@ -173,7 +130,7 @@ function ShareBar(props: { hideShareBar?: any; dispatch?: any; goodsId?: any; us
 }
 
 export default connect(
-  (state: any) => state.userData
+  (state: any) => state
 )(ShareBar)
 
 const styles = StyleSheet.create({

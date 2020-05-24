@@ -11,7 +11,7 @@ import {
   StyleSheet,
   StyleProp,
 } from 'react-native';
-import { PrimaryText, scale } from 'react-native-normalization-text';
+import { SmallText, PrimaryText, scale } from 'react-native-normalization-text';
 import {UserLevel} from '../../liveTypes';
 import images from '../../assets/images';
 import { Colors } from '../../constants/Theme';
@@ -35,7 +35,6 @@ interface MsgRowProps {
 const MsgRow = (props: MsgRowProps) : any =>  {
 
   const data = (props.dataAdapter ? props.dataAdapter(props.data) : props.data) || {}
-  console.log(data, '1123123123')
 
    /**
    * 用户等级图片
@@ -46,6 +45,7 @@ const MsgRow = (props: MsgRowProps) : any =>  {
     //   return images[`userLv${userLevel}`]
     // };
     // return images[`userLv${1}`]
+    console.log(data, 'images.roomMessageFollowed')
     if (data.isFollowed) {
       return images.roomMessageFollowed;
     }
@@ -85,10 +85,10 @@ const MsgRow = (props: MsgRowProps) : any =>  {
           resizeMode="contain"
         />
       </View>
-      <PrimaryText style={styles.text} color="white">
-        <PrimaryText style={styles.userName} color="white">{data.name || '游客'}{colon}</PrimaryText>
+      <SmallText style={styles.text} color="white">&emsp;&emsp;
+        <SmallText style={styles.userName} color="white">{data.name || '游客'}{colon}</SmallText>
         {data.text}
-      </PrimaryText>
+      </SmallText>
     </TouchableOpacity>
   )
 }
@@ -105,28 +105,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     paddingVertical: 2,
     borderRadius: 16,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   userLvImg: {
-    height: scale(16),
+    height: scale(14),
     width: scale(36),
     marginRight: 4,
     paddingTop: scale(1),
-    alignSelf: 'flex-start'
+    position: 'absolute',
+    left: -2,
   },
   imgWrapper: {
-    // borderWidth: 1,
-    // borderColor: 'white'
+    alignSelf: 'flex-start'
   },
   text: {
-    flex: 1,
-    // height: 20,
-    // lineHeight: 20,
+    paddingHorizontal: 6,
+    lineHeight: scale(16),
   },
   userName: {
     color: Colors.yellowColor,
-    // height: 20,
-    // lineHeight: 20,
+    lineHeight: scale(16),
   },
 })
 

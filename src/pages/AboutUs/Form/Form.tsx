@@ -8,7 +8,7 @@ import { Colors } from '../../../constants/Theme'
 import Toast from 'react-native-tiny-toast'
 
 export default function Form() {
-  const navigation = useNavigation()
+  const navigation: any = useNavigation()
   const [hasNewVersion, setHasNewVersion] = useState(true)
   const [showUpdateModal, setShowUpdateModal] = useState(false)
   const [forceUpadte, setForceUpdate] = useState(false)

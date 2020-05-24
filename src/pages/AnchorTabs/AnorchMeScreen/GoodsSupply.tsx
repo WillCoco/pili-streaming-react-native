@@ -90,12 +90,13 @@ const GoodsSupply = (props: any) =>  {
                 <FlatList
                   data={brandsList}
                   renderItem={({item}) => {
+                    console.log(item, 1111)
                     return (
                       <TouchableOpacity style={styles.brandStyle} onPress={() => onPressBrand(item.brandId)}>
                         <View style={styles.imgWrapper}>
                           <Image
                             style={styles.img}
-                            source={!!props.good?.brandLogo? {uri: props.good?.brandLogo} : defaultImages.goodCover}
+                            source={!!item?.brandLogo ? {uri: item?.brandLogo} : defaultImages.goodCover}
                             resizeMode="cover"
                           />
                         </View>

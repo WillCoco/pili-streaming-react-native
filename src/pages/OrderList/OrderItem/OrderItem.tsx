@@ -6,8 +6,17 @@ import { Colors } from '../../../constants/Theme'
 import { Ionicons } from '@expo/vector-icons'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
-export default function OrderItem(props:any) {
-  const navigation = useNavigation()
+interface Props {
+  orderInfo: any;
+  toPay(id: number | string): void;
+  cancelOrder(id: number | string): void;
+  remindDelivery(id: number | string): void;
+  confirmTheGoods(id: number | string): void;
+  extendReceiveGoods(id: number | string): void;
+}
+
+export default function OrderItem(props: Props) {
+  const navigation: any = useNavigation()
   const { orderInfo } = props
 
   /**
@@ -21,14 +30,19 @@ export default function OrderItem(props:any) {
    * 进入订单详情
    */
   const toOrderDetail = () => {
-    if (orderInfo.refundType) {
-      if (orderInfo.processType === 9) {
+    if (orderInfo.refundType) {  // 售后订单
+      if (orderInfo.processType === 9) {  // 售后完成订单
         navigation.push('GoodsInfo', { id: orderInfo.goodsId })
         return
       }
       navigation.push('AfterSaleDetail', { id: orderInfo.id })
       return
     }
+
+    if (orderInfo.orderStatus === 1) {  // 待付款
+      return
+    }
+
     navigation.push('OrderDetail', { id: orderInfo.id })    
   }
 

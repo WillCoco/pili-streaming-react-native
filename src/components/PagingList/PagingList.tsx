@@ -28,6 +28,8 @@ interface PageListProps {
   renderItem: (data?: any) => JSX.Element,
   onRefresh: () => Promise<any> | undefined | null,
   onEndReached: (page: number, size: number) => Promise<any> | undefined | null,
+  contentHeight: number, // 内容区域高度, 用于显示空时展开
+  refreshable: boolean, // 是否可以下拉刷新
 }
 
 const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
@@ -136,7 +138,8 @@ const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
    */
   const DefaultListEmptyComponent = () => {
     if (empty) {
-      return <Empty style={{height: contentHeight}} />;
+      let height = (contentHeight || props.contentHeight || 0) - 32; // footer
+      return <Empty style={{height}} />;
     }
     return null;
   };
@@ -165,7 +168,6 @@ const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
   return (
     <View style={StyleSheet.flatten([styles.flatList, props.style])}>
       <FlatList
-        refreshing
         data={data}
         initialNumToRender={props.initialNumToRender}
         //item显示的布局
@@ -174,12 +176,14 @@ const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
         ListEmptyComponent={props.empty || DefaultListEmptyComponent}
         //下拉刷新相关
         refreshControl={
-          <RefreshControl
-            // title={'Loading'}
-            // colors={[colors.theme]}
-            refreshing={isRefreshing}
-            onRefresh={() => onRefresh({withRefreshAnimation: true})}
-          />
+          props.refreshable ? (
+            <RefreshControl
+              // title={'Loading'}
+              // colors={[colors.theme]}
+              refreshing={isRefreshing}
+              onRefresh={() => onRefresh({withRefreshAnimation: true})}
+            />
+          ) : undefined
         }
         ListFooterComponent={props.ListFooterComponent || ListFooterComponent}
         //加载更多
@@ -216,7 +220,8 @@ PagingList.defaultProps = {
   onEndReached: () => undefined,
   initialNumToRender: 10,
   showItemSeparator: false,
-  numColumns: 1
+  numColumns: 1,
+  refreshable: true,
 };
 
 export default PagingList;

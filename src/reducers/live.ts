@@ -54,7 +54,7 @@ interface InitStateTypes {
     liveGoodsNum?: string, // 直播商品数量
   },
   isLiveOver: boolean | undefined, // 所在房间直播是否结束(观众端)
-  // livingOverInfo: AudienceLivingOverInfo | AnchorLivingOverInfo, // 结束时数据(观众端)
+  isAnchorLiveOver: boolean | undefined, // 所在房间直播是否结束(主播端违规等后台)
 }
 
 export enum CameraType {
@@ -139,6 +139,7 @@ const DEFAULT_OPTIONS: any = {
         video: INIT_STREAMING_CONFIG.profile.videoStreamingSetting,
         audio: INIT_STREAMING_CONFIG.profile.audioStreamingSetting,
     },
+
 };
 
 const INITIAL_STATE: InitStateTypes = {
@@ -151,6 +152,7 @@ const INITIAL_STATE: InitStateTypes = {
   livingGoodsQuantity: 0,
   livingInfo: undefined,
   isLiveOver: undefined,
+  isAnchorLiveOver: undefined,
 }
 
 export default function live(state = INITIAL_STATE, action: any) {
@@ -167,6 +169,8 @@ export default function live(state = INITIAL_STATE, action: any) {
       return {...state, livingInfo: {...state.livingInfo, ...action.payload.livingInfo}};
     case liveActionTypes.UPDATE_LIVING_STATUS:
       return {...state, isLiveOver: action.payload.isLiveOver};
+    case liveActionTypes.UPDATE_ANCHOR_LIVING_STATUS:
+      return {...state, isAnchorLiveOver: action.payload.isAnchorLiveOver};
     default:
       return state;
   }

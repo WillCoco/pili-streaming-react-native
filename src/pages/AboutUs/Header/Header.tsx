@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, ImageBackground, Image } from 'react-native'
+import { Text, StyleSheet, ImageBackground, Image } from 'react-native'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 

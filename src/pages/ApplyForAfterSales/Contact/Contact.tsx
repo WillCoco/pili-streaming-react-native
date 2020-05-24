@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet } from 'react-native'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 
-export default function Contact(props) {
+export default function Contact(props: { inputTel: (arg0: string) => void }) {
   return (
     <View style={styles.container}>
       <Text>联系电话</Text>

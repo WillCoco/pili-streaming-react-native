@@ -13,7 +13,13 @@ import GoodsList from './GoodsList/GoodsList'
 import ImagePicker from './ImagePicker/ImagePicker'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
-function PublishWork(props: any) {
+interface Props {
+  dispatch: any;
+  addedGoodsList: Array<any>;
+  mediaList: Array<any>;
+}
+
+function PublishWork(props: Props) {
   const { addedGoodsList, mediaList } = props
 
   const route: any = useRoute()

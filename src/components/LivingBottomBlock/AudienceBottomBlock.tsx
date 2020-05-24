@@ -7,7 +7,7 @@ import {
   View
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import LiveMsg from '../LiveMsg';
 import {Audience as AudienceLiveToolBar} from '../LiveToolBar';
 import {pad} from '../../constants/Layout';
@@ -16,9 +16,12 @@ import {RoomMessageType, MessageType} from '../../reducers/im';
 import {apiLiveLike} from '../../service/api';
 import Poller from '../../utils/poller';
 import { isSucceed } from '../../utils/fetchTools';
+import { Attention } from '../../liveTypes';
 
 const BottomBlock = (props: any) : any =>  {
   const dispatch = useDispatch();
+  const {navigate} = useNavigation();
+  const isLogin = useSelector((state: any) => state?.userData?.isLogin);
 
   // 是否有数据未提交
   const needSubmit = React.useRef(false);
@@ -28,6 +31,7 @@ const BottomBlock = (props: any) : any =>  {
     
   // 喜欢数量
   const likeSum = useSelector((state: any) => +state?.live?.livingInfo?.likeSum || 0);
+  const likeSumRef = React.useRef(likeSum);
 
   // im房间消息
   const roomMessages = useSelector((state: any) => state?.im?.roomMessages);
@@ -48,13 +52,18 @@ const BottomBlock = (props: any) : any =>  {
   
   // 喜欢
   const onPressLike = () => {
+    if (!isLogin) {
+      navigate('Login');
+      return;
+    }
+    
     needSubmit.current = true;
     setLikeQuantity((quantity: number) => ++quantity);
   }
   
   // 提交喜欢
   const submitLike = React.useCallback((quantity: number) => {
-    if (needSubmit.current && likeQuantity > 0) {
+    if (needSubmit.current && (likeQuantity > 0 || quantity > 0)) {
       // 提交、返回新值
       const params = {
         liveId: liveId || liveIdPersist,
@@ -63,7 +72,8 @@ const BottomBlock = (props: any) : any =>  {
       apiLiveLike(params)
         .then(res => {
           if (isSucceed(res)) {
-            setLikeQuantity(0);
+            // setLikeQuantity(0);
+            likeSumRef.current = 0;
           }
           // 重置
           needSubmit.current = false;
@@ -89,7 +99,10 @@ const BottomBlock = (props: any) : any =>  {
     if (poller.current) {
       poller.current.stop();
     }
+    // 更新ref
+    likeSumRef.current = likeQuantity;
 
+    // 更新poller
     poller.current = new Poller({
       interval: 1000 * 10,
       initExec: false,
@@ -102,17 +115,30 @@ const BottomBlock = (props: any) : any =>  {
       /**
        * 页面退出提交点赞
        */
-      poller.current.execOnce();
       poller.current.stop();
     }
   }, [likeQuantity]);
 
   /**
    * 分享
-  */
+   */
  const onPressForward = () => {
-
+    if (!isLogin) {
+      navigate('Login');
+      return;
+    }
  }
+
+  /**
+   * 退出提交
+   */
+  React.useEffect(() => {
+    return () => {
+      if (likeSumRef.current) {
+        submitLike(likeSumRef.current)
+      }
+    }
+  }, [])
 
 
   // 观众
@@ -122,13 +148,13 @@ const BottomBlock = (props: any) : any =>  {
         msgList={roomMessages}
         msgAdapter={(msg: RoomMessageType): any => {
           const {data} = msg || {};
-          const {userName, text, userId, type} = data || {};
+          const {userName, text, userId, type, isFollowed} = data || {};
           return {
             name: userName,
             id: userId,
             text,
             type,
-            isFollowed: props.isFollowed, // todo: 和主播是否关注
+            isFollowed, // todo: 和主播是否关注
           }
         }}
       />
@@ -138,6 +164,7 @@ const BottomBlock = (props: any) : any =>  {
         onSubmitEditing={sendMessage}
         onPressLike={onPressLike}
         onPressForward={onPressForward}
+        style={{marginTop: 28}}
       />
     </View>
   )

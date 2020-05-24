@@ -7,9 +7,14 @@ import pxToDp from '../../../utils/px2dp'
 
 import { apiGoodsIsLike } from '../../../service/api'
 
-export default function GoodsCard(props: { goodsInfo: any, updateGoodsList: any }) {
+interface Props {
+  goodsInfo: any
+  updateGoodsList(id: number | string): void
+}
+
+export default function GoodsCard(props: Props) {
   const { goodsInfo } = props
-  const navigation = useNavigation()
+  const navigation: any = useNavigation()
 
   const toGoodsInfo = () => {
     const { goods_id: id } = goodsInfo
@@ -22,7 +27,7 @@ export default function GoodsCard(props: { goodsInfo: any, updateGoodsList: any 
     apiGoodsIsLike({
       goods_id,
       type: is_like ? 0 : 1
-    }).then(res => {
+    }).then((res: any) => {
       console.log('喜欢/取消喜欢', res)
 
       props.updateGoodsList(goods_id)

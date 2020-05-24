@@ -8,7 +8,10 @@
     "test": "jest",
     "textManager": "node node_modules/react-native-normalization-text/scripts/makeConfig.js",
     "genIcons": "npx iconfont-rn",
-    "postinstall": "yarn textManager --update"
+    "splash": "node_modules/.bin/expo-splash-screen '#FFFFFF'",
+    "postinstall": "yarn textManager --update",
+    "bundleAndroid": "react-native bundle --entry-file index.js --bundle-output ./android/app/src/main/assets/index.android.jsbundle --platform android --assets-dest ./android/app/src/main/res/ --dev false",
+    "jetify": "npx jetify"
   },
   "dependencies": {
     "@ant-design/react-native": "^3.3.0",
@@ -20,6 +23,7 @@
     "@react-navigation/bottom-tabs": "^5.2.6",
     "@react-navigation/native": "^5.1.5",
     "@react-navigation/stack": "^5.2.10",
+    "@types/react-native-htmlview": "^0.12.2",
     "@types/react-native-scrollable-tab-view": "^0.10.1",
     "@types/react-native-share": "^3.1.0",
     "beeshell": "^2.0.11",
@@ -32,6 +36,7 @@
     "expo-linear-gradient": "^8.1.0",
     "expo-linking": "^1.0.1",
     "expo-permissions": "^8.1.0",
+    "expo-splash-screen": "^0.2.3",
     "expo-updates": "~0.1.0",
     "moment": "^2.24.0",
     "native-echarts": "git+ssh://git@47.114.76.40:frontend/react-native-echarts.git",
@@ -71,8 +76,8 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "rn-fetch-blob": "^0.12.0",
-    "tim-js-sdk": "^2.6.2",
     "pili-streaming-react-native": "git+ssh://git@47.114.76.40:frontend/pili-streaming-react-native.git"
+    "tim-js-sdk": "^2.6.2"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

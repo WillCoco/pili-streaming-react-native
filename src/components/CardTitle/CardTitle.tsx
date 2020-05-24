@@ -4,8 +4,13 @@ import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
 import { Ionicons } from '@expo/vector-icons'
 
+interface Props {
+  title: string;
+  subTitle?: string;
+  nextAction: ((event: import("react-native").GestureResponderEvent) => void) | undefined
+}
 
-export default function CardTitle(props: any) {
+export default function CardTitle(props: Props) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{props.title}</Text>

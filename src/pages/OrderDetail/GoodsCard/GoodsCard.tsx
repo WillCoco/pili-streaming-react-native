@@ -7,7 +7,7 @@ import { Colors } from '../../../constants/Theme'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
 export default function GoodsCard(props: { detail: any }) {
-  const navigation = useNavigation()
+  const navigation: any = useNavigation()
   const { detail: orderInfo } = props
 
   /**

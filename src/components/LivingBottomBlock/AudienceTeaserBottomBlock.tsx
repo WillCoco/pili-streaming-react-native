@@ -12,10 +12,12 @@ import {pad} from '../../constants/Layout';
 import Poller from '../../utils/poller';
 import {apiLiveLike} from '../../service/api';
 import { isSucceed } from '../../utils/fetchTools';
+import { useNavigation } from '@react-navigation/native';
 
 const BottomBlock = (props: any) : any =>  {
   const dispatch = useDispatch();
-
+  const {navigate} = useNavigation();
+  const isLogin = useSelector((state: any) => state?.userData?.isLogin);
 
   // 是否有数据未提交
   const needSubmit = React.useRef(false);
@@ -29,6 +31,10 @@ const BottomBlock = (props: any) : any =>  {
 
   // 点击喜欢
   const onPressLike = () => {
+    if (!isLogin) {
+      navigate('Login');
+      return;
+    }
     needSubmit.current = true;
     setLikeQuantity(quantity => ++quantity);
   }
@@ -51,7 +57,8 @@ const BottomBlock = (props: any) : any =>  {
       apiLiveLike(params)
         .then(res => {
           if (isSucceed(res)) {
-            setLikeQuantity(0);
+            // setLikeQuantity(0);
+            likeSumRef.current = 0;
           }
           // 重置
           needSubmit.current = false;
@@ -66,7 +73,10 @@ const BottomBlock = (props: any) : any =>  {
   
   // 转发分享
   const onPressForward = () => {
-    
+    if (!isLogin) {
+      navigate('Login');
+      return;
+    }
   }
 
   /**
@@ -101,11 +111,13 @@ const BottomBlock = (props: any) : any =>  {
   }, [likeQuantity])
 
   /**
-   * 
-  */
+   * 退出提交
+   */
  React.useEffect(() => {
   return () => {
-    submitLike(likeSumRef.current)
+    if (likeSumRef.current) {
+      submitLike(likeSumRef.current)
+    }
   }
  }, [])
 
@@ -116,6 +128,7 @@ const BottomBlock = (props: any) : any =>  {
         likeQuantity={(likeQuantity + likeSum) || 0}
         onPressLike={onPressLike}
         onPressForward={onPressForward}
+        style={{marginTop: 28}}
       />
     </View>
   )

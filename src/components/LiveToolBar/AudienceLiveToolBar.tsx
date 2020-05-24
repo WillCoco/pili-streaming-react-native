@@ -17,6 +17,8 @@ import {vw} from '../../utils/metric'
 import {Colors} from '../../constants/Theme';
 import {pad} from '../../constants/Layout';
 import images from '../../assets/images';
+import {useSelector} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 export type msgList = any[] | undefined;
 export type onMsgListResponse = (v: boolean) => any;
@@ -121,7 +123,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    paddingRight: 4
+    paddingRight: 4,
   },
   input: {
     height: scale(35),

@@ -41,6 +41,16 @@ import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
 const pageSize = 20
 
+interface HomeProps {
+  dispatch: any
+  homeData?: any
+  publicData?: any
+  swiperList: Array<any>
+  selectedGoodsInfo: any
+  seckillList: Array<any>
+  activityList: Array<any>
+}
+
 function Home(props: HomeProps) {
   const { statusBarHeight } = props.publicData
   let { swiperList, activityList, selectedGoodsInfo, seckillList } = props.homeData
@@ -63,7 +73,7 @@ function Home(props: HomeProps) {
     { timeQuantum: '14:00', state: '' },
     { timeQuantum: '20:00', state: '' }
   ])
-  
+
   useEffect(() => {
     getRecommendGoodsList(false)
   }, [])
@@ -229,9 +239,9 @@ function Home(props: HomeProps) {
     getRecommendGoodsList(false)
   }
 
-  if (netWorkErr) return <NetWorkErr reload={reload} />
+  // if (netWorkErr) return <NetWorkErr reload={reload} />
 
-  if (!isComplete) return <></>
+  // if (!isComplete) return <></>
 
   return (
     <>
@@ -293,9 +303,9 @@ function Home(props: HomeProps) {
                           }
                         </View>
                       </View>
-                      {/* 圈品热卖 */}
+                      {/* 云闪播热卖 */}
                       <View style={styles.recommendGoodsList}>
-                        <CardTitle title='圈品热卖' />
+                        <CardTitle title='云闪播热卖' />
                         <View style={styles.recommendGoodsListContainer}>
                           {
                             categoryData.shopGoods && categoryData.shopGoods.map((item: any, index: any) => <GoodsCard key={`recommend-${index}`}
@@ -342,39 +352,41 @@ function Home(props: HomeProps) {
                         </ScrollView>
                       </View>
                       {/* 限时秒杀 */}
-                      <View style={styles.seckill}>
-                        <ImageBackground source={require('../../assets/home-image/seckill_bg.png')} style={styles.seckillHeader}>
-                          <View style={styles.seckillText}>
-                            <Image source={require('../../assets/home-image/seckill_text.png')} style={styles.seckillTextImg} resizeMode='contain' />
-                            <SeckillCountDown />
+                      {!!seckillList.length &&
+                        <View style={styles.seckill}>
+                          <ImageBackground source={require('../../assets/home-image/seckill_bg.png')} style={styles.seckillHeader}>
+                            <View style={styles.seckillText}>
+                              <Image source={require('../../assets/home-image/seckill_text.png')} style={styles.seckillTextImg} resizeMode='contain' />
+                              <SeckillCountDown />
+                            </View>
+                            <View style={styles.seckillSubTitle}>
+                              <Text style={styles.seckillSubTitleText} onPress={toSeckillPage}>更多</Text>
+                              <Ionicons
+                                size={20}
+                                name='ios-arrow-forward'
+                                color={Colors.whiteColor}
+                              />
+                            </View>
+                          </ImageBackground>
+                          <View style={styles.countDonwList}>
+                            {
+                              countDownList.map((item, index) => {
+                                return (
+                                  <View style={styles.countDownItem} key={`time-${index}`}>
+                                    <Text style={[styles.countDownTime, timeQuantum === item.timeQuantum && styles.countDownActiveTime]}>{item.timeQuantum}</Text>
+                                    <Text style={[styles.countDownState, timeQuantum === item.timeQuantum && styles.countDownActiveState]}>{item.state}</Text>
+                                  </View>
+                                )
+                              })
+                            }
                           </View>
-                          <View style={styles.seckillSubTitle}>
-                            <Text style={styles.seckillSubTitleText} onPress={toSeckillPage}>更多</Text>
-                            <Ionicons
-                              size={20}
-                              name='ios-arrow-forward'
-                              color={Colors.whiteColor}
-                            />
+                          <View style={styles.seckillGoodsList}>
+                            {
+                              seckillList && seckillList.map((item: any, index: number) => <GoodsCardRow style={index && { marginTop: pxToDp(10) }} key={`goods-${index}`} goodsInfo={item} />)
+                            }
                           </View>
-                        </ImageBackground>
-                        <View style={styles.countDonwList}>
-                          {
-                            countDownList.map((item, index) => {
-                              return (
-                                <View style={styles.countDownItem} key={`time-${index}`}>
-                                  <Text style={[styles.countDownTime, timeQuantum === item.timeQuantum && styles.countDownActiveTime]}>{item.timeQuantum}</Text>
-                                  <Text style={[styles.countDownState, timeQuantum === item.timeQuantum && styles.countDownActiveState]}>{item.state}</Text>
-                                </View>
-                              )
-                            })
-                          }
                         </View>
-                        <View style={styles.seckillGoodsList}>
-                          {
-                            seckillList && seckillList.map((item: any, index: number) => <GoodsCardRow style={index && { marginTop: pxToDp(10) }} key={`goods-${index}`} goodsInfo={item} />)
-                          }
-                        </View>
-                      </View>
+                      }
                       {/* 圈重点 */}
                       <View style={styles.recommendGoodsList}>
                         <CardTitle title='圈重点' />
@@ -564,13 +576,3 @@ const styles = StyleSheet.create({
 export default connect(
   (state: any) => state
 )(withPage(Home))
-
-interface HomeProps {
-  dispatch?: any
-  swiperList?: any
-  activityList?: any
-  selectedGoodsInfo?: any
-  seckillList?: any
-  homeData?: any
-  publicData?: any
-}

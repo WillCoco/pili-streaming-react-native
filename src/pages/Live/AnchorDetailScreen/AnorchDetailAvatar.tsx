@@ -21,6 +21,7 @@ const AnorchDetailAvatar = (props: {
   isLiving: boolean,
   onPress?: () => void,
   style?: StyleProp<any>,
+  source?: any
 }) =>  {
   return (
     <TouchableOpacity style={StyleSheet.flatten([styles.avatarWrapper, props.style])} onPress={props.onPress}>
@@ -35,6 +36,7 @@ const AnorchDetailAvatar = (props: {
           borderWidth: 2,
           borderColor: '#fff'
         }}
+        source={{uri: props.source}}
       />
       {props.isLiving && <Text style={styles.livingText}>直播中</Text>}
     </TouchableOpacity>

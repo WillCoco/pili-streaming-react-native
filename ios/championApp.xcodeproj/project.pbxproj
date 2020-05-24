@@ -17,6 +17,7 @@
 		449261313F0C4E4881FF5D5F /* antoutline.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C936887AC8C54FCE8A1AA2A0 /* antoutline.ttf */; };
 		74D35D4FE55C46E98F63B34B /* antfill.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09292F97975645E386F0AE05 /* antfill.ttf */; };
 		7B0C5784998A29E517983E0C /* libPods-championApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2502ACF51380E8237829647D /* libPods-championApp.a */; };
+		8A7BAC7FA0C54067BCC91E69 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A738254A1174C949203ACAE /* SplashScreen.storyboard */; };
 		F69E630A24692A3D0073B935 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E630924692A3D0073B935 /* WebKit.framework */; };
 		F69E630C24692A570073B935 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E630B24692A570073B935 /* SystemConfiguration.framework */; };
 		F69E630E24692A620073B935 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69E630D24692A620073B935 /* CoreTelephony.framework */; };
@@ -37,12 +38,13 @@
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
+		0446BFC324766E8100B22621 /* championAppRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = championAppRelease.entitlements; path = championApp/championAppRelease.entitlements; sourceTree = "<group>"; };
 		056F63395CAC2B8C2DC048FE /* Pods-championApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-championApp.debug.xcconfig"; path = "Target Support Files/Pods-championApp/Pods-championApp.debug.xcconfig"; sourceTree = "<group>"; };
 		07287ACC2432831900C893F0 /* app.manifest */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = app.manifest; path = championApp/Supporting/app.manifest; sourceTree = "<group>"; };
 		07287ACD2432831900C893F0 /* app.bundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = app.bundle; path = championApp/Supporting/app.bundle; sourceTree = "<group>"; };
 		0731D3BB24204D9B009CAE85 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Expo.plist; path = championApp/Supporting/Expo.plist; sourceTree = "<group>"; };
 		09292F97975645E386F0AE05 /* antfill.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = antfill.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antfill.ttf"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* championApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = championApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* 云闪播.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "云闪播.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = championApp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = championApp/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -52,6 +54,7 @@
 		18BFFF0C246A99F200EB52FB /* championAppDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = championAppDebug.entitlements; path = championApp/championAppDebug.entitlements; sourceTree = "<group>"; };
 		2502ACF51380E8237829647D /* libPods-championApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-championApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A738254A1174C949203ACAE /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = championApp/SplashScreen.storyboard; sourceTree = "<group>"; };
 		C936887AC8C54FCE8A1AA2A0 /* antoutline.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = antoutline.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antoutline.ttf"; sourceTree = "<group>"; };
 		E40B1F720DE0D29BF6B90074 /* Pods-championApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-championApp.release.xcconfig"; path = "Target Support Files/Pods-championApp/Pods-championApp.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -86,6 +89,7 @@
 		13B07FAE1A68108700A75B9A /* championApp */ = {
 			isa = PBXGroup;
 			children = (
+				0446BFC324766E8100B22621 /* championAppRelease.entitlements */,
 				18BFFF0C246A99F200EB52FB /* championAppDebug.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -97,6 +101,7 @@
 				0731D3BB24204D9B009CAE85 /* Expo.plist */,
 				07287ACD2432831900C893F0 /* app.bundle */,
 				07287ACC2432831900C893F0 /* app.manifest */,
+				4A738254A1174C949203ACAE /* SplashScreen.storyboard */,
 			);
 			name = championApp;
 			sourceTree = "<group>";
@@ -153,7 +158,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* championApp.app */,
+				13B07F961A680F5B00A75B9A /* 云闪播.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -196,7 +201,7 @@
 			);
 			name = championApp;
 			productName = "Hello World";
-			productReference = 13B07F961A680F5B00A75B9A /* championApp.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* 云闪播.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -260,6 +265,7 @@
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				74D35D4FE55C46E98F63B34B /* antfill.ttf in Resources */,
 				449261313F0C4E4881FF5D5F /* antoutline.ttf in Resources */,
+				8A7BAC7FA0C54067BCC91E69 /* SplashScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,7 +394,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = championApp;
+				PRODUCT_NAME = "云闪播";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -398,6 +404,7 @@
 			baseConfigurationReference = E40B1F720DE0D29BF6B90074 /* Pods-championApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = championApp/championAppRelease.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ADA66625XJ;
 				HEADER_SEARCH_PATHS = "$(inherited)";
@@ -408,8 +415,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = championApp;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.championApp;
+				PRODUCT_NAME = "云闪播";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

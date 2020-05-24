@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import images from '../../../assets/images';
+import defaultImages from '../../../assets/default-image';
 import {apiUserLiveBanner} from '../../../service/api';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
 
@@ -23,9 +24,10 @@ interface LiveBannerProps {
   imageStyle?: StyleProp<any>,
 }
 
+const DEFAULT_BANNER = [{bimgobject: defaultImages.banner}]
 const LiveBanner = (props: LiveBannerProps) : React.ReactElement =>  {
 
-  const [bannerList, setBannerList] = React.useState([]);
+  const [bannerList, setBannerList] = React.useState(DEFAULT_BANNER);
   const {navigate} = useNavigation();
   const isFocused = useIsFocused();
 
@@ -38,7 +40,7 @@ const LiveBanner = (props: LiveBannerProps) : React.ReactElement =>  {
   const initBanner = () => {
     apiUserLiveBanner().then((res: any) => {
       console.log(res, 'banner');
-      setBannerList(res || [])
+      setBannerList(res || DEFAULT_BANNER)
     })
     .catch(console.warn)
   };
@@ -83,7 +85,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: '100%',
+    height: 200,
   }
 });
 

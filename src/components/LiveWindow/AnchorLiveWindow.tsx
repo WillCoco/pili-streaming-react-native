@@ -31,6 +31,9 @@ import { MessageType } from '../../reducers/im';
 import LivingFaceCard from '../../components/LivingFaceCard';
 
 const EMPTY_OBJ = {};
+import { clearLoginStatus } from '../../actions/user';
+import { isSucceed } from '../../utils/fetchTools';
+import { EMPTY_OBJ } from '../../constants/freeze';
 
 interface LiveWindowProps {
   style?: StyleProp<any>,
@@ -45,7 +48,7 @@ interface LiveWindowParams {
 }
 
 const LiveWindow = (props: LiveWindowProps) : any =>  {
-  const {goBack, replace} = useNavigation();
+  const {goBack, replace, reset} = useNavigation();
   const route = useRoute();
 
   const {
@@ -88,9 +91,21 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
    */
   const [isIMJoinSecceed, setIsIMJoinSecceed]: [undefined|boolean, any] = React.useState(undefined);
 
+  /**
+   * 直播结束
+   */
+  const isAnchorLiveOver = useSelector((state: any) => state?.live?.isAnchorLiveOver);
+
   const onConfirmClose = async () => {
-    const r1: any = await dispatch(closeLive({liveId}));
-    replace('AnchorLivingEnd', r1?.data);
+    dispatch(closeLive({liveId}))
+      .then((data: any) => {
+        if (data) {
+          replace('AnchorLivingEnd', data);
+          return;
+        }
+        Toast.show('关闭失败');
+      })
+      .catch((r: any) => console.log('closeLive', r));
     return true;
   }
 
@@ -257,6 +272,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
   const onAfterChangeSetting = (value: number, type:string) => {
       dispatch(updateFaceSetting({type, value}))
   };
+
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>

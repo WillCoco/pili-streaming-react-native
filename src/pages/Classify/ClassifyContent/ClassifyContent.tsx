@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 
-export default function ClassifyContent(props: { goodsList: any }) {
+export default function ClassifyContent(props: { goodsList: Array<any> }) {
   const { goodsList } = props
   const navigation: any = useNavigation()
 

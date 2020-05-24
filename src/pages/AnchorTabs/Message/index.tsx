@@ -105,8 +105,8 @@ function Message(props) {
   const onEndReached = async (pageNo: number, pageSize: number) => {
     const params = {
       anchorId,
-      pageNo: 1,
-      pageSize: 10,
+      pageNo,
+      pageSize,
     }
     const result = await apiGetUserChatList(params)
       .catch((err: any) => console.log('getUserChatList:', err))
@@ -124,7 +124,7 @@ function Message(props) {
         leftTheme="light"
         right={() => (
           <TouchableOpacity onPress={markReaded} style={{padding: pad}}>
-            <PrimaryText color="white" >全部已读</PrimaryText>
+            <PrimaryText color="white">全部已读</PrimaryText>
           </TouchableOpacity>
         )}
         style={styles.nav}

@@ -11,21 +11,44 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {PrimaryText, SmallText, T4} from 'react-native-normalization-text';
+import {PrimaryText, SmallText, T4, scale} from 'react-native-normalization-text';
 import {useNavigation} from '@react-navigation/native';
 import LiveRecord from './LiveRecord';
 import {Colors} from '../../../constants/Theme';
-import {pad} from '../../../constants/Layout';
+import {pad, radio} from '../../../constants/Layout';
 import Iconbacklight from '../../../components/Iconfont/Iconbacklight';
 import {vw} from '../../../utils/metric';
+import CountDown from '../../../components/CountDown';
+import moment from 'moment'
+import { Toast } from '@ant-design/react-native';
+import PagingList from '../../../components/PagingList';
+import {apiAnchorParticular} from '../../../service/api';
+import { isSucceed } from '../../../utils/fetchTools';
+import { EMPTY_OBJ } from '../../../constants/freeze';
 
 const Row = (props: {
   title: string,
   typeText: string,
-  subText: string,
+  subText: any,
   showDivider?: boolean,
+  countDown?: boolean,
+  time?: number,
   onPress?: (v?: any) => void
 }) => {
+
+  const renderCell = (value: number | string, unit: string) => {
+    return (
+      <View style={styles.cellWrapper}>
+        <SmallText>{value}</SmallText>
+        <SmallText>{unit}</SmallText>
+      </View>
+    )
+  }
+
+  const onStop = () => {
+    Toast.show('开播时间到啦')
+  }
+
   return (
     <TouchableOpacity
       style={StyleSheet.flatten([styles.rowWrapper, props.showDivider && styles.divider])}
@@ -34,7 +57,38 @@ const Row = (props: {
       <PrimaryText>{props.title}</PrimaryText>
       <View style={StyleSheet.flatten([styles.rowLine2])}>
         <SmallText style={styles.typeText}>{props.typeText}</SmallText>
-        <SmallText style={styles.subText}>{props.subText}</SmallText>
+        {
+          props?.countDown 
+          && 
+          <CountDown
+            deadline={props?.time.valueOf()}
+            onStop={onStop}
+            renderTime={(seconds) => {
+              const durationDay = moment.duration(seconds, 'seconds')
+              const d = Math.floor(durationDay.asDays()) || 0;
+              let restSeconds = seconds - (d * 24 * 3600);
+              const durationHour = moment.duration(restSeconds, 'seconds')
+              const h = Math.floor(durationHour.asHours()) || 0;
+              restSeconds = restSeconds - (h * 3600);
+              const durationMinuts = moment.duration(restSeconds, 'seconds')
+              const m = Math.floor(durationMinuts.asMinutes()) || 0;
+              restSeconds = restSeconds - (m * 60);
+              const durationSeconds = moment.duration(restSeconds, 'seconds')
+              const s = Math.floor(durationSeconds.asSeconds()) || '0';
+
+              return (
+                <View style={styles.renderTimeWrapper}>
+                  {renderCell(d, '天')}
+                  {renderCell(h, '小时')}
+                  {renderCell(m, '分')}
+                  {renderCell(s, '秒')}
+                  <SmallText> 开播</SmallText>
+                </View>
+              )
+            }}
+          />
+          || <SmallText style={styles.subText}>{props.subText}</SmallText>
+        }
       </View>
     </TouchableOpacity>
   )
@@ -47,54 +101,124 @@ Row.defaultProps = {
   subText: '文字内容',
 }
 
+const PAGE_SIZE = 14
+
 const LiveTabPage = (props: {
   isLiving: boolean,
-  trailers: any[],
+  trailers?: any[],
   liveRecords: any[],
-  tabLabel?: string
+  tabLabel?: string,
+  userId: string | number,
+  anchorId: string | number
 }) =>  {
   const {navigate} = useNavigation();
-  return (
-    <ScrollView style={styles.style}>
-      {props.isLiving && (
+
+  /**
+   * 下拉刷新
+   */
+  const onRefresh = async () => {
+
+    const params = {
+      anchorId: props?.anchorId,
+      userId: props?.userId,
+      pageNo: 1,
+      pageSize: PAGE_SIZE,
+    };
+
+    const result = await apiAnchorParticular(params).catch(console.warn);
+
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.data?.liveList?.records || EMPTY_OBJ});
+    }
+
+    return Promise.resolve({result: EMPTY_OBJ})
+  }
+
+  /**
+   * 上拉
+   */
+  const onEndReached = async (pageNo: number, pageSize: number) => {
+    const params = {
+      anchorId: props?.anchorId,
+      userId: props?.userId,
+      pageNo: pageNo,
+      pageSize: pageSize,
+    };
+
+    const result = await apiAnchorParticular(params).catch(console.warn);
+
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.data?.liveList?.records || EMPTY_OBJ});
+    }
+
+    return Promise.resolve({result: EMPTY_OBJ})
+  };
+
+
+  const toLiveingRoom = (item: any) => {
+    navigate('LivingRoomScreen', {
+      liveId: item?.liveId,
+      groupID: item?.groupId || `live${item?.liveId}`,
+      anchorId: item?.anchorId,
+      mediaType: item?.liveStatus
+    })
+  }
+
+  /**
+   * 渲染行
+   */
+  const renderRow = (item: any, index: number) => {
+    item = item.item
+    if (item.liveStatus == 2) {
+      return (
         <Row
-          title="[新年好礼] 精美研制摄像头"
+          key={`_${index}`}
+          title={item.liveTitle}
           typeText="直播中"
-          subText="123人观看"
+          subText={item.watchNum + '观看'}
           showDivider
-          onPress={() => navigate('LivingRoomScreen')}
+          onPress={() => toLiveingRoom(item)}
         />
-      )}
-      {
-        props.trailers?.map((trailer, index) => {
-          return (
-            <Row
-              key={`_${index}`}
-              title={trailer?.title }
-              typeText={trailer?.title}
-              subText={trailer?.title}
-              showDivider={index !== props.trailers.length}
-              onPress={() => navigate('LivingRoomScreen')} // 预告片
-            />
-          )
-        })
-      }
-      {
-        props.liveRecords && (
-          <View style={styles.liveRecordsWrapper}>
-            <T4>精彩回放</T4>
-            {
-              props.liveRecords.map((record, index) => (
-                <LiveRecord
-                  key={`record_${index}`}
-                  onPress={() => navigate('LivingRoomScreen')} // 预告片
-                />
-              ))
-            }
-          </View>
-        )
-      }
-    </ScrollView>
+      )
+    } else if (item.liveStatus == 1) {
+      return <Row
+        key={`item_${index}`}
+        title={item?.liveTitle }
+        typeText='预告'
+        countDown={true}
+        time={item?.liveTime}
+        showDivider
+        onPress={() => toLiveingRoom(item)}
+
+      />
+    } else if (item.liveStatus == 3) {
+      return (
+        <LiveRecord
+          img={item?.smallPic}
+          title={item?.liveTitle}
+          time={(new Date(item?.liveTime)).toLocaleString()}
+          viewTimes={item?.watchNum}
+          goodsQuantity={item?.liveProductnum}
+          key={`item_${index}`}
+          onPress={() => toLiveingRoom(item)}
+        />
+      )
+    } 
+  }
+
+
+  return (
+    <View style={styles.style}>
+      <PagingList
+        data={props?.liveRecords}
+        size={PAGE_SIZE}
+        renderItem={(item: any, index: number) => renderRow(item, index)}
+        onRefresh={onRefresh}
+        onEndReached={onEndReached}
+        initialNumToRender={PAGE_SIZE}
+        numColumns={1}
+      />
+    </View>
   )
 };
 
@@ -103,9 +227,11 @@ LiveTabPage.defaultProps = {
 
 const styles = StyleSheet.create({
   style: {
+    flex: 1,
     backgroundColor: '#fff',
     borderTopWidth: 4,
-    borderColor: Colors.pageGreyBg
+    borderColor: Colors.pageGreyBg,
+    paddingHorizontal: pad
   },
   rowWrapper: {
     paddingVertical: 9,
@@ -124,7 +250,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: Colors.basicColor,
     color: '#fff',
-    marginRight: 14
+    marginRight: 14,
   },
   divider: {
     borderBottomWidth: StyleSheet.hairlineWidth * 2,
@@ -134,7 +260,23 @@ const styles = StyleSheet.create({
   },
   liveRecordsWrapper: {
     padding: pad
-  }
+  },
+  cellWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  vauleWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderRadius: radio,
+    marginHorizontal: 3
+  },
+  renderTimeWrapper: {
+    flexDirection: 'row',
+    marginTop: pad
+  },
 });
 
 export default LiveTabPage;

@@ -6,7 +6,12 @@ import { Colors } from '../../../constants/Theme'
 import { Ionicons } from '@expo/vector-icons'
 import pxToDp from '../../../utils/px2dp'
 
-function Header(props: { toSearch?: any; statusBarHeight?: any }) {
+interface Props {
+  statusBarHeight: number;
+  toSearch(searchKey: string): void;
+}
+
+function Header(props: Props) {
   const { statusBarHeight } = props
   const navigation = useNavigation()
   const [searchKey, setSearchKey] = useState('')

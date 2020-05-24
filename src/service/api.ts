@@ -9,6 +9,7 @@ import { UpdateParams } from './fetch/fetchOrigin';
 const HOST_PHP = __DEV__ ? 'https://php.quanpinlive.com' : ''
 const HOST_JAVA = __DEV__ ? 'http://212.129.140.50:2333' : ''
 
+
 /**
  * PHP 接口 ==================================================================
  */
@@ -170,7 +171,11 @@ export const apiQueryOrderPayStatus = (data: any) => get1(`${HOST_JAVA}/order/qu
  * 主播相关接口 ==========================================================================================
  */
 // 成为主播
-export const apiAddAnchorUser = (data: any) => post2(`${HOST_JAVA}/anchor/addAnchorUser`, data)
+export const apiBuyAnchor = (data: any) => post2(`${HOST_JAVA}/order/buyAnchor`, data)
+// 成为经纪人
+export const apiBuyBroker = (data: any) => post2(`${HOST_JAVA}/order/buyBroker`, data)
+// 获取经纪人信息
+export const apiGetAgentInfo = () => get2(`${HOST_JAVA}/user/getAgentInfo`)
 // 主播添加商品到主播店铺
 export const apiAddAnchorGoods = (data: any) => post2(`${HOST_JAVA}/anchor/addAnchorGoods`, data)
 // 主播添加商品到主播预组货
@@ -198,7 +203,9 @@ export const apiGetGroupGoods = (data: any) => post1(`${HOST_JAVA}/anchor/getGro
 // 主播直播数据列表
 export const apiGetLiveDataList = (data: any) => post1(`${HOST_JAVA}/anchor/getLiveDataList`, data)
 // 我的直播列表
-export const apiGetLiveList = (data: any) => get(`${HOST_JAVA}/anchor/getLiveList`, data)
+export const apiGetLiveList = (data: any) => get2(`${HOST_JAVA}/anchor/getLiveList`, data)
+// 我的直播列表 一个月
+export const apiGetLiveListAll = (data: any) => get2(`${HOST_JAVA}/anchor/getLiveDataAll`, data)
 // 分页查询寄回地址列表
 export const apiGetReturnAddressList = (data: any) => post(`${HOST_JAVA}/anchor/getReturnAddressList`, data)
 // 主播消息通知列表
@@ -223,7 +230,8 @@ export const apiAnchorToLive= (data: any) => get2(`${HOST_JAVA}/anchor/anchorToL
 export const apiIsWorkLiveNow = (data: any) => get2(`${HOST_JAVA}/anchor/isWorkLiveNow`, data)
 // 主播在预组货取消添加店铺商品
 export const apiDelAnchorGoods = (data: any) => post2(`${HOST_JAVA}/anchor/delAnchorBrandGoods`, data)
-
+// 获取imUserSig
+export const apiGetUserSig = (data: any) => get2(`${HOST_JAVA}/anchor/getUserSig`, data)
 
 
 /**
@@ -232,7 +240,7 @@ export const apiDelAnchorGoods = (data: any) => post2(`${HOST_JAVA}/anchor/delAn
 // 添加订单的直播间id
 export const apiAddOrderLiveId = (data: any) => get(`${HOST_JAVA}/userLive/addOrderLiveId`, data)
 // 主播页详情
-export const apiAnchorParticular = (data: any) => get(`${HOST_JAVA}/userLive/anchorParticular`, data)
+export const apiAnchorParticular = (data: any) => get2(`${HOST_JAVA}/userLive/anchorParticular`, data)
 // 关注/取关主播
 export const apiAttentionAnchor = (data: any) => post2(`${HOST_JAVA}/userLive/attentionAnchor`, data)
 // 点击进入直播间
@@ -240,17 +248,19 @@ export const apiEnterLive = (data: any) => get2(`${HOST_JAVA}/userLive/enterLive
 // 获取精选/关注直播列表
 export const apiGetLiveStreamList = (data: any) => post2(`${HOST_JAVA}/userLive/getLiveStreamList`, data)
 // 直播间点亮红心
-export const apiLiveLike = (data: any) => get(`${HOST_JAVA}/userLive/liveLike`, data)
+export const apiLiveLike = (data: any) => get2(`${HOST_JAVA}/userLive/liveLike`, data)
 // 我的关注列表
-export const apiMyAttentionList = (data: any) => get1(`${HOST_JAVA}/userLive/myAttentionList`, data)
+export const apiMyAttentionList = (data: any) => get2(`${HOST_JAVA}/userLive/myAttentionList`, data)
 // 搜索直播列表
 export const apiSearchLiveStreamList = (data: any) => get1(`${HOST_JAVA}/userLive/searchLiveStreamList`, data)
 // 直播间的购物袋
-export const apiShoppingBag = (data: any) => get(`${HOST_JAVA}/userLive/shoppingBag`, data)
+export const apiShoppingBag = (data: any) => get2(`${HOST_JAVA}/userLive/shoppingBag`, data)
 // 用户直播列表轮播图
 export const apiUserLiveBanner = () => post1(`${HOST_JAVA}/userLive/userLiveBanner`)
+// 获取观看人数
+export const apiGetLiveViewNum = (data: any) => get2(`${HOST_JAVA}/userLive/getLiveViewNum`, data)
 // 上传用户头像本地base64
-export const apiUploadFile = (data: any) => post(`${HOST_JAVA}/user/uploadFile`, data)
+export const apiUploadFile = (data: any) => post1(`${HOST_JAVA}/user/uploadFile`, data)
 
 /**
  * 资产相关的接口 ==============================================================

@@ -1,19 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { Steps } from '@ant-design/react-native'
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
 
+interface Props {
+  expressList: Array<any>
+}
+
 const Step = Steps.Step
 
-export default function ExpressStepper(props: any) {
+export default function ExpressStepper(props: Props) {
   const { expressList } = props
-
-  const [step, setStep] = useState([
-    { title: 'Finished', description: 'This is description', status: 'error' },
-    { title: 'In Progress', description: 'This is description', status: 'wait' },
-    { title: 'Waiting', description: 'This is description', status: 'finish' }
-  ])
 
   return (
     <ScrollView

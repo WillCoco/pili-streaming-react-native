@@ -17,7 +17,7 @@ import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 
 const pageSize = 20
 
-function Mine(props: { dispatch?: any; isLogin?: any }) {
+function Mine(props: { dispatch?: any; isLogin?: boolean; }) {
   const { isLogin } = props
 
   const pageNoRef = useRef(1)
@@ -74,9 +74,8 @@ function Mine(props: { dispatch?: any; isLogin?: any }) {
       console.log('获取用户信息', err)
       if (err.code === '203' || err.code === '204') {
         navigation.push('Login')
-        return
       }
-      setNetWorkErr(true)
+      // setNetWorkErr(true)
     })
   }
 
@@ -105,12 +104,12 @@ function Mine(props: { dispatch?: any; isLogin?: any }) {
   /**
    * 网络异常 重新加载
    */
-  const reload = () => {
-    getUserInfo()
-    getGoodsList()
-  }
+  // const reload = () => {
+  //   getUserInfo()
+  //   getGoodsList()
+  // }
 
-  if (netWorkErr) return <NetWorkErr reload={reload} />
+  // if (netWorkErr) return <NetWorkErr reload={reload} />
 
   return (
     <ScrollView

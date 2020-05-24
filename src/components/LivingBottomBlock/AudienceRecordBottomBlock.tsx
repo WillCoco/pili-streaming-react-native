@@ -12,9 +12,12 @@ import {pad} from '../../constants/Layout';
 import Poller from '../../utils/poller';
 import {apiLiveLike} from '../../service/api';
 import { isSucceed } from '../../utils/fetchTools';
+import { useNavigation } from '@react-navigation/native';
 
 const BottomBlock = (props: any) : any =>  {
   const dispatch = useDispatch();
+  const {navigate} = useNavigation();
+  const isLogin = useSelector((state: any) => state?.userData?.isLogin);
 
   // 是否有数据未提交
   const needSubmit = React.useRef(false);
@@ -24,9 +27,16 @@ const BottomBlock = (props: any) : any =>  {
 
   // 喜欢数量
   const likeSum = useSelector((state: any) => +state?.live?.livingInfo?.likeSum || 0);
+  const likeSumRef = React.useRef(likeSum);
+
 
   // 点击喜欢
   const onPressLike = () => {
+    if (!isLogin) {
+      navigate('Login');
+      return;
+    }
+
     needSubmit.current = true;
     setLikeQuantity(quantity => ++quantity);
   }
@@ -38,18 +48,18 @@ const BottomBlock = (props: any) : any =>  {
   }, [])
   
   // 提交喜欢
-  const submitLike = React.useCallback(() => {
-    console.log(needSubmit.current, likeQuantity)
-    if (needSubmit.current && likeQuantity > 0) {
+  const submitLike = React.useCallback((quantity: number) => {
+    if (needSubmit.current && (likeQuantity > 0 || quantity > 0)) {
       // 提交、返回新值
       const params = {
         liveId: liveId || liveIdPersist,
-        likeNum: likeQuantity
+        likeNum: quantity || likeQuantity
       }
       apiLiveLike(params)
         .then(res => {
           if (isSucceed(res)) {
-            setLikeQuantity(0);
+            // setLikeQuantity(0);
+            likeSumRef.current = 0;
           }
           // 重置
           needSubmit.current = false;
@@ -64,7 +74,10 @@ const BottomBlock = (props: any) : any =>  {
   
   // 转发分享
   const onPressForward = () => {
-    
+    if (!isLogin) {
+      navigate('Login');
+      return;
+    }
   }
 
   /**
@@ -81,6 +94,10 @@ const BottomBlock = (props: any) : any =>  {
       poller.current.stop();
     }
 
+    // 更新ref
+    likeSumRef.current = likeQuantity;
+
+    // 更新poller
     poller.current = new Poller({
       interval: 1000 * 10,
       initExec: false,
@@ -90,10 +107,20 @@ const BottomBlock = (props: any) : any =>  {
     poller.current.start();
     
     return () => {
-      poller.current.execOnce();
       poller.current.stop();
     }
   }, [likeQuantity])
+
+  /**
+   * 退出提交
+   */
+  React.useEffect(() => {
+    return () => {
+      if (likeSumRef.current) {
+        submitLike(likeSumRef.current)
+      }
+    }
+  }, [])
 
   // 观众
   return (
@@ -103,6 +130,7 @@ const BottomBlock = (props: any) : any =>  {
         onPressShopBag={props.onPressShopBag}
         onPressLike={onPressLike}
         onPressForward={onPressForward}
+        style={{marginTop: 28}}
       />
     </View>
   )

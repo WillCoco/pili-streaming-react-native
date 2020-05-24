@@ -1,5 +1,4 @@
 import React from 'react'
-import { View, Text } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { WebView } from 'react-native-webview'
 import { Colors } from '../../constants/Theme'

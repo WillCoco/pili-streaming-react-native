@@ -17,6 +17,10 @@ const images : {
   get livingBg() {
     return require('./livingBg.png')
   },
+  // 轮播
+  get banner() {
+    return require('./banner.png')
+  },
 }
 
 export default images;

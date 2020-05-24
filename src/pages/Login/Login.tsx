@@ -3,7 +3,7 @@ import { Text, Image, ImageBackground, StyleSheet, TouchableOpacity } from 'reac
 import { useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { toggleLoginState, setToke } from '../../actions/user'
-import Toast from 'react-native-tiny-toast'
+import { Portal, Toast } from '@ant-design/react-native'
 import * as WeChat from 'react-native-wechat-lib'
 
 import Form from './Form/Form'
@@ -65,22 +65,20 @@ function Logion(props: any) {
     if (disabled) return
 
     if (!phonePattern.test(telNum)) {
-      Toast.show('请输入正确的手机号', {
-        position: 0
-      })
+      Toast.fail('请输入正确的手机号')
       return
     }
 
-    const loading = Toast.showLoading('')
+    const loading = Toast.loading('')
 
     apiSendVerCode({ userTel: telNum }).then((res: any) => {
       console.log('发送验证码', res)
 
       setHasRegister(res)
 
-      Toast.hide(loading)
+      Portal.remove(loading)
 
-      Toast.showSuccess('验证码已发送')
+      Toast.success('验证码已发送')
 
       setDisabled(true)
 
@@ -93,6 +91,7 @@ function Logion(props: any) {
         }
       }, 1000)
     }).catch((err: any) => {
+      Toast.fail('发送失败，请稍后再试')
       console.log('发送验证码', err)
     })
   }
@@ -102,16 +101,12 @@ function Logion(props: any) {
    */
   const toLogin = () => {
     if (!phonePattern.test(telNum)) {
-      Toast.show('请输入正确的手机号', {
-        position: 0
-      })
+      Toast.fail('请输入正确的手机号')
       return
     }
 
     if (verCode.length !== 6) {
-      Toast.show('请输入正确的验证码', {
-        position: 0
-      })
+      Toast.fail('请输入正确的验证码')
       return
     }
 
@@ -128,7 +123,7 @@ function Logion(props: any) {
         props.dispatch(toggleLoginState(true))
         props.dispatch(setToke(res))
 
-        Toast.showSuccess('登录成功')
+        Toast.success('登录成功')
 
         setTimeout(() => {
           navigation.goBack()
@@ -163,16 +158,13 @@ function Logion(props: any) {
       />
 
       <Form
-        telNum={telNum}
-        verCode={verCode}
-        invCode={invCode}
-        disabledSendBtn={disabled}
         countDown={countDown}
         hasRegister={hasRegister}
+        disabledSendBtn={disabled}
+        sendMsg={sendMsg}
         changeTelNum={(value: string) => changeTelNum(value)}
         changeVerCode={(value: string) => changeVerCode(value)}
         changeInvCode={(value: string) => changeInvCode(value)}
-        sendMsg={sendMsg}
       />
 
       <TouchableOpacity style={styles.loginBtnContainer} onPress={toLogin}>

@@ -50,7 +50,8 @@ const AnorchMeScreen = () =>  {
   const toolsList = [
     {img: images.anchorPieceGoods, text: '预组货', onPress: () => navigate('LivingGoodsWareHouse')},
     {img: images.anchorGoodsManage, text: '店铺商品管理', onPress: () => navigate('AnchorShowcaseManage')},
-    {img: images.anchorShop, text: '我的店铺', onPress: () => navigate('AnchorDetail')},
+    {img: images.anchorShop, text: '我的店铺', onPress: () => navigate('AnchorDetail', 
+      {anchorId: anchorInfo?.anchorId, hideFollowButton: true})},
     {img: images.anchorBeAgent, text: '成为经纪人', onPress: () => navigate('BeAgent')}
   ];
 
@@ -100,12 +101,12 @@ const AnorchMeScreen = () =>  {
       />
       <View style={styles.headerWrapper}>
         <Image style={styles.imgBg} source={images.anchorMeBg} resizeMode='stretch' />
-        <Avatar size={60} style={styles.avatar} source={anchorInfo.logo && {uri: anchorInfo.logo} || images.userAvatar} />
-        <SmallText color="white" style={styles.idText}>直播ID: {anchorInfo.anchorId}</SmallText>
+        <Avatar size={60} style={styles.avatar} source={anchorInfo?.logo && {uri: anchorInfo.logo} || images.userAvatar} />
+        <SmallText color="white" style={styles.idText}>直播ID: {anchorInfo?.anchorId}</SmallText>
       </View>
       <View style={styles.blockWrapper}>
-        <T4 style={styles.nickText}>{anchorInfo.name || '主播昵称'}</T4>
-        <SmallText style={styles.followText}>{anchorInfo.favouriteAmount || 0}粉丝</SmallText>
+        <T4 style={styles.nickText}>{anchorInfo?.name || '主播昵称'}</T4>
+        <SmallText style={styles.followText}>{anchorInfo?.favouriteAmount || 0}粉丝</SmallText>
         {
           dataList.map((row, index) => {
             return (

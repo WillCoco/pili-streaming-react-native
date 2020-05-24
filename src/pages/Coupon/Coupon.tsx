@@ -60,8 +60,8 @@ export default function Coupon() {
 
   return (
     <ScrollView
-      style={styles.container}
       showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.container}
     >
       {
         couponList.map((item: any, index: number) => {

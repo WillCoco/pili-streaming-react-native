@@ -87,6 +87,7 @@ function HomeSearch() {
       hasMoreRef.current = pageNoRef.current < totalPage
       setGoodsList([...goodsList, ...res.list])
     })
+    // .catch(err => {console.log(err, 123123123123)})
   }
 
   /**

@@ -5,7 +5,7 @@ import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
-export default function ShopCard(props) {
+export default function ShopCard(props: { orderInfo: any }) {
   const { orderInfo } = props
 
   return (

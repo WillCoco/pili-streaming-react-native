@@ -24,7 +24,7 @@ export default function OrderCard(props: { detail: any }) {
         </TouchableOpacity>
       </View>
       <Text style={styles.text}>下单时间：{detail.createTime}</Text>
-      <Text style={styles.text}>支付方式：{detail.payType === 1 ? '微信支付' : detail.payType === 2 ? '余额支付' : '圈品金支付'}</Text>
+      <Text style={styles.text}>支付方式：{detail.payType === 1 ? '微信支付' : detail.payType === 2 ? '余额支付' : '云闪播金支付'}</Text>
     </View>
   )
 }

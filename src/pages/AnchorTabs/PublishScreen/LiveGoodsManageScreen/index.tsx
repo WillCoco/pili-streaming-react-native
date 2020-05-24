@@ -253,13 +253,13 @@ const LiveGoodsManage = (props: any) =>  {
           renderItem={({item, index}: any) => {
             return (
               <GoodCheckRow
-                isChecked={item.isChecked}
+                isChecked={item?.isChecked}
                 dataAdapter={() => {
                   console.log(brandGoodAdapter(item), 'itemitemitemitem')
                   return brandGoodAdapter(item)
                 }}
                 onPressCheck={() => checkGood(index)}
-                onPressAddShop={() => addShop(item?.isExit)} // 是否在橱窗列表
+                onPressAddShop={() => addShop(item?.isExist)} // 是否在橱窗列表
                 style={{
                   marginBottom: 4,
                 }}

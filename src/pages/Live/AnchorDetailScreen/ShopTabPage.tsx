@@ -18,34 +18,66 @@ import {Colors} from '../../../constants/Theme';
 import {vw} from '../../../utils/metric';
 import { pad } from '../../../constants/Layout';
 import images from '../../../assets/images/index';
+import { AddGoodsTargetType }  from '../../../actions/shop';
+import {apiGetGroupGoods} from '../../../service/api';
+import {useDispatch} from 'react-redux';
+import { EMPTY_ARR } from '../../../constants/freeze';
+import { useNavigation } from '@react-navigation/native';
+import {isSucceed} from '../../../utils/fetchTools';
+
+const INIT_PAGE_NO = 1;
+const PAGE_SIZE = 10;
 
 const AnorchDetailAvatar = (props: {
-  isLiving: boolean
+  isLiving: boolean,
+  anchorId: number | string
 }) =>  {
 
-  /**
-   * 获取店铺商品
-   */
-  const onRefresh = () => Promise.resolve({
-    result: [
-      {
-        original_img: images.userDefaultAvatar,
-        goods_name: '测试',
-        MyDiscounts: '100',
-        shop_price: '120',
-        market_price: '130',
-      },
-      {
-        original_img: images.userDefaultAvatar,
-        goods_name: '测试',
-        MyDiscounts: '100',
-        shop_price: '120',
-        market_price: '130',
-      },
-  ]
-  });
+  const dispatch = useDispatch();
+  const {navigate} = useNavigation();
 
-  const onEndReached = () => {};
+  /**
+   * 前往商品详情
+   */
+  const toGoodsInfo = (id: number) => {
+    navigate('GoodsInfo', { id });
+  };
+
+
+  /**
+   * 获取主播商品
+   */
+  const onRefresh = async () => {
+    const result: any = await apiGetGroupGoods({
+      anchorId: props?.anchorId,
+      pageNo: INIT_PAGE_NO,
+      pageSize: PAGE_SIZE,
+      selType: AddGoodsTargetType.showcaseGoods
+    })
+      .catch((err: any) => {console.log(err, 'getGroupGoods')})
+
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.records || EMPTY_ARR});
+    }
+
+    return {result: result?.records}
+  };
+
+
+  const onEndReached = async (pageNo: number, pageSize: number) => {
+    const result: any = await apiGetGroupGoods({
+      anchorId: props?.anchorId,
+      pageNo: pageNo,
+      pageSize: pageSize,
+      selType: AddGoodsTargetType.showcaseGoods
+    }) 
+
+    if (isSucceed(result)) {
+      return Promise.resolve({result: result?.records || EMPTY_ARR});
+    }
+
+    return {result: result?.records}
+  };
 
   return (
     <View style={styles.style}>
@@ -54,15 +86,16 @@ const AnorchDetailAvatar = (props: {
         // initListData={['1223', '2222']}
         //item显示的布局
         renderItem={({item}) => {
-          console.log(item,1112322)
-          return <GoodsCard goodsInfo={item} /> 
+          return <GoodsCard 
+            goodsInfo={item} 
+            tapGoodsCard={(id: number) => toGoodsInfo(id)}
+          /> 
         }}
         //下拉刷新相关
         onRefresh={onRefresh}
         //加载更多
         onEndReached={onEndReached}
         // ItemSeparatorComponent={separator}
-        keyExtractor={(item, index) => 'index' + index + item}
         initialNumToRender={14}
         numColumns={2}
         columnWrapperStyle={{justifyContent: 'space-between'}}

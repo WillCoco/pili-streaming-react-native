@@ -3,12 +3,12 @@ import { View, Text, Image, StyleSheet, ScrollView } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import { apiBrandInfo, apiBrandGoodsList, apiAttentionBrand } from '../../service/api'
+import { Portal, Toast } from '@ant-design/react-native'
 
 import pxToDp from '../../utils/px2dp'
 import { Colors } from '../../constants/Theme'
 import checkIsBottom from '../../utils/checkIsBottom'
 
-import Toast from 'react-native-tiny-toast'
 import BrandSwiper from './BrandSwiper/BrandSwiper'
 import LoadMore from '../../components/LoadMore/LoadMore'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
@@ -16,7 +16,7 @@ import GoodsCardRow from '../../components/GoodsCardRow/GoodsCardRow'
 
 const pageSize = 20
 
-function BrandShop(props: any) {
+function BrandShop(props: { isLogin: boolean }) {
   const { isLogin } = props
 
   const pageNoRef = useRef(1)
@@ -52,18 +52,19 @@ function BrandShop(props: any) {
    * 获取品牌详情
    */
   const getBrandInfo = () => {
-    const loading = Toast.showLoading('')
+    const loading = Toast.loading('')
 
     apiBrandInfo({
       brand_id: brandId
     }).then((res: any) => {
-      Toast.hide(loading)
+      Portal.remove(loading)
       setNetWorkErr(false)
       console.log('店铺详情', res)
       setBrandInfo(res)
       setIsLoaded(true)
     }).catch((err: any) => {
       console.log('店铺详情', err)
+      Portal.remove(loading)
       setNetWorkErr(true)
     })
   }
@@ -119,7 +120,6 @@ function BrandShop(props: any) {
         setBrandInfo(JSON.parse(JSON.stringify(brandInfo)))
       }).catch((err: any) => {
         console.log('关注/取消关注店铺', err)
-        Toast.show(err.message)
       })
     } else {
       navigation.push('Login')

@@ -11,6 +11,8 @@ import {
 import {SmallText, scale} from 'react-native-normalization-text';
 import { Colors } from '../../constants/Theme';
 import { pad } from '../../constants/Layout';
+import {useSelector} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 interface FollowButtonPropsType {
   isFollowed: boolean,
@@ -23,7 +25,18 @@ interface FollowButtonPropsType {
 }
 
 const FollowButton = (props: FollowButtonPropsType) =>  {
+
+  // 是否登录
+  const isLogin = useSelector((state: any) => state?.userData?.isLogin)
+
+  const {navigate} = useNavigation()
+
   const editFollow = () => {
+    if (!isLogin) {
+      navigate('Login')
+      return
+    }
+
     props.onPress(props.isFollowed)
   }
 

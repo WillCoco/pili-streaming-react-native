@@ -5,47 +5,33 @@ import {
 import Echarts from 'native-echarts';
 
 
-const Echart = () => {
-    let arr = [];
 
-    const generateData = () => {
-        let data = [];
-        for (let i = 1; i < 100; i++) {
-            const a = timestampToTime(1589279228000 - i * 1000 * 60 * 60 * 24)
-            data.push([a, func()]);
-        }
-        arr = data;
-        console.log(arr, '2123')
-        console.log(arr[0][0], '1111')
+const Echart = (props: {
+    data: Array<any>
+}) => {
+    console.log(props.data, 'k线数据');
+    /*
+    *  数据处理
+    * */
+    const formatData = (date) => {
+        let watchK = [];
+        let orderK = [];
 
-        return data;
-    }
+        date && date.forEach(item => {
+            watchK.push([item.createTime, item.watchSum]);
+            orderK.push([item.createTime, item.orderSum]);
+        })
+        console.log(watchK,orderK, 'asdfsadsa')
+        return {watchK,orderK}
+    };
+    const kDate = formatData(props.data);
 
-    const generateData2 = () => {
-        let data = [];
-        for (let i = 1; i < 100; i++) {
-            const a = timestampToTime(1589279228000 - i * 1000 * 60 * 60 * 24)
-            data.push([a, func()]);
-        }
-        arr = data;
-        console.log(arr, '2123')
-        console.log(arr[0][0], '1111')
+    /*
+    * 计算y最大值
+    * */
+    const renderMaxY = () => {
 
-        return data;
-    }
-
-
-    const timestampToTime = ( timestamp: any ) =>  {
-        var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
-        var Y = date.getFullYear() + '-';
-        var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-        var D = date.getDate() + ' ';
-        return Y + M + D;
-    }
-
-    const func = () => {
-        return Math.random() * 50
-    }
+    };
 
     const option = {
         animation: false,
@@ -55,10 +41,6 @@ const Echart = () => {
             data: ['观看人数', '销售量']
         },
         grid: {
-            // top: 0,
-            // left: 50,
-            // right: 40,
-            // bottom: 50,
             containLabel: true
         },
 
@@ -69,6 +51,7 @@ const Echart = () => {
             },
         },
         yAxis: {
+            type:'value',
             min:0,
             max: 100,
             axisLine: {show:false},
@@ -79,8 +62,9 @@ const Echart = () => {
             show: true,
             type: 'inside',
             start:0,
-            end:4
+            end: 100
         }],
+
         series: [
             {
                 type: 'line',
@@ -88,7 +72,7 @@ const Echart = () => {
                 showSymbol: true,
                 clip: true,
                 symbolSize:6,
-                data: generateData(),
+                data: kDate.watchK,
                 itemStyle: {
                     normal : {
                         color:'#3E96FE',
@@ -104,7 +88,7 @@ const Echart = () => {
                 showSymbol: true,
                 symbolSize:6,
                 clip: true,
-                data: generateData2(),
+                data: kDate.orderK,
                 itemStyle: {
                     normal : {
                         color:'#FFC42B',

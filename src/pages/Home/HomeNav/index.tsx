@@ -26,7 +26,7 @@ const navList = [
 ]
 
 export default function HomeNav() {
-  const navigation = useNavigation()
+  const navigation: any = useNavigation()
 
   const nextAction = (path: any) => {
     if (path === 'Brand') {

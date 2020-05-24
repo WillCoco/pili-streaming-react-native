@@ -20,10 +20,10 @@ const defaultAvatar = require('../../../assets/mine-image/default_avatar.png')
 interface Props {
   userData: {
     userInfo: any
-    isLogin: any
+    isLogin: boolean
   }
   publicData: {
-    statusBarHeight: any
+    statusBarHeight: number
   }
 }
 
@@ -108,10 +108,10 @@ function Header(props: Props) {
                     return (
                       <Text
                         key={`user-${index}`}
-                        style={[styles.userLevel, !index && styles.userLevelBgc]}
+                        style={[styles.userLevel, styles.userLevelBgc]}
                       >{
                           item === '1'
-                            ? '圈品会员'
+                            ? '云闪播会员'
                             : item === '2'
                               ? '主播'
                               : item === '3'
@@ -175,7 +175,11 @@ function Header(props: Props) {
               style={styles.levelIcon}
             />
           }
-          <Text style={[styles.leveltext, styles.vipLevel]}>{isLogin ? '圈品会员' : '游客'}</Text>
+          <View>
+            <Text style={[styles.leveltext, styles.vipLevel]}>{isLogin ? '云闪播会员' : '游客'}</Text>
+            {isLogin && <Text style={styles.invCode}>邀请码：{userInfo?.inviteCode}</Text>}
+          </View>
+
         </View>
         <View style={{ flex: 1, alignSelf: 'center' }}>
           <Text style={styles.leveltext}>累计已省:</Text>
@@ -297,7 +301,7 @@ const styles = StyleSheet.create({
     color: Colors.yellowColor
   },
   vipLevel: {
-    marginTop: pxToDp(30),
+    marginTop: pxToDp(25),
     marginLeft: pxToDp(30),
     fontSize: pxToDp(40),
     fontWeight: '600'
@@ -306,5 +310,10 @@ const styles = StyleSheet.create({
     fontSize: pxToDp(32),
     fontWeight: '600',
     marginLeft: pxToDp(5)
+  },
+  invCode: {
+    marginLeft: pxToDp(30),
+    color: Colors.yellowColor,
+    marginTop: pxToDp(5)
   }
 })
