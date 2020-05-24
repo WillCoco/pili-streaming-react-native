@@ -66,12 +66,13 @@ const INIT_STREAMING_CONFIG: any = {
     rtmpURL: '',
     camera: CameraType.front,
     started: true, // 推流
-    faceBeautyEnable: false, // 内置美颜
+    faceBeautyEnable: true, // 内置美颜 为true才能设置美白磨皮红润
     faceBeautySetting: {
         beautyLevel: 0, //磨皮程度
         whiten: 0, //美白程度
         redden: 0, //红润程度
     },
+    // previewMirrorEnable:true, // 镜像
     profile: {
         videoStreamingSetting: {
             fps: 30,

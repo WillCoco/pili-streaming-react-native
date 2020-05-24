@@ -122,9 +122,10 @@ const LivingRoomScreen = (props: any) : any =>  {
         onPressBubble={props.onPressBubble}
         onPressShare={props.onPressShare}
         onPressFaceBeauty={props.onPressFaceBeauty}
-        onPressWhiten={props.onPressWhiten}
-        onPressRedden={props.onPressRedden}
-        onPressFilter={props.onPressFilter}
+        // onPressWhiten={props.onPressWhiten}
+        // onPressRedden={props.onPressRedden}
+        // onPressFilter={props.onPressFilter}
+        onPressFace={props.onPressFace}
       />
     </View>
 

@@ -49,7 +49,7 @@ export const startLive = (params: startLiveParams) => {
       return Promise.resolve(false);
     })
     .catch((error: any) => {
-      console.log(`startLive error: ${startLive}`)
+      console.log(`startLive error: ${error}`)
       return Promise.resolve(false);
     });
   }
@@ -83,24 +83,43 @@ export const updatecamera = () => {
 }
 
 /**
- * 使用/禁用 美白 磨皮 红润
+ * 调节 美白 磨皮 红润
  */
-export enum faceBeautyParams {
-    beautyLevel = 'beautyLevel',  //磨皮程度
-    whiten = 'whiten', //美白程度
-    redden = 'redden' //红润程度
+interface faceBeautyParams {
+    repeat: boolean | undefined, // 重置
+    type: string,
+    value: number
 }
-export const updateFaceSetting = (type: string) => {
+
+export const updateFaceSetting = (params: faceBeautyParams) => {
     return async function(dispatch: Dispatch, getState: any) {
         const pusherConfig = getState()?.live?.pusherConfig;
         const {faceBeautySetting} = pusherConfig || {};
-        let singleSetting = {
-            [type] : faceBeautySetting[type] === 0 ? 1 : 0
+
+        const singleSetting = {
+            [params.type] : params.value
         };
         const newSetting = {...faceBeautySetting, ...singleSetting };
         dispatch(updatePusherConfig({...pusherConfig, faceBeautySetting: newSetting}));
-    }
+     }
+};
+
+/**
+ * 重置 美白 磨皮 红润
+ */
+const INIT_SETTING: any =  {
+    beautyLevel : 0,
+    whiten : 0,
+    redden : 0,
 }
+
+export const repeatFaceSetting = () => {
+    return async function(dispatch: Dispatch, getState: any) {
+        const pusherConfig = getState()?.live?.pusherConfig;
+        dispatch(updatePusherConfig({...pusherConfig, faceBeautySetting: INIT_SETTING}));
+    }
+};
+
 /**
  * 基础美颜
  */

@@ -7,7 +7,7 @@ import { UpdateParams } from './fetch/fetchOrigin';
 // const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''
 
 const HOST_PHP = __DEV__ ? 'https://php.quanpinlive.com' : ''
-const HOST_JAVA = __DEV__ ? 'https://app.quanpinlive.com' : ''
+const HOST_JAVA = __DEV__ ? 'http://212.129.140.50:2333' : ''
 
 /**
  * PHP 接口 ==================================================================
@@ -163,7 +163,7 @@ export const apiCreatePoster = (data: any) => get1(`${HOST_JAVA}/userShare/userG
 // 发布作品 上传文件
 export const apiWorkUpload = (data: any) => uploadWorkMedia(`${HOST_JAVA}/find/uploadFile`, data)
 // 查询订单支付状态
-export const apiQueryOrderPayStatus = (data: any) => get1(`${HOST_JAVA}/order/queryOrderPayStatus`, data) 
+export const apiQueryOrderPayStatus = (data: any) => get1(`${HOST_JAVA}/order/queryOrderPayStatus`, data)
 
 
 /*

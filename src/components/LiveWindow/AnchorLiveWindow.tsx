@@ -28,6 +28,7 @@ import { joinGroup, dismissGroup, updateGroupProfile, sendRoomMessage, } from '.
 import { anchorToLive, closeLive, updatecamera, updateFaceSetting, faceBeautyParams } from '../../actions/live';
 import Toast from 'react-native-tiny-toast';
 import { MessageType } from '../../reducers/im';
+import LivingFaceCard from '../../components/LivingFaceCard';
 
 const EMPTY_OBJ = {};
 
@@ -114,6 +115,11 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
    * 商品卡可见
    */
   const [shopCardVisible,  setShopCardVisible]: [boolean | undefined, any] = React.useState(false);
+
+  /*
+  * 美颜功能设置
+  * */
+  const [faceCardVisible,  setFaceCardVisible]: [boolean | undefined, any] = React.useState(false);
 
   /**
    *
@@ -204,6 +210,29 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
   }
 
   /**
+   * 美颜动画
+   */
+  const faceCardAnim = (visiable: boolean) => {
+    LayoutAnimation.configureNext({
+      duration: 200,
+      create: {
+        type: LayoutAnimation.Types.linear,
+        property: LayoutAnimation.Properties.opacity
+      },
+      update: {
+        type: LayoutAnimation.Types.spring,
+        springDamping: 0.2,
+      },
+      delete: {
+        type: LayoutAnimation.Types.linear,
+        property: LayoutAnimation.Properties.opacity
+      }
+    });
+
+     setFaceCardVisible(visiable)
+  }
+
+  /**
    * 处理android返回
   */
   useFocusEffect(
@@ -220,6 +249,15 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
     }, [])
   );
 
+  // // 美颜设置参数
+  // const { pusherConfig } = useSelector((state: any) => state?.live)
+  // const {beautyLevel,redden,whiten} = pusherConfig?.faceBeautySetting;
+
+  // 滑块
+  const onAfterChangeSetting = (value: number, type:string) => {
+      dispatch(updateFaceSetting({type, value}))
+  };
+
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
       <LivePusher />
@@ -230,25 +268,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
           onPressShopBag={() => shopCardAnim(true)}
           onPressBubble={onPressBubble}
           onPressShare={() =>alert('余组货')}
-          onPressFaceBeauty={() => {
-               return dispatch(updateFaceSetting(faceBeautyParams.beautyLevel))
-            // requestAnimationFrame(() => {
-            //   // dispatch(sendRoomMessage({text: '下单了2件', type: MessageType.order}))
-            //
-            // })
-          }}
-          onPressWhiten={() => {
-              return dispatch(updateFaceSetting(faceBeautyParams.whiten))
-              // requestAnimationFrame(() => {
-              //     dispatch(sendRoomMessage({text: '关注了主播', type: MessageType.follow}))
-              // })
-          }}
-          onPressRedden={() => {
-              return dispatch(updateFaceSetting(faceBeautyParams.redden))
-            // requestAnimationFrame(() => {
-            //   dispatch(sendRoomMessage({text: '关注了主播', type: MessageType.follow}))
-            // })
-          }}
+          onPressFace={() => faceCardAnim(true)}
         />
         <TouchableOpacity onPress={switchCamera} style={StyleSheet.flatten([styles.camera, {top: props.safeTop + (pad * 2)}])}>
           <Iconchangecamera size={24} />
@@ -268,6 +288,12 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
           setVisible={setShopCardVisible}
           onPressClose={() => shopCardAnim(false)}
           safeBottom={props.safeBottom}
+        />
+        <LivingFaceCard
+            visible={!!faceCardVisible}
+            setVisible={setFaceCardVisible}
+            onPressClose={() => faceCardAnim(false)}
+            onAfterChangeSetting={onAfterChangeSetting}
         />
       </View>
     </View>
