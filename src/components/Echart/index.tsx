@@ -16,7 +16,6 @@ const Echart = (props: {
     const formatData = (date) => {
         let watchK = [];
         let orderK = [];
-
         date && date.forEach(item => {
             watchK.push([item.createTime, item.watchSum]);
             orderK.push([item.createTime, item.orderSum]);
@@ -24,13 +23,23 @@ const Echart = (props: {
         console.log(watchK,orderK, 'asdfsadsa')
         return {watchK,orderK}
     };
+
     const kDate = formatData(props.data);
 
     /*
-    * 计算y最大值
+    * 计算k线首屏展示百分比
     * */
-    const renderMaxY = () => {
-
+    const renderPrecent = () => {
+        const length = props.data.length || 0;
+        if(length > 25) {
+            return 30
+        }else if(length > 15) {
+            return 50
+        }else if(length > 7) {
+            return 80
+        }else {
+            return 100
+        }
     };
 
     const option = {
@@ -43,7 +52,10 @@ const Echart = (props: {
         grid: {
             containLabel: true
         },
-
+        tooltip: {
+            trigger: 'axis',
+            formatter: '{a} <br/>{c} '
+        },
         xAxis: {
             type:'time',
             splitLine:{//去除网格线
@@ -53,7 +65,7 @@ const Echart = (props: {
         yAxis: {
             type:'value',
             min:0,
-            max: 100,
+            // max: 100,
             axisLine: {show:false},
             axisTick: {show:false},
         },
@@ -62,7 +74,7 @@ const Echart = (props: {
             show: true,
             type: 'inside',
             start:0,
-            end: 100
+            end: renderPrecent()
         }],
 
         series: [
