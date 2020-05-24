@@ -39,9 +39,10 @@ interface LiveGoodsManageRowProps {
 const LiveGoodsManageRow = (props: LiveGoodsManageRowProps) =>  {
 
   const data = (props.dataAdapter ? props.dataAdapter(props.data) : props.data) || {};
+  console.log(data, 'dddddddd')
 
-  const btnText = data.isAdded ? '添加店铺' : '取消添加';
-  const btnBg = data.isAdded ? Colors.basicColor : Colors.lightGrey;
+  const btnText = !data.isAdded ? '添加店铺' : '取消添加';
+  const btnBg = !data.isAdded ? Colors.basicColor : Colors.lightGrey;
   
   return (
     <View style={StyleSheet.flatten([styles.style, props.style])}>

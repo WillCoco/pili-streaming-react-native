@@ -12,6 +12,8 @@ import {pad} from '../../constants/Layout';
 import Poller from '../../utils/poller';
 import {apiLiveLike} from '../../service/api';
 import { isSucceed } from '../../utils/fetchTools';
+import { ShareType } from '../../utils/share';
+import share from '../../utils/share';
 
 const BottomBlock = (props: any) : any =>  {
   const dispatch = useDispatch();
@@ -66,7 +68,13 @@ const BottomBlock = (props: any) : any =>  {
   
   // 转发分享
   const onPressForward = () => {
-    
+    share(ShareType.record, {
+      title: '分享',
+      url: `liveId=${liveId}`,
+      failOnCancel: false,
+    })
+      .then((res) => { console.log(res) })
+      .catch((err) => { err && console.log(err); });
   }
 
   /**

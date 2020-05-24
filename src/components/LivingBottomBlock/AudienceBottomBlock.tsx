@@ -17,6 +17,10 @@ import {apiLiveLike} from '../../service/api';
 import Poller from '../../utils/poller';
 import { isSucceed } from '../../utils/fetchTools';
 import { Attention } from '../../liveTypes';
+import share from '../../utils/share';
+import { shareUrlPerfix } from '../../constants/Urls';
+import { ShareType } from '../../utils/share';
+import { EMPTY_OBJ, EMPTY_ARR } from '../../constants/freeze';
 
 const BottomBlock = (props: any) : any =>  {
   const dispatch = useDispatch();
@@ -32,10 +36,10 @@ const BottomBlock = (props: any) : any =>  {
   const likeSumRef = React.useRef(likeSum);
 
   // im房间消息
-  const roomMessages = useSelector((state: any) => state?.im?.roomMessages);
+  const roomMessages = useSelector((state: any) => state?.im?.roomMessages || EMPTY_ARR);
 
   // im房间信息
-  const room = useSelector((state: any) => state?.im?.room);
+  const room = useSelector((state: any) => state?.im?.room || EMPTY_OBJ);
 
   // 直播房间信息 (退出会现执行外层useEffect, 清除liveID, 用memo保存)
   const liveId = useSelector((state: any) => state?.live?.livingInfo?.liveId);
@@ -115,9 +119,15 @@ const BottomBlock = (props: any) : any =>  {
   /**
    * 分享
    */
- const onPressForward = () => {
-
- }
+  const onPressForward = () => {
+    share(ShareType.living, {
+      title: '分享',
+      url: `liveId=${liveId}?groupId=${room.groupId}`,
+      failOnCancel: false,
+    })
+      .then((res) => { console.log(res) })
+      .catch((err) => { err && console.log(err); });
+  }
 
   /**
    * 退出提交

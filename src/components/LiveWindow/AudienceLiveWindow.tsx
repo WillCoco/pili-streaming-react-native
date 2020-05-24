@@ -32,6 +32,7 @@ import { isSucceed } from '../../utils/fetchTools';
 import { EMPTY_OBJ } from '../../constants/freeze';
 import { MessageType } from "../../reducers/im";
 import { sendRoomMessage } from '../../actions/im';
+import share from '../../utils/share';
 
 interface LiveWindowProps {
   style?: StyleProp<any>;
@@ -107,7 +108,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
     // player.current?.stop(); // 停止播放器实例
     // 我不是这场直播的主播
     if (myAnchorId !== anchorId) {
-      dispatch(quitGroup()); // 退im群
+      dispatch(quitGroup(groupID)); // 退im群
     }
     goBack();
   };

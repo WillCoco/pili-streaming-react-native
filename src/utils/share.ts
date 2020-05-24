@@ -1,13 +1,23 @@
 import { Platform } from 'react-native';
 import Share, {Options} from 'react-native-share';
+import {MediaType} from '../liveTypes';
+import {downloadUrl} from '../constants/Urls';
 
 // const url = 'https://awesome.contents.com/';
 // const title = 'Awesome Contents';
 // const message = 'Please check this out.';
 // const icon = 'data:<data_type>/<file_extension>;base64,<base64_data>';
 
-const share = (options: Options) => {
+export enum ShareType {
+  goodInfo = 'goodInfo',
+  teaser = 'teaser', // 预告
+  living = 'living', // 直播
+  record = 'record', // 回放
+}
 
+const share = (type: ShareType | MediaType, options: Options) => {
+
+  const sharePrefix = `${downloadUrl}?type=${type}&`
   const opts = Platform.select({
   // ios: {
   //   activityItemSources: [
@@ -49,10 +59,13 @@ const share = (options: Options) => {
   //     // },
   //   ],
   // },
-    default: options,
+    default: {
+      ...options,
+      url: `${sharePrefix}${options.url}`
+    },
   });
   
-  Share.open(opts);
+  return Share.open(opts);
 }
 
 export default share;

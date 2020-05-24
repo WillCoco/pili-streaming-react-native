@@ -368,9 +368,9 @@ export const joinGroup = (
 /**
  * 退出房间
  */
-export const quitGroup = () => {
+export const quitGroup = (groupId: string) => {
   return function(dispatch: Dispatch<any>, getState: any) {
-    const groupID = getState().im?.room?.groupID;
+    const groupID = groupId || getState().im?.room?.groupID;
 
     console.log(groupID, 123123213)
 
