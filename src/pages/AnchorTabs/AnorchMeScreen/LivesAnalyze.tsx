@@ -179,6 +179,7 @@ const LivesAnalyze = (props) =>  {
                     </View>
                 </View>
                 <PagingList
+                    refreshable={false}
                     size={10}
                     data={liveInfoList}
                     setData={setLiveInfoList}
