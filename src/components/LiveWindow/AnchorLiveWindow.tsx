@@ -30,7 +30,6 @@ import Toast from 'react-native-tiny-toast';
 import { MessageType } from '../../reducers/im';
 import LivingFaceCard from '../../components/LivingFaceCard';
 
-const EMPTY_OBJ = {};
 import { clearLoginStatus } from '../../actions/user';
 import { isSucceed } from '../../utils/fetchTools';
 import { EMPTY_OBJ } from '../../constants/freeze';
