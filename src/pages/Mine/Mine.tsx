@@ -29,7 +29,7 @@ function Mine(props: { dispatch?: any; isLogin?: boolean; }) {
   const [netWorkErr, setNetWorkErr] = useState(false)
   const [orderCount, setOrderCount]: any = useState({})
   const [goodsList, setGoodsList]: Array<any> = useState([])
-  
+
   useEffect(() => {
     getGoodsList()
   }, [])

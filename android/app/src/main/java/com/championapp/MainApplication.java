@@ -18,6 +18,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import java.util.Arrays;
 import java.util.List;
+import javax.annotation.Nullable;
+
 
 public class MainApplication extends Application implements ReactApplication {
   private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(new BasePackageList().getPackageList(), null);
@@ -29,26 +31,28 @@ public class MainApplication extends Application implements ReactApplication {
           return BuildConfig.DEBUG;
         }
 
-        @Override
-        protected List<ReactPackage> getPackages() {
-          @SuppressWarnings("UnnecessaryLocalVariable")
-          List<ReactPackage> packages = new PackageList(this).getPackages();
-          // Packages that cannot be autolinked yet can be added manually here, for example:
-          // packages.add(new MyReactNativePackage());
+    @Override
+    protected List<ReactPackage> getPackages() {
+      List<ReactPackage> packages = new PackageList(this).getPackages();
+//      packages.add(new ModuleRegistryAdapter(mModuleRegistryProvider));
+//      packages.add(new WeChatPackage());
+//      packages.add(new PiliPackage());
+//      return packages;
+//    }
 
-          List<ReactPackage> unimodules = Arrays.<ReactPackage>asList(
-            new ModuleRegistryAdapter(mModuleRegistryProvider)
-          );
-          packages.addAll(unimodules);
+      List<ReactPackage> unimodules = Arrays.<ReactPackage>asList(
+        new ModuleRegistryAdapter(mModuleRegistryProvider)
+      );
+      packages.addAll(unimodules);
 
-          return packages;
-        }
+      return packages;
+    }
 
-        @Override
-        protected String getJSMainModuleName() {
-          return "index";
-        }
-      };
+    @Override
+    protected String getJSMainModuleName() {
+      return "index";
+    }
+  };
 
   @Override
   public ReactNativeHost getReactNativeHost() {

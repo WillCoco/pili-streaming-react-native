@@ -4,23 +4,25 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
+  LayoutAnimation
 } from 'react-native';
 import Toast from 'react-native-tiny-toast';
 import {useSelector, useDispatch} from 'react-redux';
-import {PrimaryText, SmallText} from 'react-native-normalization-text';
+import {PrimaryText, SmallText,scale} from 'react-native-normalization-text';
 import {useNavigation} from '@react-navigation/native';
 import withPage from '../../../components/HOCs/withPage';
 // import NavBar from '../../../../components/NavBar'
 // import LiveWindow from '../../../../components/LiveWindow'
 import LiveReadyCard from '../../../components/LiveReadyCard';
-import LivePusher from '../../../components/LivePusher';
+import LivePusher from '../../../components/LivePusherNew';
 import {vw} from '../../../utils/metric';
 import {Colors} from '../../../constants/Theme';
 import images from '../../../assets/images/index';
 import usePermissions from '../../../hooks/usePermissions';
 import { pad } from '../../../constants/Layout';
-import {updateLiveConfig} from '../../../actions/live';
+import {updateLiveConfig,updateFaceSetting} from '../../../actions/live';
 import * as api from '../../../service/api';
+import LivingFaceCard from '../../../components/LivingFaceCard';
 
 const CreateLiveScreen = (props: any) =>  {
   const navigation = useNavigation();
@@ -29,10 +31,10 @@ const CreateLiveScreen = (props: any) =>  {
   /**
    * 直播设置
    */
-  const liveConfig = useSelector((state: any) => state?.live?.liveConfig)
+  const {liveConfig, pusherConfig} = useSelector((state: any) => state?.live)
 
-
-  console.log(liveConfig, 'liveConfig')
+  const {beautyLevel,redden,whiten} = pusherConfig?.faceBeautySetting;
+  console.log(pusherConfig, 'pusherConfig')
 
   const isValidData = (): boolean => {
     if (!liveConfig.cover) {
@@ -64,7 +66,7 @@ const CreateLiveScreen = (props: any) =>  {
   /**
    * 实例
    */
-  let camera: {current: any} = React.useRef();
+  // let camera: {current: any} = React.useRef();
 
   /**
    * 切换摄像头
@@ -101,11 +103,42 @@ const CreateLiveScreen = (props: any) =>  {
     }
   }
 
+  /*
+   * 美颜功能设置
+   * */
+  const [faceCardVisible,  setFaceCardVisible]: [boolean | undefined, any] = React.useState(false);
+
+  /**
+   * 美颜动画
+   */
+  const faceCardAnim = (visiable: boolean) => {
+        LayoutAnimation.configureNext({
+            duration: 200,
+            create: {
+                type: LayoutAnimation.Types.linear,
+                property: LayoutAnimation.Properties.opacity
+            },
+            update: {
+                type: LayoutAnimation.Types.spring,
+                springDamping: 0.2,
+            },
+            delete: {
+                type: LayoutAnimation.Types.linear,
+                property: LayoutAnimation.Properties.opacity
+            }
+        });
+
+        setFaceCardVisible(visiable)
+    };
+
+  // 滑块
+  const onAfterChangeSetting = (value: number, type:string) => {
+      dispatch(updateFaceSetting({type, value}))
+  };
+
   return (
     <View style={StyleSheet.flatten([styles.style, {paddingBottom: props.safeBottom}])}>
-      <LivePusher
-        ref={(c: any) => camera.current = c}
-      />
+      <LivePusher />
       <View style={styles.contentWrapper}>
         <View style={StyleSheet.flatten([styles.liveReadyCardWrapper, {marginTop: props.safeTop + 80}])}>
           <LiveReadyCard
@@ -114,13 +147,10 @@ const CreateLiveScreen = (props: any) =>  {
           />
         </View>
         <View style={styles.functionBtnWrapper}>
-          <TouchableOpacity>
-            <PrimaryText color="white">美颜</PrimaryText>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={images.userDefaultAvatar} />
-            <PrimaryText color="white">滤镜</PrimaryText>
-          </TouchableOpacity>
+            <TouchableOpacity  onPress={() => faceCardAnim(true)}>
+                <Image source={images.filterIcon} style={styles.img}/>
+                <PrimaryText color="white">美颜</PrimaryText>
+            </TouchableOpacity>
         </View>
         <TouchableOpacity onPress={onNextPress} style={styles.button}>
           <PrimaryText style={styles.nextText}>下一步</PrimaryText>
@@ -134,6 +164,12 @@ const CreateLiveScreen = (props: any) =>  {
             《云闪播主播入驻协议》
           </SmallText>
         </SmallText>
+          <LivingFaceCard
+              visible={!!faceCardVisible}
+              setVisible={setFaceCardVisible}
+              onPressClose={() => faceCardAnim(false)}
+              onAfterChangeSetting={onAfterChangeSetting}
+          />
       </View>
     </View>
   )
@@ -171,7 +207,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: vw(60),
     alignSelf: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
   button: {
     width: vw(70),
@@ -190,7 +226,21 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 24,
     marginBottom: 8,
-  }
+  },
+    cellsWrapper: {
+        flexDirection: 'row',
+        width: vw(60),
+        justifyContent: 'space-between'
+    },
+    cell: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    img: {
+        width: 31,
+        height: 35,
+    }
 });
 
 export default withPage(CreateLiveScreen, {

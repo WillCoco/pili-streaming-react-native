@@ -26,7 +26,10 @@ interface LiveToolBarProps {
   onPressShopBag: () => any,
   onPressBubble: () => any,
   onPressShare: () => any,
-  onPressFaceBeauty: () => any,
+  // onPressFaceBeauty: () => any,
+  // onPressWhiten: () => any,
+  // onPressRedden: () => any,
+  onPressFace: () => any,
   onPressFilter: () => any,
 }
 
@@ -42,21 +45,13 @@ const LiveToolBar = (props: LiveToolBarProps) : any =>  {
         />
       </TouchableOpacity>
       <View style={styles.cellsWrapper}>
-        <TouchableOpacity style={styles.cell} onPress={props.onPressFaceBeauty}>
-          <Image
-            source={images.faceBeautyIcon}
-            style={styles.img}
-            resizeMode="contain"
-          />
-          <SmallText color="white">美颜</SmallText>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.cell} onPress={props.onPressFilter}>
-          <Image
-            source={images.filterIcon}
-            style={styles.img}
-            resizeMode="contain"
-          />
-          <SmallText color="white">滤镜</SmallText>
+        <TouchableOpacity style={styles.cell} onPress={props.onPressFace}>
+            <Image
+                source={images.filterIcon }
+                style={styles.img}
+                resizeMode="contain"
+            />
+            <SmallText color="white">美颜</SmallText>
         </TouchableOpacity>
         <TouchableOpacity onPress={props.onPressBubble} style={styles.cell}>
           <Image
@@ -106,8 +101,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   img: {
-    width: scale(35),
-    height: scale(35),
+    width: 32,
+    height: 35,
   }
 })
 export default LiveToolBar;

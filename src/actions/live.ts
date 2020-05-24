@@ -1,6 +1,6 @@
 import {Dispatch} from 'redux';
 import liveActionType from '../constants/Live';
-import {LiveConfig} from '../reducers/live';
+import {LiveConfig,CameraType} from '../reducers/live';
 import * as api from '../service/api';
 import {isSucceed} from '../utils/fetchTools';
 import {EMPTY_OBJ, EMPTY_ARR} from '../constants/freeze';
@@ -49,7 +49,7 @@ export const startLive = (params: startLiveParams) => {
       return Promise.resolve(false);
     })
     .catch((error: any) => {
-      console.log(`startLive error: ${startLive}`)
+      console.log(`startLive error: ${error}`)
       return Promise.resolve(false);
     });
   }
@@ -75,12 +75,50 @@ export const updateStarted = (started: boolean) => {
 export const updatecamera = () => {
   return async function(dispatch: Dispatch, getState: any) {
     const pusherConfig = getState()?.live?.pusherConfig;
-    console.log()
     const {camera} = pusherConfig || {};
-    const newCameraId = camera?.cameraId === 1 ? 0 : 1;
-    dispatch(updatePusherConfig({...pusherConfig, camera: {...pusherConfig.camera, cameraId: 1}}));
+    const cameraDir = camera === CameraType.front ? CameraType.back : CameraType.front;
+
+    dispatch(updatePusherConfig({...pusherConfig, camera: cameraDir}));
   }
 }
+
+/**
+ * 调节 美白 磨皮 红润
+ */
+interface faceBeautyParams {
+    repeat: boolean | undefined, // 重置
+    type: string,
+    value: number
+}
+
+export const updateFaceSetting = (params: faceBeautyParams) => {
+    return async function(dispatch: Dispatch, getState: any) {
+        const pusherConfig = getState()?.live?.pusherConfig;
+        const {faceBeautySetting} = pusherConfig || {};
+
+        const singleSetting = {
+            [params.type] : params.value
+        };
+        const newSetting = {...faceBeautySetting, ...singleSetting };
+        dispatch(updatePusherConfig({...pusherConfig, faceBeautySetting: newSetting}));
+     }
+};
+
+/**
+ * 重置 美白 磨皮 红润
+ */
+const INIT_SETTING: any =  {
+    beautyLevel : 0,
+    whiten : 0,
+    redden : 0,
+}
+
+export const repeatFaceSetting = () => {
+    return async function(dispatch: Dispatch, getState: any) {
+        const pusherConfig = getState()?.live?.pusherConfig;
+        dispatch(updatePusherConfig({...pusherConfig, faceBeautySetting: INIT_SETTING}));
+    }
+};
 
 /**
  * 基础美颜
@@ -194,11 +232,12 @@ interface anchorToLiveParams {
 export const anchorToLive = (params: anchorToLiveParams) => {
   return async function(dispatch: Dispatch, getState: any) {
     const anchorId = getState()?.anchorData?.anchorInfo?.anchorId; // id
+    const pusherConfig = getState()?.live?.pusherConfig;
 
     return api.apiAnchorToLive({...params, anchorId})
     .then((r: any) => {
       console.log(r, 'anchorToLive')
-      
+
       if (isSucceed(r)) {
         // 更新推流地址
         const livingInfo = r?.data;
@@ -206,7 +245,9 @@ export const anchorToLive = (params: anchorToLiveParams) => {
 
         // 更新初始观看人数、头像、昵称、推流地址等
         if (livingInfo) {
-          dispatch(updateLivingInfo(livingInfo));
+          dispatch(updateLivingInfo(livingInfo))
+            console.log('89909')
+          dispatch(updatePusherConfig({...pusherConfig,rtmpURL: livingInfo.pushUrl}));
         }
 
         return Promise.resolve(r?.data);

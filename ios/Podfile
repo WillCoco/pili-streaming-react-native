@@ -52,4 +52,6 @@ target 'championApp-tvOS' do
     # Pods for testing
   end
 
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+  pod "PLPlayerKit", :podspec => 'https://raw.githubusercontent.com/pili-engineering/PLPlayerKit/master/PLPlayerKit-Universal.podspec'
 end

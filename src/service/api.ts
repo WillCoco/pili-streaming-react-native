@@ -6,8 +6,9 @@ import { UpdateParams } from './fetch/fetchOrigin';
 // const HOST_PHP = __DEV__ ? 'https://php.quanpinrtmp.com' : ''
 // const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''
 
-const HOST_PHP = __DEV__ ? 'http://212.129.140.50' : ''
+const HOST_PHP = __DEV__ ? 'https://php.quanpinlive.com' : ''
 const HOST_JAVA = __DEV__ ? 'http://212.129.140.50:2333' : ''
+
 
 /**
  * PHP 接口 ==================================================================
@@ -163,7 +164,7 @@ export const apiCreatePoster = (data: any) => get1(`${HOST_JAVA}/userShare/userG
 // 发布作品 上传文件
 export const apiWorkUpload = (data: any) => uploadWorkMedia(`${HOST_JAVA}/find/uploadFile`, data)
 // 查询订单支付状态
-export const apiQueryOrderPayStatus = (data: any) => get1(`${HOST_JAVA}/order/queryOrderPayStatus`, data) 
+export const apiQueryOrderPayStatus = (data: any) => get1(`${HOST_JAVA}/order/queryOrderPayStatus`, data)
 
 
 /*
@@ -202,7 +203,9 @@ export const apiGetGroupGoods = (data: any) => post1(`${HOST_JAVA}/anchor/getGro
 // 主播直播数据列表
 export const apiGetLiveDataList = (data: any) => post1(`${HOST_JAVA}/anchor/getLiveDataList`, data)
 // 我的直播列表
-export const apiGetLiveList = (data: any) => get(`${HOST_JAVA}/anchor/getLiveList`, data)
+export const apiGetLiveList = (data: any) => get2(`${HOST_JAVA}/anchor/getLiveList`, data)
+// 我的直播列表 一个月
+export const apiGetLiveListAll = (data: any) => get2(`${HOST_JAVA}/anchor/getLiveDataAll`, data)
 // 分页查询寄回地址列表
 export const apiGetReturnAddressList = (data: any) => post(`${HOST_JAVA}/anchor/getReturnAddressList`, data)
 // 主播消息通知列表

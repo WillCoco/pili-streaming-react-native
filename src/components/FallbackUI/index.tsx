@@ -7,12 +7,13 @@
  * @lastModificationDate:
  */
 import React from 'react';
-import {View, ImageBackground, StyleSheet, Text, Image} from 'react-native';
+import {View, ImageBackground, StyleSheet, Text, Image, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import images from '../../assets/images';
 import pxToDp from '../../utils/px2dp';
 import pad from '../../constants/Layout';
 import {PrimaryText} from 'react-native-normalization-text';
+import {Colors} from '../../constants/Theme';
 
 
 
@@ -28,15 +29,12 @@ const RootError = (props) => {
   
   return (
     <View style={styles.wrapper}>
-      <View>
-        <Image
-          resizeMode="contain"
-          source={images.errorPage}
-          style={styles.img}
-        />
-        <PrimaryText style={styles.text}>页面出错</PrimaryText>
-        <PrimaryText style={styles.link} onPress={goHome}>返回首页</PrimaryText>
-      </View>
+      <ImageBackground source={require('../../assets/default-image/err_network.png')} style={styles.errNetWorkImg} >
+        <Text style={styles.text}>页面出错</Text>
+      </ImageBackground>
+      <TouchableOpacity style={styles.reloadBtn} onPress={goHome}>
+        <Text style={styles.reloadText}>点击前往首页</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -61,6 +59,24 @@ const styles = StyleSheet.create({
   link: {
     textAlign: 'center',
   },
+  errNetWorkImg: {
+    width: pxToDp(380),
+    height: pxToDp(360),
+    paddingTop: pxToDp(300)
+  },
+  reloadBtn: {
+    height: pxToDp(50),
+    backgroundColor: Colors.basicColor,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingLeft: pxToDp(20),
+    paddingRight: pxToDp(20),
+    borderRadius: pxToDp(25)
+  },
+  reloadText: {
+    fontSize: pxToDp(24),
+    color: Colors.whiteColor
+  }
 });
 
 export default RootError;

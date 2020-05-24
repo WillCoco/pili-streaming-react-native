@@ -112,6 +112,35 @@ const images : {
   get anchorShareIcon() {
     return require('./anchorShare.png')
   },
+  // 美白
+  get anchorBeauty() {
+      return require('./anchorBeauty.png');
+  },
+  get anchorBeautyAc() {
+      return require('./anchorBeautyAc.png');
+  },
+  // 红润
+  get anchorRedden() {
+      return require('./anchorRedden.png');
+  },
+  get anchorReddenAc() {
+      return require('./anchorReddenAc.png');
+  },
+  // 磨皮
+  get anchorWhite() {
+      return require('./anchorWhiten.png');
+  },
+  get anchorWhiteAc() {
+      return require('./anchorWhitenAc.png');
+  },
+  // 重置
+  get anchorRepeat() {
+      return require('./anchorRepeat.png');
+  },
+  // 收起
+  get pakeUp() {
+      return require('./pakeUp.png');
+  },
   // 主播-消息
   get liveMessageIcon() {
     return require('./message.png')
@@ -370,6 +399,10 @@ const images : {
   // 404页，网络错误页
   get errorPage() {
     return require('../default-image/err_network.png')
+  },
+  // 主播详情背景图
+  get anchorDetail() {
+    return require('./anchorDetailBg.png')
   }
 }
 
