@@ -24,7 +24,7 @@ import Toast from 'react-native-tiny-toast';
 import Mask from '../../../components/Mask';
 import {useSelector, useDispatch} from 'react-redux';
 import {setAnchorAssetsInfo} from '../../../actions/asset';
-import formatSinglePrice from '../../../utils/formatGoodsPrice'
+import formatSinglePrice from '../../../utils/formatGoodsPrice';
 
 const AssetManage = (props: any) =>  {
   const {navigate, replace} = useNavigation();
@@ -80,7 +80,10 @@ const AssetManage = (props: any) =>  {
             text: '为了您的资金安全，请先前往实名认证！',
             title: '提示',
             rightBtnText: '去实名认证',
-            onPressRight: () => {navigate('RealName')}
+            onPressRight: () => {
+              maskDispatch({type: Mask.Actions.REMOVE})
+              navigate('RealName')
+            }
           }
         }
       });

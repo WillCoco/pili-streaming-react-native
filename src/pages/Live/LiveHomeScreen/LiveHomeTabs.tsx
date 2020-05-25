@@ -25,6 +25,7 @@ import pxToDp from '../../../utils/px2dp';
 import { EMPTY_ARR, EMPTY_OBJ } from '../../../constants/freeze';
 import { isSucceed } from '../../../utils/fetchTools';
 import {useIsFocused} from '@react-navigation/native';
+import { Toast } from '@ant-design/react-native';
 
 interface LiveBannerProps {
   style?: StyleProp<any>,
@@ -76,7 +77,7 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
   /**
    * 切换tab
    */
-  const changeTab = (e) => {
+  const changeTab = (e: any) => {
     console.log(e.i);
     // if (e.i === 0) { // 关注
     //   getDataList('2')
@@ -136,7 +137,7 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
         isLogin 
         &&
         <ScrollableTabView
-          initialPage={0}
+          initialPage={1}
           tabBarTextStyle={{
           }}
           tabBarUnderlineStyle={{
