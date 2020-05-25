@@ -175,7 +175,7 @@ function Header(props: Props) {
               style={styles.levelIcon}
             />
           }
-          <View>
+          <View style={{ alignSelf: 'center' }}>
             <Text style={[styles.leveltext, styles.vipLevel]}>{isLogin ? '云闪播会员' : '游客'}</Text>
             {isLogin && <Text style={styles.invCode}>邀请码：{userInfo?.inviteCode}</Text>}
           </View>
@@ -301,7 +301,6 @@ const styles = StyleSheet.create({
     color: Colors.yellowColor
   },
   vipLevel: {
-    marginTop: pxToDp(25),
     marginLeft: pxToDp(30),
     fontSize: pxToDp(40),
     fontWeight: '600'

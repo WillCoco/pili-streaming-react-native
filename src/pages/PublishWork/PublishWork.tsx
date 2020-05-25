@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
-import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
 import { apiPublishWorks } from '../../service/api'
 import { setAddedGoodsList, setMediaList } from '../../actions/works'
