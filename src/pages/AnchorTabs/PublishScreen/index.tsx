@@ -4,6 +4,7 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
+  BackHandler
 } from 'react-native';
 import {T1, SmallText} from 'react-native-normalization-text';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
@@ -41,7 +42,7 @@ const PublishScreen = (props: any) =>  {
   }, []);
 
   /**
-   * tab的返回到 我的 
+   * tab的返回到 我的
    */
   const onBackPress = () => {
     reset({
@@ -53,18 +54,21 @@ const PublishScreen = (props: any) =>  {
   }
 
   /**
-   * 检测下有没有直播 
+   * 检测下有没有直播
    * 可选关闭或者继续直播
    */
+  const [allowBack, setAllowBack] = React.useState(true);
   const checkIsLiveNow = async () => {
     const r: any = await dispatch(isWorkLiveNow());
     if (!r) {
+      setAllowBack(true);
       return
     }
 
     const {liveId, groupId} = r;
 
     if (!!liveId) {
+      setAllowBack(false);
       maskDispatch({
         type: Mask.Actions.PUSH,
         payload: {
@@ -98,8 +102,27 @@ const PublishScreen = (props: any) =>  {
   );
 
   React.useEffect(() => {
-    
+
   }, [])
+
+  /**
+   * 处理android返回
+   */
+  useFocusEffect(
+      React.useCallback(() => {
+          const onBackPressAndroid = () => {
+              if(allowBack) {
+                  onBackPress()
+              }
+              return true
+          }
+
+          BackHandler.addEventListener('hardwareBackPress', onBackPressAndroid);
+
+          return () =>
+            BackHandler.removeEventListener('hardwareBackPress', onBackPressAndroid);
+      }, [])
+  );
 
   return (
     <View style={styles.style}>
