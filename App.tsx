@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Platform, StatusBar, View, NativeModules, Text } from 'react-native';
+import { Platform, StatusBar, View, NativeModules, Linking } from 'react-native';
 // import { AppLoading } from 'expo'
 // import * as SplashScreen from 'expo-splash-screen'
 import SplashScreen from 'react-native-splash-screen'
@@ -97,6 +97,7 @@ import AnchorEntryAgreement from './src/pages/Agreements/AnchorEntryAgreement'
 import LivePlatformStandard from './src/pages/Agreements/LivePlatformStandard'
 import UserAgreement from './src/pages/Agreements/UserAgreement'
 import PrivacyPolicy from './src/pages/Agreements/PrivacyPolicy'
+import LiveGoodsPickerScreen from './src/pages/AnchorTabs/PublishScreen/LiveGoodsPickerScreen';
 
 const { StatusBarManager } = NativeModules
 const { store, persistor } = configStore()
@@ -106,42 +107,47 @@ export default function App(props: { skipLoadingScreen: any; }) {
   const [isLoadingComplete, setLoadingComplete] = useState(false)
 
   useEffect(() => {
-    async function loadResourcesAndDataAsync() {
-      try {
-
-        // SplashScreen.preventAutoHide()
-
-        await Font.loadAsync({
-          ...Ionicons.font,
-          'space-mono': require('./src/assets/fonts/SpaceMono-Regular.ttf')
-        })
-
-      } catch (e) {
-        // We might want to provide this error information to an error reporting service
-        console.warn(e)
-      } finally {
-        setLoadingComplete(true)
-
-        if (Platform.OS === 'ios') {
-          StatusBarManager.getHeight((h: any) => {
-            store.dispatch(getStatusBarHeight(h.height))
-          })
-        } else {
-          store.dispatch(getStatusBarHeight(Number(StatusBar.currentHeight)))
-        }
-
-        // FIXME:
-        // if (isAndroid()) {
-          SplashScreen.hide()
-        // }
-      }
-    }
-
+    checkUrl();
     loadResourcesAndDataAsync();
 
     // 登录im
     store.dispatch(login());
   }, [])
+
+  const checkUrl = () => {
+    Linking.getInitialURL().then((url: any) => {
+      console.log('初始化路径', url)
+    })
+  }
+
+  const loadResourcesAndDataAsync = async () => {
+    try {
+      // SplashScreen.preventAutoHide()
+      await Font.loadAsync({
+        ...Ionicons.font,
+        'space-mono': require('./src/assets/fonts/SpaceMono-Regular.ttf')
+      })
+
+    } catch (e) {
+      // We might want to provide this error information to an error reporting service
+      console.warn(e)
+    } finally {
+      setLoadingComplete(true)
+
+      if (Platform.OS === 'ios') {
+        StatusBarManager.getHeight((h: any) => {
+          store.dispatch(getStatusBarHeight(h.height))
+        })
+      } else {
+        store.dispatch(getStatusBarHeight(Number(StatusBar.currentHeight)))
+      }
+
+      // FIXME:
+      // if (isAndroid()) {
+        SplashScreen.hide()
+      // }
+    }
+  }
 
   const navHeadOption = (title?: string) => ({
     header: (p: any) => <NavBar {...p} title={title} />,
@@ -162,8 +168,8 @@ export default function App(props: { skipLoadingScreen: any; }) {
               <View style={{ flex: 1 }}>
                 {
                   Platform.OS === 'ios'
-                  ? <StatusBar barStyle='light-content' />
-                  : <StatusBar barStyle='light-content' translucent={true} backgroundColor='transparent' />
+                    ? <StatusBar barStyle='light-content' />
+                    : <StatusBar barStyle='light-content' translucent={true} backgroundColor='transparent' />
                 }
                 <NavigationContainer ref={navigationRef as any}>
                   <Stack.Navigator>

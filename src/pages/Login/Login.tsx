@@ -105,7 +105,11 @@ function Logion(props: any) {
       return
     }
 
-    if (verCode.length !== 6) {
+    // if (verCode.length !== 6) {
+    //   Toast.fail('请输入正确的验证码')
+    //   return
+    // }
+    if (!verCode.length) {
       Toast.fail('请输入正确的验证码')
       return
     }

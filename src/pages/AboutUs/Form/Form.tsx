@@ -1,28 +1,58 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, PixelRatio, TouchableWithoutFeedback, Modal, Dimensions, ImageBackground, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  Modal,
+  Platform,
+  StyleSheet,
+  PixelRatio,
+  Dimensions,
+  TouchableWithoutFeedback,
+  ImageBackground,
+  TouchableOpacity
+} from 'react-native'
 import * as Linking from 'expo-linking'
 import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
-import Toast from 'react-native-tiny-toast'
+import { Toast } from '@ant-design/react-native'
 
-export default function Form() {
+interface Props {
+  version: string;
+  hasNewVer: number;
+  updatePath: string;
+  forceUpdate: number;
+  updateContent: string;
+}
+
+export default function Form(props: Props) {
+  const { hasNewVer, version, forceUpdate, updateContent, updatePath } = props
+
   const navigation: any = useNavigation()
-  const [hasNewVersion, setHasNewVersion] = useState(true)
   const [showUpdateModal, setShowUpdateModal] = useState(false)
-  const [forceUpadte, setForceUpdate] = useState(false)
 
   /**
    * 检查更新
    */
   const checkVersion = () => {
-    if (hasNewVersion) {
-      setShowUpdateModal(true)
+    if (hasNewVer) {
+      checkPlatform()
       return
     }
 
-    Toast.show('当前是最新版本', { position: 0 })
+    Toast.success('当前已经是最新版本')
+  }
+
+  /**
+   * 不同平台的下载逻辑
+   */
+  const checkPlatform = () => {
+    if (Platform.OS === 'ios') {
+      Linking.openURL('itms-apps://')
+    } else {
+      setShowUpdateModal(true)
+    }
   }
 
   /**
@@ -58,7 +88,10 @@ export default function Form() {
       <TouchableWithoutFeedback onPress={checkVersion}>
         <View style={styles.formItem}>
           <Text style={styles.title}>检查更新</Text>
-          <Ionicons size={20} name='ios-arrow-forward' color={Colors.darkGrey} />
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            {!!hasNewVer && <Text style={styles.dot} />}
+            <Ionicons size={20} name='ios-arrow-forward' color={Colors.darkGrey} />
+          </View>
         </View>
       </TouchableWithoutFeedback>
 
@@ -70,12 +103,14 @@ export default function Form() {
       >
         <View style={styles.updateModalContainer}>
           <ImageBackground source={require('../../../assets/mine-image/update_bgi.png')} style={styles.updateBgi}>
-            <Text style={styles.updateTitle}>发现新版本</Text>
-            <Text style={styles.updateContent}>云闪播2.0震撼来袭</Text>
+            <Text style={styles.updateTitle}>发现新版本{version}</Text>
+            <Text style={styles.updateContent}>{updateContent}</Text>
             <View style={styles.updateBtnGroup}>
-              <TouchableOpacity style={[styles.updateBtn, styles.cancelBtn]} onPress={() => setShowUpdateModal(false)}>
-                <Text style={[styles.btnText, styles.cancelBtnText]}>取消</Text>
-              </TouchableOpacity>
+              {
+                !forceUpdate && <TouchableOpacity style={[styles.updateBtn, styles.cancelBtn]} onPress={() => setShowUpdateModal(false)}>
+                  <Text style={[styles.btnText, styles.cancelBtnText]}>取消</Text>
+                </TouchableOpacity>
+              }
               <TouchableOpacity style={styles.updateBtn} onPress={downloadNewVersion}>
                 <Text style={styles.btnText}>立即更新</Text>
               </TouchableOpacity>
@@ -161,5 +196,13 @@ const styles = StyleSheet.create({
   },
   cancelBtnText: {
     color: Colors.darkGrey
+  },
+  dot: {
+    width: pxToDp(20),
+    height: pxToDp(20),
+    backgroundColor: Colors.basicColor,
+    margin: pxToDp(30),
+    borderRadius: pxToDp(10),
+    overflow: 'hidden'
   }
 })

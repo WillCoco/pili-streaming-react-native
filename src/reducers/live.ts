@@ -6,7 +6,6 @@ import {Platform} from 'react-native';
 import window from '../constants/Layout';
 
 const isAndroid = Platform.OS === 'android';
-console.log(window, '12300000')
 
 export interface LiveConfig {
   cover?: { // 封面
@@ -64,7 +63,7 @@ export enum CameraType {
 
 const INIT_STREAMING_CONFIG: any = {
     rtmpURL: '',
-    camera: CameraType.front,
+    camera: CameraType.back,
     started: true, // 推流
     faceBeautyEnable: true, // 内置美颜 为true才能设置美白磨皮红润
     faceBeautySetting: {
@@ -73,6 +72,36 @@ const INIT_STREAMING_CONFIG: any = {
         redden: 0, //红润程度
     },
     // previewMirrorEnable:true, // 镜像
+    muted: false,
+    zoom: 1,
+    focus: false,
+    watermarkSetting: {
+        src: null, // or `''`？
+        alpha: 122,
+        position: {
+            x: 0,
+            y: 0,
+        },
+        size: {
+            width: 50,
+            height: 50,
+        },
+    },
+    pictureStreamingFile: null,
+    pictureStreamingEnable: false,
+    torchEnable: false,
+    previewMirrorEnable: false,
+    encodingMirrorEnable: false,
+    audioMixFile: {
+        filePath: null, // or `''`？
+        loop: true,
+    },
+    playMixAudio: false,
+    audioMixVolume: {
+        micVolume: 0.5,
+        musicVolume: 0.5,
+    },
+    playbackEnable: false,
     profile: {
         videoStreamingSetting: {
             fps: 30,

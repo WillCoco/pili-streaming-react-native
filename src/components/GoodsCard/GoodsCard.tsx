@@ -35,7 +35,14 @@ function GoodsCard(props: Props) {
 
     try {
       const result = await Share.share({
-        message: '分享'
+        message: `
+        邀请您加入云闪播，主播团队带货，正品大牌折上折！
+        购物更划算！
+        --------------
+        下载链接：download.yunshanbo.cn
+        --------------
+        注册填写邀请口令：666666
+        `
       })
       if (result.action === Share.sharedAction) {
         if (result.activityType) {

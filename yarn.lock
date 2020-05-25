@@ -4849,9 +4849,9 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-"native-echarts@git+http://47.114.76.40/frontend/react-native-echarts.git":
+"native-echarts@git+ssh://git@47.114.76.40:frontend/react-native-echarts.git":
   version "0.5.0"
-  resolved "git+http://47.114.76.40/frontend/react-native-echarts.git#395d162991471356d2d12a3a1c2411b2390b3e39"
+  resolved "git+ssh://git@47.114.76.40:frontend/react-native-echarts.git#395d162991471356d2d12a3a1c2411b2390b3e39"
   dependencies:
     echarts "3.2.3"
     react-native-webview "^9.4.0"
@@ -5266,9 +5266,9 @@ pify@^4.0.1:
   version "4.0.1"
   resolved "https://registry.npm.taobao.org/pify/download/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
 
-"pili-streaming-react-native@git+http://47.114.76.40/frontend/pili-streaming-react-native.git":
+"pili-streaming-react-native@git+ssh://git@47.114.76.40:frontend/pili-streaming-react-native.git":
   version "2.0.0"
-  resolved "git+http://47.114.76.40/frontend/pili-streaming-react-native.git#e87599bc3fac15a0aa7e69ad0490cf00da9e4110"
+  resolved "git+ssh://git@47.114.76.40:frontend/pili-streaming-react-native.git#e87599bc3fac15a0aa7e69ad0490cf00da9e4110"
 
 pinkie-promise@^2.0.0:
   version "2.0.1"
@@ -5508,7 +5508,6 @@ react-native-fs@^2.16.6:
 react-native-gesture-handler@^1.6.1:
   version "1.6.1"
   resolved "https://registry.npm.taobao.org/react-native-gesture-handler/download/react-native-gesture-handler-1.6.1.tgz#678e2dce250ed66e93af409759be22cd6375dd17"
-  integrity sha1-Z44tziUO1m6Tr0CXWb4izWN13Rc=
   dependencies:
     "@egjs/hammerjs" "^2.0.17"
     hoist-non-react-statics "^2.3.1"

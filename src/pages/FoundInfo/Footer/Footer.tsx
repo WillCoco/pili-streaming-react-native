@@ -15,17 +15,17 @@ interface Props {
   commentInfo: any;
   isLogin: boolean;
   inputFocus: boolean;
-  showGoodsActionSheet: boolean;
   inputBlur(): void;
   followWorks(): void;
   updateCommentList(): void;
+  showGoodsActionSheet(): void;
 }
 
 export default function Footer(props: Props) {
   const { worksInfo, inputFocus, commentInfo, isLogin } = props
   const [inputValue, setInputValue] = useState('')
   const inputRef: any = useRef()
-  const navigation = useNavigation()
+  const navigation: any = useNavigation()
 
   useEffect(() => {
     if (inputFocus) {
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     padding: 0
   },
   bagIcon: {
-    width: pxToDp(40),
+    width: pxToDp(42),
     height: pxToDp(38),
     marginBottom: pxToDp(10)
   },

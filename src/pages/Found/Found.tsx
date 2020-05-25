@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import {
   View,
+  Text,
   Image,
+  FlatList,
   ScrollView,
   StyleSheet,
   RefreshControl,
@@ -32,7 +34,7 @@ function Found(props: { isLogin: boolean }) {
 
   const navigation: any = useNavigation()
   const isFocused: boolean = useIsFocused()
-  
+
   const [maxHeight, setMaxHeight] = useState(0)
   const [loading, setLoading] = useState(false)
   const [showMask, setShowMask] = useState(false)
@@ -78,7 +80,7 @@ function Found(props: { isLogin: boolean }) {
       setMaxHeight(isPullDown ? waterFall(res.worksInfoList).maxHeight : maxH)
     }).catch((err: any) => {
       console.log('发现数据', err)
-      setNetWorkErr(true)
+      // setNetWorkErr(true)
     })
   }
 
@@ -99,7 +101,7 @@ function Found(props: { isLogin: boolean }) {
       getFoundList(false)
     }
   }
-  if (netWorkErr) return <NetWorkErr reload={() => getFoundList(false)} />
+  // if (netWorkErr) return <NetWorkErr reload={() => getFoundList(false)} />
 
   return (
     <>
@@ -124,7 +126,6 @@ function Found(props: { isLogin: boolean }) {
         </View>
         <LoadMore hasMore={hasMoreRef.current} />
       </ScrollView>
-
 
       <View style={styles.addContainer}>
         {
@@ -190,5 +191,8 @@ const styles = StyleSheet.create({
     width: pxToDp(100),
     height: pxToDp(100),
     marginBottom: pxToDp(40)
+  },
+  flatList: {
+    padding: pxToDp(10)
   }
 })

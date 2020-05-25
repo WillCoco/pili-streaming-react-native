@@ -101,7 +101,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       .then((data: any) => {
         if (data) {
           replace('AnchorLivingEnd', data);
-          return;
+            return;
         }
         Toast.show('关闭失败');
       })
@@ -163,7 +163,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       // camera.current.stopPreview();
       // Toast.hide('');
     }
-  }, [])
+  }, []);
 
   // React.useEffect(() => {
   //   if (camera.current) {

@@ -25,11 +25,6 @@ export default function SelectGoodsInfo() {
 
   navigation.setOptions({
     headerTitle: '',
-    headerStyle: {
-      backgroundColor: Colors.basicColor,
-      elevation: 0,  // 去除安卓状态栏底部阴影
-    },
-    headerTitleAlign: 'center',
     headerTintColor: Colors.whiteColor,
     headerBackTitleVisible: false,
     headerTransparent: true

@@ -27,15 +27,6 @@ function FansContent(props: { userInfo?: {} | any; isLogin: boolean }) {
         </View>
       </TouchableWithoutFeedback>
 
-      <View style={styles.item}>
-        <Text style={styles.count}>{userInfo?.fansCount || 0}</Text>
-        <Text style={styles.text}>粉丝</Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.count}>{userInfo?.lookCount || 0}</Text>
-        <Text style={styles.text}>浏览</Text>
-      </View>
-
       <TouchableWithoutFeedback onPress={toFocusedAnchor}>
         <View style={styles.item}>
           <Text style={styles.count}>{userInfo?.anchorCount || 0}</Text>
@@ -43,6 +34,17 @@ function FansContent(props: { userInfo?: {} | any; isLogin: boolean }) {
         </View>
       </TouchableWithoutFeedback>
 
+      <View style={styles.line} />
+
+      <View style={styles.item}>
+        <Text style={[styles.count, { color: Colors.darkGrey}]}>{userInfo?.fansCount || 0}</Text>
+        <Text style={styles.text}>粉丝</Text>
+      </View>
+      <View style={styles.item}>
+        <Text style={[styles.count, { color: Colors.darkGrey}]}>{userInfo?.lookCount || 0}</Text>
+        <Text style={styles.text}>浏览</Text>
+      </View>
+      
     </View>
   )
 }
@@ -74,5 +76,10 @@ const styles = StyleSheet.create({
     fontSize: pxToDp(26),
     lineHeight: pxToDp(37),
     color: Colors.darkGrey
+  },
+  line: {
+    height: pxToDp(80),
+    width: pxToDp(2),
+    backgroundColor: Colors.borderColor
   }
 })

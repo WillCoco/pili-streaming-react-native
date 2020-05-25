@@ -21,6 +21,7 @@ export default function GoodsSwiper(props: { swiperList: Array<any> }) {
                 key={`swiper-${index}`}
                 source={{ uri: item.worksUrl }}
                 style={styles.img}
+                resizeMode='contain'
               />
             )
           })
@@ -33,10 +34,11 @@ export default function GoodsSwiper(props: { swiperList: Array<any> }) {
 
 const styles = StyleSheet.create({
   swiperContainer: {
-    height: pxToDp(460)
+    height: pxToDp(750)
   },
   img: {
     width: '100%',
-    height: '100%'
+    height: '100%',
+    backgroundColor: Colors.darkBlack
   } 
 })
