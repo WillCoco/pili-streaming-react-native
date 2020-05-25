@@ -215,11 +215,11 @@ const LiveWindow = (props: LiveWindowProps): any => {
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
-      <Image
+      {/* <Image
         source={smallPic ? {uri: smallPic} : defaultImages.livingBg}
         resizeMode="cover"
         style={styles.imgBg}
-      />
+      /> */}
       <LivePuller
         ref={v => {
           if (v) {
