@@ -91,7 +91,7 @@ function Logion(props: any) {
         }
       }, 1000)
     }).catch((err: any) => {
-      Toast.fail('发送失败，请稍后再试')
+      // Toast.fail('发送失败，请稍后再试')
       console.log('发送验证码', err)
     })
   }
