@@ -54,8 +54,8 @@ export default class Steam extends Component {
 
       faceBeautyEnable: false,
       faceBeautySetting: {
-        beautyLevel: 1,
-        whiten: 1,
+        beautyLevel: 0,
+        whiten: 0,
         redden: 0.8,
       },
       watermarkSetting: {
@@ -376,6 +376,11 @@ export default class Steam extends Component {
               {...this.bindStateOfPath(
                 'streamingConfig.profile.adaptiveBitrateRange.minBitrate',
               )}
+            />
+
+            <NumberInput
+              label="zoom 设置"
+              {...this.bindStateOfPath('streamingConfig.zoom')}
             />
             <NumberInput
               label="自适应码率调节范围上限"
