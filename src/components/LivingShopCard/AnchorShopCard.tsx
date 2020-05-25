@@ -153,11 +153,13 @@ const AnchorShopCard = (props: {
   const onPressAddShop = async (data: any) => {
     const goodsIdList = Array.isArray(data) ? checkedList.map(d => d.goodsId) : [data?.goodsId];
     // const loading = Toast.loading('添加中');
-    await dispatch(addGroupHouseGoods({goodsIdList}));
-    // console.log(goodsIdList, 'goodsIdList')
-    setDataList(changeIsExit(dataList, (item) => goodsIdList.indexOf(item.goodsId) !== -1, true))
-    // Portal.remove(loading);
-    Toast.success('添加成功');
+    const isSucceed = await dispatch(addGroupHouseGoods({goodsIdList}));
+    console.log(goodsIdList, 'goodsIdList')
+    if (!!isSucceed) {
+      setDataList(changeIsExit(dataList, (item) => goodsIdList.indexOf(item.goodsId) !== -1, true))
+      // Portal.remove(loading);
+      Toast.success('添加成功');
+    }
   }
 
   /**
@@ -166,11 +168,13 @@ const AnchorShopCard = (props: {
   const onPressRemoveShop = async (data: any) => {
     const goodsIdList = Array.isArray(data) ? checkedList.map(d => d.goodsId) : [data?.goodsId];
     // const loading = Toast.loading('删除中');
-    await dispatch(delGroupHouseGoods({goodsIdList}));
+    const isSucceed = await dispatch(delGroupHouseGoods({goodsIdList}));
     // console.log(goodsIdList, 'goodsIdList')
-    setDataList(changeIsExit(dataList, (item) => goodsIdList.indexOf(item.goodsId) !== -1, false))
     // Portal.remove(loading);
-    Toast.success('删除成功');
+    if (!!isSucceed) {
+      setDataList(changeIsExit(dataList, (item) => goodsIdList.indexOf(item.goodsId) !== -1, false))
+      Toast.success('删除成功');
+    }
   }
 
   /**
@@ -298,7 +302,7 @@ const AnchorShopCard = (props: {
             
             <TouchableOpacity
               disabled={!canSubmit}
-              onPress={onPressAddShop}
+              onPress={() => onPressAddShop(checkedList)}
               style={StyleSheet.flatten([
                 styles.submit,
                 {

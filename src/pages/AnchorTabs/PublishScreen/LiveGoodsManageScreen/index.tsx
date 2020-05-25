@@ -10,6 +10,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
+import { nanoid } from 'nanoid/non-secure';
 import {PrimaryText, SmallText, T1, scale} from 'react-native-normalization-text';
 import {useNavigation, useRoute, CommonActions, Route} from '@react-navigation/native';
 import withPage from '../../../../components/HOCs/withPage';
@@ -27,7 +28,7 @@ import {getWareHouseGoods, AddGoodsTargetType, goodsCheckedFormat} from '../../.
 // import Toast from 'react-native-tiny-toast';
 import {Toast, Portal} from '@ant-design/react-native';
 import {brandGoodAdapter} from '../../../../utils/dataAdapters';
-import { nanoid } from 'nanoid/non-secure';
+import {addGroupHouseGoods, changeIsExit, delGroupHouseGoods} from '../../../../actions/shop';
 
 const emptyList: [] = [];
 const emptyObj: {} = {};
@@ -144,8 +145,31 @@ const LiveGoodsManage = (props: any) =>  {
   /**
    * 添加/取消店铺
    */
-  const addShop = () => {
-    alert('根据是否在店铺列表执行删除或添加操作')
+  const addShop = async (data: any) => {
+    const goodsIdList = Array.isArray(data) ? checkedList.map(d => d.goodsId) : [data?.goodsId];
+    // const loading = Toast.loading('添加中');
+    const isSucceed = await dispatch(addGroupHouseGoods({goodsIdList}));
+    console.log(goodsIdList, 'goodsIdList')
+    if (!!isSucceed) {
+      setDataList(changeIsExit(dataList, (item) => goodsIdList.indexOf(item.goodsId) !== -1, true))
+      Toast.success('添加成功');
+    }
+    // Portal.remove(loading);
+  }
+
+  /**
+   * 取消店铺
+   */
+  const removeShop = async (data: any) => {
+    const goodsIdList = Array.isArray(data) ? checkedList.map(d => d.goodsId) : [data?.goodsId];
+    // const loading = Toast.loading('删除中');
+    const isSucceed = await dispatch(delGroupHouseGoods({goodsIdList}));
+    console.log(goodsIdList, 'goodsIdList')
+    if (!!isSucceed) {
+      setDataList(changeIsExit(dataList, (item) => goodsIdList.indexOf(item.goodsId) !== -1, false))
+      Toast.success('删除成功');
+    }
+    // Portal.remove(loading);
   }
 
   /**
@@ -259,7 +283,7 @@ const LiveGoodsManage = (props: any) =>  {
                   return brandGoodAdapter(item)
                 }}
                 onPressCheck={() => checkGood(index)}
-                onPressAddShop={() => addShop(item?.isExist)} // 是否在橱窗列表
+                onPressAddShop={() => item?.isExist === 1 ? removeShop(item) : addShop(item)} // 是否在橱窗列表
                 style={{
                   marginBottom: 4,
                 }}

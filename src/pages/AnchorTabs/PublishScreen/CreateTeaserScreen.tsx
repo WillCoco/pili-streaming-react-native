@@ -24,6 +24,8 @@ import {releaseTeaser} from '../../../actions/live';
 import * as api from '../../../service/api';
 import {Toast, Portal} from '@ant-design/react-native';
 import { vh } from '../../../utils/metric';
+import moment from 'moment';
+// alert(moment(['2015', '5', '4']))
 
 const CreateTraserScreen = (props: {
   safeTop: number,
@@ -74,8 +76,22 @@ const CreateTraserScreen = (props: {
 
       // 收集满了计算时间戳
       if (liveTime.current[0] && liveTime.current[1]) {
-        const t = new Date(liveTime.current.join(' '))
-        liveTimeStamp.current = t.getTime && t.getTime();
+        // const t = new Date(liveTime.current.join(' '))
+        const d = liveTime.current[0].split('.');
+        const year = d[0];
+        const mouth = +d[1] - 1;
+        const day = d[2];
+
+        const t = liveTime.current[1].split(':')
+        // liveTimeStamp.current = t.getTime && t.getTime();
+        
+        // const t = new Date(liveTime.current.join(' '))
+        // alert(t)
+        const mo = moment([year, mouth, day, t[0], t[1]]);
+
+        liveTimeStamp.current = mo.valueOf();
+
+        // alert(mo);
 
         console.log(liveTimeStamp.current, 'liveTimeStamp.currentliveTimeStamp.current')
       }
@@ -215,7 +231,7 @@ const CreateTraserScreen = (props: {
 
     // const cover = result?.data;
 
-    await dispatch(releaseTeaser({
+    const isSucceed = await dispatch(releaseTeaser({
       title,
       smallPic: coverResult,
       advance: videoResult,
@@ -224,8 +240,10 @@ const CreateTraserScreen = (props: {
     }));
     Portal.remove(loading);
 
-    Toast.show('发布成功')
-    goBack();
+    if (isSucceed) {
+      Toast.show('发布成功');
+      goBack();
+    }
   }
 
   return (

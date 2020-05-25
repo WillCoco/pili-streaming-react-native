@@ -12,6 +12,8 @@ import {pad} from '../../constants/Layout';
 import Poller from '../../utils/poller';
 import {apiLiveLike} from '../../service/api';
 import { isSucceed } from '../../utils/fetchTools';
+import { ShareType } from '../../utils/share';
+import share from '../../utils/share';
 import { useNavigation } from '@react-navigation/native';
 
 const BottomBlock = (props: any) : any =>  {
@@ -78,6 +80,13 @@ const BottomBlock = (props: any) : any =>  {
       navigate('Login');
       return;
     }
+    share(ShareType.record, {
+      title: '分享',
+      url: `liveId=${liveId}`,
+      failOnCancel: false,
+    })
+      .then((res) => { console.log(res) })
+      .catch((err) => { err && console.log(err); });
   }
 
   /**

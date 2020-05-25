@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Platform, StatusBar, View, NativeModules, Text } from 'react-native';
 // import { AppLoading } from 'expo'
-// import * as SplashScreen from 'expo-splash-screen'
+import * as SplashScreen from 'expo-splash-screen'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons'
 import { navigationRef } from './src/navigation/RootNavgation';
+import { isAndroid } from './src/constants/DeviceInfo';
 
 import { Provider as AntdProvider } from '@ant-design/react-native'
 import { Provider } from 'react-redux'
@@ -129,7 +130,9 @@ export default function App(props: { skipLoadingScreen: any; }) {
         }
 
         // FIXME:
-        // SplashScreen.hide()
+        if (isAndroid()) {
+          SplashScreen.hide()
+        }
       }
     }
 
@@ -163,7 +166,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 }
                 <NavigationContainer ref={navigationRef as any}>
                   <Stack.Navigator>
-                    {/*<Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />*/}
+                    {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
                     <Stack.Screen name='Root' component={Root} />
                     <Stack.Screen name='HomeSearch' component={HomeSearch} />
                     <Stack.Screen name='FoundSearch' component={FoundSearch} />
@@ -193,7 +196,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                     <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
                     <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false, gestureEnabled: false }} />
                     <Stack.Screen name='LiveSearchScreen' component={LiveSearch} />
-                     <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{ headerShown: false }} />
+                    <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{ headerShown: false }} />
                     <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{ headerShown: false }} />
                     <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} options={{ headerShown: false }} />
                     <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{ headerShown: false }} />
