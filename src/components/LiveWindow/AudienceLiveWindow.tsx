@@ -159,6 +159,13 @@ const LiveWindow = (props: LiveWindowProps): any => {
         // 找不到指定群组 显示结束
         setIsIMJoinSecceed(false);
       });
+
+      // 
+
+    return () => {
+      console.log(player.current, 'player.current.stop')
+      player.current && player.current.stop();
+    }
   }, []);
   
   /**
@@ -214,7 +221,11 @@ const LiveWindow = (props: LiveWindowProps): any => {
         style={styles.imgBg}
       />
       <LivePuller
-        ref={player}
+        ref={v => {
+          if (v) {
+            player.current = v;
+          }
+        }}
         inputUrl={pullUrl}
         onStatus={onPlayerStatus}
         style={styles.video}

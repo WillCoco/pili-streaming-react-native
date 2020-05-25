@@ -312,6 +312,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 66T4PACQC5;
+						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -689,6 +690,8 @@
 			baseConfigurationReference = 193B71850897C1E6F760E9A6 /* Pods-championApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 66T4PACQC5;
@@ -699,8 +702,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.champion.championlive;
+				PRODUCT_BUNDLE_IDENTIFIER = com.championapp;
 				PRODUCT_NAME = championApp;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -710,6 +714,8 @@
 			baseConfigurationReference = A703E07999A01966613DB77B /* Pods-championApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 66T4PACQC5;
 				INFOPLIST_FILE = championApp/Info.plist;
@@ -719,8 +725,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.champion.championlive;
+				PRODUCT_BUNDLE_IDENTIFIER = com.championapp;
 				PRODUCT_NAME = championApp;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
