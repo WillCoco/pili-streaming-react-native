@@ -39,7 +39,6 @@
     "expo-permissions": "^8.1.0",
     "expo-updates": "~0.1.0",
     "moment": "^2.24.0",
-    "native-echarts": "git+http://47.114.76.40/frontend/react-native-echarts.git",
     "pili-streaming-react-native": "git+http://47.114.76.40/frontend/pili-streaming-react-native.git",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
