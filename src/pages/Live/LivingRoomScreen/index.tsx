@@ -6,6 +6,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import {useRoute} from '@react-navigation/native';
+import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import {useDispatch} from 'react-redux';
 import LiveWindow from '../../../components/LiveWindow';
 import withPage from '../../../components/HOCs/withPage';
@@ -21,6 +22,14 @@ interface LiveWindowParams {
 
 const LivingRoomScreen = (props: any) : any =>  {
   const route = useRoute() || EMPTY_OBJ;
+
+  // 屏幕常亮
+  React.useEffect(() => {
+    activateKeepAwake();
+    return () => {
+      deactivateKeepAwake();
+    }
+  }, [])
 
   const dispatch = useDispatch();
 

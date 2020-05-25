@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Platform, StatusBar, View, NativeModules, Linking } from 'react-native';
 // import { AppLoading } from 'expo'
-import * as SplashScreen from 'expo-splash-screen'
+// import * as SplashScreen from 'expo-splash-screen'
+import SplashScreen from 'react-native-splash-screen'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import * as Font from 'expo-font';
