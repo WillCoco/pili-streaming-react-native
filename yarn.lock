@@ -5679,6 +5679,10 @@ react-native-iconfont-cli@^2.0.0:
     mkdirp "^0.5.1"
     tslib "^1.10.0"
 
+react-native-idle-timer@^2.1.6:
+  version "2.1.6"
+  resolved "https://registry.npm.taobao.org/react-native-idle-timer/download/react-native-idle-timer-2.1.6.tgz#6076c9e6127aabdc8eb1e1d846014bfe3dfa7527"
+
 react-native-iphone-x-helper@1.2.1, react-native-iphone-x-helper@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npm.taobao.org/react-native-iphone-x-helper/download/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"

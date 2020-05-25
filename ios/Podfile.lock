@@ -70,9 +70,6 @@ PODS:
   - PLMediaStreamingKit (3.0.0):
     - PLMediaStreamingKit/iphoneos (= 3.0.0)
   - PLMediaStreamingKit/iphoneos (3.0.0)
-  - PLPlayerKit (3.4.3):
-    - PLPlayerKit/universal (= 3.4.3)
-  - PLPlayerKit/universal (3.4.3)
   - RCTRequired (0.61.5)
   - RCTTypeSafety (0.61.5):
     - FBLazyVector (= 0.61.5)
@@ -240,6 +237,8 @@ PODS:
   - React-jsinspector (0.61.5)
   - react-native-cameraroll (1.4.0):
     - React
+  - react-native-idle-timer (2.1.6):
+    - React
   - react-native-nodemediaclient (0.1.11):
     - NodeMediaClient (= 2.7.6)
     - React
@@ -354,7 +353,6 @@ DEPENDENCIES:
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - pili-react-native (from `../node_modules/pili-streaming-react-native/ios/pili-react-native`)
-  - PLPlayerKit (from `https://raw.githubusercontent.com/pili-engineering/PLPlayerKit/master/PLPlayerKit-Universal.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - RCTWeChat (from `../node_modules/react-native-wechat-lib`)
@@ -368,6 +366,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - "react-native-cameraroll (from `../node_modules/@react-native-community/cameraroll`)"
+  - react-native-idle-timer (from `../node_modules/react-native-idle-timer`)
   - react-native-nodemediaclient (from `../node_modules/react-native-nodemediaclient`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-video (from `../node_modules/react-native-video`)
@@ -458,8 +457,6 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   pili-react-native:
     :path: "../node_modules/pili-streaming-react-native/ios/pili-react-native"
-  PLPlayerKit:
-    :podspec: https://raw.githubusercontent.com/pili-engineering/PLPlayerKit/master/PLPlayerKit-Universal.podspec
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -482,6 +479,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-cameraroll:
     :path: "../node_modules/@react-native-community/cameraroll"
+  react-native-idle-timer:
+    :path: "../node_modules/react-native-idle-timer"
   react-native-nodemediaclient:
     :path: "../node_modules/react-native-nodemediaclient"
   react-native-safe-area-context:
@@ -586,7 +585,6 @@ SPEC CHECKSUMS:
   NodeMediaClient: f1a64c858fe87a52453acd0e2a29d49bcf2b3a7a
   pili-react-native: bda3f3d751b6b88e0d83f31eb01934f2fbb9d903
   PLMediaStreamingKit: 3f4fafe3535de54a02c219f40331afa2b47592e0
-  PLPlayerKit: 5eecac081fbf4dc88a142887f82c4095d9095887
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
   RCTWeChat: 21edc74a8d759566d226e6fa12e7ea5ac6bf2129
@@ -598,6 +596,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
   react-native-cameraroll: dbda741db5dadcdcf738e55a1fd565c307943bca
+  react-native-idle-timer: 1d5aacf8915340f4c59b56ff829a6c08ec4e43ee
   react-native-nodemediaclient: d34fb53fc8ccada8d00b5cdbb63435c7dc639384
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   react-native-video: eee541262ada11bc7ffe8ec5508e6a877937c462
@@ -638,6 +637,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: cb890c79c63885504ddc0efd7a7d01481760aca2
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: b01d7e0dcc471754899bb5aa305e6f97b0c13984
+PODFILE CHECKSUM: e6ab5b87f7471f03840571e8e359850c0235fac8
 
 COCOAPODS: 1.9.1

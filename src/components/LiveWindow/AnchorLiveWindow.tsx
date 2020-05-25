@@ -33,6 +33,7 @@ import LivingFaceCard from '../../components/LivingFaceCard';
 import { clearLoginStatus } from '../../actions/user';
 import { isSucceed } from '../../utils/fetchTools';
 import { EMPTY_OBJ } from '../../constants/freeze';
+import IdleTimerManager from 'react-native-idle-timer';
 
 interface LiveWindowProps {
   style?: StyleProp<any>,
@@ -100,7 +101,8 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       .then((data: any) => {
         if (data) {
           replace('AnchorLivingEnd', data);
-          return;
+            IdleTimerManager.setIdleTimerDisabled(false);
+            return;
         }
         Toast.show('关闭失败');
       })
@@ -162,7 +164,11 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       // camera.current.stopPreview();
       // Toast.hide('');
     }
-  }, [])
+  }, []);
+
+  React.useEffect(() => {
+      IdleTimerManager.setIdleTimerDisabled(true);
+  });
 
   // React.useEffect(() => {
   //   if (camera.current) {
