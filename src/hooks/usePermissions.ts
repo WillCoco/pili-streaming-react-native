@@ -6,9 +6,9 @@ import { PermissionsAndroid, Permission, InteractionManager } from 'react-native
 import { isIOS } from '../constants/DeviceInfo';
 
 const usePermissions = (permissions: Array<Permission>) => {
-  if (isIOS()) {
-    return true;
-  }
+  // if (isIOS()) {
+    // return true;
+  // }
 
   const [status, setStatus]: Array<any> = React.useState();
 
@@ -33,6 +33,10 @@ const usePermissions = (permissions: Array<Permission>) => {
 
   React.useEffect(() => {
     InteractionManager.runAfterInteractions(() => {
+      if (isIOS()) {
+        setStatus(true);
+        return;
+      }
       getPermissionAsync();
     })
   }, [])
