@@ -204,7 +204,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
     replace('AudienceLivingEnd');
   }
 
-  // console.log( 'anchorInfoanchorInfoanchorInfo');
+  console.log( pullUrl, 'pullUrlpullUrlpullUrlpullUrl');
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>

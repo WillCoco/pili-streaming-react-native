@@ -135,10 +135,11 @@ const CreateLiveScreen = (props: any) =>  {
   const onAfterChangeSetting = (value: number, type:string) => {
       dispatch(updateFaceSetting({type, value}))
   };
+  // alert(1)
 
   return (
     <View style={StyleSheet.flatten([styles.style, {paddingBottom: props.safeBottom}])}>
-      <LivePusher />
+      {/* <LivePusher /> */}
       <View style={styles.contentWrapper}>
         <View style={StyleSheet.flatten([styles.liveReadyCardWrapper, {marginTop: props.safeTop + 80}])}>
           <LiveReadyCard
