@@ -62,6 +62,12 @@ PODS:
     - glog
   - glog (0.3.5)
   - NodeMediaClient (2.7.6)
+  - pili-react-native (0.0.1):
+    - PLMediaStreamingKit
+    - React
+  - PLMediaStreamingKit (3.0.0):
+    - PLMediaStreamingKit/iphoneos (= 3.0.0)
+  - PLMediaStreamingKit/iphoneos (3.0.0)
   - PLPlayerKit (3.4.3):
     - PLPlayerKit/universal (= 3.4.3)
   - PLPlayerKit/universal (3.4.3)
@@ -346,6 +352,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - pili-react-native (from `../node_modules/pili-streaming-react-native/ios/pili-react-native`)
   - PLPlayerKit (from `https://raw.githubusercontent.com/pili-engineering/PLPlayerKit/master/PLPlayerKit-Universal.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -406,6 +413,7 @@ SPEC REPOS:
   trunk:
     - boost-for-react-native
     - NodeMediaClient
+    - PLMediaStreamingKit
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -446,6 +454,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  pili-react-native:
+    :path: "../node_modules/pili-streaming-react-native/ios/pili-react-native"
   PLPlayerKit:
     :podspec: https://raw.githubusercontent.com/pili-engineering/PLPlayerKit/master/PLPlayerKit-Universal.podspec
   RCTRequired:
@@ -573,6 +583,8 @@ SPEC CHECKSUMS:
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   NodeMediaClient: f1a64c858fe87a52453acd0e2a29d49bcf2b3a7a
+  pili-react-native: bda3f3d751b6b88e0d83f31eb01934f2fbb9d903
+  PLMediaStreamingKit: 3f4fafe3535de54a02c219f40331afa2b47592e0
   PLPlayerKit: 5eecac081fbf4dc88a142887f82c4095d9095887
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
@@ -626,6 +638,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: cb890c79c63885504ddc0efd7a7d01481760aca2
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: cda062d19023332af97cf4e9a759335b074e9b63
+PODFILE CHECKSUM: 4885e3cc9885e21ff9769c58e85f682a6217058f
 
 COCOAPODS: 1.9.1

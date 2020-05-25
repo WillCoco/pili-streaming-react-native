@@ -31,7 +31,7 @@ const LiveWindow = React.forwardRef((props: LiveWindowProps, ref: any) : any => 
   /**
    * 播放器实例
    */
-  const player = React.useRef();
+  const player: {current: any} = React.useRef();
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>

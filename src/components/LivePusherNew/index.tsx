@@ -45,6 +45,7 @@ const LivePusher = React.forwardRef((props: LivePusherProps, ref: any) : any => 
     ]);
 
     React.useEffect(() => {
+        // dispatch(updateStarted(true))
         // console.log('updateStarted')
         // dispatch(updateStarted(false))
         // 打开
