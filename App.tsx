@@ -143,9 +143,9 @@ export default function App(props: { skipLoadingScreen: any; }) {
       }
 
       // FIXME:
-      if (isAndroid()) {
+      // if (isAndroid()) {
         SplashScreen.hide()
-      }
+      // }
     }
   }
 
