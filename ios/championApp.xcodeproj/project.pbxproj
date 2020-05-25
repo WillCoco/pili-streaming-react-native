@@ -245,7 +245,7 @@
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
-				00DD1BFF1BD5951E006B06BC /* Bundle Expo Assets */,
+				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				FDD541C91CCFD29C32472C95 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -267,6 +267,7 @@
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
 				2D02E4791E0B4A5D006451C7 /* Resources */,
 				2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */,
+				BD410F33081F17F08E11491E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -477,6 +478,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		BD410F33081F17F08E11491E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-championApp-tvOS/Pods-championApp-tvOS-frameworks.sh",
+				"${PODS_ROOT}/PLPlayerKit/Pod/Library-Universal/PLPlayerKit.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PLPlayerKit.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-championApp-tvOS/Pods-championApp-tvOS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		C59ACB5F7C573A80E7FFE8BF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -546,13 +565,11 @@
 				"${PODS_ROOT}/Target Support Files/Pods-championApp/Pods-championApp-frameworks.sh",
 				"${PODS_ROOT}/PLMediaStreamingKit/Pod/Library/PLMediaStreamingKit.framework",
 				"${PODS_ROOT}/PLMediaStreamingKit/Pod/Library/HappyDNS.framework",
-				"${PODS_ROOT}/PLPlayerKit/Pod/Library-Universal/PLPlayerKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PLMediaStreamingKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HappyDNS.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PLPlayerKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
