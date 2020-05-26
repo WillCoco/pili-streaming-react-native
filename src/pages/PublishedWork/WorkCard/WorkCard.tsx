@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image, ImageBackground } from 'react-native'
+import { View, Text, StyleSheet, Image, ImageBackground, TouchableOpacity } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
 import moment from 'moment'
@@ -7,13 +8,29 @@ import moment from 'moment'
 export default function WorkCard(props: { workAction?: any; workInfo?: any }) {
   const { workInfo } = props
 
+  const navigation: any = useNavigation()
+
+  const toFoundInfo = () => {
+    if (workInfo.auditStatus !== 1) return
+
+    const params = {
+      id: workInfo.worksId,
+      width: workInfo.worksMoreInfo.imageWidth,
+      height: workInfo.worksMoreInfo.imageHeight
+    }
+
+    navigation.push('FoundInfo', params)
+  }
+
   return (
     <View style={styles.container}>
-      <ImageBackground source={{ uri: workInfo.worksType === 'VIDEO' ? workInfo.worksMoreInfo.videoCover : workInfo.worksMoreInfo.worksUrl }} style={styles.workImg} resizeMode='cover'>
-        {
-          workInfo.worksType === 'VIDEO' && <Image source={require('../../../assets/works-image/play.png')} style={styles.playIcon} />
-        }
-      </ImageBackground>
+      <TouchableOpacity onPress={toFoundInfo}>
+        <ImageBackground source={{ uri: workInfo.worksType === 'VIDEO' ? workInfo.worksMoreInfo.videoCover : workInfo.worksMoreInfo.worksUrl }} style={styles.workImg} resizeMode='cover'>
+          {
+            workInfo.worksType === 'VIDEO' && <Image source={require('../../../assets/works-image/play.png')} style={styles.playIcon} />
+          }
+        </ImageBackground>
+      </TouchableOpacity>
       <View style={styles.workInfo}>
         <View>
           <Text style={styles.title}>{workInfo.worksTitle}</Text>

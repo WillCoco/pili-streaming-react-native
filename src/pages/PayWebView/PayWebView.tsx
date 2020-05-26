@@ -13,6 +13,7 @@ export default function PayWebview() {
   // const { orderSn, payType } = route.params
   const { orderSn, payType, nextBtnText, nextRoute } = route.params
 
+  console.log(route.params, '支付页面路由参数')
 
   navigation.setOptions({
     headerTitle: '支付' || route?.params?.title,
