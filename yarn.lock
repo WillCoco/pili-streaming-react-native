@@ -1217,9 +1217,10 @@
   version "3.3.0"
   resolved "https://registry.npm.taobao.org/@react-native-community/viewpager/download/@react-native-community/viewpager-3.3.0.tgz#e613747a43a31a6f3278f817ba96fdaaa7941f23"
 
-"@react-navigation/bottom-tabs@^5.2.6":
-  version "5.4.6"
-  resolved "https://registry.npm.taobao.org/@react-navigation/bottom-tabs/download/@react-navigation/bottom-tabs-5.4.6.tgz?cache=0&sync_timestamp=1589963463193&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40react-navigation%2Fbottom-tabs%2Fdownload%2F%40react-navigation%2Fbottom-tabs-5.4.6.tgz#ae4370b3839e68074b4b62c760f96f895f19bec3"
+"@react-navigation/bottom-tabs@^5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@react-navigation/bottom-tabs/-/bottom-tabs-5.5.0.tgz#b8b5b8909d6155048abaefe504ccad2b3c91230a"
+  integrity sha512-VHkp73oXLLaB3KhmhalzJI5Q8Fp29rhT1TW7TQTFYvWLlh8Mq1mCUywwlfOWsTZa8mIBZqZiLfTLflS/1oD/1w==
   dependencies:
     color "^3.1.2"
     react-native-iphone-x-helper "^1.2.1"
@@ -4849,9 +4850,9 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-"native-echarts@git+ssh://git@47.114.76.40:frontend/react-native-echarts.git":
+"native-echarts@git+http://47.114.76.40/frontend/react-native-echarts.git":
   version "0.5.0"
-  resolved "git+ssh://git@47.114.76.40:frontend/react-native-echarts.git#395d162991471356d2d12a3a1c2411b2390b3e39"
+  resolved "git+http://47.114.76.40/frontend/react-native-echarts.git#395d162991471356d2d12a3a1c2411b2390b3e39"
   dependencies:
     echarts "3.2.3"
     react-native-webview "^9.4.0"
@@ -5266,9 +5267,9 @@ pify@^4.0.1:
   version "4.0.1"
   resolved "https://registry.npm.taobao.org/pify/download/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
 
-"pili-streaming-react-native@git+ssh://git@47.114.76.40:frontend/pili-streaming-react-native.git":
+"pili-streaming-react-native@git+http://47.114.76.40/frontend/pili-streaming-react-native.git":
   version "2.0.0"
-  resolved "git+ssh://git@47.114.76.40:frontend/pili-streaming-react-native.git#e87599bc3fac15a0aa7e69ad0490cf00da9e4110"
+  resolved "git+http://47.114.76.40/frontend/pili-streaming-react-native.git#e87599bc3fac15a0aa7e69ad0490cf00da9e4110"
 
 pinkie-promise@^2.0.0:
   version "2.0.1"
