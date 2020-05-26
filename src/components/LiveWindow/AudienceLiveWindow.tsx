@@ -135,7 +135,8 @@ const LiveWindow = (props: LiveWindowProps): any => {
     apiEnterLive(params)
       .then((res: any) => {
         if (isSucceed(res)) {
-          if (res?.data?.liveStatus !== '1') {
+          // console.log(res, 11111)
+          if (res?.data?.liveStatus !== '2') {
             // 直播已结束
             Toast.show('直播已结束');
             goBack();
@@ -144,6 +145,18 @@ const LiveWindow = (props: LiveWindowProps): any => {
           console.log(res, '进入列表');
           res.watchNum = res.watchNum - 1; // 这里重新会重复加人数
           dispatch(updateLivingInfo({...res?.data, liveId, anchorId}));
+
+          // 直播加群
+          dispatch(joinGroup({groupID}))
+          .then((success?: boolean) => {
+            setIsIMJoinSecceed(!!success);
+          })
+          .catch((err: any) => {
+            console.log(err, "err");
+            // 找不到指定群组 显示结束
+            setIsIMJoinSecceed(false);
+          });
+          
           return;
         }
         // 错误返回
@@ -155,16 +168,6 @@ const LiveWindow = (props: LiveWindowProps): any => {
         console.log(`apiEnterLive: ${err}`)
       })
 
-    // 直播加群
-    dispatch(joinGroup({groupID}))
-      .then((success?: boolean) => {
-        setIsIMJoinSecceed(!!success);
-      })
-      .catch((err: any) => {
-        console.log(err, "err");
-        // 找不到指定群组 显示结束
-        setIsIMJoinSecceed(false);
-      });
 
       // 
 

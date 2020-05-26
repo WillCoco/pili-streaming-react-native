@@ -266,6 +266,8 @@ const LiveGoodsManage = (props: any) =>  {
     }
   }
 
+  const length = checkedList && checkedList.length || 0
+
   return (
     <View style={styles.style}>
       <NavBar title={navTitle} leftTheme="light" titleStyle={{color: '#fff'}} style={{backgroundColor: Colors.basicColor}} />
@@ -308,7 +310,7 @@ const LiveGoodsManage = (props: any) =>  {
           onPress={onPressCheckAll}
         />
         <ButtonRadius
-          text={btnText || `开播(${0})`}
+          text={btnText || `开播(${length})`}
           onPress={onSubmit}
         />
       </View>

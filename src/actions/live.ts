@@ -160,7 +160,6 @@ export const releaseTeaser = (params: ReleaseTeaserParams) => {
     console.log(opts, 'optsoptsopts')
     return api.apiReleaseNotice(opts)
     .then((r: any) => {
-      console.log(r, 123123123123);
       return Promise.resolve(isSucceed(r));
     })
     .catch((error: any) => {

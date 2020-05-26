@@ -191,10 +191,9 @@ export const getUserSig = (userId: string) => {
   return async function(dispatch: Dispatch, getState: any) {
     // const stateUserSig = getState()?.im?.userSig;
     // return getUserSigLocal(userID)
-    console.log(222222)
     return api.apiGetUserSig({userId})
       .then(r => {
-        console.log(r, '11111')
+        // console.log(r, '11111')
         if (isSucceed(r)) {
           dispatch(updateUserStatus({userId, userSig: r?.data}));
           return Promise.resolve(r?.data);

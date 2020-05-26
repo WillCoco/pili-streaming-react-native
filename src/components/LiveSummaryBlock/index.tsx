@@ -125,7 +125,7 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
         </PrimaryText>
       </View>
       
-      <TouchableOpacity style={styles.bottomBar} onPress={() => navigate('AnchorDetail')}>
+      <View style={styles.bottomBar}>
         <View style={styles.anorchInfoWrapper}>
           <Avatar size={scale(20)} style={{marginRight: pad / 2}} source={props.liveInfo?.anchorLogo}/>
           <SmallText
@@ -149,7 +149,7 @@ const LiveSummaryBlock = (props: LiveSummaryBlockProps) : any =>  {
               {props.liveInfo?.likeSum || 0}
           </SmallText>
         </View>
-      </TouchableOpacity>
+      </View>
     </TouchableOpacity>
   )
 }

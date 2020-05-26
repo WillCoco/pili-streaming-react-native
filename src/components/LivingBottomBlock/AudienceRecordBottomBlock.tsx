@@ -48,6 +48,11 @@ const BottomBlock = (props: any) : any =>  {
   const liveIdPersist = React.useMemo(() => {
     return liveId
   }, [])
+
+  /**
+   * 邀请码
+   */
+  const inviteCode = useSelector((state: any) => state?.userData?.userInfo?.inviteCode);
   
   // 提交喜欢
   const submitLike = React.useCallback((quantity: number) => {
@@ -80,9 +85,12 @@ const BottomBlock = (props: any) : any =>  {
       navigate('Login');
       return;
     }
-    share(ShareType.record, {
+
+    share({
+      liveId,
+      inviteCode
+    }, {
       title: '分享',
-      url: `liveId=${liveId}`,
       failOnCancel: false,
     })
       .then((res) => { console.log(res) })

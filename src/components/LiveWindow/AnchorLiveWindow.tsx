@@ -97,6 +97,11 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
   const roomMemberNum = useSelector((state: any) => state?.im?.roomMemberNum);
 
   /**
+   * 邀请码
+   */
+  const inviteCode = useSelector((state: any) => state?.userData?.userInfo?.inviteCode);
+
+  /**
    * im加群状态
    */
   const [isIMJoinSecceed, setIsIMJoinSecceed]: [undefined|boolean, any] = React.useState(undefined);
@@ -287,9 +292,12 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
    * 分享
   */
   const onPressShare = () => {
-    share(ShareType.living, {
+    share({
+      liveId,
+      groupId: groupID,
+      inviteCode
+    }, {
       title: '分享',
-      url: `liveId=${liveId}?groupId=${groupID}`,
       failOnCancel: false,
     })
       .then((res) => { console.log(res) })
