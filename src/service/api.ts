@@ -6,8 +6,8 @@ import { UpdateParams } from './fetch/fetchOrigin';
 // const HOST_PHP = __DEV__ ? 'https://php.quanpinrtmp.com' : ''
 // const HOST_JAVA = __DEV__ ? 'https://java.quanpinrtmp.com' : ''
 
-const HOST_PHP = __DEV__ ? 'https://php.quanpinlive.com' : ''
-const HOST_JAVA = __DEV__ ? 'http://212.129.140.50:2333' : ''
+const HOST_PHP = __DEV__ ? 'https://mobile.quanpinlive.com' : 'https://mobile.quanpinlive.com'
+const HOST_JAVA = __DEV__ ? 'https://app.quanpinlive.com' : 'https://app.quanpinlive.com'
 
 
 /**
