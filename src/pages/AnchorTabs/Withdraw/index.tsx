@@ -15,7 +15,6 @@ import {ListItem} from 'react-native-elements';
 import {useSelector, useDispatch} from 'react-redux';
 import {PrimaryText, TinyText, T4} from 'react-native-normalization-text';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import Toast from 'react-native-tiny-toast';
 import NavBar from '../../../components/NavBar';
 import ButtonRadius from '../../../components/Buttons/ButtonRadius';
 import {Colors} from '../../../constants/Theme';
@@ -31,6 +30,9 @@ import {apiGetUserBankCards, apiWithdraw} from '../../../service/api';
 import pxToDp from '../../../utils/px2dp';
 import images from '../../../assets/images';
 import {updateCurBankCards} from '../../../actions/asset';
+import { apiSendVerCode } from '../../../service/api';
+import { Toast, Portal } from '@ant-design/react-native';
+
 
 const Withdraw = (props: any) =>  {
   const {navigate, goBack, replace} = useNavigation();
@@ -39,9 +41,10 @@ const Withdraw = (props: any) =>  {
   const [withdrawNum, setWithdrawNum] = React.useState('');
   const [verifyCode, setVerifyCode] =  React.useState('');
   let [maskList, maskDispatch] = React.useContext(Mask.context);
-  const curBankCard = useSelector(state => state?.asset?.curBankCard) || {}; // 当前选中银行卡
+  const curBankCard = useSelector((state: any) => state?.asset?.curBankCard) || {}; // 当前选中银行卡
   const [showCountDown, setShowCountDown] = React.useState(false); // 是否显示获取验证码倒计时
-  const accountMoney = useSelector(state => state?.asset?.anchorAssetsInfo?.accountMoney) || 0; // 可提现金额
+  const accountMoney = useSelector((state: any) => state?.asset?.anchorAssetsInfo?.accountMoney) || 0; // 可提现金额
+  const userTel = useSelector((state: any) => state?.userData?.userInfo?.userTel) || '' // 手机号
 
   React.useEffect(() => {
     apiGetUserBankCards()
@@ -68,15 +71,30 @@ const Withdraw = (props: any) =>  {
    * 展示倒计时
    */
   const renderCoundDown = (second: number) => {
-    return <PrimaryText onPress={getCode}>{'' + second}s后重发</PrimaryText>
+    return <PrimaryText>{'' + second}s后重发</PrimaryText>
   }
   
   /**
-   * 获取验证码
+   * 发送验证码
    */
   const getCode = () => {
-    setShowCountDown(true);
-  };
+
+    const loading = Toast.loading('')
+
+    apiSendVerCode({ userTel: 17681610221 }).then((res: any) => {
+      console.log('发送验证码', res)
+
+      Portal.remove(loading)
+
+      Toast.success('验证码已发送')
+
+      setShowCountDown(true);
+
+    }).catch((err: any) => {
+      // Toast.fail('发送失败，请稍后再试')
+      console.log('发送验证码', err)
+    })
+  }
 
   /**
    * 提交提现
@@ -99,25 +117,27 @@ const Withdraw = (props: any) =>  {
       "userBankCardId": curBankCard.id
     };
 
-    apiWithdraw(params).then( (res: any) => {
-      if (res?.message.indexOf('验证码')) {
-        maskDispatch({
-          type: Mask.Actions.PUSH,
-          payload: {
-            type: Mask.ContentTypes.Normal,
-            data: {
-              text: '验证码错误，请重新输入!',
-              title: '提示',
-              showLeftBtn: false,
-              rightBtnText: '确定',
-              onPressRight: () => {maskDispatch({type: Mask.Actions.REMOVE})}
-            }
-          }});
-        return;
-      }
-      Toast.show('提现成功')
-      goBack();
-    });
+    apiWithdraw(params)
+      .then( (res: any) => {
+        if (res?.message?.indexOf('手机验证码不正确')) {
+          maskDispatch({
+            type: Mask.Actions.PUSH,
+            payload: {
+              type: Mask.ContentTypes.Normal,
+              data: {
+                text: '验证码错误，请重新输入!',
+                title: '提示',
+                showLeftBtn: false,
+                rightBtnText: '确定',
+                onPressRight: () => {maskDispatch({type: Mask.Actions.REMOVE})}
+              }
+            }});
+          return;
+        }
+        Toast.show('提现成功')
+        goBack();
+      })
+      .catch(console.warn)
   };
 
   return (
@@ -150,7 +170,7 @@ const Withdraw = (props: any) =>  {
             <PrimaryText >添加银行卡</PrimaryText>
           </TouchableOpacity>
         }
-        <FormRow 
+        <FormRow
           title={'提现金额'}
           placeholder={`可提现金额¥${accountMoney / 100}`}
           value={withdrawNum}
@@ -180,7 +200,7 @@ const Withdraw = (props: any) =>  {
      
       <ButtonRadius
         text="提交"
-        style={StyleSheet.flatten([styles.button, {marginBottom: props.safeBottom}])}
+        style={styles.button}
         onPress={onSumbit}
       />
     </View>
@@ -193,7 +213,8 @@ Withdraw.defaultProps = {
 const styles = StyleSheet.create({
   style: {
     flex: 1,
-    backgroundColor: Colors.bgColor
+    backgroundColor: Colors.bgColor,
+    borderWidth: 2,
   },
   nav: {
     backgroundColor: Colors.basicColor,
@@ -206,6 +227,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: vw(80),
+    marginBottom: pxToDp(40)
   },
   addIcon: {
     width: 18,

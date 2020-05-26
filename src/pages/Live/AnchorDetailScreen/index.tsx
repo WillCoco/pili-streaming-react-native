@@ -129,7 +129,6 @@ const AnchorDetail = (props: any) =>  {
           left: vw(25) - 25,
         }}
         renderTabBar={(props) => {
-          console.log(props, 'renderTabBar')
           return (
             <ScrollableTab {...props} />
           )
