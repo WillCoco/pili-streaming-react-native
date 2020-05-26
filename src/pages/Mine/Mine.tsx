@@ -10,6 +10,7 @@ import ToolBar from './ToolBar/ToolBar'
 import Account from './Account/Account'
 import ShareBar from './ShareBar/ShareBar'
 import GoodsList from './GoodsList/GoodsList'
+import PosterCard from './PosterCard/PosterCard'
 import FansContent from './FansContent/FansContent'
 import checkIsBottom from '../../utils/checkIsBottom'
 import OrdersContent from './OrdersContent/OrdersContent'
@@ -19,7 +20,7 @@ import ActionSheet from '../../components/ActionSheet/ActionSheet'
 
 const pageSize = 20
 
-function Mine(props: { dispatch?: any; isLogin?: boolean; }) {
+function Mine(props: { dispatch: any; isLogin: boolean; }) {
   const { isLogin } = props
 
   const pageNoRef = useRef(1)
@@ -32,6 +33,8 @@ function Mine(props: { dispatch?: any; isLogin?: boolean; }) {
   const [orderCount, setOrderCount]: any = useState({})
   const [goodsList, setGoodsList]: Array<any> = useState([])
   const [showShareBar, setShowShareBar] = useState(false)
+  const [showPoster, setShowPoster] = useState(false)
+  const [posterPath, setPosterPath] = useState('')
 
   useEffect(() => {
     getGoodsList()
@@ -105,6 +108,14 @@ function Mine(props: { dispatch?: any; isLogin?: boolean; }) {
   }
 
   /**
+   * 显示分享卡片
+   */
+  const showPosterContainer = (img: string) => {
+    setShowPoster(true)
+    setPosterPath(`data:image/png;base64,${img}`)
+  }
+
+  /**
    * 网络异常 重新加载
    */
   // const reload = () => {
@@ -140,9 +151,15 @@ function Mine(props: { dispatch?: any; isLogin?: boolean; }) {
       <ActionSheet isShow={showShareBar}>
         <ShareBar
           hideShareBar={() => setShowShareBar(false)}
-          // setPosterPath={(img: string, type: number) => showPoster(img, type)}
+          setPosterPath={(img: string) => showPosterContainer(img)}
         />
       </ActionSheet>
+
+      <PosterCard
+        show={showPoster}
+        path={posterPath}
+        hidePosterCard={() => setShowPoster(false)}
+      />
     </>
   )
 }

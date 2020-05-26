@@ -17,12 +17,10 @@ import { setUserInfo } from '../../../actions/user'
 import { Portal, Toast as AntToast } from '@ant-design/react-native'
 
 interface Props {
-  dispatch: any;
-  userId: number;
-  goodsId: number;
-  userData: any;
+  userId?: number;
+  userData?: any;
   hideShareBar(): void;
-  setPosterPath(img: string, type: number): any;
+  setPosterPath(img: string): any;
 }
 
 function ShareBar(props: Props) {
@@ -71,8 +69,9 @@ function ShareBar(props: Props) {
     }
 
     apiCreatePoster(params).then((res: any) => {
+      console.log('分享卡片', res)
       Portal.remove(loading)
-      // props.setPosterPath(res)
+      props.setPosterPath(res)
       props.hideShareBar()
     }).catch((err: any) => {
       Portal.remove(loading)

@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
 
-function FansContent(props: { userInfo?: {} | any; isLogin: boolean }) {
+function FansContent(props: { userInfo?: {} | any; isLogin?: boolean }) {
   const navigation: any = useNavigation()
   const { userInfo = {}, isLogin } = props
 
