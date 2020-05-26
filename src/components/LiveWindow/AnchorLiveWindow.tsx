@@ -33,6 +33,7 @@ import LivingFaceCard from '../../components/LivingFaceCard';
 import { clearLoginStatus } from '../../actions/user';
 import { isSucceed } from '../../utils/fetchTools';
 import { EMPTY_OBJ } from '../../constants/freeze';
+import share, { ShareType } from '../../utils/share';
 
 interface LiveWindowProps {
   style?: StyleProp<any>,
@@ -272,6 +273,19 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       dispatch(updateFaceSetting({type, value}))
   };
 
+  /**
+   * 分享
+  */
+  const onPressShare = () => {
+    share(ShareType.living, {
+      title: '分享',
+      url: `liveId=${liveId}?groupId=${groupID}`,
+      failOnCancel: false,
+    })
+      .then((res) => { console.log(res) })
+      .catch((err) => { err && console.log(err); });
+  }
+
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
@@ -282,7 +296,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
         <LivingBottomBlock.Anchor
           onPressShopBag={() => shopCardAnim(true)}
           onPressBubble={onPressBubble}
-          onPressShare={() =>alert('余组货')}
+          onPressShare={onPressShare}
           onPressFace={() => faceCardAnim(true)}
         />
         <TouchableOpacity onPress={switchCamera} style={StyleSheet.flatten([styles.camera, {top: props.safeTop + (pad * 2)}])}>

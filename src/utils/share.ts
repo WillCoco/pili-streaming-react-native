@@ -61,7 +61,13 @@ const share = (type: ShareType | MediaType, options: Options) => {
   // },
     default: {
       ...options,
-      url: `${sharePrefix}${options.url}`
+      url: `
+邀请您加入云闪播，主播团队带货，正品大牌折上折！
+购物更划算！
+--------------
+下载链接：${sharePrefix}${options.url}
+--------------
+注册填写邀请口令：666666`
     },
   });
   
