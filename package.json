@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pili-engineering/pili-streaming-react-native.git"
+    "url": "git+http://47.114.76.40/frontend/pili-streaming-react-native"
   },
   "keywords": [
     "pili",
