@@ -50,6 +50,7 @@ export default function PayWebview() {
   return (
     <WebView
       ref={webViewRef}
+      style={{opacity: 0.99}}
       source={{ uri: route?.params?.url }}
     />
   )

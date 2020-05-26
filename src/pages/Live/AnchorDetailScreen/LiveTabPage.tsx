@@ -24,7 +24,7 @@ import { Toast } from '@ant-design/react-native';
 import PagingList from '../../../components/PagingList';
 import {apiAnchorParticular} from '../../../service/api';
 import { isSucceed } from '../../../utils/fetchTools';
-import { EMPTY_OBJ } from '../../../constants/freeze';
+import { EMPTY_OBJ, EMPTY_ARR } from '../../../constants/freeze';
 
 const Row = (props: {
   title: string,
@@ -128,10 +128,10 @@ const LiveTabPage = (props: {
     const result = await apiAnchorParticular(params).catch(console.warn);
 
     if (isSucceed(result)) {
-      return Promise.resolve({result: result?.data?.liveList?.records || EMPTY_OBJ});
+      return Promise.resolve({result: result?.data?.liveList?.records || EMPTY_ARR});
     }
 
-    return Promise.resolve({result: EMPTY_OBJ})
+    return Promise.resolve({result: EMPTY_ARR})
   }
 
   /**
@@ -148,10 +148,11 @@ const LiveTabPage = (props: {
     const result = await apiAnchorParticular(params).catch(console.warn);
 
     if (isSucceed(result)) {
-      return Promise.resolve({result: result?.data?.liveList?.records || EMPTY_OBJ});
+      return Promise.resolve({result: EMPTY_ARR})
+      return Promise.resolve({result: result?.data?.liveList?.records || EMPTY_ARR});
     }
 
-    return Promise.resolve({result: EMPTY_OBJ})
+    return Promise.resolve({result: EMPTY_ARR})
   };
 
 
