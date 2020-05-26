@@ -37,7 +37,7 @@ export default function WorkCard(props: { workInfo: any }) {
           }}
           style={{
             width: '100%',
-            height: workInfo.height - pxToDp(160)
+            height: workInfo.height - pxToDp(140)
           }}
         >
           {
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     color: Colors.darkBlack,
     lineHeight: pxToDp(36),
     fontWeight: '500',
-    marginBottom: pxToDp(20)
+    marginBottom: pxToDp(10)
   },
   anchorInfo: {
     flexDirection: 'row',
