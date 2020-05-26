@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     paddingTop: pxToDp(20)
   },
   item: {
-    flex: 1,
+    width: '25%',
     alignItems: 'center'
   },
   icon: {
