@@ -6,6 +6,7 @@ import {
   View,
   StyleSheet,
   Image,
+  ScrollView,
 } from 'react-native'
 import NavBar from '../../../components/NavBar'
 import {Colors} from '../../../constants/Theme'
@@ -28,7 +29,7 @@ const BeAnchor = (props: any) =>  {
   const beAnchorPrice = useSelector((state: any) => state?.userData?.userInfo?.liveMoney) // 开通主播的价格
   // const userId = useSelector(state => state?.userData?.userInfo?.userId) || ''
   
-  const [checked, setChecked] = React.useState(false) // 勾选框
+  const [checked, setChecked] = React.useState(true) // 勾选框
 
   const anchorRights = [
     {title: '直播权限', text: '一键直播、简单卖货', source: require('../../../assets/be-anchor-image/bg0.png')},
@@ -83,7 +84,11 @@ const BeAnchor = (props: any) =>  {
         titleStyle={styles.navTitle}
         style={styles.nav}
       />
-      <View style={styles.rightsWrapper}>
+      
+      <ScrollView 
+        style={styles.rightsWrapper}
+        showsVerticalScrollIndicator={false}
+      >
         {
           anchorRights.map((item, index) => {
             return <BeAnchorRow 
@@ -92,7 +97,7 @@ const BeAnchor = (props: any) =>  {
             />
           })
         }
-        <View style={{flexDirection: 'row'}}>
+        <View style={styles.checkBox}>
           <CheckBox 
             isChecked={checked}
             onPress={() => {setChecked((c) =>  !c)}}
@@ -100,7 +105,7 @@ const BeAnchor = (props: any) =>  {
           />
           <PrimaryText>同意<PrimaryText style={{color: Colors.blueColor}} onPress={() => navigate('AnchorEntryAgreement')}>《云闪播主播入驻服务协议》</PrimaryText></PrimaryText>
         </View>
-      </View>
+      </ScrollView>
       <View style={styles.beAnchorWrapper}>
         <Image source={images.beAnchorIcon} style={styles.beAnchorIconStyle}/>
         <View>
@@ -133,12 +138,17 @@ const styles = StyleSheet.create({
   rightsWrapper: {
     flex: 1,
     padding: pad,
-    paddingTop: pad * 1.5
+    paddingTop: pad * 1.5,
+  },
+  checkBox: {
+    flexDirection: 'row',
+    // height: pxToDp(80),
+    marginBottom: pad * 4,
   },
   beAnchorWrapper: {
     flexDirection: 'row',
     padding: pad * 1.5,
-    paddingBottom: pad * 4,
+    paddingBottom: pad * 2,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     backgroundColor: Colors.whiteColor,

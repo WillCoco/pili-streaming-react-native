@@ -167,9 +167,14 @@ const LiveTabPage = (props: {
   /**
    * 渲染行
    */
-  const renderRow = (item: any, index: number) => {
+  let notRecordCount = 0 // 不是回放的数量
+
+  const renderRow = (item: any) => {
+    let index
+    index = item.index
     item = item.item
     if (item.liveStatus == 2) {
+      notRecordCount ++
       return (
         <Row
           key={`_${index}`}
@@ -181,6 +186,7 @@ const LiveTabPage = (props: {
         />
       )
     } else if (item.liveStatus == 1) {
+      notRecordCount ++
       return <Row
         key={`item_${index}`}
         title={item?.liveTitle }
@@ -189,20 +195,36 @@ const LiveTabPage = (props: {
         time={item?.liveTime}
         showDivider
         onPress={() => toLiveingRoom(item)}
-
       />
     } else if (item.liveStatus == 3) {
-      return (
-        <LiveRecord
-          img={item?.smallPic}
-          title={item?.liveTitle}
-          time={(new Date(item?.liveTime)).toLocaleString()}
-          viewTimes={item?.watchNum}
-          goodsQuantity={item?.liveProductnum}
-          key={`item_${index}`}
-          onPress={() => toLiveingRoom(item)}
-        />
-      )
+      if (notRecordCount == index) {
+        return (
+          <View>
+            <T4>精彩回放</T4>
+            <LiveRecord
+              img={item?.smallPic}
+              title={item?.liveTitle}
+              time={(new Date(item?.liveTime)).toLocaleString()}
+              viewTimes={item?.watchNum}
+              goodsQuantity={item?.liveProductnum}
+              key={`item_${index}`}
+              onPress={() => toLiveingRoom(item)}
+            />
+          </View>
+        )
+      } else {
+        return (
+          <LiveRecord
+            img={item?.smallPic}
+            title={item?.liveTitle}
+            time={(new Date(item?.liveTime)).toLocaleString()}
+            viewTimes={item?.watchNum}
+            goodsQuantity={item?.liveProductnum}
+            key={`item_${index}`}
+            onPress={() => toLiveingRoom(item)}
+          />
+        )
+      }
     } 
   }
 
@@ -212,7 +234,7 @@ const LiveTabPage = (props: {
       <PagingList
         data={props?.liveRecords}
         size={PAGE_SIZE}
-        renderItem={(item: any, index: number) => renderRow(item, index)}
+        renderItem={(item: any) => renderRow(item)}
         onRefresh={onRefresh}
         onEndReached={onEndReached}
         initialNumToRender={PAGE_SIZE}
