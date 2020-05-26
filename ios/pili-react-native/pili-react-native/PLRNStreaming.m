@@ -125,13 +125,11 @@ const char *networkStatus[] = {
         NSDictionary *audioCapture = self.profile[@"microphoneSteamingSetting"];
         NSDictionary *videoStream = self.profile[@"videoStreamingSetting"];
         NSDictionary *audioStream = self.profile[@"audioStreamingSetting"];
-        NSString *camera = self.profile[@"camera"];
-    
-        int cameraId = [camera isEqualToString:@"front"] ? 2 : 1;
+        
         
         //cameraSetting
         int presetVideo = [videoCapture[@"resolution"] intValue];
-
+        int cameraId = [videoCapture[@"cameraId"] intValue];
         int videoOrientation = [videoCapture[@"videoOrientation"] intValue];
       
         //MicrophoneSteamingSetting
@@ -165,7 +163,7 @@ const char *networkStatus[] = {
     
         PLVideoCaptureConfiguration *videoCaptureConfiguration = [PLVideoCaptureConfiguration defaultConfiguration];
         videoCaptureConfiguration.sessionPreset = [self getPresetVideo:presetVideo];
-        videoCaptureConfiguration.position = cameraId;
+        videoCaptureConfiguration.position = cameraId + 1;
         videoCaptureConfiguration.videoOrientation = videoOrientation;
     
         PLAudioCaptureConfiguration *audioCaptureConfiguration = [PLAudioCaptureConfiguration defaultConfiguration];

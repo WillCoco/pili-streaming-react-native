@@ -3505,10 +3505,10 @@ pify@^4.0.1:
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
-pili-streaming-react-native@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/pili-streaming-react-native/-/pili-streaming-react-native-2.0.0.tgz#33ffd7d909ee0a31f8a93f7377514860d984ae71"
-  integrity sha512-XrjfpicoCR8zPmIb9+ph4bgio3TubLftLpuB6enObblUMhFm06eKfDsSD7pRn2dL9yAzTKycRU774lMgg+K8PQ==
+"pili-streaming-react-native@file:./..":
+  version "2.0.1"
+  dependencies:
+    pili-streaming-react-native "file:../../../../Library/Caches/Yarn/v6/npm-pili-streaming-react-native-2.0.1-f1b3f192-74f4-455b-a6d1-29425fad8d4c-1590472401339/node_modules/pili-streaming-react-native"
 
 pirates@^4.0.0:
   version "4.0.1"

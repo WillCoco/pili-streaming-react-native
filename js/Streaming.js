@@ -3,32 +3,31 @@
  * @author nighca <nighca@live.cn>
  */
 
-import React, { Component } from 'react'
-import P from 'prop-types'
-import { View, requireNativeComponent } from 'react-native'
-import * as consts from './const'
+import React, { Component } from "react";
+import P from "prop-types";
+import { View, requireNativeComponent } from "react-native";
+import * as consts from "./const";
 
-const PLRNMediaStreaming = requireNativeComponent('PLRNMediaStreaming')
+const PLRNMediaStreaming = requireNativeComponent("PLRNMediaStreaming");
 
 export default class Streaming extends Component {
-
   handleStateChange = (event) => {
     if (this.props.onStateChange) {
-      this.props.onStateChange(event.nativeEvent.state)
+      this.props.onStateChange(event.nativeEvent.state);
     }
-  }
+  };
 
   handleStreamInfoChange = (event) => {
     if (this.props.onStreamInfoChange) {
-      this.props.onStreamInfoChange(event.nativeEvent)
+      this.props.onStreamInfoChange(event.nativeEvent);
     }
-  }
+  };
 
   handleAudioMixProgress = (event) => {
     if (this.props.onAudioMixProgress) {
-      this.props.onAudioMixProgress(event.nativeEvent)
+      this.props.onAudioMixProgress(event.nativeEvent);
     }
-  }
+  };
 
   render() {
     return (
@@ -38,14 +37,13 @@ export default class Streaming extends Component {
         onStreamInfoChange={this.handleStreamInfoChange}
         onAudioMixProgress={this.handleAudioMixProgress}
       />
-    )
+    );
   }
 }
 
 Streaming.propTypes = {
-
   rtmpURL: P.string.isRequired,
-  camera: P.oneOf(['front','back']),
+  camera: P.oneOf(["front", "back"]),
   muted: P.bool,
   zoom: P.number,
   focus: P.bool,
@@ -56,14 +54,16 @@ Streaming.propTypes = {
     whiten: P.number, // 0-1.0
     redden: P.number, // 0-1.0
   }),
-  watermarkSetting: P.shape({ // 水印设置
+  watermarkSetting: P.shape({
+    // 水印设置
     src: P.string, // 文件路径
     alpha: P.number, // 0-255, iOS 不支持
     position: P.shape({
       x: P.number,
       y: P.number,
     }),
-    size: P.shape({ // iOS 不支持
+    size: P.shape({
+      // iOS 不支持
       width: P.number,
       height: P.number,
     }),
@@ -74,7 +74,8 @@ Streaming.propTypes = {
   // captureFrame: P.bool, // TODO: 截图
   previewMirrorEnable: P.bool, // 预览镜像设置
   encodingMirrorEnable: P.bool, // 编码镜像设置
-  audioMixFile: P.shape({ // 混音
+  audioMixFile: P.shape({
+    // 混音
     filePath: P.string, // 混音文件路径
     loop: P.bool,
   }),
@@ -86,7 +87,6 @@ Streaming.propTypes = {
   playbackEnable: P.bool,
 
   profile: P.shape({
-
     videoStreamingSetting: P.shape({
       fps: P.number.isRequired,
       bps: P.number.isRequired,
@@ -95,8 +95,8 @@ Streaming.propTypes = {
       h264Profile: oneOf(consts.videoH264Profiles),
       customVideoEncodeSize: P.shape({
         width: P.number, // 单位：像素
-        height: P.number // 单位：像素
-      })
+        height: P.number, // 单位：像素
+      }),
     }).isRequired,
 
     audioStreamingSetting: P.shape({
@@ -110,13 +110,14 @@ Streaming.propTypes = {
     cameraStreamingSetting: P.shape({
       resolution: oneOf(consts.cameraResolutions),
       focusMode: oneOf(consts.cameraFocusModes), // iOS 不支持
-      videoOrientation: oneOf(consts.cameraVideoOrientations) // Android 不支持
+      videoOrientation: oneOf(consts.cameraVideoOrientations), // Android 不支持
+      cameraId: oneof(consts.cameraPosition),
     }),
 
     microphoneSteamingSetting: P.shape({
       sampleRate: oneOf(consts.microphoneSampleRates), // iOS 不支持
       channel: oneOf(consts.microphoneChannels),
-      isAecEnable: P.bool
+      isAecEnable: P.bool,
     }),
 
     quicEnable: P.bool,
@@ -124,23 +125,20 @@ Streaming.propTypes = {
 
     adaptiveBitrateRange: P.shape({
       minBitrate: P.number, // 单位：bps
-      maxBitrate: P.number // 单位：bps，iOS 不支持
+      maxBitrate: P.number, // 单位：bps，iOS 不支持
     }),
 
     encoderRCMode: oneOf(consts.encoderRCModes), // iOS 不支持
     streamInfoUpdateInterval: P.number, // 单位：秒
-
   }).isRequired,
 
   onStateChange: P.func,
   onStreamInfoChange: P.func,
   onAudioMixProgress: P.func,
 
-  ...View.propTypes
-}
+  ...View.propTypes,
+};
 
 function oneOf(kvs) {
-  return P.oneOf(Object.keys(kvs).map(
-    k => kvs[k]
-  ))
+  return P.oneOf(Object.keys(kvs).map((k) => kvs[k]));
 }

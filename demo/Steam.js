@@ -114,7 +114,7 @@ export default class Steam extends Component {
             : consts.cameraResolutions_iOS.AVCaptureSessionPresetMedium,
           focusMode: consts.cameraFocusModes.continuousVideo,
           videoOrientation: consts.cameraVideoOrientations.portrait,
-          cameraId: 1, // (ios: back = 0, front = 1)
+          cameraId: consts.cameraPosition.front,
         },
         microphoneSteamingSetting: {
           sampleRate: consts.microphoneSampleRates.r44100,
