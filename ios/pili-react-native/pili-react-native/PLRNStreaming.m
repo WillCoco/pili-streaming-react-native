@@ -14,18 +14,18 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 
 typedef NS_ENUM(NSUInteger, PLRNStreamState) {
-  
-  PLRNStreamStateReady = 0,
-  
-  PLRNStreamStateConnecting,
-  
-  PLRNStreamStateStreaming,
-  
-  PLRNStreamStateShutdown,
-  
-  PLRNStreamStateError,
-  
-  PLRNStreamStateDisconnected,
+    
+    PLRNStreamStateReady = 0,
+    
+    PLRNStreamStateConnecting,
+    
+    PLRNStreamStateStreaming,
+    
+    PLRNStreamStateShutdown,
+    
+    PLRNStreamStateError,
+    
+    PLRNStreamStateDisconnected,
 };
 
 @interface PLRNStreaming()
@@ -38,73 +38,74 @@ typedef NS_ENUM(NSUInteger, PLRNStreamState) {
 @end
 
 @implementation PLRNStreaming{
-//  RCTEventDispatcher *_eventDispatcher;
-  BOOL _started;
-  BOOL _muted;
-  BOOL _focus;
-  NSString *_camera;
-  BOOL _faceBeautyEnable;
-  NSDictionary *_faceBeautySetting;
-  NSDictionary *_watermarkSetting;
-  BOOL _pictureStreamingEnable;
-  NSString * _pictureStreamingFile;
-  BOOL _torchEnable;
-  BOOL _previewMirrorEnable;
-  BOOL _encodingMirrorEnable;
-  NSDictionary *_audioMixFile;
-  BOOL _playMixAudio;
-  NSDictionary * _audioMixVolume;
-  BOOL _playbackEnable;
-  BOOL _isPlayerFinish;
+    //  RCTEventDispatcher *_eventDispatcher;
+    BOOL _started;
+    BOOL _muted;
+    BOOL _focus;
+    NSString *_camera;
+    BOOL _faceBeautyEnable;
+    NSDictionary *_faceBeautySetting;
+    NSDictionary *_watermarkSetting;
+    BOOL _pictureStreamingEnable;
+    NSString * _pictureStreamingFile;
+    BOOL _torchEnable;
+    BOOL _previewMirrorEnable;
+    BOOL _encodingMirrorEnable;
+    NSDictionary *_audioMixFile;
+    BOOL _playMixAudio;
+    NSDictionary * _audioMixVolume;
+    BOOL _playbackEnable;
+    BOOL _isPlayerFinish;
 }
 
 const char *stateNames[] = {
-  "Unknow",
-  "Connecting",
-  "Connected",
-  "Disconnecting",
-  "Disconnected",
-  "Error"
+    "Unknow",
+    "Connecting",
+    "Connected",
+    "Disconnecting",
+    "Disconnected",
+    "Error"
 };
 
 
 const char *networkStatus[] = {
-  "Not Reachable",
-  "Reachable via WiFi",
-  "Reachable via CELL"
+    "Not Reachable",
+    "Reachable via WiFi",
+    "Reachable via CELL"
 };
 
 - (instancetype)init
 {
-  if ((self = [super init])) {
-    [PLStreamingEnv initEnv];
-    _started = YES;
-    _muted = NO;
-    _focus = NO;
-    _isPlayerFinish = NO;
-    _camera = @"front";
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleInterruption:)
-                                                 name:AVAudioSessionInterruptionNotification
-                                               object:[AVAudioSession sharedInstance]];
-    CGSize videoSize = CGSizeMake(480 , 640);
-    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    if (orientation <= AVCaptureVideoOrientationLandscapeLeft) {
-      if (orientation > AVCaptureVideoOrientationPortraitUpsideDown) {
-        videoSize = CGSizeMake(640 , 480);
-      }
+    if ((self = [super init])) {
+        [PLStreamingEnv initEnv];
+        _started = YES;
+        _muted = NO;
+        _focus = NO;
+        _isPlayerFinish = NO;
+        _camera = @"front";
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleInterruption:)
+                                                     name:AVAudioSessionInterruptionNotification
+                                                   object:[AVAudioSession sharedInstance]];
+        CGSize videoSize = CGSizeMake(480 , 640);
+        UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+        if (orientation <= AVCaptureVideoOrientationLandscapeLeft) {
+            if (orientation > AVCaptureVideoOrientationPortraitUpsideDown) {
+                videoSize = CGSizeMake(640 , 480);
+            }
+        }
     }
-  }
-  
-  return self;
+    
+    return self;
 };
 
-- (void)dealloc
-{
+- (void)dealloc {
     if (self.session) {
         [self.session destroy];
     }
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
@@ -120,7 +121,7 @@ const char *networkStatus[] = {
 
 - (void)setSourceAndProfile {
     if (self.profile && self.rtmpURL) {
-    
+        
         NSDictionary *videoCapture = self.profile[@"cameraStreamingSetting"];
         NSDictionary *audioCapture = self.profile[@"microphoneSteamingSetting"];
         NSDictionary *videoStream = self.profile[@"videoStreamingSetting"];
@@ -129,13 +130,15 @@ const char *networkStatus[] = {
         
         //cameraSetting
         int presetVideo = [videoCapture[@"resolution"] intValue];
-        int cameraId = [videoCapture[@"cameraId"] intValue];
         int videoOrientation = [videoCapture[@"videoOrientation"] intValue];
-      
+        
+        int cameraId = [videoCapture[@"cameraId"] intValue];
+        cameraId = [(_camera ?: @"front") isEqualToString:@"front"] ? 1 : 0;
+        
         //MicrophoneSteamingSetting
         int channelsPerFrame = [audioCapture[@"channel"] intValue] +1;
         BOOL acousticEchoCancellationEnable = [audioCapture[@"isAecEnable"] boolValue];
-      
+        
         //videoStreamingSetting
         int fps = [videoStream[@"fps"] intValue];
         int bps = [videoStream[@"bps"] intValue];
@@ -144,7 +147,7 @@ const char *networkStatus[] = {
         double width = [videoStream[@"customVideoEncodeSize"][@"width"] intValue];
         int h264Profile = [videoStream[@"h264Profile"] intValue];
         int avCodecType = [self.profile[@"avCodecType"] intValue];
-      
+        
         //audioStreamingSetting
         int audioRate = [audioStream[@"rate"] intValue];
         int audioBps = [audioStream[@"bitrate"] intValue];
@@ -156,22 +159,28 @@ const char *networkStatus[] = {
         }
         NSUInteger minVideoBitRate = [self.profile[@"adaptiveBitrateRange"][@"minBitrate"] unsignedIntegerValue];
         int streamStatusConfig = [self.profile[@"streamInfoUpdateInterval"] intValue];
-    
-    //TODO videoProfileLevel 需要通过 分辨率 选择
-    
-        PLVideoStreamingConfiguration *videoStreamingConfiguration = [[PLVideoStreamingConfiguration alloc] initWithVideoSize:CGSizeMake(width, height) expectedSourceVideoFrameRate:fps videoMaxKeyframeInterval:maxFrameInterval averageVideoBitRate:bps videoProfileLevel:[self getH264Profile:h264Profile] videoEncoderType:avCodecType];
-    
+        
+        //TODO videoProfileLevel 需要通过 分辨率 选择
+        
+        PLVideoStreamingConfiguration *videoStreamingConfiguration = [[PLVideoStreamingConfiguration alloc] initWithVideoSize:CGSizeMake(width, height)
+                                                                                                 expectedSourceVideoFrameRate:fps
+                                                                                                     videoMaxKeyframeInterval:maxFrameInterval
+                                                                                                          averageVideoBitRate:bps
+                                                                                                            videoProfileLevel:[self getH264Profile:h264Profile] videoEncoderType:avCodecType];
+        
         PLVideoCaptureConfiguration *videoCaptureConfiguration = [PLVideoCaptureConfiguration defaultConfiguration];
         videoCaptureConfiguration.sessionPreset = [self getPresetVideo:presetVideo];
         videoCaptureConfiguration.position = cameraId + 1;
         videoCaptureConfiguration.videoOrientation = videoOrientation;
-    
+        
         PLAudioCaptureConfiguration *audioCaptureConfiguration = [PLAudioCaptureConfiguration defaultConfiguration];
-      audioCaptureConfiguration.channelsPerFrame = channelsPerFrame;
-      audioCaptureConfiguration.acousticEchoCancellationEnable = acousticEchoCancellationEnable;
+        audioCaptureConfiguration.channelsPerFrame = channelsPerFrame;
+        audioCaptureConfiguration.acousticEchoCancellationEnable = acousticEchoCancellationEnable;
         // 音频编码配置
-        PLAudioStreamingConfiguration *audioStreamingConfiguration = [[PLAudioStreamingConfiguration alloc] initWithEncodedAudioSampleRate:audioRate encodedNumberOfChannels:1 audioBitRate:audioBps];
-      
+        PLAudioStreamingConfiguration *audioStreamingConfiguration = [[PLAudioStreamingConfiguration alloc] initWithEncodedAudioSampleRate:audioRate
+                                                                                                                   encodedNumberOfChannels:1
+                                                                                                                              audioBitRate:audioBps];
+        
         // 推流 session
         self.session = [[PLMediaStreamingSession alloc] initWithVideoCaptureConfiguration:videoCaptureConfiguration
                                                                 audioCaptureConfiguration:audioCaptureConfiguration
@@ -179,17 +188,24 @@ const char *networkStatus[] = {
                                                               audioStreamingConfiguration:audioStreamingConfiguration
                                                                                    stream:nil];
         self.session.delegate = self;
-    
+        
         //            UIImage *waterMark = [UIImage imageNamed:@"qiniu.png"];
         //            PLFilterHandler handler = [self.session addWaterMark:waterMark origin:CGPointMake(100, 300)];
         //            self.filterHandlers = [@[handler] mutableCopy];//TODO -  水印暂时注释
-    
+        
         [self.session setMonitorNetworkStateEnable:YES];
         self.session.statusUpdateInterval = streamStatusConfig;
         self.session.quicEnable = quicEnable;
+        
+        [self setFaceBeautyEnable:_faceBeautyEnable ?: YES];
+        [self setFaceBeautySetting:_faceBeautySetting ?: @{@"beautyLevel":@(0), @"redden":@(0), @"whiten":@(0)}];
+        
+//        [self setCamera:_camera ?: @"front"];
+        
         if (autoBitrateAdjustMode) {
-          [self.session   enableAdaptiveBitrateControlWithMinVideoBitRate:minVideoBitRate];
+            [self.session enableAdaptiveBitrateControlWithMinVideoBitRate:minVideoBitRate];
         }
+        
         self.session.connectionChangeActionCallback = ^(PLNetworkStateTransition transition) {
             switch (transition) {
                 case PLNetworkStateTransitionWiFiToWWAN:
@@ -207,29 +223,29 @@ const char *networkStatus[] = {
             }
             return YES;
         };
-    
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             UIView *previewView = self.session.previewView;
             [self addSubview:previewView];
             [previewView setTranslatesAutoresizingMaskIntoConstraints:NO];
-      
+            
             NSLayoutConstraint *centerX = [NSLayoutConstraint constraintWithItem:previewView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0];
             NSLayoutConstraint *centerY = [NSLayoutConstraint constraintWithItem:previewView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0];
             NSLayoutConstraint *width = [NSLayoutConstraint constraintWithItem:previewView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0];
             NSLayoutConstraint *height = [NSLayoutConstraint constraintWithItem:previewView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0];
-      
+            
             NSArray *constraints = [NSArray arrayWithObjects:centerX, centerY,width,height, nil];
             [self addConstraints: constraints];
-      
+            
             NSString *log = [NSString stringWithFormat:@"Zoom Range: [1..%.0f]", self.session.videoActiveFormat.videoMaxZoomFactor];
             NSLog(@"%@", log);
-      
-            if(_focus){
+            
+            if (_focus) {
                 [self.session setSmoothAutoFocusEnabled:_focus];
                 [self.session setTouchToFocusEnable:_focus];
             }
-      
-            if(_muted){
+            
+            if (_muted) {
                 [self setMuted:_muted];
             }
             
@@ -237,7 +253,7 @@ const char *networkStatus[] = {
                 [self startSession];
             }
         });
-    
+        
         
     }
 }
@@ -279,25 +295,25 @@ const char *networkStatus[] = {
 }
 
 - (void)setFaceBeautyEnable:(BOOL)faceBeautyEnable {
-  _faceBeautyEnable = faceBeautyEnable;
-  [self.session setBeautifyModeOn:faceBeautyEnable];
+    _faceBeautyEnable = faceBeautyEnable;
+    [self.session setBeautifyModeOn:faceBeautyEnable];
 }
 
 - (void)setFaceBeautySetting:(NSDictionary *)faceBeautySetting {
-  _faceBeautySetting = [faceBeautySetting copy];
-  [self.session setBeautify:[faceBeautySetting[@"beautyLevel"] floatValue]];
-  [self.session setRedden:[faceBeautySetting[@"redden"] floatValue]];
-  [self.session setWhiten:[faceBeautySetting[@"whiten"] floatValue]];
+    _faceBeautySetting = [faceBeautySetting copy];
+    [self.session setBeautify:[faceBeautySetting[@"beautyLevel"] floatValue]];
+    [self.session setRedden:[faceBeautySetting[@"redden"] floatValue]];
+    [self.session setWhiten:[faceBeautySetting[@"whiten"] floatValue]];
 }
 
 - (void)setWatermarkSetting:(NSDictionary *)watermarkSetting {
-  _watermarkSetting = [watermarkSetting copy];
-  if (watermarkSetting && (watermarkSetting[@"src"] != [NSNull null]) &&![watermarkSetting[@"src"] isEqual:@""] && [watermarkSetting[@"src"] containsString:@"/"]) {
-    UIImage *waterMark = [UIImage imageWithContentsOfFile:watermarkSetting[@"src"]];
-    [self.session setWaterMarkWithImage:waterMark position:CGPointMake([watermarkSetting[@"position"][@"x"] floatValue], [watermarkSetting[@"position"][@"y"] floatValue])];
-  }else {
-    [self.session clearWaterMark];
-  }
+    _watermarkSetting = [watermarkSetting copy];
+    if (watermarkSetting && (watermarkSetting[@"src"] != [NSNull null]) &&![watermarkSetting[@"src"] isEqual:@""] && [watermarkSetting[@"src"] containsString:@"/"]) {
+        UIImage *waterMark = [UIImage imageWithContentsOfFile:watermarkSetting[@"src"]];
+        [self.session setWaterMarkWithImage:waterMark position:CGPointMake([watermarkSetting[@"position"][@"x"] floatValue], [watermarkSetting[@"position"][@"y"] floatValue])];
+    }else {
+        [self.session clearWaterMark];
+    }
 }
 
 - (void)setPictureStreamingEnable:(BOOL)pictureStreamingEnable {
@@ -313,59 +329,59 @@ const char *networkStatus[] = {
 }
 
 - (void)setPictureStreamingFile:(NSString *)pictureStreamingFile {
-  _pictureStreamingFile = pictureStreamingFile;
-  
+    _pictureStreamingFile = pictureStreamingFile;
+    
 }
 
 - (void)setTorchEnable:(BOOL)torchEnable {
-  _torchEnable = torchEnable;
-  [self.session setTorchOn:torchEnable];
+    _torchEnable = torchEnable;
+    [self.session setTorchOn:torchEnable];
 }
 
 - (void)setPreviewMirrorEnable:(BOOL)previewMirrorEnable {
-  _previewMirrorEnable = previewMirrorEnable;
-  self.session.previewMirrorRearFacing = previewMirrorEnable;
-  self.session.previewMirrorFrontFacing = previewMirrorEnable;
+    _previewMirrorEnable = previewMirrorEnable;
+    self.session.previewMirrorRearFacing = previewMirrorEnable;
+    self.session.previewMirrorFrontFacing = previewMirrorEnable;
 }
 
 - (void)setEncodingMirrorEnable:(BOOL)encodingMirrorEnable {
-  _encodingMirrorEnable = encodingMirrorEnable;
-  self.session.streamMirrorRearFacing = encodingMirrorEnable;
-  self.session.streamMirrorFrontFacing = encodingMirrorEnable;
+    _encodingMirrorEnable = encodingMirrorEnable;
+    self.session.streamMirrorRearFacing = encodingMirrorEnable;
+    self.session.streamMirrorFrontFacing = encodingMirrorEnable;
 }
 
 - (void)setAudioMixFile:(NSDictionary *)audioMixFile {
-  if (audioMixFile && audioMixFile[@"filePath"] != [NSNull null] && [audioMixFile[@"filePath"] containsString:@"/"]) {
-    _audioMixFile = [audioMixFile copy];
-    self.audioPlayer = [self.session audioPlayerWithFilePath:audioMixFile[@"filePath"]];
-  }
-  
+    if (audioMixFile && audioMixFile[@"filePath"] != [NSNull null] && [audioMixFile[@"filePath"] containsString:@"/"]) {
+        _audioMixFile = [audioMixFile copy];
+        self.audioPlayer = [self.session audioPlayerWithFilePath:audioMixFile[@"filePath"]];
+    }
+    
 }
 
 - (void)setPlayMixAudio:(BOOL)playMixAudio {
-  if (_audioMixFile && (_audioMixFile[@"filePath"] != [NSNull null]) && [_audioMixFile[@"filePath"] containsString:@"/"]) {
-    _playMixAudio = playMixAudio;
-    if (playMixAudio) {
-      [self.audioPlayer play];
-    }else {
-      [self.audioPlayer pause];
+    if (_audioMixFile && (_audioMixFile[@"filePath"] != [NSNull null]) && [_audioMixFile[@"filePath"] containsString:@"/"]) {
+        _playMixAudio = playMixAudio;
+        if (playMixAudio) {
+            [self.audioPlayer play];
+        }else {
+            [self.audioPlayer pause];
+        }
     }
-  }
-  
+    
 }
 
 - (void)setAudioMixVolume:(NSDictionary *)audioMixVolume {
-  if (_audioMixFile && (_audioMixFile[@"filePath"] != [NSNull null]) && [_audioMixFile[@"filePath"] containsString:@"/"]) {
-    _audioMixVolume = [audioMixVolume copy];
-    self.session.inputGain = [audioMixVolume[@"micVolume"] floatValue];
-    self.audioPlayer.volume = [audioMixVolume[@"musicVolume"] floatValue];
-  }
-  
+    if (_audioMixFile && (_audioMixFile[@"filePath"] != [NSNull null]) && [_audioMixFile[@"filePath"] containsString:@"/"]) {
+        _audioMixVolume = [audioMixVolume copy];
+        self.session.inputGain = [audioMixVolume[@"micVolume"] floatValue];
+        self.audioPlayer.volume = [audioMixVolume[@"musicVolume"] floatValue];
+    }
+    
 }
 
 - (void)setPlaybackEnable:(BOOL)playbackEnable {
-  _playbackEnable = playbackEnable;
-  [self.session setPlayback:playbackEnable];
+    _playbackEnable = playbackEnable;
+    [self.session setPlayback:playbackEnable];
 }
 
 - (void)streamingSessionSendingBufferDidFull:(id)session {
@@ -402,7 +418,7 @@ const char *networkStatus[] = {
     self.onStreamInfoChange(@{@"videoFPS":@(status.videoFPS),
                               @"audioFPS":@(status.audioFPS),
                               @"totalBitrate":@(status.totalBitrate)
-    });
+                            });
 }
 
 - (void)mediaStreamingSession:(PLMediaStreamingSession *)session streamStateDidChange:(PLStreamState)state {
@@ -411,30 +427,30 @@ const char *networkStatus[] = {
     if (!self.onStateChange) {
         return;
     }
-  
+    
     switch (state) {
         case PLStreamStateUnknow:
-      
+            
             self.onStateChange(@{@"state":@(PLRNStreamStateReady)});
             break;
         case PLStreamStateConnecting:
-      
+            
             self.onStateChange(@{@"state":@(PLRNStreamStateConnecting)});
             break;
         case PLStreamStateConnected:
-      
+            
             self.onStateChange(@{@"state":@(PLRNStreamStateStreaming)});
             break;
         case PLStreamStateDisconnecting:
-      
+            
             break;
         case PLStreamStateDisconnected:
-                
+            
             self.onStateChange(@{@"state":@(PLRNStreamStateShutdown)});
             self.onStateChange(@{@"state":@(PLRNStreamStateDisconnected)});
             break;
         case PLStreamStateError:
-      
+            
             self.onStateChange(@{@"state":@(PLRNStreamStateError)});
             break;
         default:
@@ -447,7 +463,7 @@ const char *networkStatus[] = {
     NSLog(@"%@", log);
     // [self startSession];
     _started = NO;
-
+    
     if (self.onStateChange) {
         NSString *errorlog = [NSString stringWithFormat:@"Stream State: %s", stateNames[PLStreamStateError]];
         NSLog(@"%@", errorlog);
@@ -467,9 +483,9 @@ const char *networkStatus[] = {
 - (void)handleInterruption:(NSNotification *)notification {
     if ([notification.name isEqualToString:AVAudioSessionInterruptionNotification]) {
         NSLog(@"Interruption notification");
-    
+        
         if ([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeBegan]]) {
-                NSLog(@"InterruptionTypeBegan");
+            NSLog(@"InterruptionTypeBegan");
         } else {
             // the facetime iOS 9 has a bug: 1 does not send interrupt end 2 you can use application become active, and repeat set audio session acitve until success.  ref http://blog.corywiles.com/broken-facetime-audio-interruptions-in-ios-9
             NSLog(@"InterruptionTypeEnded");
@@ -486,7 +502,7 @@ const char *networkStatus[] = {
             return AVVideoProfileLevelH264Baseline30;
             
         case 1:
-        
+            
             return AVVideoProfileLevelH264Main30;
             
         case 2:
@@ -494,7 +510,7 @@ const char *networkStatus[] = {
             return AVVideoProfileLevelH264Baseline31;
             
         case 3:
-        
+            
             return AVVideoProfileLevelH264Main31;
             
         case 4:
@@ -536,56 +552,56 @@ const char *networkStatus[] = {
 }
 
 - (NSString *)getPresetVideo:(int)presetVideo {
-        switch (presetVideo) {
-            case 0:
-                
-                return AVCaptureSessionPresetPhoto;
-                
-            case 1:
+    switch (presetVideo) {
+        case 0:
             
-                return AVCaptureSessionPresetHigh;
-                
-            case 2:
-                
-                return AVCaptureSessionPresetMedium;
-                
-            case 3:
+            return AVCaptureSessionPresetPhoto;
             
-                return AVCaptureSessionPresetLow;
-                
-            case 4:
-                
-                return AVCaptureSessionPreset352x288;
-                
-            case 5:
-                
-                return AVCaptureSessionPreset640x480;
-                
-            case 6:
-                
-                return AVCaptureSessionPreset1280x720;
-                
-            case 7:
-                
-                return AVCaptureSessionPreset1920x1080;
-                
-            case 8:
-                
-                return AVCaptureSessionPreset3840x2160;
-                
-            case 9:
-                
-                return AVCaptureSessionPresetiFrame960x540;
-                
-            case 10:
-                
-                return AVCaptureSessionPresetiFrame1280x720;
-                
-                
-            default:
-                return AVCaptureSessionPreset640x480;
-        }
-        return AVCaptureSessionPreset640x480;
+        case 1:
+            
+            return AVCaptureSessionPresetHigh;
+            
+        case 2:
+            
+            return AVCaptureSessionPresetMedium;
+            
+        case 3:
+            
+            return AVCaptureSessionPresetLow;
+            
+        case 4:
+            
+            return AVCaptureSessionPreset352x288;
+            
+        case 5:
+            
+            return AVCaptureSessionPreset640x480;
+            
+        case 6:
+            
+            return AVCaptureSessionPreset1280x720;
+            
+        case 7:
+            
+            return AVCaptureSessionPreset1920x1080;
+            
+        case 8:
+            
+            return AVCaptureSessionPreset3840x2160;
+            
+        case 9:
+            
+            return AVCaptureSessionPresetiFrame960x540;
+            
+        case 10:
+            
+            return AVCaptureSessionPresetiFrame1280x720;
+            
+            
+        default:
+            return AVCaptureSessionPreset640x480;
+    }
+    return AVCaptureSessionPreset640x480;
 }
 
 

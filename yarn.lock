@@ -961,8 +961,10 @@ path-parse@^1.0.6:
   resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.6.tgz#d62dbb5679405d72c4737ec58600e9ddcf06d24c"
   integrity sha512-GSmOT2EbHrINBf9SR7CDELwlJ8AENk3Qn7OikK4nFYAu3Ote2+JYNVvkpAEQm3/TLNEJFD/xZJjzyxg3KBWOzw==
 
-"pili-streaming-react-native@file:./":
-  version "2.0.1"
+"pili-streaming-react-native@file:.":
+  version "2.0.0"
+  dependencies:
+    pili-streaming-react-native "file:../../../../Library/Caches/Yarn/v6/npm-pili-streaming-react-native-2.0.0-0b8490ae-195e-46d8-91d7-2b312af70dd8-1590506925144/node_modules/pili-streaming-react-native"
 
 private@^0.1.6:
   version "0.1.8"

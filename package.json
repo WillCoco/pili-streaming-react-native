@@ -37,6 +37,6 @@
     "rollup-plugin-node-resolve": "^5.2.0"
   },
   "dependencies": {
-    "pili-streaming-react-native": "file:./"
+    "pili-streaming-react-native": "file:."
   }
 }
