@@ -156,7 +156,7 @@ const LiveWindow = (props: LiveWindowProps): any => {
             // 找不到指定群组 显示结束
             setIsIMJoinSecceed(false);
           });
-          
+
           return;
         }
         // 错误返回
@@ -168,8 +168,6 @@ const LiveWindow = (props: LiveWindowProps): any => {
         console.log(`apiEnterLive: ${err}`)
       })
 
-
-      // 
 
     return () => {
       console.log(player.current, 'player.current.stop')
@@ -216,7 +214,6 @@ const LiveWindow = (props: LiveWindowProps): any => {
 
   // 直播结束
   if (isLiveOver) {
-    console.log(12312312312312)
     replace('AudienceLivingEnd');
   }
 

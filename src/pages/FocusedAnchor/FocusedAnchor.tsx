@@ -65,6 +65,18 @@ function FocusedAnchor(props: any) {
     return Promise.resolve({EMPTY_ARR})
   }
 
+  /**
+   * 点击进入
+  */
+ const onPress = (item: any) => {
+    navigation.navigate('LivingRoomScreen', {
+      liveId: item?.liveId,
+      groupID: item?.groupId || `live${item?.liveId}`,
+      anchorId: item?.anchorId,
+      mediaType: item?.liveStatus,
+    });
+ }
+
   return (
     <View style={StyleSheet.flatten([styles.container, {marginBottom: props.safeBottom}])}>
       <PagingList
@@ -74,7 +86,11 @@ function FocusedAnchor(props: any) {
         // initListData={warehouseGoods}
         renderItem={({item, index}: any) => {
           return (
-            <AnchorCard key={`anchor-${index}`} item={item}/>
+            <AnchorCard
+              key={`anchor-${index}`}
+              item={item}
+              onPress={() => onPress(item)}
+            />
           )
         }}
         empty={

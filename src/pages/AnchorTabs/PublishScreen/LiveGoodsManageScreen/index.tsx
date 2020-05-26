@@ -54,28 +54,18 @@ const LiveGoodsManage = (props: any) =>  {
     btnText?: string, // 
   } = route.params || emptyObj;
 
-  /**
-   * 获取
-   */
-  // React.useEffect(() => {
-  //   dispatch(getWareHouseGoods())
-  // }, [])
-
-
-  // const liveConfig = useSelector(state => state?.live?.liveConfig);
-
-  // /**
-  //  * 删除
-  //  */
-  // const onDeletePress = () => {
-  //   console.log('shanchu')
-  // }
+  React.useEffect(() => {
+    // 清空标题等配置
+    return () => {
+      dispatch(updateLiveConfig())
+    }
+  }, [])
 
   /**
    * 预组货列表
    *  添加是否选中
    */
-  const warehouseGoods = useSelector(state => {
+  const warehouseGoods = useSelector((state: any) => {
     const list = state?.shop?.warehouseGoods;
     return list.map((good: any) => {
       return ({
