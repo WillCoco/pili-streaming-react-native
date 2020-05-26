@@ -19,6 +19,9 @@ export default function Service() {
   })
 
   return (
-    <WebView source={{ uri: route.params }} />
+    <WebView 
+      style={{opacity: 0.99}}
+      source={{ uri: route.params }} 
+    />
   )
 }

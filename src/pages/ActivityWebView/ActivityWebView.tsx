@@ -19,6 +19,9 @@ export default function ActivityWebView() {
   })
 
   return (
-    <WebView source={{ uri: route.params.url }} />
+    <WebView 
+      style={{opacity: 0.99}}
+      source={{ uri: route.params.url }} 
+    />
   )
 }
