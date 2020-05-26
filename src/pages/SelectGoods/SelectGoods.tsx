@@ -131,7 +131,9 @@ export default function SelectGoods() {
         tabBarActiveTextColor={Colors.darkBlack}
         tabBarInactiveTextColor={Colors.darkBlack}
         tabBarBackgroundColor={Colors.whiteColor}
-        renderTabBar={() => <ScrollableTabBar />}
+        renderTabBar={() => <ScrollableTabBar
+          style={{ borderBottomWidth: 0 }}
+        />}
         onChangeTab={(e) => changeTab(e)}
       >
         {
