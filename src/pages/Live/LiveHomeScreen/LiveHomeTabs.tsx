@@ -171,7 +171,7 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
             tabLabel={"精选"}
             size={14}
             data={selectList}
-            setData={setFollowList}
+            setData={setSelectlist}
             //item显示的布局
             renderItem={renderItem}
             //下拉刷新相关
