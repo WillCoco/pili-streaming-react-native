@@ -34,7 +34,7 @@ target 'pili_startkit' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
   pod 'PLMediaStreamingKit'
-  pod 'pili-react-native', :path => '../node_modules/pili-streaming-react-native/ios/pili-react-native'
+  pod 'pili-react-native', :path => '../../ios/pili-react-native'
 
   # react-native-file-selector begin
   use_native_modules!

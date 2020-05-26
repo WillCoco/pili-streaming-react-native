@@ -108,28 +108,30 @@ const char *networkStatus[] = {
 }
 
 
-- (void)setRtmpURL:(NSString *)rtmpURL
-{
-  _rtmpURL = rtmpURL;
-  [self setSourceAndProfile];
+- (void)setRtmpURL:(NSString *)rtmpURL {
+    _rtmpURL = rtmpURL;
+    [self setSourceAndProfile];
 }
 
 - (void)setProfile:(NSDictionary *)profile{
-  _profile = profile;
-  [self setSourceAndProfile];
+    _profile = profile;
+    [self setSourceAndProfile];
 }
 
-- (void) setSourceAndProfile{
-    if(self.profile && self.rtmpURL){
+- (void)setSourceAndProfile {
+    if (self.profile && self.rtmpURL) {
     
         NSDictionary *videoCapture = self.profile[@"cameraStreamingSetting"];
         NSDictionary *audioCapture = self.profile[@"microphoneSteamingSetting"];
         NSDictionary *videoStream = self.profile[@"videoStreamingSetting"];
         NSDictionary *audioStream = self.profile[@"audioStreamingSetting"];
+        NSString *camera = self.profile[@"camera"];
     
+        int cameraId = [camera isEqualToString:@"front"] ? 2 : 1;
+        
         //cameraSetting
         int presetVideo = [videoCapture[@"resolution"] intValue];
-        int cameraId = [videoCapture[@"cameraId"] intValue];
+
         int videoOrientation = [videoCapture[@"videoOrientation"] intValue];
       
         //MicrophoneSteamingSetting
@@ -163,7 +165,7 @@ const char *networkStatus[] = {
     
         PLVideoCaptureConfiguration *videoCaptureConfiguration = [PLVideoCaptureConfiguration defaultConfiguration];
         videoCaptureConfiguration.sessionPreset = [self getPresetVideo:presetVideo];
-        videoCaptureConfiguration.position = cameraId+1;
+        videoCaptureConfiguration.position = cameraId;
         videoCaptureConfiguration.videoOrientation = videoOrientation;
     
         PLAudioCaptureConfiguration *audioCaptureConfiguration = [PLAudioCaptureConfiguration defaultConfiguration];
@@ -173,7 +175,11 @@ const char *networkStatus[] = {
         PLAudioStreamingConfiguration *audioStreamingConfiguration = [[PLAudioStreamingConfiguration alloc] initWithEncodedAudioSampleRate:audioRate encodedNumberOfChannels:1 audioBitRate:audioBps];
       
         // 推流 session
-        self.session = [[PLMediaStreamingSession alloc] initWithVideoCaptureConfiguration:videoCaptureConfiguration audioCaptureConfiguration:audioCaptureConfiguration videoStreamingConfiguration:videoStreamingConfiguration audioStreamingConfiguration:audioStreamingConfiguration stream:nil];
+        self.session = [[PLMediaStreamingSession alloc] initWithVideoCaptureConfiguration:videoCaptureConfiguration
+                                                                audioCaptureConfiguration:audioCaptureConfiguration
+                                                              videoStreamingConfiguration:videoStreamingConfiguration
+                                                              audioStreamingConfiguration:audioStreamingConfiguration
+                                                                                   stream:nil];
         self.session.delegate = self;
     
         //            UIImage *waterMark = [UIImage imageNamed:@"qiniu.png"];
@@ -437,10 +443,18 @@ const char *networkStatus[] = {
             break;
     }
 }
+
 - (void)mediaStreamingSession:(PLMediaStreamingSession *)session didDisconnectWithError:(NSError *)error {
     NSString *log = [NSString stringWithFormat:@"Stream State: Error. %@", error];
     NSLog(@"%@", log);
-    [self startSession];
+    // [self startSession];
+    _started = NO;
+
+    if (self.onStateChange) {
+        NSString *errorlog = [NSString stringWithFormat:@"Stream State: %s", stateNames[PLStreamStateError]];
+        NSLog(@"%@", errorlog);
+        self.onStateChange(@{@"state":@(PLRNStreamStateError)});
+    }
 }
 
 - (void)audioPlayer:(PLAudioPlayer *)audioPlayer audioDidPlayedRateChanged:(double)audioDidPlayedRate {

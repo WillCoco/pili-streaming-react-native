@@ -242,7 +242,7 @@ DEPENDENCIES:
   - FileBrowser (from `https://github.com/prscX/FileBrowser`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - pili-react-native (from `../node_modules/pili-streaming-react-native/ios/pili-react-native`)
+  - pili-react-native (from `../../ios/pili-react-native`)
   - PLMediaStreamingKit
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -290,7 +290,7 @@ EXTERNAL SOURCES:
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   pili-react-native:
-    :path: "../node_modules/pili-streaming-react-native/ios/pili-react-native"
+    :path: "../../ios/pili-react-native"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -377,6 +377,6 @@ SPEC CHECKSUMS:
   RNFS: 0d4191b1052bef9ce70deff00a5b4169c62bbd9b
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 18349a4e26291862991517b92e4df25fd1dc3334
+PODFILE CHECKSUM: 780a813df362e5faa05f1ad43addab0764e62640
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.9.2

@@ -29,3 +29,20 @@ dependencies {
     implementation 'com.facebook.react:react-native:0.20.1'
     implementation 'com.qiniu:happy-dns:0.2.13'
 }
+
+buildscript {
+    repositories {
+//        ...
+        //In IntelliJ or older versions of Android Studio
+        //maven {
+        //   url 'https://maven.google.com'
+        //}
+        google()//in newer versions of Android Studio
+        jcenter()
+        mavenLocal()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.6.0'
+    }
+}

@@ -46,7 +46,7 @@ export default class Steam extends Component {
     streamingConfig: {
       // rtmpURL: 'rtmp://pili-publish.qnsdk.com/sdk-live/111',
       rtmpURL: 'rtmp://pili-publish.youzfx.cn/pili-yunshanbo/live123456789',
-      camera: 'back',
+      camera: 'front',
       muted: false,
       zoom: 1,
       focus: false,
@@ -114,6 +114,7 @@ export default class Steam extends Component {
             : consts.cameraResolutions_iOS.AVCaptureSessionPresetMedium,
           focusMode: consts.cameraFocusModes.continuousVideo,
           videoOrientation: consts.cameraVideoOrientations.portrait,
+          cameraId: 1, // (ios: back = 0, front = 1)
         },
         microphoneSteamingSetting: {
           sampleRate: consts.microphoneSampleRates.r44100,

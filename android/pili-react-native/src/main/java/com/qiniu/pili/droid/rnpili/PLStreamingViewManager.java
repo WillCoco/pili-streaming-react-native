@@ -153,6 +153,10 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         int previewSize = cameraSetting.getInt("resolution");
         int focusMode = cameraSetting.getInt("focusMode");
 
+        // 设置初始化摄像头位置
+        String cameraName = profile.getString("camera");
+        this.mCameraId = cameraName.equals("front") ? CameraStreamingSetting.CAMERA_FACING_ID.CAMERA_FACING_FRONT : CameraStreamingSetting.CAMERA_FACING_ID.CAMERA_FACING_BACK;
+
         ReadableMap microphoneSetting = profile.getMap("microphoneSteamingSetting");
         int sampleRate = microphoneSetting.getInt("sampleRate");
         int channel = microphoneSetting.getInt("channel");
