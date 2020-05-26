@@ -96,8 +96,8 @@ function Header(props: Props) {
         <View style={styles.userInfo}>
           {
             isLogin
-              ? <Image source={{ uri: userInfo?.userAvatar }} defaultSource={defaultAvatar} style={styles.avatar} />
-              : <Image source={defaultAvatar} style={styles.avatar} />
+              ? <Image source={ userInfo.userAvatar ? { uri: userInfo.userAvatar } : defaultAvatar } defaultSource={defaultAvatar} style={styles.avatar} resizeMode='stretch' />
+              : <Image source={defaultAvatar} style={styles.avatar} resizeMode='stretch' />
           }
           <View>
             <Text style={styles.userName}>{isLogin ? userInfo?.nickName : '立即登录'}</Text>

@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     marginTop: pxToDp(15)
   },
   shareText: {
+    fontSize: pxToDp(24),
     backgroundColor: Colors.basicColor,
     height: '100%',
     paddingTop: pxToDp(5),

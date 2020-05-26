@@ -28,7 +28,7 @@ export default function waterFall(items: any) {
   // 设置每个项目的宽高
   items.forEach((item: Item) => {
     item.width = itemWidth
-    item.height = item.imageHeight / item.imageWidth * itemWidth + pxToDp(160)
+    item.height = item.imageHeight / item.imageWidth * itemWidth + pxToDp(140)
   })
 
   for (let i = 0; i < items.length; i++) {
