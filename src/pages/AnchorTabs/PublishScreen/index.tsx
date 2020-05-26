@@ -30,7 +30,7 @@ const PublishScreen = (props: any) =>  {
   const anchorInfo = useSelector((state: any) => state?.anchorData?.anchorInfo) || {}
   const userId = useSelector((state: any) => state?.userData?.userInfo?.userId)
 
-  /**
+/**
  * 获取主播详情
  */
   React.useEffect(() => {

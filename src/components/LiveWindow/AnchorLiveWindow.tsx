@@ -34,6 +34,8 @@ import { clearLoginStatus } from '../../actions/user';
 import { isSucceed } from '../../utils/fetchTools';
 import { EMPTY_OBJ } from '../../constants/freeze';
 import share, { ShareType } from '../../utils/share';
+import Poller from '../../utils/poller';
+import { getLiveViewNum } from '../../actions/live';
 
 interface LiveWindowProps {
   style?: StyleProp<any>,
@@ -111,12 +113,21 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
    */
   const isAnchorLiveOver = useSelector((state: any) => state?.live?.isAnchorLiveOver);
 
+  /**
+   * 轮询器
+   */
+  const poller = React.useRef(new Poller({
+    interval: 1000 * 30,
+    initExec: false,
+    callback: () => dispatch(getLiveViewNum({liveId})),
+  }));
+
   const onConfirmClose = async () => {
     dispatch(closeLive({liveId}))
       .then((data: any) => {
         if (data) {
           replace('AnchorLivingEnd', data);
-            return;
+          return;
         }
         Toast.show('关闭失败');
       })
@@ -172,11 +183,11 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
         console.log(err, 'err');
       });
 
+    // 请求观看人数
+    poller.current.start();
+
     return () => {
-      // dispatch(dismissGroup()); // 退im群
-      // todo 晴空room消息、message、livegoods
-      // camera.current.stopPreview();
-      // Toast.hide('');
+    poller.current.stop();
     }
   }, []);
 

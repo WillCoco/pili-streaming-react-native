@@ -82,9 +82,9 @@ function handleCustomMsg(message: any) {
     }
 
     // 更新观看次数
-    if (type === MessageType.enter) {
-      dispatch(addLivingWatchNum());
-    }
+    // if (type === MessageType.enter) {
+      // dispatch(addLivingWatchNum());
+    // }
 
     dispatch(updateMessage2Store(newRoomMessage))
   }
@@ -370,8 +370,6 @@ export const joinGroup = (
 export const quitGroup = (groupId: string) => {
   return function(dispatch: Dispatch<any>, getState: any) {
     const groupID = groupId || getState().im?.room?.groupID;
-
-    console.log(groupID, 123123213)
 
     tim.quitGroup(groupID)
       .then(function(imResponse: any) {
@@ -745,12 +743,12 @@ export function popScrollMessage() {
 /**
  * 更新房间观看次数
  */
-export function addLivingWatchNum() {
-  return function(dispatch: Dispatch<any>, getState: any) {
-    let watchNum = getState()?.live?.livingInfo?.watchNum || 0;
-    dispatch({type: liveActionType.UPDATE_LIVING_INFO, payload: {livingInfo: {watchNum: ++watchNum}}})
-  }
-}
+// export function addLivingWatchNum() {
+//   return function(dispatch: Dispatch<any>, getState: any) {
+//     let watchNum = getState()?.live?.livingInfo?.watchNum || 0;
+//     dispatch({type: liveActionType.UPDATE_LIVING_INFO, payload: {livingInfo: {watchNum: ++watchNum}}})
+//   }
+// }
 
 /**
  * 更新房间成员数量
