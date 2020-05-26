@@ -60,7 +60,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
   const dispatch = useDispatch();
 
   /**
-   * 实例
+   * 商品卡
    */
   let [maskList, maskDispatch] = React.useContext(Mask.context);
 
@@ -70,10 +70,20 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
   let camera: {current: any} = React.useRef();
 
   /**
+   * 推流状态
+   */
+  const [pusherStatus, setPusherStatus] = React.useState();
+
+  const onStateChange = (status: any) => {
+    setPusherStatus(status)
+    console.log(status, 'status')
+  }
+
+  /**
    * 切换摄像头
    */
   const switchCamera = () => {
-      dispatch(updatecamera())
+    dispatch(updatecamera())
   };
 
   /**
@@ -284,11 +294,6 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
     })
       .then((res) => { console.log(res) })
       .catch((err) => { err && console.log(err); });
-  }
-
-  const onStateChange = (status: any) => {
-    
-    console.log(status, 'status')
   }
 
   return (

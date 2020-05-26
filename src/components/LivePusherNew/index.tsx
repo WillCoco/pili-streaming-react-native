@@ -12,13 +12,13 @@ import {
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 // import {Streaming} from 'pili-streaming-react-native';
-import {NodePlayerView, NodeCameraView} from 'react-native-nodemediaclient';
+// import {NodePlayerView, NodeCameraView} from 'react-native-nodemediaclient';
 import {PrimaryText} from 'react-native-normalization-text';
 import {vw, vh} from '../../utils/metric';
-import { isAndroid, safeTop } from '../../constants/DeviceInfo';
-import {updateStarted} from '../../actions/live';
+// import { isAndroid, safeTop } from '../../constants/DeviceInfo';
+// import {updateStarted} from '../../actions/live';
 import usePermissions from '../../hooks/usePermissions';
-import Toast from 'react-native-tiny-toast';
+// import Toast from 'react-native-tiny-toast';
 import {consts, Streaming} from 'pili-streaming-react-native';
 
 interface LivePusherProps {
@@ -73,20 +73,26 @@ const LivePusher = React.forwardRef((props: LivePusherProps, ref: any) : any => 
     /**
      * 加载推流的条件
      */
-    const showPusher = isPermissionGranted && pushUrl;
+    const showPusher = !!(isPermissionGranted && pushUrl);
 
+    /**
+     * 播放器状态
+     */
+    const [status, setStatus]: [number | undefined, any] = React.useState()
 
+    
     console.log(isPermissionGranted, 'b01_isPermissionGranted')
     console.log(pusherConfig, 'b01_pusherConfig')
     console.log(pushUrl, 'b01_pushUrl')
-    console.log(showPusher, 'b01_showPushershowPusher')
+    console.log(showPusher, 'b01_showPusher')
 
-    const onStateChange =(v) => {
-        props.onStateChange && props.onStateChange();
+    const onStateChange =(v: any) => {
+        setStatus(v);
+        props.onStateChange && props.onStateChange(v);
         console.log(v, 'onStateChange')
     }
 
-    const onStreamInfoChange =(v) => {
+    const onStreamInfoChange =(v: any) => {
         console.log(v, 'onStreamInfoChange')
     }
 
@@ -99,6 +105,7 @@ const LivePusher = React.forwardRef((props: LivePusherProps, ref: any) : any => 
                 onStreamInfoChange={onStreamInfoChange}
             />
         ) : null}
+        {/* {(status && status !== 2) ? <PrimaryText color="white" style={styles.loading}>连接中</PrimaryText> : null} */}
       </View>
     );
 })
@@ -106,11 +113,6 @@ const LivePusher = React.forwardRef((props: LivePusherProps, ref: any) : any => 
 const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
-        // position: 'absolute',
-        // top: 0,
-        // left: 0,
-        // bottom: 0,
-        // right: 0,
     },
     scrollerWrapper: {
     },

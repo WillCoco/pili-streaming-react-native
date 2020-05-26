@@ -135,6 +135,12 @@ const LiveWindow = (props: LiveWindowProps): any => {
     apiEnterLive(params)
       .then((res: any) => {
         if (isSucceed(res)) {
+          if (res?.data?.liveStatus !== '1') {
+            // 直播已结束
+            Toast.show('直播已结束');
+            goBack();
+            return;
+          }
           console.log(res, '进入列表');
           res.watchNum = res.watchNum - 1; // 这里重新会重复加人数
           dispatch(updateLivingInfo({...res?.data, liveId, anchorId}));

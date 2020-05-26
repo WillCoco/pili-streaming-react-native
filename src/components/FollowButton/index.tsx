@@ -60,7 +60,7 @@ const FollowButton = (props: FollowButtonPropsType) =>  {
     >
         {
           props.isFollowed ?
-            <SmallText style={StyleSheet.flatten([styles.followText, {color: Colors.basicColor}, props.textStyle])}>取消关注</SmallText> :
+            <SmallText style={StyleSheet.flatten([styles.followText, {color: Colors.basicColor}, props.textStyle])}>已关注</SmallText> :
             <SmallText style={StyleSheet.flatten([styles.followText, {color: '#fff'}, props.textStyle])}>关注</SmallText>
         }
     </TouchableOpacity>

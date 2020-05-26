@@ -195,6 +195,9 @@ export default function live(state = INITIAL_STATE, action: any) {
     case liveActionTypes.UPDATE_PUSHER_CONFIG:
       return {...state, pusherConfig: {...state.pusherConfig, ...action.payload.pusherConfig}};
     case liveActionTypes.UPDATE_LIVING_INFO:
+      if (!action.payload.livingInfo) {
+        return {...state, livingInfo: undefined};
+      }
       return {...state, livingInfo: {...state.livingInfo, ...action.payload.livingInfo}};
     case liveActionTypes.UPDATE_LIVING_STATUS:
       return {...state, isLiveOver: action.payload.isLiveOver};
