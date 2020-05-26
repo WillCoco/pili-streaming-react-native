@@ -12,11 +12,13 @@ import { setMediaList } from '../../../actions/works'
 interface Props {
   dispatch?: any;
   pageType: string;
-  mediaList: Array<any>
+  mediaList: Array<any>;
+  fullPathImageList: Array<any>;
+  setFullPathImageList([]: Array<any>): void
 }
 
 function ImgPicker(props: Props) {
-  const { pageType, mediaList } = props
+  const { pageType, mediaList, fullPathImageList } = props
 
   const chooseImage = async (index: number) => {
     if (index) return
@@ -67,6 +69,7 @@ function ImgPicker(props: Props) {
         let imgPath = imgFullPath.substr(0, imgFullPath.lastIndexOf('&', imgFullPath.lastIndexOf('&') - 1))
 
         props.dispatch(setMediaList([...mediaList, ...[imgPath]]))
+        props.setFullPathImageList([...fullPathImageList, ...[res.data.worksUrl]])
       } else {
         Toast.fail(res.data)
       }

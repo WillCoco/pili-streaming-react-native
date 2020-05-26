@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Text, Image, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
-import { toggleLoginState, setToke } from '../../actions/user'
+import { toggleLoginState, setToke, setUserInfo } from '../../actions/user'
 import { Portal, Toast } from '@ant-design/react-native'
 import * as WeChat from 'react-native-wechat-lib'
 
@@ -11,7 +11,7 @@ import Form from './Form/Form'
 import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
 
-import { apiSendVerCode, apiLogin } from '../../service/api'
+import { apiSendVerCode, apiLogin, apiGetUserData } from '../../service/api'
 
 const phonePattern = /^1[3456789]\d{9}$/
 
@@ -133,6 +133,12 @@ function Logion(props: any) {
         props.dispatch(setToke(res))
 
         Toast.success('登录成功')
+
+        apiGetUserData().then((res: any) => {
+          props.dispatch(setUserInfo(res))
+        }).catch((err: any) => {
+          console.log(err)
+        })
 
         setTimeout(() => {
           navigation.goBack()

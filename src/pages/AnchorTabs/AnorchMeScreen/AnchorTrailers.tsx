@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {PrimaryText, SmallText, T2} from 'react-native-normalization-text';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import LiveWindow from '../../../components/LiveWindow';
 import withPage from '../../../components/HOCs/withPage';
 import NavBar from '../../../components/NavBar';
@@ -24,7 +24,7 @@ import { getAdvanceList, updateLivingInfo } from '../../../actions/live';
 import pxToDp from '../../../utils/px2dp';
 import {EMPTY_OBJ} from '../../../constants/freeze';
 import { MediaType } from '../../../liveTypes';
-import share from '../../../utils/share';
+import share, { ShareType } from '../../../utils/share';
 
 const ROW_HEIGHT = pxToDp(300);
 const INIT_PAGE_NO = 1;
@@ -72,6 +72,11 @@ const AnchorTrailers = () =>  {
   const dispatch = useDispatch();
   const {navigate} = useNavigation();
 
+  /**
+   * 邀请码
+   */
+  const inviteCode = useSelector((state: any) => state?.userData?.userInfo?.inviteCode);
+
   const trailersList = [
     {
       remind: false,
@@ -90,13 +95,17 @@ const AnchorTrailers = () =>  {
   /**
    * 点击分享按钮
    */
-  const onSharePress = (url) => {
-      share({
-          title: '分享',
-          url,
-          failOnCancel: false,
-      }).then((res) => { console.log(res) })
-          .catch((err) => { err && console.log(err); });
+  const onSharePress = (item) => {
+    share({
+      liveId: item?.liveId,
+      groupId: item?.groupID,
+      inviteCode
+    }, {
+      title: '分享',
+      failOnCancel: false,
+    })
+      .then((res) => { console.log(res) })
+      .catch((err) => { err && console.log(err); });  
   };
 
   /**
@@ -168,7 +177,7 @@ const AnchorTrailers = () =>  {
               title={title}
               remind={item.remind}
               liveTime={liveTime}
-              onSharePress={() => onSharePress('假的假的假的')}
+              onSharePress={() => onSharePress(item)}
               onRemindPress={() => onRemindPress(item.remind, index)}
               onPress={() => {
                 navigate('LivingRoomScreen', {

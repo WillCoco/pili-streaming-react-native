@@ -2,6 +2,8 @@ import React from 'react'
 import { View, Text, StyleSheet, Image } from 'react-native'
 import pxToDp from '../../../utils/px2dp'
 import { Colors } from '../../../constants/Theme'
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { MediaType } from '../../../liveTypes';
 
 export default function AnchorCard(props: any) {
 
@@ -12,6 +14,16 @@ export default function AnchorCard(props: any) {
   console.log(props, 3142532153125346);
 
   const {item} = props
+
+  let text;
+
+  if (item?.liveStatus === MediaType.teaser ) {
+    text = '预告'
+  } else if (item?.liveStatus === MediaType.living) {
+    text = '直播中'
+  } else if (item?.liveStatus === MediaType.record) {
+    text = '回放'
+  }
 
   return (
     <View style={styles.container}>
@@ -26,15 +38,15 @@ export default function AnchorCard(props: any) {
         </View>
       </View>
       <View style={StyleSheet.flatten([styles.state, item?.liveStatus !== 2 && {backgroundColor: Colors.yellowColor}])}>
-        <Text style={{ fontSize: pxToDp(28), color: Colors.whiteColor }}>
-          {
-            item?.liveStatus === 1 
-              ? '预告'
-              : item?.liveStatus === 2
-                ? '直播中'
-                : '回放'
-          }
-        </Text>
+        {
+          text ? (
+            <TouchableOpacity onPress={props.onPress}>
+              <Text style={{ fontSize: pxToDp(28), color: Colors.whiteColor }}>
+                {text}
+              </Text>
+            </TouchableOpacity>
+          ) : null
+        }
       </View>
     </View>
   )

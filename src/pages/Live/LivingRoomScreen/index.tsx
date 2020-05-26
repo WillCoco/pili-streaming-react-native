@@ -12,7 +12,7 @@ import LiveWindow from '../../../components/LiveWindow';
 import withPage from '../../../components/HOCs/withPage';
 import {EMPTY_OBJ} from '../../../constants/freeze';
 import {MediaType} from '../../../liveTypes';
-import {clearLiveRoom} from '../../../actions/im';
+import {clearLiveRoom, updateRoomMessage} from '../../../actions/im';
 
 interface LiveWindowParams {
   mediaType: MediaType, // 媒体类型
@@ -26,6 +26,8 @@ const LivingRoomScreen = (props: any) : any =>  {
   // 屏幕常亮
   React.useEffect(() => {
     activateKeepAwake();
+    // 清空消息
+    dispatch(updateRoomMessage([]));
     return () => {
       deactivateKeepAwake();
     }

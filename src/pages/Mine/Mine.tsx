@@ -8,16 +8,19 @@ import { apiGetUserData, apiGetOrderCount, apiGetIndexGoodsList } from '../../se
 import Header from './Header/Header'
 import ToolBar from './ToolBar/ToolBar'
 import Account from './Account/Account'
+import ShareBar from './ShareBar/ShareBar'
 import GoodsList from './GoodsList/GoodsList'
+import PosterCard from './PosterCard/PosterCard'
 import FansContent from './FansContent/FansContent'
 import checkIsBottom from '../../utils/checkIsBottom'
 import OrdersContent from './OrdersContent/OrdersContent'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+import ActionSheet from '../../components/ActionSheet/ActionSheet'
 // import Banner from './Banner/Banner'
 
 const pageSize = 20
 
-function Mine(props: { dispatch?: any; isLogin?: boolean; }) {
+function Mine(props: { dispatch: any; isLogin: boolean; }) {
   const { isLogin } = props
 
   const pageNoRef = useRef(1)
@@ -29,6 +32,9 @@ function Mine(props: { dispatch?: any; isLogin?: boolean; }) {
   const [netWorkErr, setNetWorkErr] = useState(false)
   const [orderCount, setOrderCount]: any = useState({})
   const [goodsList, setGoodsList]: Array<any> = useState([])
+  const [showShareBar, setShowShareBar] = useState(false)
+  const [showPoster, setShowPoster] = useState(false)
+  const [posterPath, setPosterPath] = useState('')
 
   useEffect(() => {
     getGoodsList()
@@ -102,6 +108,14 @@ function Mine(props: { dispatch?: any; isLogin?: boolean; }) {
   }
 
   /**
+   * 显示分享卡片
+   */
+  const showPosterContainer = (img: string) => {
+    setShowPoster(true)
+    setPosterPath(`data:image/png;base64,${img}`)
+  }
+
+  /**
    * 网络异常 重新加载
    */
   // const reload = () => {
@@ -112,26 +126,41 @@ function Mine(props: { dispatch?: any; isLogin?: boolean; }) {
   // if (netWorkErr) return <NetWorkErr reload={reload} />
 
   return (
-    <ScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-      onMomentumScrollEnd={(e) => onReachBottom(e)}
-    >
-      {/* 头部区域 */}
-      <Header />
-      {/* 订单 */}
-      <OrdersContent orderCount={orderCount} isLogin={isLogin} />
-      {/* 粉丝数量 相关 */}
-      <FansContent />
-      {/* 账户 */}
-      <Account />
-      {/* 邀新横幅 */}
-      {/* <Banner /> */}
-      {/* 工具栏 */}
-      <ToolBar />
-      {/* 推荐商品 */}
-      <GoodsList list={goodsList} hasMore={hasMoreRef.current} />
-    </ScrollView>
+    <>
+      <ScrollView
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+        onMomentumScrollEnd={(e) => onReachBottom(e)}
+      >
+        {/* 头部区域 */}
+        <Header />
+        {/* 订单 */}
+        <OrdersContent orderCount={orderCount} isLogin={isLogin} />
+        {/* 粉丝数量 相关 */}
+        <FansContent />
+        {/* 账户 */}
+        <Account />
+        {/* 邀新横幅 */}
+        {/* <Banner /> */}
+        {/* 工具栏 */}
+        <ToolBar showShareBar={() => setShowShareBar(true)} />
+        {/* 推荐商品 */}
+        <GoodsList list={goodsList} hasMore={hasMoreRef.current} />
+      </ScrollView>
+
+      <ActionSheet isShow={showShareBar}>
+        <ShareBar
+          hideShareBar={() => setShowShareBar(false)}
+          setPosterPath={(img: string) => showPosterContainer(img)}
+        />
+      </ActionSheet>
+
+      <PosterCard
+        show={showPoster}
+        path={posterPath}
+        hidePosterCard={() => setShowPoster(false)}
+      />
+    </>
   )
 }
 

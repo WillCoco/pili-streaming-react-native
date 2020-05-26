@@ -43,6 +43,11 @@ const BottomBlock = (props: any) : any =>  {
   // im房间信息
   const room = useSelector((state: any) => state?.im?.room || EMPTY_OBJ);
 
+  /**
+   * 邀请码
+   */
+  const inviteCode = useSelector((state: any) => state?.userData?.userInfo?.inviteCode);
+
   // 直播房间信息 (退出会现执行外层useEffect, 清除liveID, 用memo保存)
   const liveId = useSelector((state: any) => state?.live?.livingInfo?.liveId);
   const liveIdPersist = React.useMemo(() => {
@@ -131,9 +136,13 @@ const BottomBlock = (props: any) : any =>  {
       navigate('Login');
       return;
     }
-    share(ShareType.living, {
+
+    share({
+      liveId,
+      groupId: room.groupId,
+      inviteCode
+    }, {
       title: '分享',
-      url: `liveId=${liveId}?groupId=${room.groupId}`,
       failOnCancel: false,
     })
       .then((res) => { console.log(res) })

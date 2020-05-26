@@ -3,13 +3,10 @@ import {
   View,
   Text,
   Image,
-  Share,
   StyleSheet,
   PixelRatio,
-  ImageBackground,
   TouchableWithoutFeedback
 } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
 import { connect } from 'react-redux'
 
 import pxToDp from '../../utils/px2dp'
@@ -25,75 +22,43 @@ interface Props {
 
 function GoodsCard(props: Props) {
   const { goodsInfo } = props
-  const navigation: any = useNavigation()
-
-  const toShare = async () => {
-    if (!props.isLogin) {
-      navigation.push('Login')
-      return
-    }
-
-    try {
-      const result = await Share.share({
-        message: `
-        邀请您加入云闪播，主播团队带货，正品大牌折上折！
-        购物更划算！
-        --------------
-        下载链接：download.yunshanbo.cn
-        --------------
-        注册填写邀请口令：666666
-        `
-      })
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      alert(error.message)
-    }
-  }
 
   return (
-    <View style={[styles.container, props.style]}>
-      <TouchableWithoutFeedback onPress={() => props.tapGoodsCard(goodsInfo.goods_id || goodsInfo.goodsId)}>
-        <Image source={{ uri: goodsInfo.original_img || goodsInfo.originalImg}} style={styles.goodsImg} />
-      </TouchableWithoutFeedback>
-      <View style={styles.goodsInfo}>
-        <Text 
-          style={styles.goodsName} 
-          numberOfLines={2} 
-          onPress={() => props.tapGoodsCard(goodsInfo.goods_id || goodsInfo.goodsId)}
-        >
-          {goodsInfo.goods_name || goodsInfo.goodsName}
-        </Text>
-        <View style={styles.goodsShare}>
-          {/* {
+    <TouchableWithoutFeedback onPress={() => props.tapGoodsCard(goodsInfo.goods_id || goodsInfo.goodsId)}>
+      <View style={[styles.container, props.style]}>
+
+        <Image source={{ uri: goodsInfo.original_img || goodsInfo.originalImg }} style={styles.goodsImg} />
+
+        <View style={styles.goodsInfo}>
+          <Text
+            style={styles.goodsName}
+            numberOfLines={2}
+            onPress={() => props.tapGoodsCard(goodsInfo.goods_id || goodsInfo.goodsId)}
+          >
+            {goodsInfo.goods_name || goodsInfo.goodsName}
+          </Text>
+          <View style={styles.goodsShare}>
+            {/* {
             goodsInfo.is_proprietary
               ? <ImageBackground source={require('../../assets/home-image/badge_bg.png')} style={styles.badgeBg}>
                 <Text style={styles.badgeText}>自营</Text>
               </ImageBackground>
               : <Text />
           } */}
-          <Text />
-          <TouchableWithoutFeedback onPress={toShare}>
+            <Text />
             <View style={styles.shareCard}>
               <Text style={styles.shareText}>分享</Text>
               <Text style={styles.sharePrice}>¥{formatGoodsPrice(goodsInfo.MyDiscounts || goodsInfo.rebate || 0)}</Text>
             </View>
-          </TouchableWithoutFeedback>
-        </View>
-        <View style={styles.goodsPrice}>
-          <Text style={styles.rmbIcon}>¥</Text>
-          <Text style={styles.salePrice}>{formatGoodsPrice(goodsInfo.shop_price || goodsInfo.shopPrice)}</Text>
-          <Text style={styles.originalPrice}>¥{formatGoodsPrice(goodsInfo.market_price || goodsInfo.marketPrice)}</Text>
+          </View>
+          <View style={styles.goodsPrice}>
+            <Text style={styles.rmbIcon}>¥</Text>
+            <Text style={styles.salePrice}>{formatGoodsPrice(goodsInfo.shop_price || goodsInfo.shopPrice)}</Text>
+            <Text style={styles.originalPrice}>¥{formatGoodsPrice(goodsInfo.market_price || goodsInfo.marketPrice)}</Text>
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   )
 }
 

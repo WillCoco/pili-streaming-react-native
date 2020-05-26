@@ -12,13 +12,12 @@ import { Portal, Toast as AntToast } from '@ant-design/react-native'
 
 interface Props {
   show: boolean
-  type: number
   path: string
   hidePosterCard(): void
 }
 
 function PosterCard(props: Props) {
-  const { show, type, path } = props
+  const { show, path } = props
 
   const saveImg = () => {
     const loading = AntToast.loading('保存中')
@@ -86,49 +85,19 @@ function PosterCard(props: Props) {
       animationType='fade'
     >
       <View style={styles.container}>
-        {
-          type === 1
-            ? <View>
-              <Image source={{ uri: path }} style={styles.poster1Img} />
-              <TouchableOpacity style={styles.saveBtn} onPress={saveImg}>
-                <Text style={styles.saveText}>保存图片</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.closeIcon} onPress={props.hidePosterCard}>
-                <Ionicons
-                  size={30}
-                  name='ios-close-circle'
-                  color={Colors.whiteColor}
-                />
-              </TouchableOpacity>
-            </View>
-            : type === 2
-              ? <View style={styles.poster2}>
-                <Image source={{ uri: path }} style={styles.poster2Img} />
-                <TouchableOpacity style={[styles.saveBtn, { width: pxToDp(500) }]} onPress={saveImg}>
-                  <Text style={styles.saveText}>保存图片</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.closeIcon} onPress={props.hidePosterCard}>
-                  <Ionicons
-                    size={30}
-                    name='ios-close-circle'
-                    color={Colors.whiteColor}
-                  />
-                </TouchableOpacity>
-              </View>
-              : <View style={styles.poster3}>
-                <Image source={{ uri: path }} style={styles.poster3Img} />
-                <TouchableOpacity style={[styles.saveBtn, { width: pxToDp(500) }]} onPress={saveImg}>
-                  <Text style={styles.saveText}>保存图片</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.closeIcon} onPress={props.hidePosterCard}>
-                  <Ionicons
-                    size={30}
-                    name='ios-close-circle'
-                    color={Colors.whiteColor}
-                  />
-                </TouchableOpacity>
-              </View>
-        }
+        <View style={styles.poster3}>
+          <Image source={{ uri: path }} style={styles.poster3Img} />
+          <TouchableOpacity style={[styles.saveBtn, { width: pxToDp(500) }]} onPress={saveImg}>
+            <Text style={styles.saveText}>保存图片</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.closeIcon} onPress={props.hidePosterCard}>
+            <Ionicons
+              size={30}
+              name='ios-close-circle'
+              color={Colors.whiteColor}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     </Modal>
   )
@@ -144,11 +113,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  poster1Img: {
-    width: pxToDp(550),
-    height: pxToDp(978),
-    borderRadius: pxToDp(20)
   },
   saveBtn: {
     width: pxToDp(550),
@@ -166,18 +130,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -10,
     right: -10
-  },
-  poster2: {
-    width: pxToDp(550),
-    backgroundColor: Colors.whiteColor,
-    alignItems: 'center',
-    paddingTop: pxToDp(60),
-    paddingBottom: pxToDp(30),
-    borderRadius: pxToDp(20)
-  },
-  poster2Img: {
-    width: pxToDp(360),
-    height: pxToDp(360)
   },
   poster3: {
     padding: pxToDp(25),

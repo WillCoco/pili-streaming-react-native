@@ -18,6 +18,7 @@ import {pad} from '../../constants/Layout';
 import {RoomMessageType, MessageType} from '../../reducers/im';
 import {setGroupMemberMuteTime, getGroupMemberProfile} from '../../actions/im';
 import Iconcartlight from '../../components/Iconfont/Iconcartlight';
+import Iconguanzhu from '../../components/Iconfont/Iconguanzhu';
 import { Colors } from '../../constants/Theme';
 
 const emptyList: [] = [];
@@ -67,7 +68,7 @@ const LivingRoomScreen = (props: any) : any =>  {
               name: userName,
               id: userId,
               text,
-              Icon: Iconcartlight,
+              Icon: type === MessageType.order ? Iconcartlight : Iconguanzhu,
               backgroundColor: type === MessageType.order ? Colors.basicColor : Colors.yellowColor
             }
           }}

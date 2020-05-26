@@ -6,7 +6,7 @@ import { Colors } from '../../../constants/Theme'
 import pxToDp from '../../../utils/px2dp'
 import { useSelector } from 'react-redux'
 
-export default function ToolBar() {
+export default function ToolBar(props: { showShareBar(): any }) {
   const navigation: any = useNavigation()
   const userRole = useSelector((state: any) => state?.userData?.userInfo?.userRole) || '' // 用户角色
   const isLogin = useSelector((state: any) => state.userData.isLogin)
@@ -23,11 +23,20 @@ export default function ToolBar() {
     }
   }
 
+  const toShare = () => {
+    if (!isLogin) {
+      navigation.push('Login')
+      return
+    }
+
+    props.showShareBar()
+  }
+
   return (
     <View style={styles.container}>
       <CardTitle title='我的工具栏' />
       <View style={styles.content}>
-        <TouchableOpacity style={styles.item}>
+        <TouchableOpacity style={styles.item} onPress={toShare}>
           <Image source={require('../../../assets/mine-image/icon_share.png')} style={styles.icon} />
           <Text style={styles.text}>分享好友</Text>
         </TouchableOpacity>
@@ -63,7 +72,7 @@ const styles = StyleSheet.create({
     paddingTop: pxToDp(20)
   },
   item: {
-    flex: 1,
+    width: '25%',
     alignItems: 'center'
   },
   icon: {

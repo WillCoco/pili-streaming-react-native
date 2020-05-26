@@ -12,53 +12,25 @@ import { connect } from 'react-redux'
 import pxToDp from '../../../utils/px2dp'
 import { AntDesign } from '@expo/vector-icons'
 import { Colors } from '../../../constants/Theme'
-// import * as WeChat from 'react-native-wechat-lib'
 import { apiCreatePoster, apiGetUserData } from '../../../service/api'
 import { setUserInfo } from '../../../actions/user'
 import { Portal, Toast as AntToast } from '@ant-design/react-native'
 
 interface Props {
-  dispatch: any;
-  userId: number;
-  goodsId: number;
-  userData: any;
+  userId?: number;
+  userData?: any;
   hideShareBar(): void;
-  setPosterPath(img: string, type: number): any;
+  setPosterPath(img: string): any;
 }
 
 function ShareBar(props: Props) {
-  const { goodsId, userId, userData } = props
-
-  /**
-   * 分享到微信
-   */
-  // const shareToWeChat = () => {
-  // WeChat.shareMiniProgram({
-  //   title: 'Mini program.',
-  //   userName: 'gh_d39d10000000',
-  //   webpageUrl: 'https://google.com/show.html',
-  //   thumbImageUrl: 'https://google.com/1.jpg',
-  //   scene: 0
-  // }).then(res => {
-  //   Toast.show('已保存至相册')
-  //   props.hideShareBar()
-  // }).catch(err => {
-  //   console.log(err)
-  // })
-  // }
+  const { userInfo } = props.userData
 
   /**
    * 立即分享
    */
   const share = async () => {
     try {
-      let userInfo: any = {} = props.userData.userInfo || {}
-
-      if (!userId) {
-        userInfo = await apiGetUserData()
-        props.dispatch(setUserInfo(userInfo))
-      }
-
       const result = await Share.share({
         message: `邀请您加入云闪播，主播团队带货，正品大牌折上折！
 购物更划算！
@@ -88,24 +60,18 @@ function ShareBar(props: Props) {
   /**
    * 生成空间海报
    */
-  const createPoster = async (shareType: number) => {
-    let userInfo: any = {}
+  const createPoster = () => {
     let loading = AntToast.loading('正在生成海报')
 
-    if (!userId) {
-      userInfo = await apiGetUserData()
-      props.dispatch(setUserInfo(userInfo))
-    }
-
-    const params = await {
-      goodsId,
-      userId: userId || userInfo.userId,
-      shareType
+    const params = {
+      userId: userInfo.userId,
+      shareType: 4
     }
 
     apiCreatePoster(params).then((res: any) => {
+      console.log('分享卡片', res)
       Portal.remove(loading)
-      props.setPosterPath(res, shareType)
+      props.setPosterPath(res)
       props.hideShareBar()
     }).catch((err: any) => {
       Portal.remove(loading)
@@ -126,17 +92,9 @@ function ShareBar(props: Props) {
           <Image source={require('../../../assets/goods-image/icon_wechat.png')} style={styles.icon} />
           <Text style={styles.shareText}>立即分享</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.item} onPress={() => createPoster(2)}>
+        <TouchableOpacity style={styles.item} onPress={() => createPoster()}>
           <Image source={require('../../../assets/goods-image/icon_miniapp.png')} style={styles.icon} />
           <Text style={styles.shareText}>生成小程序码</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.item} onPress={() => createPoster(1)}>
-          <Image source={require('../../../assets/goods-image/icon_card.png')} style={styles.icon} />
-          <Text style={styles.shareText}>生成图文卡片</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.item} onPress={() => createPoster(3)}>
-          <Image source={require('../../../assets/goods-image/icon_poster.png')} style={styles.icon} />
-          <Text style={styles.shareText}>生成空间海报</Text>
         </TouchableOpacity>
       </View>
     </View>
