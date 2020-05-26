@@ -23,6 +23,7 @@ import {consts, Streaming} from 'pili-streaming-react-native';
 
 interface LivePusherProps {
     style?: StyleProp<any>,
+    onStateChange?: (v: any) => any
 }
 
 const LivePusher = React.forwardRef((props: LivePusherProps, ref: any) : any =>  {
@@ -80,15 +81,26 @@ const LivePusher = React.forwardRef((props: LivePusherProps, ref: any) : any => 
     console.log(pushUrl, 'b01_pushUrl')
     console.log(showPusher, 'b01_showPushershowPusher')
 
+    const onStateChange =(v) => {
+        props.onStateChange && props.onStateChange();
+        console.log(v, 'onStateChange')
+    }
+
+    const onStreamInfoChange =(v) => {
+        console.log(v, 'onStreamInfoChange')
+    }
+
     return (
-        <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
-            {
-                showPusher ? (
-                    <Streaming {...pusherConfig}/>
-                ) : null
-            }
-        </View>
-    )
+      <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
+        {showPusher ? (
+            <Streaming
+                {...pusherConfig}
+                onStateChange={onStateChange}
+                onStreamInfoChange={onStreamInfoChange}
+            />
+        ) : null}
+      </View>
+    );
 })
 
 const styles = StyleSheet.create({

@@ -63,7 +63,7 @@ export enum CameraType {
 
 const INIT_STREAMING_CONFIG: any = {
     rtmpURL: '',
-    camera: CameraType.back,
+    camera: CameraType.front,
     started: true, // 推流
     faceBeautyEnable: true, // 内置美颜 为true才能设置美白磨皮红润
     faceBeautySetting: {
@@ -149,8 +149,8 @@ const INIT_STREAMING_CONFIG: any = {
         width: '100%',
         height: '100%',
         backgroundColor: 'transparent',
-        borderBottomColor: '#333',
-        borderBottomWidth: 1,
+        // borderBottomColor: '#333',
+        // borderBottomWidth: 1,
     },
 }
 const DEFAULT_OPTIONS: any = {

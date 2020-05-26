@@ -286,10 +286,16 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       .catch((err) => { err && console.log(err); });
   }
 
+  const onStateChange = (status: any) => {
+    
+    console.log(status, 'status')
+  }
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
-      <LivePusher />
+      <LivePusher
+        onStateChange={onStateChange}
+      />
       {/*  backgroundColor: 'rgba(0,0,0,0.01)' 修复摄像上层气泡边缘显示问题 */}
       <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.01)', zIndex: 1}}>
         <LiveIntro />
