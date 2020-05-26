@@ -173,7 +173,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                 }
                 <NavigationContainer ref={navigationRef as any}>
                   <Stack.Navigator>
-                    {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
+                    <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} />
                     <Stack.Screen name='Root' component={Root} />
                     <Stack.Screen name='HomeSearch' component={HomeSearch} />
                     <Stack.Screen name='FoundSearch' component={FoundSearch} />
@@ -203,7 +203,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                     <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
                     <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false, gestureEnabled: false }} />
                     <Stack.Screen name='LiveSearchScreen' component={LiveSearch} />
-                    <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{ headerShown: false }} />
+                    {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{ headerShown: false }} /> */}
                     <Stack.Screen name='CreateLiveScreen' component={CreateLive} options={{ headerShown: false }} />
                     <Stack.Screen name='CreateTeaserScreen' component={CreateTeaser} options={{ headerShown: false }} />
                     <Stack.Screen name='LiveGoodsPicker' component={LiveGoodsPicker} options={{ headerShown: false }} />

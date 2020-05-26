@@ -29,6 +29,8 @@ import {getWareHouseGoods, AddGoodsTargetType, goodsCheckedFormat} from '../../.
 import {Toast, Portal} from '@ant-design/react-native';
 import {brandGoodAdapter} from '../../../../utils/dataAdapters';
 import {addGroupHouseGoods, changeIsExit, delGroupHouseGoods} from '../../../../actions/shop';
+import * as api from '../../../../service/api';
+import { isSucceed } from '../../../../utils/fetchTools';
 
 const emptyList: [] = [];
 const emptyObj: {} = {};
@@ -48,10 +50,14 @@ const LiveGoodsManage = (props: any) =>  {
     navTitle = '预组货',
     nextNav = 'AnorchLivingRoomScreen',
     btnText,
+    liveId,
+    onPressSubmit,
   } : {
     navTitle?: string, // navTitle
     nextNav?: string, // 
     btnText?: string, // 
+    liveId?: string,
+    onPressSubmit?: () => any,
   } = route.params || emptyObj;
 
   React.useEffect(() => {
@@ -103,7 +109,7 @@ const LiveGoodsManage = (props: any) =>  {
     const newDataList = [...dataList];
     newDataList[index].isChecked = !newDataList[index].isChecked;
 
-    console.log(newDataList, 'newDataList')
+    console.log(newDataList, 'newDataList');
     setDataList(newDataList);
   }
 
@@ -208,9 +214,9 @@ const LiveGoodsManage = (props: any) =>  {
   };
 
   /**
-   * 确认
+   * 确认开播
    */
-  const onSubmit = async () => {
+  const onStartLive = async () => {
     if (!isVaildData()) {
       return;
     }
@@ -256,6 +262,44 @@ const LiveGoodsManage = (props: any) =>  {
     }
   }
 
+  /**
+   * 更改预组货
+   */
+  const changeWarehouse = async () => {
+    const loading = Toast.loading('提交中');
+    const goodsIdList = checkedList.map(d => d.goodsId);
+    console.log(goodsIdList, '选中要去直播卖的商品');
+
+    api.apiAnewAddLiveGoods({goodsIdList: goodsIdList, liveId})
+      .then((r: any) => {
+        Portal.remove(loading);
+        if (isSucceed(r)) {
+          Toast.show('提交成功')
+          goBack();
+        }
+      })
+      .catch((err: any) => {
+        Portal.remove(loading);
+        console.log('apiAnewAddLiveGoods err:', err)
+      })
+    
+  }
+
+  const isToLive = nextNav === 'AnorchLivingRoomScreen';
+  /**
+   * 点击
+   */
+  const onPress = async () => {
+    // 去直播
+    if (isToLive) {
+      onStartLive();
+      return;
+    }
+    await changeWarehouse();
+    onPressSubmit && onPressSubmit();
+  }
+
+
   const length = checkedList && checkedList.length || 0
 
   return (
@@ -300,8 +344,8 @@ const LiveGoodsManage = (props: any) =>  {
           onPress={onPressCheckAll}
         />
         <ButtonRadius
-          text={btnText || `开播(${length})`}
-          onPress={onSubmit}
+          text={`${(btnText || '开播')}(${length})`}
+          onPress={onPress}
         />
       </View>
     </View>

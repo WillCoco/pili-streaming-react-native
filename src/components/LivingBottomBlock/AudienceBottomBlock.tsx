@@ -195,8 +195,8 @@ BottomBlock.defaultProps = {
 
 const styles = StyleSheet.create({
   wrapper: {
-    position: 'absolute',
-    bottom: 0,
+    // position: 'absolute',
+    // bottom: 0,
     width: '100%',
     padding: pad,
     justifyContent: 'flex-end',

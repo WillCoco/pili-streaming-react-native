@@ -139,6 +139,10 @@ const LiveWindow = (props: LiveWindowProps): any => {
     callback: () => dispatch(getLiveViewNum({liveId})),
   }));
 
+  /**
+   * 键盘下降
+   */
+
   React.useEffect(() => {
     // 进入直播间，获取拉流地址等房间信息
     const params = {
@@ -183,12 +187,19 @@ const LiveWindow = (props: LiveWindowProps): any => {
 
     // 请求观看人数
     poller.current.start();
+
+    const keyboardListener = Keyboard.addListener('keyboardDidHide', () => {
+      // set
+    });
+
     return () => {
       console.log(player.current, 'player.current.stop')
       player.current && player.current.stop();
 
       // 请求观看人数
       poller.current.stop();
+
+      keyboardListener.remove();
     }
   }, []);
   
@@ -243,16 +254,18 @@ const LiveWindow = (props: LiveWindowProps): any => {
         resizeMode="cover"
         style={styles.imgBg}
       /> */}
-      <LivePuller
-        ref={v => {
-          if (v) {
-            player.current = v;
-          }
-        }}
-        inputUrl={pullUrl}
-        onStatus={onPlayerStatus}
-        style={styles.video}
-      />
+      <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}}>
+        <LivePuller
+          ref={v => {
+            if (v) {
+              player.current = v;
+            }
+          }}
+          inputUrl={pullUrl}
+          onStatus={onPlayerStatus}
+          style={styles.video}
+        />
+      </View>
       <View style={styles.livingBottomBlock}>
         <LivingBottomBlock.Audience 
           onPressShopBag={() => shopCardAnim(true)}
@@ -289,10 +302,10 @@ const styles = StyleSheet.create({
   livingBottomBlock: {
     flex: 1,
     position: "absolute",
-    top: 0,
     left: 0,
     bottom: 0,
     right: 0,
+    justifyContent: 'flex-end'
   },
   scrollerWrapper: {},
   contentWrapper: {
