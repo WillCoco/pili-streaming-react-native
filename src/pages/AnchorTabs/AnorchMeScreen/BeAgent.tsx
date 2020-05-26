@@ -277,8 +277,7 @@ export default withPage(BeAgent)
 
 const styles = StyleSheet.create({
   style: {
-    width: vw(100),
-    height: vh(100),
+    flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
     borderWidth: 2,

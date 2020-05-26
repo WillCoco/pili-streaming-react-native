@@ -60,7 +60,7 @@ const AnorchDetailAvatar = (props: {
       return Promise.resolve({result: result?.records || EMPTY_ARR});
     }
 
-    return {result: result?.records}
+    return Promise.resolve({result: EMPTY_ARR})
   };
 
 
@@ -76,7 +76,7 @@ const AnorchDetailAvatar = (props: {
       return Promise.resolve({result: result?.records || EMPTY_ARR});
     }
 
-    return {result: result?.records}
+    return Promise.resolve({result: EMPTY_ARR})
   };
 
   return (
