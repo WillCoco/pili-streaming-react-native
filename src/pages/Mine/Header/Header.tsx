@@ -97,8 +97,8 @@ function Header(props: Props) {
         <View style={styles.userInfo}>
           {
             isLogin
-              ? <Image source={ userInfo.userAvatar ? { uri: userInfo.userAvatar } : defaultAvatar } defaultSource={defaultAvatar} style={styles.avatar} resizeMode='stretch' />
-              : <Image source={defaultAvatar} style={styles.avatar} resizeMode='stretch' />
+              ? <Image source={ userInfo.userAvatar ? { uri: userInfo.userAvatar } : defaultAvatar } defaultSource={defaultAvatar} style={styles.avatar} />
+              : <Image source={defaultAvatar} style={styles.avatar} />
           }
           <View>
             <Text style={styles.userName}>{isLogin ? userInfo?.nickName : '立即登录'}</Text>
@@ -109,7 +109,7 @@ function Header(props: Props) {
                     return (
                       <Text
                         key={`user-${index}`}
-                        style={[styles.userLevel, styles.userLevelBgc]}
+                        style={[styles.userLevel, item === '1' && styles.userLevelBgc]}
                       >{
                           item === '1'
                             ? '云闪播会员'
