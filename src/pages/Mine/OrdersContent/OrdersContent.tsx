@@ -61,9 +61,9 @@ export default function OrdersContent(props: Props) {
           <View style={styles.orderItem}>
             <Image source={require('../../../assets/mine-image/icon_wancheng.png')} style={styles.orderIcon} />
             <Text style={styles.orderText}>已完成</Text>
-            {
+            {/* {
               !!orderCount.receivedCount && <Text style={styles.badge}>{orderCount?.receivedCount || 0}</Text>
-            }
+            } */}
           </View>
         </TouchableWithoutFeedback>
 
@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.whiteColor,
     color: Colors.basicColor,
     paddingLeft: pxToDp(5),
-    paddingRight: pxToDp(5)
+    paddingRight: pxToDp(5),
+    fontSize: pxToDp(22)
   }
 })

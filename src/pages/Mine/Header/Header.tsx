@@ -16,6 +16,7 @@ import pxToDp from '../../../utils/px2dp'
 import formatSinglePrice from '../../../utils/formatGoodsPrice'
 
 const defaultAvatar = require('../../../assets/mine-image/default_avatar.png')
+const vipText = require('../../../assets/mine-image/vip_text.png')
 
 interface Props {
   userData: {
@@ -176,7 +177,11 @@ function Header(props: Props) {
             />
           }
           <View style={{ alignSelf: 'center' }}>
-            <Text style={[styles.leveltext, styles.vipLevel]}>{isLogin ? '云闪播会员' : '游客'}</Text>
+            {
+              isLogin
+              ? <Image source={vipText} style={styles.viptext} resizeMode='contain' />
+              : <Text style={[styles.leveltext, styles.vipLevel]}>游客</Text>
+            }
             {isLogin && <Text style={styles.invCode}>邀请码：{userInfo?.inviteCode}</Text>}
           </View>
 
@@ -200,8 +205,8 @@ export default connect(
 const styles = StyleSheet.create({
   container: {
     height: pxToDp(550),
-    borderBottomLeftRadius: pxToDp(46),
-    borderBottomRightRadius: pxToDp(46),
+    borderBottomLeftRadius: pxToDp(52),
+    borderBottomRightRadius: pxToDp(52),
     overflow: 'hidden'
   },
   rightOption: {
@@ -312,7 +317,10 @@ const styles = StyleSheet.create({
   },
   invCode: {
     marginLeft: pxToDp(30),
-    color: Colors.yellowColor,
-    marginTop: pxToDp(5)
+    color: Colors.yellowColor
+  },
+  viptext: {
+    width: pxToDp(200),
+    marginLeft: pxToDp(30)
   }
 })

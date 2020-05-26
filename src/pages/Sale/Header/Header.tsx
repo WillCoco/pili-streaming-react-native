@@ -26,7 +26,7 @@ export default function Sale(props: Props) {
     <ImageBackground source={require('../../../assets/sale-image/header_bgi.png')} style={styles.container}>
       {
         type === 'sale'
-          ? <Image source={require('../../../assets/sale-image/sale_text.png')} style={styles.saleText} />
+          ? <Image source={require('../../../assets/sale-image/sale_text.png')} style={styles.saleText} resizeMode='contain' />
           : <View style={styles.timeQuantumContainer}>
             {
               timeList && timeList.map((item, index) => {
