@@ -113,6 +113,8 @@ const LiveWindow = (props: LiveWindowProps): any => {
     if (myAnchorId !== anchorId) {
       dispatch(quitGroup(groupID)); // 退im群
     }
+
+    player.current && player.current.stop()
     goBack();
   };
 

@@ -25,7 +25,7 @@ import {
 import CameraRoll from '@react-native-community/cameraroll';
 import {PrimaryText, SmallText, T1} from 'react-native-normalization-text';
 import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import withPage from '../../../components/HOCs/withPage';
 import NavBar from '../../../components/NavBar';
 import images from '../../../assets/images';
@@ -41,6 +41,7 @@ import RNFS from 'react-native-fs';
 import {Toast, Portal} from '@ant-design/react-native';
 import {EMPTY_ARR, EMPTY_OBJ} from '../../../constants/freeze';
 import {isSucceed} from '../../../utils/fetchTools';
+import { updateLivingInfo } from '../../../actions/live';
 
 const RecordsCard = (props: {
   smallPic: any;
@@ -140,6 +141,7 @@ const RecordsCard = (props: {
 const AnchorRecords = (props) => {
   const {anchorInfo = {}} = props;
   const [liveList, setLiveList] = useState([]);
+  const dispatch = useDispatch();
 
   const {navigate} = useNavigation();
 
@@ -295,6 +297,7 @@ const AnchorRecords = (props) => {
               moneyNum={item.moneyNum}
               startTime={item.startTime}
               onPress={() => {
+                dispatch(updateLivingInfo());
                 navigate('LivingRoomScreen', {
                   liveId: item?.liveId,
                   groupID: item?.groupId || `live${item?.liveId}`,

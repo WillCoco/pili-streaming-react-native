@@ -77,6 +77,7 @@ const PublishScreen = (props: any) =>  {
             title: '您有直播未正常关闭',
             text: '是否恢复上次直播',
             rightBtnText: '恢复直播',
+            leftBtnText: '关闭',
             onPressLeft: async () => {
               // 关闭直播件
               const type = 1; // 1 保存回放, 2 不保存

@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import {PrimaryText, SmallText, T4, scale} from 'react-native-normalization-text';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
 import LiveRecord from './LiveRecord';
 import {Colors} from '../../../constants/Theme';
 import {pad, radio} from '../../../constants/Layout';
@@ -25,6 +26,7 @@ import PagingList from '../../../components/PagingList';
 import {apiAnchorParticular} from '../../../service/api';
 import { isSucceed } from '../../../utils/fetchTools';
 import { EMPTY_OBJ, EMPTY_ARR } from '../../../constants/freeze';
+import { updateLivingInfo } from '../../../actions/live';
 
 const Row = (props: {
   title: string,
@@ -35,7 +37,6 @@ const Row = (props: {
   time?: number,
   onPress?: (v?: any) => void
 }) => {
-
   const renderCell = (value: number | string, unit: string) => {
     return (
       <View style={styles.cellWrapper}>
@@ -112,6 +113,7 @@ const LiveTabPage = (props: {
   anchorId: string | number
 }) =>  {
   const {navigate} = useNavigation();
+  const dispatch = useDispatch();
 
   /**
    * 下拉刷新
@@ -157,6 +159,8 @@ const LiveTabPage = (props: {
 
 
   const toLiveingRoom = (item: any) => {
+    dispatch(updateLivingInfo());
+
     navigate('LivingRoomScreen', {
       liveId: item?.liveId,
       groupID: item?.groupId || `live${item?.liveId}`,

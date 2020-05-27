@@ -30,6 +30,7 @@ const LiveBanner = (props: LiveBannerProps) : React.ReactElement =>  {
   const [bannerList, setBannerList] = React.useState(DEFAULT_BANNER);
   const {navigate} = useNavigation();
   const isFocused = useIsFocused();
+  
 
   React.useEffect(() => {
     if (isFocused) {
