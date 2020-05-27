@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'row',
-    paddingTop: pxToDp(20)
+    paddingTop: pxToDp(20),
+    justifyContent: 'space-between',
   },
   item: {
     width: '25%',

@@ -21,6 +21,7 @@ import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab
 import OrderItem from './OrderItem/OrderItem'
 import LoadMore from '../../components/LoadMore/LoadMore'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+import sandpaySerializeURL from '../../utils/sandpaySerializeURL'
 
 const pageSize = 20
 const tabList = ['全部', '待付款', '待发货', '待收货', '已完成', '退款/售后']
@@ -215,11 +216,7 @@ export default function OrderList() {
         return
       }
 
-      let payURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
-
-      for (let item in res.data) {
-        payURL += '&' + item + '=' + res.data[item]
-      }
+      const payURL = sandpaySerializeURL(res.data)
 
       const params = {
         url: payURL,

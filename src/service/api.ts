@@ -9,6 +9,7 @@ import { UpdateParams } from './fetch/fetchOrigin';
 const HOST_PHP = __DEV__ ? 'https://mobile.quanpinlive.com' : 'https://mobile.quanpinlive.com'
 const HOST_JAVA = __DEV__ ? 'https://app.quanpinlive.com' : 'https://app.quanpinlive.com'
 
+export const SANDPAY_PRE = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8&signType=01' // 杉德支付前缀
 
 /**
  * PHP 接口 ==================================================================
