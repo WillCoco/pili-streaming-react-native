@@ -117,6 +117,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
     public void onDropViewInstance(CameraPreviewFrameView view) {
         Log.i(TAG, "onDropViewInstance");
         super.onDropViewInstance(view);
+        onHostDestroy();
         mReactContext.removeLifecycleEventListener(this);
     }
 
@@ -524,6 +525,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
     @Override
     public void onHostDestroy() {
         Log.i(TAG, "onHostDestroy");
+        mMediaStreamingManager.stopStreaming();
         mMediaStreamingManager.destroy();
         mMediaStreamingManager = null;
         mProfile = null;
