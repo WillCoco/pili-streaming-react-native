@@ -323,15 +323,15 @@ function CreateOrder(props: Props) {
 
       const payURL = sandpaySerializeURL(res.data)
 
-      const params = {
+      const payParams = {
         url: payURL,
         orderSn: res.data.orderSn,
         payType: res.data.payType
       }
 
-      console.log('创建订单路由参数', params)
+      console.log('创建订单路由参数', payParams)
 
-      navigation.push('PayWebView', params)
+      navigation.push('PayWebView', payParams)
     }).catch((err: any) => {
       console.log('提交订单', err)
       Portal.remove(loading)

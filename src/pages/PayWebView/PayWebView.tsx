@@ -8,7 +8,6 @@ export default function PayWebview() {
   const route: any = useRoute()
   const navigation: any = useNavigation()
 
-  // const { orderSn, payType } = route.params
   const { orderSn, payType, nextBtnText, nextRoute } = route.params
 
   console.log(route.params, '支付页面路由参数')
