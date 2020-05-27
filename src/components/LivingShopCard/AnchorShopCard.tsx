@@ -55,16 +55,9 @@ const AnchorShopCard = (props: {
   /**
    * 直播商品
    */
-  const onPressBuy = () => {
-    navigate('go');
-  }
+  const livingGoods = useSelector(state => (state?.live?.livingGoods || EMPTY_ARR));
 
-  /**
-   * 直播商品
-   */
-  const livingGoods = useSelector(state => (state?.live?.livingGoods || emptyList));
-
-  const [dataList, setDataList]: [Array<any>, any] = React.useState(livingGoods);
+  const [dataList, setDataList]: any = React.useState(livingGoods);
 
   /**
    * 过滤出选中的
@@ -94,38 +87,38 @@ const AnchorShopCard = (props: {
     return dataList.find(o => (o.isChecked)) // todo: 标识
   }, [dataList]);
 
-  /**
-   * 加工原数据
-   * 加上isChecked字段
-   * @params: {Array} dataList - 预组货列表原数据
-   * @params: {Array} checkList - 本地操作选择的
-   */
-  const dataFormat = (dataList: Array<any>, checkList?: Array<any>) => {
-    // 本地选择过之后刷新, format数据
-    if (checkList) {
-      const checked = checkedFilter(checkList);
-      const result: Array<any> = [];
+  // /**
+  //  * 加工原数据
+  //  * 加上isChecked字段
+  //  * @params: {Array} dataList - 预组货列表原数据
+  //  * @params: {Array} checkList - 本地操作选择的
+  //  */
+  // const dataFormat = (dataList: Array<any>, checkList?: Array<any>) => {
+  //   // 本地选择过之后刷新, format数据
+  //   if (checkList) {
+  //     const checked = checkedFilter(checkList);
+  //     const result: Array<any> = [];
 
-      dataList.forEach(d => {
-        const matchedGood = checked.find(o => (o.id === d.id && !!o.id)) // todo: 标识
-        if (matchedGood) {
-          result.push({...d, isChecked: matchedGood.isChecked})
-        } else {
-          result.push(d)
-        }
-      })
+  //     dataList.forEach(d => {
+  //       const matchedGood = checked.find(o => (o.id === d.id && !!o.id)) // todo: 标识
+  //       if (matchedGood) {
+  //         result.push({...d, isChecked: matchedGood.isChecked})
+  //       } else {
+  //         result.push(d)
+  //       }
+  //     })
 
-      return result;
-    }
+  //     return result;
+  //   }
 
-    // 本地没有选择过, format数据默认未选中
-    return dataList.map((d: any) => {
-      return {
-        ...d,
-        isChecked: false
-      }
-    });
-  }
+  //   // 本地没有选择过, format数据默认未选中
+  //   return dataList.map((d: any) => {
+  //     return {
+  //       ...d,
+  //       isChecked: false
+  //     }
+  //   });
+  // }
 
    /**
    * 全选/反选
@@ -199,13 +192,18 @@ const AnchorShopCard = (props: {
     })
       .catch((r: any) => {console.log(r, 'selLiveGoods')});
 
+      console.log(result?.data?.records || EMPTY_ARR, 1111111111111)
+
     if (isSucceed(result)) {
+      // console.log(result?.data?.records, 'result')
+      // setDataList(result?.data?.records || EMPTY_ARR)
       return Promise.resolve({result: result?.data?.records || EMPTY_ARR});
     }
 
     return Promise.resolve({result: EMPTY_ARR});
   }
-
+  console.log(dataList, '12')
+  
   /**
    * 获取更多在售直播商品
    */
@@ -218,8 +216,9 @@ const AnchorShopCard = (props: {
     .catch((r: any) => {console.log(r, 'selLiveGoods')});
 
     // console.log(result, 'result')
+    const newList = result?.data?.records || EMPTY_ARR;
     if (isSucceed(result)) {
-      return Promise.resolve({result: result?.data?.records || EMPTY_ARR});
+      return Promise.resolve({result: newList});
     }
     return Promise.resolve({result: EMPTY_ARR});
   };
@@ -247,7 +246,19 @@ const AnchorShopCard = (props: {
             </TouchableOpacity>
             <T4 style={styles.titleCenter}>直播商品管理</T4>
             <TouchableOpacity
-              onPress={() => navigate('LiveGoodsManageAgain')}
+              onPress={() => {
+                navigate(
+                  'LiveGoodsManageAgain',
+                  {
+                    nextNav: 'live',
+                    liveId,
+                    btnText: '提交',
+                    onPressSubmit: async () => {
+                      const res = await onRefresh();
+                      setDataList(res?.result || EMPTY_ARR);
+                    }
+                  })
+              }}
             >
               <SmallText style={styles.titleRight}>重新组货</SmallText>
             </TouchableOpacity>

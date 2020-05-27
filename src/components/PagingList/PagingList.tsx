@@ -14,6 +14,7 @@ import _get from 'lodash/get';
 import {Colors as colors} from '../../constants/Theme';
 import {vw} from '../../utils/metric';
 import Empty from '../../components/Empty';
+import { EMPTY_ARR } from '../../constants/freeze';
 
 interface PageListProps {
   numColumns?: number,
@@ -43,7 +44,7 @@ const PagingList = React.forwardRef((props: PageListProps, ref: any) => {
   * 模式1: 需要外部维护数据的
   * 模式2: 只需内部维护数据的
   */
-  const [listData, setListData] = React.useState(props.initListData || []);
+  const [listData, setListData] = React.useState(props.initListData || EMPTY_ARR);
   const data = props.data || listData;
   const setData = props.setData || setListData;
 
