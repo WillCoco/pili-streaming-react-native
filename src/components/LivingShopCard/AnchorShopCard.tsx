@@ -192,7 +192,7 @@ const AnchorShopCard = (props: {
     })
       .catch((r: any) => {console.log(r, 'selLiveGoods')});
 
-      console.log(result?.data?.records || EMPTY_ARR, 1111111111111)
+      // console.log(result?.data?.records || EMPTY_ARR, 1111111111111)
 
     if (isSucceed(result)) {
       // console.log(result?.data?.records, 'result')

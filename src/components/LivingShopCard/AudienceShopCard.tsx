@@ -62,6 +62,11 @@ const AudienceShopCard = (props: {
   console.log(anchorId, 'anchorIdanchorIdanchorId')
 
   /**
+   * 数量
+   */
+  const [goodsQuantity, setGoodsQuantity] = React.useState(0)
+
+  /**
    * 直播商品
    */
   const onPressBuy = (good: any) => {
@@ -101,10 +106,13 @@ const AudienceShopCard = (props: {
     })
       .catch((r: any) => {console.log(r, 'selLiveGoods')});
 
+    console.log(result, '44444')
     if (isSucceed(result)) {
+      setGoodsQuantity(result?.data?.total);
       return Promise.resolve({result: result?.data?.records || EMPTY_ARR});
     }
 
+    setGoodsQuantity(0);
     return Promise.resolve({result: EMPTY_ARR});
   }
 
@@ -118,6 +126,7 @@ const AudienceShopCard = (props: {
 
     console.log(result, 'result')
     if (isSucceed(result)) {
+      setGoodsQuantity(result?.data?.total);
       return Promise.resolve({result: result?.data?.records || EMPTY_ARR});
     }
     return Promise.resolve({result: EMPTY_ARR});
@@ -133,7 +142,7 @@ const AudienceShopCard = (props: {
             <View style={{flex: 1}} />
           </TouchableWithoutFeedback>
             <View style={styles.contentStyle}>
-              <T4 style={styles.title}>共{1}件商品</T4>
+              <T4 style={styles.title}>共{goodsQuantity}件商品</T4>
               <PagingList
                 size={PAGE_SIZE}
                 renderItem={({item, index}) => {
