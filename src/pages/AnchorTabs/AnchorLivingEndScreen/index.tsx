@@ -69,8 +69,8 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
   }
 
   return (
-    <ScrollView>
-      <ImageBackground source={images.liveEndBg} style={StyleSheet.flatten([styles.wrapper, ])}>
+    <View style={{flex: 1}}>
+      <ImageBackground source={images.liveEndBg} style={styles.wrapper}>
         <View style={{paddingTop: props.safeTop}}>
           <TouchableOpacity style={styles.close} onPress={onPressClose} >
             <Icon name="close" color={Colors.whiteColor}/>
@@ -88,19 +88,19 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
                 dataList.map(item => {
                   return (
                     <View style={styles.dataItem} key={item.title}>
-                      <Text>{endData[item.key] || 0}</Text>
+                      <Text>{endData && endData[item.key] || 0}</Text>
                       <Text style={{color: Colors.darkGrey}}>{item.title}</Text>
                     </View>
                   )
                 })
               }
             </View>
-            <View style={styles.divider}></View>
             {
-              Object.keys(endData?.bestSellGoodsRes).length
+              endData?.bestSellGoodsRes?.goodsId
                && 
               (
                 <View>
+                  <View style={styles.divider}></View>
                   <View style={styles.subTitleLine}>
                     <Image source={images.liveEndGoods} style={styles.subIcon} />
                     <T4 style={styles.subTitle}>本场销量最佳商品</T4>
@@ -120,7 +120,7 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
               )
             }
             {
-              Object.keys(endData?.bestBrowseGoodsRes).length
+              endData && Object.keys(endData?.bestBrowseGoodsRes).length
                && 
               <View>
                 <View style={styles.divider}></View>
@@ -134,14 +134,14 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
                   rightTitle={endData?.bestBrowseGoodsRes?.totalNum}
                   rightTitleStyle={{color: Colors.yellowColor}}
                   rightSubtitle={'最高观看人数'}
-                  rightSubtitleStyle={{fontSize: 12}}
+                  rightSubtitleStyle={{fontSize: 12, width: 90}}
                 />
               </View>
             }
           </View>
       </View>
       </ImageBackground>
-    </ScrollView>
+    </View>
   )
 };
 
