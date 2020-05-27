@@ -525,6 +525,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
     @Override
     public void onHostDestroy() {
         Log.i(TAG, "onHostDestroy");
+        mMediaStreamingManager.pause();
         mMediaStreamingManager.stopStreaming();
         mMediaStreamingManager.destroy();
         mMediaStreamingManager = null;
