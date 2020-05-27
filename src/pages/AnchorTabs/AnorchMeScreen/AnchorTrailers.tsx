@@ -185,7 +185,8 @@ const AnchorTrailers = () =>  {
                 navigate('LivingRoomScreen', {
                   mediaType: MediaType.teaser,
                   liveId,
-                  anchorId
+                  anchorId,
+                  liveTime
                 });
               }
               }

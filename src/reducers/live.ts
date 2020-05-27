@@ -104,17 +104,17 @@ const INIT_STREAMING_CONFIG: any = {
     playbackEnable: false,
     profile: {
         videoStreamingSetting: {
-            fps: 30,
+            fps: 24,
             bps: 1000 * 1024,
             maxFrameInterval: 60,
             encodeOrientation: consts.videoEncodeOrientations.portrait,
             h264Profile: isAndroid
                 ? consts.videoH264Profiles_android.baseline
                 : consts.videoH264Profiles_iOS.baseline31,
-            customVideoEncodeSize: {// 根据窗口设置镜头远近
-                width: window.window.width,
-                height: window.window.height,
-            },
+            // customVideoEncodeSize: {// 根据窗口设置镜头远近
+            //     width: window.window.width,
+            //     height: window.window.height,
+            // },
         },
         audioStreamingSetting: {
             rate: 44100,
@@ -126,6 +126,7 @@ const INIT_STREAMING_CONFIG: any = {
             : consts.avCodecTypes_iOS.PLH264EncoderType_AVFoundation,
         cameraStreamingSetting: {
             resolution: isAndroid
+                // ? consts.cameraResolutions_android.MEDIUM_RATIO_16_9
                 ? consts.cameraResolutions_android.MEDIUM_RATIO_16_9
                 : consts.cameraResolutions_iOS.AVCaptureSessionPresetMedium,
             focusMode: consts.cameraFocusModes.continuousVideo,
