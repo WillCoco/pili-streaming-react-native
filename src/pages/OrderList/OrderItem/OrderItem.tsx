@@ -23,7 +23,7 @@ export default function OrderItem(props: Props) {
    * 进入品牌店铺
    */
   const toBrandShop = () => {
-    navigation.push('BrandShop', { id: orderInfo.shopId })
+    navigation.push('BrandShop', { id: orderInfo.brandId })
   }
 
   /**
