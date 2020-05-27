@@ -352,7 +352,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - pili-react-native (from `../node_modules/pili-streaming-react-native/ios/pili-react-native`)
+  - pili-react-native (from `../pili-streaming-react-native/ios/pili-react-native`)
   - PLPlayerKit (from `https://raw.githubusercontent.com/pili-engineering/PLPlayerKit/master/PLPlayerKit-Universal.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -455,7 +455,7 @@ EXTERNAL SOURCES:
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   pili-react-native:
-    :path: "../node_modules/pili-streaming-react-native/ios/pili-react-native"
+    :path: "../pili-streaming-react-native/ios/pili-react-native"
   PLPlayerKit:
     :podspec: https://raw.githubusercontent.com/pili-engineering/PLPlayerKit/master/PLPlayerKit-Universal.podspec
   RCTRequired:

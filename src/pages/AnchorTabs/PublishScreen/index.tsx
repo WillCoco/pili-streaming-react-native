@@ -1,10 +1,5 @@
 import * as React from 'react';
-import {
-  View,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {T1, SmallText} from 'react-native-normalization-text';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import NavBar from '../../../components/NavBar';
@@ -14,52 +9,53 @@ import images from '../../../assets/images/index';
 import {vw, vh} from '../../../utils/metric';
 import {pad} from '../../../constants/Layout';
 import {LinearGradient} from 'expo-linear-gradient';
-import { apiAnchorHomePage } from '../../../service/api';
+import {apiAnchorHomePage} from '../../../service/api';
 import {setAnchorInfo} from '../../../actions/anchor';
 import {isWorkLiveNow, closeLive, anchorToLive} from '../../../actions/live';
 import {useDispatch, useSelector} from 'react-redux';
 import Mask from '../../../components/Mask';
-import { isSucceed } from '../../../utils/fetchTools';
-import { Toast } from '@ant-design/react-native';
+import {isSucceed} from '../../../utils/fetchTools';
+import {Toast} from '@ant-design/react-native';
 
-const PublishScreen = (props: any) =>  {
+const PublishScreen = (props: any) => {
   const [maskList, maskDispatch] = React.useContext(Mask.context);
   const {navigate, reset} = useNavigation();
   const dispatch = useDispatch();
-  const anchorInfo = useSelector((state: any) => state?.anchorData?.anchorInfo) || {}
-  const userId = useSelector((state: any) => state?.userData?.userInfo?.userId)
+  const anchorInfo =
+    useSelector((state: any) => state?.anchorData?.anchorInfo) || {};
+  const userId = useSelector((state: any) => state?.userData?.userInfo?.userId);
 
   /**
- * 获取主播详情
- */
+   * 获取主播详情
+   */
   React.useEffect(() => {
     apiAnchorHomePage({userId})
       .then((res: any) => {
-        dispatch(setAnchorInfo(res))
+        dispatch(setAnchorInfo(res));
       })
-      .catch(console.warn)
+      .catch(console.warn);
   }, []);
 
   /**
-   * tab的返回到 我的 
+   * tab的返回到 我的
    */
   const onBackPress = () => {
     reset({
       index: 0,
-      routes: [{ name: 'Root', params: {initialRoute: '我的'}}],
+      routes: [{name: 'Root', params: {initialRoute: '我的'}}],
     });
 
     // navigate('我的')
-  }
+  };
 
   /**
-   * 检测下有没有直播 
+   * 检测下有没有直播
    * 可选关闭或者继续直播
    */
   const checkIsLiveNow = async () => {
     const r: any = await dispatch(isWorkLiveNow());
     if (!r) {
-      return
+      return;
     }
 
     const {liveId, groupId} = r;
@@ -86,20 +82,19 @@ const PublishScreen = (props: any) =>  {
               navigate('AnorchLivingRoomScreen', {groupID: groupId, liveId});
               return true;
             },
-          }
-        }})
+          },
+        },
+      });
     }
-  }
+  };
 
   useFocusEffect(
     React.useCallback(() => {
       checkIsLiveNow();
-    }, [])
+    }, []),
   );
 
-  React.useEffect(() => {
-    
-  }, [])
+  React.useEffect(() => {}, []);
 
   return (
     <View style={styles.style}>
@@ -113,15 +108,27 @@ const PublishScreen = (props: any) =>  {
           bottom: 0,
         }}
       />
-      <NavBar leftTheme="light" title="" style={styles.navWrapper} onLeftPress={onBackPress} />
-      <Avatar size={65} style={{marginTop: props.safeTop + vh(8)}} source={anchorInfo.logo && {uri: anchorInfo.logo} || images.userAvatar}/>
+      <NavBar
+        leftTheme="light"
+        title=""
+        style={styles.navWrapper}
+        onLeftPress={onBackPress}
+      />
+      <Avatar
+        size={65}
+        style={{marginTop: props.safeTop + vh(8)}}
+        source={
+          (anchorInfo.logo && {uri: anchorInfo.logo}) || images.userAvatar
+        }
+      />
       <T1 style={styles.nameText}>{anchorInfo.name || '主播昵称'}</T1>
-      <SmallText style={styles.followText}>{anchorInfo.favouriteAmount || 0}粉丝</SmallText>
+      <SmallText style={styles.followText}>
+        {anchorInfo.favouriteAmount || 0}粉丝
+      </SmallText>
       <View style={styles.entranceWrapper}>
         <TouchableOpacity
           style={styles.entranceImgWrapper}
-          onPress={() => navigate('CreateLiveScreen')}
-        >
+          onPress={() => navigate('CreateLiveScreen')}>
           <Image
             style={StyleSheet.flatten([styles.entranceImg])}
             source={images.publishLive}
@@ -130,8 +137,7 @@ const PublishScreen = (props: any) =>  {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.entranceImg}
-          onPress={() => navigate('CreateTeaserScreen')}
-        >
+          onPress={() => navigate('CreateTeaserScreen')}>
           <Image
             style={styles.entranceImg}
             source={images.publishTeaser}
@@ -140,20 +146,19 @@ const PublishScreen = (props: any) =>  {
         </TouchableOpacity>
       </View>
     </View>
-  )
+  );
 };
 
-PublishScreen.defaultProps = {
-};
+PublishScreen.defaultProps = {};
 
 const styles = StyleSheet.create({
   style: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   nameText: {
     color: '#fff',
-    marginTop: pad
+    marginTop: pad,
   },
   followText: {
     color: '#fff',
@@ -163,10 +168,9 @@ const styles = StyleSheet.create({
     width: vw(72),
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: vh(6)
+    marginTop: vh(6),
   },
-  entranceImgWrapper: {
-  },
+  entranceImgWrapper: {},
   entranceImg: {
     width: vw(30),
     height: vw(81),
@@ -180,13 +184,13 @@ const styles = StyleSheet.create({
     right: 0,
     zIndex: 103,
     backgroundColor: 'transparent',
-    borderBottomColor: 'transparent'
+    borderBottomColor: 'transparent',
   },
 });
 
 export default withPage(PublishScreen, {
   statusBarOptions: {
     barStyle: 'light-content',
-    backgroundColor: 'transparent'
-  }
+    backgroundColor: 'transparent',
+  },
 });
