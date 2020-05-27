@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     paddingBottom: pxToDp(5),
     paddingLeft: pxToDp(10),
     paddingRight: pxToDp(10),
+    fontSize: pxToDp(24),
     color: Colors.whiteColor
   },
   sharePrice: {
