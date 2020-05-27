@@ -16,6 +16,7 @@ import CouponList from './CouponList/CouponList'
 import AddressBar from './AddressBar/AddressBar'
 import ActionSheet from '../../components/ActionSheet/ActionSheet'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+import sandpaySerializeURL from '../../utils/sandpaySerializeURL'
 
 interface Props {
   choosedAddress: {}
@@ -320,11 +321,7 @@ function CreateOrder(props: Props) {
 
       route.params.onOrderCompleted && route.params.onOrderCompleted(params)
 
-      let payURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
-
-      for (let item in res.data) {
-        payURL += '&' + item + '=' + res.data[item]
-      }
+      const payURL = sandpaySerializeURL(res.data)
 
       const params = {
         url: payURL,
