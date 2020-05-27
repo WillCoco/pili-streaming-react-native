@@ -1,14 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { AppState } from 'react-native'
-import { useRoute, useNavigation } from '@react-navigation/native'
+import { useRoute, useNavigation, useIsFocused } from '@react-navigation/native'
 import { WebView } from 'react-native-webview'
 import { Colors } from '../../constants/Theme'
 
 export default function PayWebview() {
-  const webViewRef: any = useRef()
-
   const route: any = useRoute()
   const navigation: any = useNavigation()
+  const isFocused = useIsFocused()
 
   // const { orderSn, payType } = route.params
   const { orderSn, payType, nextBtnText, nextRoute } = route.params
@@ -30,6 +29,12 @@ export default function PayWebview() {
     AppState.addEventListener('change', handleAppStateChange)
   }, [])
 
+  useEffect(() => {
+    if (!isFocused) {
+      AppState.removeEventListener('change', handleAppStateChange)
+    }
+  }, [isFocused])
+
   const handleAppStateChange = (nextAppState: any) => {
     if (nextAppState === 'background') {
       console.log('后台')
@@ -49,8 +54,7 @@ export default function PayWebview() {
 
   return (
     <WebView
-      ref={webViewRef}
-      style={{opacity: 0.99}}
+      style={{ opacity: 0.99 }}
       source={{ uri: route?.params?.url }}
     />
   )
