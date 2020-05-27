@@ -50,6 +50,8 @@ const Row = (props: {
     Toast.show('开播时间到啦')
   }
 
+  console.log(props?.time, 'ttttttt')
+
   return (
     <TouchableOpacity
       style={StyleSheet.flatten([styles.rowWrapper, props.showDivider && styles.divider])}

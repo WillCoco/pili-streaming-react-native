@@ -104,7 +104,7 @@ const INIT_STREAMING_CONFIG: any = {
     playbackEnable: false,
     profile: {
         videoStreamingSetting: {
-            fps: 30,
+            fps: 24,
             bps: 1000 * 1024,
             maxFrameInterval: 60,
             encodeOrientation: consts.videoEncodeOrientations.portrait,
