@@ -74,12 +74,18 @@ const AudienceShopCard = (props: {
       id: good?.goodsId,
       shareUserId: anchorId,
       onOrderCompleted: (info: any) => {
+        const safeInfo = info || {};
         requestAnimationFrame(() => {
-          const [orders] = info?.shopReqs || EMPTY_OBJ;
-          const [order] = orders?.orderGoodsReqs || EMPTY_ARR;
-          const quantity = order.goodsNum || 1;
+          let quantity;
+          try {
+            const [orders] = safeInfo?.shopReqs || EMPTY_OBJ;
+            const [order] = orders?.orderGoodsReqs || EMPTY_ARR;
+            quantity = order.goodsNum;
+          } catch (err) {
+            quantity = 1;
+          }
 
-          console.log(info, 'inffooooooo')
+          console.log(safeInfo, 'inffooooooo')
           dispatch(sendRoomMessage({text: `下单了${quantity}件`, type: MessageType.order}))
         })
       }

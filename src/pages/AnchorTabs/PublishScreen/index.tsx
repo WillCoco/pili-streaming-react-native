@@ -82,7 +82,7 @@ const PublishScreen = (props: any) =>  {
               // 关闭直播件
               const type = 1; // 1 保存回放, 2 不保存
               const r1: any = await dispatch(closeLive({liveId, type}));
-              navigate('AnchorLivingEnd', r1?.data);
+              // navigate('AnchorLivingEnd', r1?.data);
               return true;
             },
             onPressRight: () => {

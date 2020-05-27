@@ -301,7 +301,7 @@ function CreateOrder(props: Props) {
       }
     })
 
-    let params = {
+    let params1 = {
       cartIds,
       payType: 2,  //  支付方式
       shopReqs,
