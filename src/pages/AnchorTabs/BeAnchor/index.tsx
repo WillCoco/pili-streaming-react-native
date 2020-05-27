@@ -23,6 +23,7 @@ import { useNavigation } from '@react-navigation/native'
 import CheckBox from '../../../components/CheckBox'
 import { Toast } from '@ant-design/react-native'
 import formatGoodsPrice from '../../../utils/formatGoodsPrice'
+import sandpaySerializeURL from '../../../utils/sandpaySerializeURL'
 
 const BeAnchor = (props: any) =>  {
   const {navigate} = useNavigation()
@@ -55,11 +56,7 @@ const BeAnchor = (props: any) =>  {
         return
       }
 
-      let payURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
-
-      for (let item in res.data) {
-        payURL += '&' + item + '=' + res.data[item]
-      }
+      const payURL = sandpaySerializeURL(res.data)
 
       const params = {
         url: payURL,

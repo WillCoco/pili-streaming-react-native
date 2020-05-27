@@ -112,6 +112,7 @@ function Header(props: { dispatch?: any; userInfo?: any }) {
                 style={styles.input}
                 defaultValue={userInfo.nickName}
                 onChangeText={(text) => setNickName(text)}
+                returnKeyType='done'
               />
           }
 

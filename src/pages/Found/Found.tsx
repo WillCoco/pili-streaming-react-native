@@ -167,7 +167,7 @@ export default connect(
 const styles = StyleSheet.create({
   addContainer: {
     position: 'absolute',
-    bottom: 100,
+    bottom: 120,
     right: 10,
     zIndex: 999
   },
