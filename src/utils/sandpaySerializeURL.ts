@@ -13,9 +13,9 @@ interface SandPayParams {
 
 import {SANDPAY_PRE} from '../service/api';
 
-let payURL: string = SANDPAY_PRE;
-
 export default function sandpaySerializeURL(param: SandPayParams) {
+  let payURL: string = SANDPAY_PRE;
+
   for (let item in param) {
     payURL += '&' + item + '=' + encodeURIComponent(param[item])
   }
