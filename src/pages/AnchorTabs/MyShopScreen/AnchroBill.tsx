@@ -160,53 +160,53 @@ const AnchroBill = props =>  {
         leftTheme="light"
         style={styles.navWrapper}
       />
-      <View style={StyleSheet.flatten([styles.headerWrapper, {height: 230 + props.safeTop}])}>
-        <Image style={styles.imgBg} source={images.anchorShopBg} resizeMode="stretch" />
-      </View>
-      <View style={StyleSheet.flatten([styles.billWrapper, {top: props.safeTop + pxToDp(88)}])}>
-        <View style={styles.billTimer}>
-          <PrimaryText style={{color: Colors.whiteColor}}>{billDate.getFullYear() + '年' + (billDate.getMonth() + 1) + '月'}</PrimaryText>
-          <DatePicker
-            value={billDate}
-            mode="month"
-            minDate={new Date(2020, 3)}
-            maxDate={new Date(2099, 11)}
-            onChange={onDatePicker}
-            format="YYYY-MM"
-            title="时间"
-          >
-            <Feather name="more-horizontal" size={24} color="white" />
-          </DatePicker>
-        </View>
-        <View style={styles.billContainer}>
-          <PagingList
-            data={data}
-            setData={setData}
-            size={10}
-            // initListData={warehouseGoods}
-            renderItem={({item, index}: any) => {
-              return (
-                <ListItem
-                  leftAvatar={{source: billTypeIcon(item.type)}}
-                  title={item.desc}
-                  subtitle={item.createTime}
-                  subtitleStyle={{color: Colors.darkGrey, marginTop: pad}}
-                  rightTitle={(+item.amount > 0 ? '+' : '') + formatSinglePrice(item.amount) + '¥'}
-                  rightTitleStyle={+item.amount > 0 ? {fontWeight: 'bold', color: Colors.darkBlack} : {fontWeight: 'bold', color: Colors.basicColor}}
-                  bottomDivider
-                />
-              )
-            }}
-            getItemLayout={(data, index) => (
-              {length: ROW_HEIGHT, offset: ROW_HEIGHT * index, index}
-            )}
-            onRefresh={onRefresh}
-            onEndReached={onEndReached}
-            keyExtractor={(item, index) => 'index' + index + item}
-            initialNumToRender={14}
-            numColumns={1}
-            columnWrapperStyle={{justifyContent: 'space-between'}}
-          />
+      <View style={StyleSheet.flatten([styles.headerWrapper])}>
+        <Image style={StyleSheet.flatten([styles.imgBg, {height: 230 + props.safeTop}])} source={images.anchorShopBg} resizeMode="stretch" />
+        <View style={StyleSheet.flatten([styles.billWrapper, {paddingTop: props.safeTop + pxToDp(88)}])}>
+          <View style={styles.billTimer}>
+            <PrimaryText style={{color: Colors.whiteColor}}>{billDate.getFullYear() + '年' + (billDate.getMonth() + 1) + '月'}</PrimaryText>
+            <DatePicker
+              value={billDate}
+              mode="month"
+              minDate={new Date(2020, 3)}
+              maxDate={new Date(2099, 11)}
+              onChange={onDatePicker}
+              format="YYYY-MM"
+              title="时间"
+            >
+              <Feather name="more-horizontal" size={24} color="white" />
+            </DatePicker>
+          </View>
+          <View style={styles.billContainer}>
+            <PagingList
+              data={data}
+              setData={setData}
+              size={10}
+              // initListData={warehouseGoods}
+              renderItem={({item, index}: any) => {
+                return (
+                  <ListItem
+                    leftAvatar={{source: billTypeIcon(item.type)}}
+                    title={item.desc}
+                    subtitle={item.createTime}
+                    subtitleStyle={{color: Colors.darkGrey, marginTop: pad}}
+                    rightTitle={(+item.amount > 0 ? '+' : '') + formatSinglePrice(item.amount) + '¥'}
+                    rightTitleStyle={+item.amount > 0 ? {fontWeight: 'bold', color: Colors.darkBlack} : {fontWeight: 'bold', color: Colors.basicColor}}
+                    bottomDivider
+                  />
+                )
+              }}
+              getItemLayout={(data, index) => (
+                {length: ROW_HEIGHT, offset: ROW_HEIGHT * index, index}
+              )}
+              onRefresh={onRefresh}
+              onEndReached={onEndReached}
+              keyExtractor={(item, index) => 'index' + index + item}
+              initialNumToRender={14}
+              numColumns={1}
+              columnWrapperStyle={{justifyContent: 'space-between'}}
+            />
+          </View>
         </View>
       </View>
     </View>
@@ -231,6 +231,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent'
   },
   headerWrapper: {
+    flex: 1,
     backgroundColor: 'transparent',
   },
   imgBg: {
@@ -240,8 +241,8 @@ const styles = StyleSheet.create({
     position: 'absolute'
   },
   billWrapper: {
+    flex: 1,
     width: '100%',
-    position: 'absolute',
     padding: pad,
   },
   billTimer: {
@@ -252,7 +253,7 @@ const styles = StyleSheet.create({
     marginBottom: pad * 2,
   },
   billContainer: {
-    height: vh(80),
+    flex: 1,
     backgroundColor: Colors.whiteColor,
   },
   contentContainerStyle: {

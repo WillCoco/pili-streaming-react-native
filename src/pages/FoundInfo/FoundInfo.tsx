@@ -66,7 +66,7 @@ function FoundInfo(props: { userData: { userInfo?: any; isLogin?: boolean } }) {
 
     apiGetWorksDetailInfo(params).then((res: any) => {
       console.log('发现详情', res)
-      setNetWorkErr(false)
+      // setNetWorkErr(false)
       if (!res) {
         Toast.show('作品不存在', {
           position: 0
@@ -90,7 +90,10 @@ function FoundInfo(props: { userData: { userInfo?: any; isLogin?: boolean } }) {
       setIsLoaded(true)
     }).catch((err: any) => {
       console.log('作品详情', err)
-      setNetWorkErr(true)
+      // setNetWorkErr(true)
+      setTimeout(() => {
+        navigation.goBack()
+      }, 1000)
     })
   }
 
@@ -321,7 +324,7 @@ function FoundInfo(props: { userData: { userInfo?: any; isLogin?: boolean } }) {
     setCommentList(JSON.parse(JSON.stringify(commentList)))
   }
 
-  if (netWorkErr) return <NetWorkErr reload={() => getWorksInfo(false)} />
+  // if (netWorkErr) return <NetWorkErr reload={() => getWorksInfo(false)} />
 
   if (!isLoaded) return <></>
 

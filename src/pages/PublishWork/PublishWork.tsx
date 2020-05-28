@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
-import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { Colors } from '../../constants/Theme'
 import { apiPublishWorks } from '../../service/api'
 import { setAddedGoodsList, setMediaList } from '../../actions/works'
@@ -28,6 +28,7 @@ function PublishWork(props: Props) {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [netWorkErr, setNetWorkErr] = useState(false)
+  const [fullPathImageList, setFullPathImageList]: Array<any> = useState([])
 
   const { type: pageType } = route.params
 
@@ -56,8 +57,6 @@ function PublishWork(props: Props) {
    * 发表
    */
   const publish = () => {
-    const filesUrl = mediaList.splice(1, mediaList.length - 1)
-
     if (!title || !content) {
       Toast.show('标题和内容不能为空', { position: 0 })
       return
@@ -84,7 +83,7 @@ function PublishWork(props: Props) {
 
     const params = {
       content,
-      filesUrl,
+      filesUrl: fullPathImageList,
       findGoodsInfoList,
       title,
       worksType: pageType === 'video' ? 'VIDEO' : 'PICTURE'
@@ -119,6 +118,8 @@ function PublishWork(props: Props) {
       />
       <ImagePicker
         pageType={pageType}
+        fullPathImageList={fullPathImageList}
+        setFullPathImageList={(list: Array<any>) => setFullPathImageList(list) }
       />
       <GoodsList
         publish={publish}

@@ -1,8 +1,8 @@
-import React from 'react';
-// import { registerRootComponent } from 'expo';
 import { UIManager, AppRegistry, Text } from 'react-native';
 import App from './App';
 // console.log(registerRootComponent, 'registerRootComponent')
+import { enableScreens } from 'react-native-screens';
+enableScreens();
 
 UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 

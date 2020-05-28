@@ -5,29 +5,31 @@ import { connect } from 'react-redux'
 import { Colors } from '../../../constants/Theme'
 import * as ImagePicker from 'expo-image-picker'
 import { Ionicons } from '@expo/vector-icons'
-import Toast from 'react-native-tiny-toast'
+import { Portal, Toast } from '@ant-design/react-native'
 import { apiWorkUpload } from '../../../service/api'
 import { setMediaList } from '../../../actions/works'
 
 interface Props {
   dispatch?: any;
   pageType: string;
-  mediaList: Array<any>
+  mediaList: Array<any>;
+  fullPathImageList: Array<any>;
+  setFullPathImageList([]: Array<any>): void
 }
 
 function ImgPicker(props: Props) {
-  const { pageType, mediaList } = props
+  const { pageType, mediaList, fullPathImageList } = props
 
   const chooseImage = async (index: number) => {
     if (index) return
 
     if (pageType !== 'video' && mediaList.length === 10) {
-      Toast.show('最多上传9张图片', { position: 0 })
+      Toast.fail('最多上传9张图片')
       return
     }
 
     if (pageType === 'video' && mediaList.length === 2) {
-      Toast.show('只能上传一个视频', { position: 0 })
+      Toast.fail('只能上传一个视频')
       return
     }
 
@@ -54,19 +56,26 @@ function ImgPicker(props: Props) {
   }
 
   const upLoadImage = (imgUri: string) => {
+    const loading = Toast.loading('')
+
     apiWorkUpload({
       fileType: pageType === 'video' ? 'VIDEO' : 'PICTURE',
       file: getImageInfo(imgUri),
     }).then((res: any) => {
+      Portal.remove(loading)
       console.log(res)
       if (res.code === 200) {
         let imgFullPath = res.data.worksUrl
         let imgPath = imgFullPath.substr(0, imgFullPath.lastIndexOf('&', imgFullPath.lastIndexOf('&') - 1))
 
         props.dispatch(setMediaList([...mediaList, ...[imgPath]]))
+        props.setFullPathImageList([...fullPathImageList, ...[res.data.worksUrl]])
       } else {
-        Toast.show(res.data)
+        Toast.fail(res.data)
       }
+    }).catch((err: any) => {
+      Portal.remove(loading)
+      console.log(err)
     })
   }
 

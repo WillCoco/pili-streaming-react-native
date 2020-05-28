@@ -69,8 +69,8 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
   }
 
   return (
-    <ScrollView>
-      <ImageBackground source={images.liveEndBg} style={StyleSheet.flatten([styles.wrapper, ])}>
+    <View style={{flex: 1}}>
+      <ImageBackground source={images.liveEndBg} style={styles.wrapper}>
         <View style={{paddingTop: props.safeTop}}>
           <TouchableOpacity style={styles.close} onPress={onPressClose} >
             <Icon name="close" color={Colors.whiteColor}/>
@@ -88,46 +88,60 @@ const AnorchLivingEndScreen = (props: any) : any =>  {
                 dataList.map(item => {
                   return (
                     <View style={styles.dataItem} key={item.title}>
-                      <Text>{endData[item.key] || 0}</Text>
+                      <Text>{endData && endData[item.key] || 0}</Text>
                       <Text style={{color: Colors.darkGrey}}>{item.title}</Text>
                     </View>
                   )
                 })
               }
             </View>
-            <View style={styles.divider}></View>
-            <View style={styles.subTitleLine}>
-              <Image source={images.liveEndGoods} style={styles.subIcon} />
-              <T4 style={styles.subTitle}>本场销量最佳商品</T4>
-            </View>
-            <ListItem
-              leftAvatar={{ source: {uri: endData?.bestSellGoodsRes?.originalImg || ''}, rounded: false}}
-              title={endData?.bestSellGoodsRes?.goodsName}
-              subtitle={endData?.bestSellGoodsRes?.goodsSku}
-              subtitleStyle={{color: Colors.darkGrey, paddingVertical: pad}}
-              rightTitle={
-                <PrimaryText style={styles.fontYellow}>
-                  {endData?.bestSellGoodsRes?.totalNum}<TinyText style={styles.fontYellow}> 元</TinyText>
-                </PrimaryText>
-              }
-            />
-            <View style={styles.divider}></View>
-            <View style={styles.subTitleLine}>
-              <Image source={images.liveEndGoods} style={styles.subIcon} />
-              <T4 style={styles.subTitle}>本场销量人气商品</T4>
-            </View>
-            <ListItem
-              leftAvatar={{ source: {uri: endData?.bestBrowseGoodsRes?.originalImg}, rounded: false}}
-              title={endData?.bestBrowseGoodsRes?.goodsName}
-              rightTitle={endData?.bestBrowseGoodsRes?.totalNum}
-              rightTitleStyle={{color: Colors.yellowColor}}
-              rightSubtitle={'最高观看人数'}
-              rightSubtitleStyle={{fontSize: 12}}
-            />
+            {
+              endData?.bestSellGoodsRes?.goodsId
+               && 
+              (
+                <View>
+                  <View style={styles.divider}></View>
+                  <View style={styles.subTitleLine}>
+                    <Image source={images.liveEndGoods} style={styles.subIcon} />
+                    <T4 style={styles.subTitle}>本场销量最佳商品</T4>
+                  </View>
+                  <ListItem
+                    leftAvatar={{ source: {uri: endData?.bestSellGoodsRes?.originalImg || ''}, rounded: false}}
+                    title={endData?.bestSellGoodsRes?.goodsName}
+                    subtitle={endData?.bestSellGoodsRes?.goodsSku}
+                    subtitleStyle={{color: Colors.darkGrey, paddingVertical: pad}}
+                    rightTitle={
+                      <PrimaryText style={styles.fontYellow}>
+                        {endData?.bestSellGoodsRes?.totalNum}<TinyText style={styles.fontYellow}> 元</TinyText>
+                      </PrimaryText>
+                    }
+                  />
+                </View>
+              )
+            }
+            {
+              endData && Object.keys(endData?.bestBrowseGoodsRes).length
+               && 
+              <View>
+                <View style={styles.divider}></View>
+                <View style={styles.subTitleLine}>
+                  <Image source={images.liveEndGoods} style={styles.subIcon} />
+                  <T4 style={styles.subTitle}>本场销量人气商品</T4>
+                </View>
+                <ListItem
+                  leftAvatar={{ source: {uri: endData?.bestBrowseGoodsRes?.originalImg}, rounded: false}}
+                  title={endData?.bestBrowseGoodsRes?.goodsName}
+                  rightTitle={endData?.bestBrowseGoodsRes?.totalNum}
+                  rightTitleStyle={{color: Colors.yellowColor}}
+                  rightSubtitle={'最高观看人数'}
+                  rightSubtitleStyle={{fontSize: 12, width: 90}}
+                />
+              </View>
+            }
           </View>
       </View>
       </ImageBackground>
-    </ScrollView>
+    </View>
   )
 };
 
@@ -142,6 +156,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     padding: pad * 1.5,
+    backgroundColor: 'rgba(0,0,0,0.1)',
   },
   close: {
     width: '100%',

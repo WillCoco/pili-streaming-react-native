@@ -31,6 +31,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setUserInfo } from '../../../actions/user'
 import { apiGetUserData } from '../../../service/api'
 import withPage from '../../../components/HOCs/withPage'
+import sandpaySerializeURL from '../../../utils/sandpaySerializeURL'
 import { EMPTY_OBJ } from '../../../constants/freeze'
 
 const BeAgent = (props: any) => {
@@ -107,11 +108,7 @@ const BeAgent = (props: any) => {
         return
       }
 
-      let payURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
-
-      for (let item in res.data) {
-        payURL += '&' + item + '=' + res.data[item]
-      }
+      const payURL = sandpaySerializeURL(res.data)
 
       const params = {
         url: payURL,
@@ -226,7 +223,7 @@ const BeAgent = (props: any) => {
             }
             <TinyText style={styles.beAgentTip}>
               {
-                agentRequire?.currentLevel === 0 ? '任意一条件达成即可成为经纪人' : '达成所有条件升级经纪人'
+                agentRequire?.currentLevel === 3 ? '达成任一条件达成即可成为经纪人' : '达成所有条件升级经纪人'
               }
             </TinyText>
           </View>
@@ -277,8 +274,7 @@ export default withPage(BeAgent)
 
 const styles = StyleSheet.create({
   style: {
-    width: vw(100),
-    height: vh(100),
+    flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
     borderWidth: 2,

@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import {PrimaryText, SmallText, T4, scale} from 'react-native-normalization-text';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
 import LiveRecord from './LiveRecord';
 import {Colors} from '../../../constants/Theme';
 import {pad, radio} from '../../../constants/Layout';
@@ -24,7 +25,8 @@ import { Toast } from '@ant-design/react-native';
 import PagingList from '../../../components/PagingList';
 import {apiAnchorParticular} from '../../../service/api';
 import { isSucceed } from '../../../utils/fetchTools';
-import { EMPTY_OBJ } from '../../../constants/freeze';
+import { EMPTY_OBJ, EMPTY_ARR } from '../../../constants/freeze';
+import { clearLiveRoom } from '../../../actions/im';
 
 const Row = (props: {
   title: string,
@@ -35,7 +37,6 @@ const Row = (props: {
   time?: number,
   onPress?: (v?: any) => void
 }) => {
-
   const renderCell = (value: number | string, unit: string) => {
     return (
       <View style={styles.cellWrapper}>
@@ -48,6 +49,8 @@ const Row = (props: {
   const onStop = () => {
     Toast.show('开播时间到啦')
   }
+
+  console.log(props?.time, 'ttttttt')
 
   return (
     <TouchableOpacity
@@ -112,6 +115,7 @@ const LiveTabPage = (props: {
   anchorId: string | number
 }) =>  {
   const {navigate} = useNavigation();
+  const dispatch = useDispatch();
 
   /**
    * 下拉刷新
@@ -128,10 +132,10 @@ const LiveTabPage = (props: {
     const result = await apiAnchorParticular(params).catch(console.warn);
 
     if (isSucceed(result)) {
-      return Promise.resolve({result: result?.data?.liveList?.records || EMPTY_OBJ});
+      return Promise.resolve({result: result?.data?.liveList?.records || EMPTY_ARR});
     }
 
-    return Promise.resolve({result: EMPTY_OBJ})
+    return Promise.resolve({result: EMPTY_ARR})
   }
 
   /**
@@ -148,14 +152,17 @@ const LiveTabPage = (props: {
     const result = await apiAnchorParticular(params).catch(console.warn);
 
     if (isSucceed(result)) {
-      return Promise.resolve({result: result?.data?.liveList?.records || EMPTY_OBJ});
+      return Promise.resolve({result: EMPTY_ARR})
+      return Promise.resolve({result: result?.data?.liveList?.records || EMPTY_ARR});
     }
 
-    return Promise.resolve({result: EMPTY_OBJ})
+    return Promise.resolve({result: EMPTY_ARR})
   };
 
 
   const toLiveingRoom = (item: any) => {
+    dispatch(clearLiveRoom());
+
     navigate('LivingRoomScreen', {
       liveId: item?.liveId,
       groupID: item?.groupId || `live${item?.liveId}`,
@@ -167,9 +174,14 @@ const LiveTabPage = (props: {
   /**
    * 渲染行
    */
-  const renderRow = (item: any, index: number) => {
+  let notRecordCount = 0 // 不是回放的数量
+
+  const renderRow = (item: any) => {
+    let index
+    index = item.index
     item = item.item
     if (item.liveStatus == 2) {
+      notRecordCount ++
       return (
         <Row
           key={`_${index}`}
@@ -181,6 +193,7 @@ const LiveTabPage = (props: {
         />
       )
     } else if (item.liveStatus == 1) {
+      notRecordCount ++
       return <Row
         key={`item_${index}`}
         title={item?.liveTitle }
@@ -189,20 +202,36 @@ const LiveTabPage = (props: {
         time={item?.liveTime}
         showDivider
         onPress={() => toLiveingRoom(item)}
-
       />
     } else if (item.liveStatus == 3) {
-      return (
-        <LiveRecord
-          img={item?.smallPic}
-          title={item?.liveTitle}
-          time={(new Date(item?.liveTime)).toLocaleString()}
-          viewTimes={item?.watchNum}
-          goodsQuantity={item?.liveProductnum}
-          key={`item_${index}`}
-          onPress={() => toLiveingRoom(item)}
-        />
-      )
+      if (notRecordCount == index) {
+        return (
+          <View>
+            <T4>精彩回放</T4>
+            <LiveRecord
+              img={item?.smallPic}
+              title={item?.liveTitle}
+              time={(new Date(item?.liveTime)).toLocaleString()}
+              viewTimes={item?.watchNum}
+              goodsQuantity={item?.liveProductnum}
+              key={`item_${index}`}
+              onPress={() => toLiveingRoom(item)}
+            />
+          </View>
+        )
+      } else {
+        return (
+          <LiveRecord
+            img={item?.smallPic}
+            title={item?.liveTitle}
+            time={(new Date(item?.liveTime)).toLocaleString()}
+            viewTimes={item?.watchNum}
+            goodsQuantity={item?.liveProductnum}
+            key={`item_${index}`}
+            onPress={() => toLiveingRoom(item)}
+          />
+        )
+      }
     } 
   }
 
@@ -212,7 +241,7 @@ const LiveTabPage = (props: {
       <PagingList
         data={props?.liveRecords}
         size={PAGE_SIZE}
-        renderItem={(item: any, index: number) => renderRow(item, index)}
+        renderItem={(item: any) => renderRow(item)}
         onRefresh={onRefresh}
         onEndReached={onEndReached}
         initialNumToRender={PAGE_SIZE}

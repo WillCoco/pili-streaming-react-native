@@ -12,8 +12,9 @@ import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
 const pageSize = 20
 
 export default function PublishedWork() {
-  let pageNoRef = useRef(1)
-  let hasMoreRef = useRef(true)
+  const pageNoRef = useRef(1)
+  const hasMoreRef = useRef(true)
+  const workListRef: any = useRef([])
 
   const navigation: any = useNavigation()
 
@@ -46,7 +47,8 @@ export default function PublishedWork() {
       if (res && res.totalCount) {
         const totalPage = res.totalCount / pageSize
         hasMoreRef.current = pageNoRef.current < totalPage
-        setWorkList([...workList, ...res.worksInfoList])
+        workListRef.current = [...workListRef.current, ...res.worksInfoList]
+        setWorkList(workListRef.current)
       }
       setIsEmpty(!res.totalCount)
     }).catch((err: any) => {
@@ -62,9 +64,13 @@ export default function PublishedWork() {
     }).then((res: any) => {
       console.log('操作作品', res)
       if (res) {
+        workListRef.current = []
         pageNoRef.current = 1
+        setWorkList(workListRef.current)
         getPublishedWorks()
       }
+    }).catch((err: any) => {
+      console.log(err)
     })
   }
 

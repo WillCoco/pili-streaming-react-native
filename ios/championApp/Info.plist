@@ -2,16 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSCameraUsageDescription</key>
-	<string>Allow championApp to use the camera</string>
-	<key>NSContactsUsageDescription</key>
-	<string>Allow championApp experiences to access your contacts</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Allow championApp to access your microphone</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>championApp</string>
+	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -26,8 +20,23 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.champion.championlive</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>championLive</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationCategoryType</key>
+	<string>NSMicrophoneUsageDescription</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -45,12 +54,18 @@
 	</dict>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Allow championApp to access your calendar</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow championApp to use the camera</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Allow championApp experiences to access your contacts</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Allow championApp to use your location</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Allow championApp to use your location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>我们需要通过您的地理位置信息获取您周边的数据</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Allow championApp to access your microphone</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Allow championApp to access your device's accelerometer</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

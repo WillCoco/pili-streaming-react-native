@@ -10,6 +10,7 @@ import GoodsCard from './GoodsCard/GoodsCard'
 import OrderCard from './OrderCard/OrderCard'
 import ExpressStepper from '../../components/ExpressStepper/ExpressStepper'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+import sandpaySerializeURL from '../../utils/sandpaySerializeURL'
 
 export default function OrderDetail() {
   const route: any = useRoute()
@@ -83,13 +84,7 @@ export default function OrderDetail() {
         return
       }
 
-      let payURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
-
-      for (let item in res.data) {
-        payURL += '&' + item + '=' + res.data[item]
-      }
-
-      console.log(payURL, 423532153416125135);
+      const payURL = sandpaySerializeURL(res.data)
 
       navigation.push('PayWebView', { url: payURL })
     }).catch((err: any) => {

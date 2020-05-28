@@ -11,7 +11,7 @@ import {useDispatch} from 'react-redux';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import LiveWindow from '../../../components/LiveWindow';
 import withPage from '../../../components/HOCs/withPage';
-import {clearLiveRoom} from '../../../actions/im';
+import {clearLiveRoom, updateRoomMessage} from '../../../actions/im';
 
 const AnchorLivingRoomScreen = (props: any) : any =>  {
   const dispatch = useDispatch();
@@ -19,6 +19,8 @@ const AnchorLivingRoomScreen = (props: any) : any =>  {
   React.useEffect(() => {
     // 屏幕常亮
     activateKeepAwake();
+    // 清空消息
+    dispatch(updateRoomMessage([]));
     return () => {
       // 取消屏幕常亮
       deactivateKeepAwake();

@@ -42,7 +42,6 @@ function PosterCard(props: Props) {
     const downloadDest = `${dirs}/${((Math.random() * 10000000) | 0)}.png`;
     const imageData = base64Img;
 
-    // 报错了 先注释
     RNFetchBlob.fs.writeFile(downloadDest, imageData, 'base64').then(async () => {
       try {
         if (Platform.OS !== 'ios') {

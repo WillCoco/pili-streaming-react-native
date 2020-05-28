@@ -6,7 +6,6 @@ import {Platform} from 'react-native';
 import window from '../constants/Layout';
 
 const isAndroid = Platform.OS === 'android';
-console.log(window, '12300000')
 
 export interface LiveConfig {
   cover?: { // 封面
@@ -73,19 +72,49 @@ const INIT_STREAMING_CONFIG: any = {
         redden: 0, //红润程度
     },
     // previewMirrorEnable:true, // 镜像
+    muted: false,
+    zoom: 1,
+    focus: false,
+    watermarkSetting: {
+        src: null, // or `''`？
+        alpha: 122,
+        position: {
+            x: 0,
+            y: 0,
+        },
+        size: {
+            width: 50,
+            height: 50,
+        },
+    },
+    pictureStreamingFile: null,
+    pictureStreamingEnable: false,
+    torchEnable: false,
+    previewMirrorEnable: false,
+    encodingMirrorEnable: false,
+    audioMixFile: {
+        filePath: null, // or `''`？
+        loop: true,
+    },
+    playMixAudio: false,
+    audioMixVolume: {
+        micVolume: 0.5,
+        musicVolume: 0.5,
+    },
+    playbackEnable: false,
     profile: {
         videoStreamingSetting: {
-            fps: 30,
+            fps: 24,
             bps: 1000 * 1024,
             maxFrameInterval: 60,
             encodeOrientation: consts.videoEncodeOrientations.portrait,
             h264Profile: isAndroid
                 ? consts.videoH264Profiles_android.baseline
                 : consts.videoH264Profiles_iOS.baseline31,
-            customVideoEncodeSize: {// 根据窗口设置镜头远近
-                width: window.window.width,
-                height: window.window.height,
-            },
+            // customVideoEncodeSize: {// 根据窗口设置镜头远近
+            //     width: window.window.width,
+            //     height: window.window.height,
+            // },
         },
         audioStreamingSetting: {
             rate: 44100,
@@ -97,6 +126,7 @@ const INIT_STREAMING_CONFIG: any = {
             : consts.avCodecTypes_iOS.PLH264EncoderType_AVFoundation,
         cameraStreamingSetting: {
             resolution: isAndroid
+                // ? consts.cameraResolutions_android.MEDIUM_RATIO_16_9
                 ? consts.cameraResolutions_android.MEDIUM_RATIO_16_9
                 : consts.cameraResolutions_iOS.AVCaptureSessionPresetMedium,
             focusMode: consts.cameraFocusModes.continuousVideo,
@@ -120,8 +150,8 @@ const INIT_STREAMING_CONFIG: any = {
         width: '100%',
         height: '100%',
         backgroundColor: 'transparent',
-        borderBottomColor: '#333',
-        borderBottomWidth: 1,
+        // borderBottomColor: '#333',
+        // borderBottomWidth: 1,
     },
 }
 const DEFAULT_OPTIONS: any = {
@@ -166,6 +196,9 @@ export default function live(state = INITIAL_STATE, action: any) {
     case liveActionTypes.UPDATE_PUSHER_CONFIG:
       return {...state, pusherConfig: {...state.pusherConfig, ...action.payload.pusherConfig}};
     case liveActionTypes.UPDATE_LIVING_INFO:
+      if (!action.payload.livingInfo) {
+        return {...state, livingInfo: undefined};
+      }
       return {...state, livingInfo: {...state.livingInfo, ...action.payload.livingInfo}};
     case liveActionTypes.UPDATE_LIVING_STATUS:
       return {...state, isLiveOver: action.payload.isLiveOver};

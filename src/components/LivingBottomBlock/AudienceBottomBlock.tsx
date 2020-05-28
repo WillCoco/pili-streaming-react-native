@@ -43,11 +43,25 @@ const BottomBlock = (props: any) : any =>  {
   // im房间信息
   const room = useSelector((state: any) => state?.im?.room || EMPTY_OBJ);
 
+  /**
+   * 邀请码
+   */
+  const inviteCode = useSelector((state: any) => state?.userData?.userInfo?.inviteCode);
+
   // 直播房间信息 (退出会现执行外层useEffect, 清除liveID, 用memo保存)
   const liveId = useSelector((state: any) => state?.live?.livingInfo?.liveId);
-  const liveIdPersist = React.useMemo(() => {
-    return liveId
-  }, [])
+  const liveIdRef = React.useRef(liveId);
+  React.useEffect(() => {
+    if (liveId) {
+      liveIdRef.current = liveId;
+    }
+  }, [liveId])
+
+  // const liveIdPersist = React.useMemo(() => {
+  //   return liveId
+  // }, [])
+
+  // console.log(liveId, 333344)
 
   // 发送消息
   const sendMessage = (text: string) => {
@@ -67,10 +81,10 @@ const BottomBlock = (props: any) : any =>  {
   
   // 提交喜欢
   const submitLike = React.useCallback((quantity: number) => {
-    if (needSubmit.current && (likeQuantity > 0 || quantity > 0)) {
+    if (needSubmit.current && (likeQuantity > 0 || quantity > 0) && (liveId || liveIdRef.current)) {
       // 提交、返回新值
       const params = {
-        liveId: liveId || liveIdPersist,
+        liveId: liveId || liveIdRef.current,
         likeNum: quantity || likeQuantity
       }
       apiLiveLike(params)
@@ -88,7 +102,7 @@ const BottomBlock = (props: any) : any =>  {
           console.log(`apiLiveLike: ${error}`)
         })
     }
-  }, [likeQuantity, needSubmit.current]);
+  }, [likeQuantity, needSubmit.current, liveId]);
 
   /**
    * 轮询器
@@ -131,9 +145,13 @@ const BottomBlock = (props: any) : any =>  {
       navigate('Login');
       return;
     }
-    share(ShareType.living, {
+
+    share({
+      liveId,
+      groupId: room.groupId,
+      inviteCode
+    }, {
       title: '分享',
-      url: `liveId=${liveId}?groupId=${room.groupId}`,
       failOnCancel: false,
     })
       .then((res) => { console.log(res) })
@@ -186,11 +204,11 @@ BottomBlock.defaultProps = {
 
 const styles = StyleSheet.create({
   wrapper: {
-    position: 'absolute',
-    bottom: 0,
+    // position: 'absolute',
+    // bottom: 0,
     width: '100%',
     padding: pad,
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
 });
 

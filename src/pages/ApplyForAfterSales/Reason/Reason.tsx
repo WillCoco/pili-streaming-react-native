@@ -85,6 +85,7 @@ export default function Reason(props: Props) {
         multiline={true}
         placeholder='请输入您的申请原因，如有必要，请上传图片'
         onChangeText={(text) => props.inputReason(text)}
+        returnKeyType='done'
       />
       <View style={styles.imagePicker}>
         {

@@ -18,6 +18,7 @@ export default function Result() {
   const [orderPrice, setOrderPrice] = useState(0)
   const [completed, setCompleted] = useState(false)
   const [paySuccess, setPaySuccess] = useState(false)
+  const [resultType, setResultType] = useState('')
 
   const { orderSn, payType, nextBtnText, nextRoute } = route.params
 
@@ -50,6 +51,8 @@ export default function Result() {
     apiQueryOrderPayStatus(params).then((res: any) => {
       setCompleted(true)
       setPaySuccess(true)
+      setOrderPrice(res.totalAmount)
+      setResultType(res.orderStatus)
       console.log('订单支付成功', res)
     }).catch((err: any) => {
       setCompleted(true)
@@ -64,7 +67,7 @@ export default function Result() {
     <View style={styles.container}>
       <View style={styles.content}>
         <Image source={paySuccess ? successIcon : failedIcon} style={styles.icon} />
-        <Text style={styles.statusText}>{paySuccess ? '支付成功' : '支付失败'}</Text>
+        <Text style={styles.statusText}>{paySuccess ? resultType === '00' ? '支付成功' : '订单处理中' : '支付失败'}</Text>
         {paySuccess && <Text style={styles.price}>¥{formatSinglePrice(orderPrice)}</Text>}
       </View>
       <TouchableOpacity style={styles.completeBtn} onPress={() => navigation.navigate(nextRoute || '首页')}>

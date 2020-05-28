@@ -6,7 +6,7 @@ import {
   StyleSheet,
   LayoutAnimation
 } from 'react-native';
-import Toast from 'react-native-tiny-toast';
+import {Toast, Portal} from '@ant-design/react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {PrimaryText, SmallText,scale} from 'react-native-normalization-text';
 import {useNavigation} from '@react-navigation/native';
@@ -36,8 +36,24 @@ const CreateLiveScreen = (props: any) =>  {
   const {beautyLevel,redden,whiten} = pusherConfig?.faceBeautySetting;
   console.log(pusherConfig, 'pusherConfig')
 
+  /**
+   * 修改标题
+   */
+  const onChangeTitle = async (title?: string) => {
+    dispatch(updateLiveConfig({title}))
+  }
+
+  /**
+   * 上传文件
+   */
+  const coverUrl: {current: any} = React.useRef();
+  const onChangeCover = async (r: any) => {
+    console.log(r, '=======')
+    coverUrl.current = r;
+  }
+
   const isValidData = (): boolean => {
-    if (!liveConfig.cover) {
+    if (!coverUrl.current) {
       Toast.show('请选择直播封面');
       return false;
     }
@@ -50,57 +66,37 @@ const CreateLiveScreen = (props: any) =>  {
     return true;
   }
 
-  const onNextPress = () => {
+  const onNextPress = async() => {
     if (!isValidData()) {
       return;
     }
+    const loading = Toast.loading('上传中');
+    // 上传
+    const result = await api.apiLiveUploadFile({
+      fileType: 'PICTURE',
+      size: '20',
+      unit: 'M',
+      file: coverUrl.current,
+    });
+
+    console.log(result, 'resultresultresult')
+
+    Portal.remove(loading);
+
+    const cover = result?.data;
+
+    if (!cover) {
+      Toast.show('上传失败');
+    }
+
+    // 存直播配置
+    dispatch(updateLiveConfig({cover}))
 
     // 跳转
     navigation.navigate('LiveGoodsManage');
 
     // 暂停
     // camera.current.stopPreview();
-  }
-
-
-  /**
-   * 实例
-   */
-  // let camera: {current: any} = React.useRef();
-
-  /**
-   * 切换摄像头
-   */
-  // const switchCamera = () => {
-  //   camera.current.switchCamera()
-  // }
-
-  /**
-   * 修改标题
-   */
-  const onChangeTitle = async (title?: string) => {
-    dispatch(updateLiveConfig({title}))
-  }
-
-  /**
-   * 上传文件
-   */
-  const onChangeCover = async (r: any) => {
-    console.log(r, '=======')
-
-    const result = await api.apiLiveUploadFile({
-      fileType: 'PICTURE',
-      size: '20',
-      unit: 'M',
-      file: r,
-    });
-
-    console.log(result, 'resultresultresult')
-    const cover = result?.data;
-    if (cover) {
-      // 存直播配置
-      dispatch(updateLiveConfig({cover}))
-    }
   }
 
   /*
@@ -160,7 +156,7 @@ const CreateLiveScreen = (props: any) =>  {
           开播默认已阅读
           <SmallText
             style={{color: Colors.yellowColor}}
-            onPress={() => navigation.navigate('AnchorAgreement')}
+            onPress={() => navigation.navigate('AnchorEntryAgreement')}
           >
             《云闪播主播入驻协议》
           </SmallText>

@@ -21,12 +21,13 @@ interface Props {
   dispatch: any;
   userId: number;
   goodsId: number;
+  userData: any;
   hideShareBar(): void;
   setPosterPath(img: string, type: number): any;
 }
 
 function ShareBar(props: Props) {
-  const { goodsId, userId } = props
+  const { goodsId, userId, userData } = props
 
   /**
    * 分享到微信
@@ -51,8 +52,20 @@ function ShareBar(props: Props) {
    */
   const share = async () => {
     try {
+      let userInfo: any = {} = props.userData.userInfo || {}
+
+      if (!userId) {
+        userInfo = await apiGetUserData()
+        props.dispatch(setUserInfo(userInfo))
+      }
+
       const result = await Share.share({
-        message: '分享测试'
+        message: `邀请您加入云闪播，主播团队带货，正品大牌折上折！
+购物更划算！
+--------------
+下载链接：www.quanpinlive.com
+--------------
+注册填写邀请口令：${userInfo.inviteCode}`
       });
 
       if (result.action === Share.sharedAction) {
@@ -62,6 +75,7 @@ function ShareBar(props: Props) {
 
         } else {
           // shared
+          props.hideShareBar()
         }
       } else if (result.action === Share.dismissedAction) {  // iOS Only
         // dismissed
@@ -83,7 +97,7 @@ function ShareBar(props: Props) {
       props.dispatch(setUserInfo(userInfo))
     }
 
-    const params = {
+    const params = await {
       goodsId,
       userId: userId || userInfo.userId,
       shareType
@@ -116,11 +130,11 @@ function ShareBar(props: Props) {
           <Image source={require('../../../assets/goods-image/icon_miniapp.png')} style={styles.icon} />
           <Text style={styles.shareText}>生成小程序码</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.item} onPress={() => createPoster(3)}>
+        <TouchableOpacity style={styles.item} onPress={() => createPoster(1)}>
           <Image source={require('../../../assets/goods-image/icon_card.png')} style={styles.icon} />
           <Text style={styles.shareText}>生成图文卡片</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.item} onPress={() => createPoster(1)}>
+        <TouchableOpacity style={styles.item} onPress={() => createPoster(3)}>
           <Image source={require('../../../assets/goods-image/icon_poster.png')} style={styles.icon} />
           <Text style={styles.shareText}>生成空间海报</Text>
         </TouchableOpacity>

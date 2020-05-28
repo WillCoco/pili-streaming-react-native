@@ -9,6 +9,7 @@ import RNFS from 'react-native-fs'
 import { apiUpdateUserInfo, apiGetUserData, apiUploadFile } from '../../../service/api'
 import Toast from 'react-native-tiny-toast'
 import { setUserInfo } from '../../../actions/user'
+import defaultAvatar from '../../../assets/mine-image/default_avatar.png'
 
 function Header(props: { dispatch?: any; userInfo?: any }) {
   const { userInfo } = props
@@ -71,7 +72,7 @@ function Header(props: { dispatch?: any; userInfo?: any }) {
       return
     }
 
-    let params = {
+    let params: any = {
       nickName
     }
 
@@ -79,12 +80,12 @@ function Header(props: { dispatch?: any; userInfo?: any }) {
       params[`avatarUrl`] = await apiUploadFile(avatarBase64)
     }
 
-    apiUpdateUserInfo(params).then(res => {
+    apiUpdateUserInfo(params).then((res: string) => {
       console.log('修改用户信息', res)
       if (res === 'success') {
         Toast.show('修改成功', { position: 0 })
         setEditable(!editable)
-        apiGetUserData().then(res => {
+        apiGetUserData().then((res: any) => {
           props.dispatch(setUserInfo(res))
         })
       }
@@ -95,7 +96,7 @@ function Header(props: { dispatch?: any; userInfo?: any }) {
     <ImageBackground source={require('../../../assets/mine-image/setting_bgi.png')} style={styles.container}>
       <View style={styles.content}>
         <TouchableOpacity onPress={changeAvatar}>
-          <ImageBackground source={{ uri: avatarPath || userInfo.userAvatar }} style={styles.avatar}>
+          <ImageBackground source={ avatarPath || userInfo.userAvatar ? { uri: avatarPath || userInfo.userAvatar } : defaultAvatar } style={styles.avatar}>
             {
               editable && <Text style={styles.editAvatar}>更换头像</Text>
             }
@@ -111,6 +112,7 @@ function Header(props: { dispatch?: any; userInfo?: any }) {
                 style={styles.input}
                 defaultValue={userInfo.nickName}
                 onChangeText={(text) => setNickName(text)}
+                returnKeyType='done'
               />
           }
 

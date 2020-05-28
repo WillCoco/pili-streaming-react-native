@@ -33,6 +33,10 @@ import LivingFaceCard from '../../components/LivingFaceCard';
 import { clearLoginStatus } from '../../actions/user';
 import { isSucceed } from '../../utils/fetchTools';
 import { EMPTY_OBJ } from '../../constants/freeze';
+import share, { ShareType } from '../../utils/share';
+import Poller from '../../utils/poller';
+import { getLiveViewNum } from '../../actions/live';
+import useFixDraw from '../../hooks/useFixDraw';
 
 interface LiveWindowProps {
   style?: StyleProp<any>,
@@ -59,7 +63,7 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
   const dispatch = useDispatch();
 
   /**
-   * 实例
+   * 商品卡
    */
   let [maskList, maskDispatch] = React.useContext(Mask.context);
 
@@ -69,10 +73,20 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
   let camera: {current: any} = React.useRef();
 
   /**
+   * 推流状态
+   */
+  const [pusherStatus, setPusherStatus] = React.useState();
+
+  const onStateChange = (status: any) => {
+    setPusherStatus(status)
+    console.log(status, 'status')
+  }
+
+  /**
    * 切换摄像头
    */
   const switchCamera = () => {
-      dispatch(updatecamera())
+    dispatch(updatecamera())
   };
 
   /**
@@ -86,6 +100,11 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
   const roomMemberNum = useSelector((state: any) => state?.im?.roomMemberNum);
 
   /**
+   * 邀请码
+   */
+  const inviteCode = useSelector((state: any) => state?.userData?.userInfo?.inviteCode);
+
+  /**
    * im加群状态
    */
   const [isIMJoinSecceed, setIsIMJoinSecceed]: [undefined|boolean, any] = React.useState(undefined);
@@ -94,6 +113,16 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
    * 直播结束
    */
   const isAnchorLiveOver = useSelector((state: any) => state?.live?.isAnchorLiveOver);
+  
+
+  /**
+   * 轮询器
+   */
+  const poller = React.useRef(new Poller({
+    interval: 1000 * 30,
+    initExec: false,
+    callback: () => dispatch(getLiveViewNum({liveId})),
+  }));
 
   const onConfirmClose = async () => {
     dispatch(closeLive({liveId}))
@@ -156,13 +185,13 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
         console.log(err, 'err');
       });
 
+    // 请求观看人数
+    poller.current.start();
+
     return () => {
-      // dispatch(dismissGroup()); // 退im群
-      // todo 晴空room消息、message、livegoods
-      // camera.current.stopPreview();
-      // Toast.hide('');
+    poller.current.stop();
     }
-  }, [])
+  }, []);
 
   // React.useEffect(() => {
   //   if (camera.current) {
@@ -272,17 +301,37 @@ const LiveWindow = (props: LiveWindowProps) : any =>  {
       dispatch(updateFaceSetting({type, value}))
   };
 
+  /**
+   * 分享
+  */
+  const onPressShare = () => {
+    share({
+      liveId,
+      groupId: groupID,
+      inviteCode
+    }, {
+      title: '分享',
+      failOnCancel: false,
+    })
+      .then((res) => { console.log(res) })
+      .catch((err) => { err && console.log(err); });
+  }
+
+  // 期望修复气泡显示
+  useFixDraw();
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
-      <LivePusher />
+      <LivePusher
+        onStateChange={onStateChange}
+      />
       {/*  backgroundColor: 'rgba(0,0,0,0.01)' 修复摄像上层气泡边缘显示问题 */}
       <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.01)', zIndex: 1}}>
         <LiveIntro />
         <LivingBottomBlock.Anchor
           onPressShopBag={() => shopCardAnim(true)}
           onPressBubble={onPressBubble}
-          onPressShare={() =>alert('余组货')}
+          onPressShare={onPressShare}
           onPressFace={() => faceCardAnim(true)}
         />
         <TouchableOpacity onPress={switchCamera} style={StyleSheet.flatten([styles.camera, {top: props.safeTop + (pad * 2)}])}>

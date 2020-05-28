@@ -21,34 +21,33 @@ export default function GoodsCardRow(props: Props) {
   }
 
   return (
-    <View style={[styles.container, props.style]}>
-      <TouchableWithoutFeedback onPress={toGoodsInfo}>
+    <TouchableWithoutFeedback onPress={toGoodsInfo}>
+      <View style={[styles.container, props.style]}>
         <Image source={{ uri: goodsInfo.original_img }} style={styles.goodsImg} />
-      </TouchableWithoutFeedback>
-      
-      <View style={styles.goodsInfo}>
-        <Text style={styles.goodsName} numberOfLines={2} onPress={toGoodsInfo}>{goodsInfo.goods_name}</Text>
-        <View style={styles.goodsShare}>
-          {/* {
+        <View style={styles.goodsInfo}>
+          <Text style={styles.goodsName} numberOfLines={2} onPress={toGoodsInfo}>{goodsInfo.goods_name}</Text>
+          <View style={styles.goodsShare}>
+            {/* {
             goodsInfo.is_proprietary
               ? <ImageBackground source={require('../../assets/home-image/badge_bg.png')} style={styles.badgeBg}>
                 <Text style={styles.badgeText}>自营</Text>
               </ImageBackground>
               : <Text />
           } */}
-          <Text />
-          <View style={styles.shareCard}>
-            <Text style={styles.shareText}>分享</Text>
-            <Text style={styles.sharePrice}>¥{formatGoodsPrice(goodsInfo.MyDiscounts || 0)}</Text>
+            <Text />
+            <View style={styles.shareCard}>
+              <Text style={styles.shareText}>分享</Text>
+              <Text style={styles.sharePrice}>¥{formatGoodsPrice(goodsInfo.MyDiscounts || 0)}</Text>
+            </View>
+          </View>
+          <View style={styles.goodsPrice}>
+            <Text style={styles.rmbIcon}>¥</Text>
+            <Text style={styles.salePrice}>{formatGoodsPrice(goodsInfo.shop_price)}</Text>
+            <Text style={styles.originalPrice}>¥{formatGoodsPrice(goodsInfo.market_price)}</Text>
           </View>
         </View>
-        <View style={styles.goodsPrice}>
-          <Text style={styles.rmbIcon}>¥</Text>
-          <Text style={styles.salePrice}>{formatGoodsPrice(goodsInfo.shop_price)}</Text>
-          <Text style={styles.originalPrice}>¥{formatGoodsPrice(goodsInfo.market_price)}</Text>
-        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   )
 }
 
@@ -122,8 +121,7 @@ const styles = StyleSheet.create({
     color: Colors.basicColor
   },
   goodsPrice: {
-    flexDirection: 'row',
-    alignItems: 'baseline'
+    flexDirection: 'row'
   },
   rmbIcon: {
     fontSize: pxToDp(24),
@@ -132,11 +130,13 @@ const styles = StyleSheet.create({
   salePrice: {
     fontSize: pxToDp(34),
     color: Colors.basicColor,
-    marginRight: pxToDp(16)
+    marginRight: pxToDp(16),
+    lineHeight: pxToDp(33)
   },
   originalPrice: {
     fontSize: pxToDp(24),
     color: Colors.lightGrey,
-    textDecorationLine: 'line-through'
+    textDecorationLine: 'line-through',
+    lineHeight: pxToDp(33)
   }
 })

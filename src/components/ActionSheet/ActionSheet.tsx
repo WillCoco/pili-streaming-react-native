@@ -4,9 +4,9 @@ import { Colors } from '../../constants/Theme'
 import pxToDp from '../../utils/px2dp'
 
 interface Props {
-  isShow: boolean;
+  isShow?: boolean;
   children: React.ReactNode;
-  close: () => void;
+  close?: () => void;
 }
 
 export default function ActionSheet(props: Props) {

@@ -42,17 +42,25 @@ const BottomBlock = (props: any) : any =>  {
 
   // 直播房间信息 (退出会现执行外层useEffect, 清除liveID, 用memo保存)
   const liveId = useSelector((state: any) => state?.live?.livingInfo?.liveId);
-  const liveIdPersist = React.useMemo(() => {
-    return liveId
-  }, [])
+  const liveIdRef = React.useRef(liveId);
+  React.useEffect(() => {
+    if (liveId) {
+      liveIdRef.current = liveId;
+    }
+  }, [liveId])
+
+  /**
+   * 邀请码
+   */
+  const inviteCode = useSelector((state: any) => state?.userData?.userInfo?.inviteCode);
   
   // 提交喜欢
   const submitLike = React.useCallback((quantity: number) => {
     console.log(needSubmit.current, likeQuantity)
-    if (needSubmit.current && (likeQuantity > 0 || quantity > 0)) {
+    if (needSubmit.current && (likeQuantity > 0 || quantity > 0) && (liveId || liveIdRef.current)) {
       // 提交、返回新值
       const params = {
-        liveId: liveId || liveIdPersist,
+        liveId: liveId || liveIdRef.current,
         likeNum: quantity || likeQuantity
       }
       apiLiveLike(params)
@@ -78,13 +86,16 @@ const BottomBlock = (props: any) : any =>  {
       navigate('Login');
       return;
     }
-    share(ShareType.record, {
+
+    share({
+      liveId,
+      inviteCode
+    }, {
       title: '分享',
-      url: `liveId=${liveId}`,
       failOnCancel: false,
     })
       .then((res) => { console.log(res) })
-      .catch((err) => { err && console.log(err); });
+      .catch((err) => { err && console.log(err); });  
   }
 
   /**

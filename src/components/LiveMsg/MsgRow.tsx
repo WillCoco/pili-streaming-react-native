@@ -45,7 +45,7 @@ const MsgRow = (props: MsgRowProps) : any =>  {
     //   return images[`userLv${userLevel}`]
     // };
     // return images[`userLv${1}`]
-    console.log(data, 'images.roomMessageFollowed')
+    // console.log(data, 'images.roomMessageFollowed')
     if (data.isFollowed) {
       return images.roomMessageFollowed;
     }
@@ -111,12 +111,14 @@ const styles = StyleSheet.create({
     height: scale(14),
     width: scale(36),
     marginRight: 4,
-    paddingTop: scale(1),
-    position: 'absolute',
-    left: -2,
   },
   imgWrapper: {
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
+    height: scale(19),
+    justifyContent: 'center',
+    position: 'absolute',
+    left: 0,
+    top: 0
   },
   text: {
     paddingHorizontal: 6,

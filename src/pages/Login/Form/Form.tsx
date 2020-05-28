@@ -21,13 +21,26 @@ export default function Form(props: Props) {
       <View style={styles.formItem}>
         <View style={styles.formItemOption}>
           <Image source={require('../../../assets/login-image/icon_tel.png')} style={styles.telIcon} />
-          <TextInput placeholder='请输入手机号' style={styles.input} onChangeText={value => props.changeTelNum(value)} maxLength={11} keyboardType='phone-pad' />
+          <TextInput
+            placeholder='请输入手机号'
+            style={styles.input}
+            onChangeText={value => props.changeTelNum(value)} maxLength={11}
+            keyboardType='phone-pad'
+            returnKeyType='next'
+          />
         </View>
       </View>
       <View style={styles.formItem}>
         <View style={styles.formItemOption}>
           <Image source={require('../../../assets/login-image/icon_vercode.png')} style={styles.verIcon} />
-          <TextInput placeholder='请输入验证码' style={styles.input} onChangeText={value => props.changeVerCode(value)} maxLength={6} keyboardType='number-pad' />
+          <TextInput
+            placeholder='请输入验证码'
+            style={styles.input}
+            onChangeText={value => props.changeVerCode(value)}
+            maxLength={6}
+            keyboardType='number-pad'
+            returnKeyType={!props.hasRegister ? 'done' : 'next'}
+          />
         </View>
 
         <Text style={[styles.sendMeg, disabled && styles.disabledStyle]} onPress={props.sendMsg}>{disabled ? `${countDown}秒重发` : '发送验证码'}</Text>
@@ -36,7 +49,13 @@ export default function Form(props: Props) {
         !props.hasRegister && <View style={styles.formItem}>
           <View style={styles.formItemOption}>
             <Image source={require('../../../assets/login-image/icon_invcode.png')} style={styles.invIcon} />
-            <TextInput placeholder='请输入邀请码' style={styles.input} onChangeText={value => props.changeInvCode(value)} maxLength={6} />
+            <TextInput
+              placeholder='请输入邀请码'
+              style={styles.input}
+              onChangeText={value => props.changeInvCode(value)}
+              maxLength={6}
+              returnKeyType='done'
+            />
           </View>
         </View>
       }

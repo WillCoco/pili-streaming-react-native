@@ -14,14 +14,17 @@ import withPage from '../../components/HOCs/withPage'
 import pxToDp from '../../utils/px2dp'
 import { useNavigation } from '@react-navigation/native'
 import Mask from '../../components/Mask'
-import {apiRealName} from '../../service/api'
+import {apiRealName, apiGetUserData} from '../../service/api'
 import {Portal, Toast} from '@ant-design/react-native'
+import { setUserInfo } from '../../actions/user'
+import { useDispatch } from 'react-redux'
 
 const RealName = props => {
   const [name, setName] = React.useState('')
   const [idNumber, setIdNumber] = React.useState('')
   let [maskList, maskDispatch] = React.useContext(Mask.context);
   const {navigate, goBack} = useNavigation()
+  const dispatch = useDispatch()
 
   /**
    * 前置确认
@@ -65,14 +68,30 @@ const RealName = props => {
     });
 
     const loading = Toast.loading('认证中')
-    apiRealName(params).then(res => {
-      Portal.remove(loading)
-      console.log(res?.success) 
-      if (res?.success) {
-        Toast.info('实名认证通过')
-        goBack()
-      }
-    })
+    apiRealName(params)
+      .then((res: any) => {
+        Portal.remove(loading)
+        if (res?.success) {
+          Toast.info('实名认证通过')
+          /**
+           * 获取用户信息
+           */
+          apiGetUserData().then((res: any) => {
+            console.log('获取用户信息', res)
+            dispatch(setUserInfo(res))
+          }).catch((err: any) => {
+            console.log('获取用户信息', err)
+            if (err.code === '203' || err.code === '204') {
+              navigate('Login')
+            }
+          })
+          goBack()
+        }
+      })
+      .catch((err: any) => {
+        console.log(err, 'realname')
+        Portal.remove(loading)
+      })
   }
 
   return (
@@ -96,6 +115,7 @@ const RealName = props => {
         placeholder={'请输入身份证号码'}
         onChangeText={setIdNumber}
         bottomDivider
+        maxLength={18}
       />
       <PrimaryText style={styles.tip}>继续表示同意
         <PrimaryText style={{color: Colors.blueColor}} onPress={() => navigate('PrivacyPolicy')}>云闪播用户隐私政策协议</PrimaryText>

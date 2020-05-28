@@ -33,6 +33,10 @@ import { EMPTY_OBJ } from '../../constants/freeze';
 import { MessageType } from "../../reducers/im";
 import { sendRoomMessage } from '../../actions/im';
 import share from '../../utils/share';
+import Poller from '../../utils/poller';
+import { getLiveViewNum } from '../../actions/live';
+import useFixDraw from '../../hooks/useFixDraw';
+
 
 interface LiveWindowProps {
   style?: StyleProp<any>;
@@ -71,9 +75,13 @@ const LiveWindow = (props: LiveWindowProps): any => {
 
   // 拉流
   const pullUrl = useSelector((state: any) => state?.live?.livingInfo?.pullUrl) || '';
+  const livingInfo = useSelector((state: any) => state?.live?.livingInfo) || '';
 
   // 底图
   const smallPic = useSelector((state: any) => state?.live?.livingInfo?.smallPic);
+
+  // 修复底部工具不见
+  useFixDraw();
 
   /**
    * 播放器状态
@@ -110,6 +118,8 @@ const LiveWindow = (props: LiveWindowProps): any => {
     if (myAnchorId !== anchorId) {
       dispatch(quitGroup(groupID)); // 退im群
     }
+
+    player.current && player.current.stop()
     goBack();
   };
 
@@ -126,6 +136,20 @@ const LiveWindow = (props: LiveWindowProps): any => {
     any
   ] = React.useState();
 
+
+  /**
+   * 轮询器
+   */
+  const poller = React.useRef(new Poller({
+    interval: 1000 * 10,
+    initExec: false,
+    callback: () => dispatch(getLiveViewNum({liveId})),
+  }));
+
+  /**
+   * 键盘下降
+   */
+
   React.useEffect(() => {
     // 进入直播间，获取拉流地址等房间信息
     const params = {
@@ -135,9 +159,28 @@ const LiveWindow = (props: LiveWindowProps): any => {
     apiEnterLive(params)
       .then((res: any) => {
         if (isSucceed(res)) {
+          // console.log(res, 11111)
+          if (res?.data?.liveStatus !== '2') {
+            // 直播已结束
+            Toast.show('直播已结束');
+            goBack();
+            return;
+          }
           console.log(res, '进入列表');
-          res.watchNum = res.watchNum - 1; // 这里重新会重复加人数
+          // res.watchNum = res.watchNum - 1; // 这里重新会重复加人数
           dispatch(updateLivingInfo({...res?.data, liveId, anchorId}));
+
+          // 直播加群
+          dispatch(joinGroup({groupID}))
+          .then((success?: boolean) => {
+            setIsIMJoinSecceed(!!success);
+          })
+          .catch((err: any) => {
+            console.log(err, "err");
+            // 找不到指定群组 显示结束
+            setIsIMJoinSecceed(false);
+          });
+
           return;
         }
         // 错误返回
@@ -149,16 +192,16 @@ const LiveWindow = (props: LiveWindowProps): any => {
         console.log(`apiEnterLive: ${err}`)
       })
 
-    // 直播加群
-    dispatch(joinGroup({groupID}))
-      .then((success?: boolean) => {
-        setIsIMJoinSecceed(!!success);
-      })
-      .catch((err: any) => {
-        console.log(err, "err");
-        // 找不到指定群组 显示结束
-        setIsIMJoinSecceed(false);
-      });
+    // 请求观看人数
+    poller.current.start();
+
+    return () => {
+      console.log(player.current, 'player.current.stop')
+      player.current && player.current.stop();
+
+      // 请求观看人数
+      poller.current.stop();
+    }
   }, []);
   
   /**
@@ -200,7 +243,6 @@ const LiveWindow = (props: LiveWindowProps): any => {
 
   // 直播结束
   if (isLiveOver) {
-    console.log(12312312312312)
     replace('AudienceLivingEnd');
   }
 
@@ -208,17 +250,23 @@ const LiveWindow = (props: LiveWindowProps): any => {
 
   return (
     <View style={StyleSheet.flatten([styles.wrapper, props.style])}>
-      <Image
+      {/* <Image
         source={smallPic ? {uri: smallPic} : defaultImages.livingBg}
         resizeMode="cover"
         style={styles.imgBg}
-      />
-      <LivePuller
-        ref={player}
-        inputUrl={pullUrl}
-        onStatus={onPlayerStatus}
-        style={styles.video}
-      />
+      /> */}
+      <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}}>
+        <LivePuller
+          ref={v => {
+            if (v) {
+              player.current = v;
+            }
+          }}
+          inputUrl={pullUrl}
+          onStatus={onPlayerStatus}
+          style={styles.video}
+        />
+      </View>
       <View style={styles.livingBottomBlock}>
         <LivingBottomBlock.Audience 
           onPressShopBag={() => shopCardAnim(true)}
@@ -255,10 +303,10 @@ const styles = StyleSheet.create({
   livingBottomBlock: {
     flex: 1,
     position: "absolute",
-    top: 0,
     left: 0,
     bottom: 0,
     right: 0,
+    justifyContent: 'flex-end'
   },
   scrollerWrapper: {},
   contentWrapper: {

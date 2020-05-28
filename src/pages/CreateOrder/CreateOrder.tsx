@@ -16,6 +16,7 @@ import CouponList from './CouponList/CouponList'
 import AddressBar from './AddressBar/AddressBar'
 import ActionSheet from '../../components/ActionSheet/ActionSheet'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+import sandpaySerializeURL from '../../utils/sandpaySerializeURL'
 
 interface Props {
   choosedAddress: {}
@@ -310,7 +311,7 @@ function CreateOrder(props: Props) {
 
     apiCreateOrder(params).then((res: any) => {
       Portal.remove(loading)
-      setNetWorkErr(false)
+      // setNetWorkErr(false)
       console.log('提交订单', res)
 
       if (res.code !== 200) {
@@ -320,37 +321,33 @@ function CreateOrder(props: Props) {
 
       route.params.onOrderCompleted && route.params.onOrderCompleted(params)
 
-      let payURL = 'https://cashier.sandpay.com.cn/gw/web/order/create?charset=UTF-8'
+      const payURL = sandpaySerializeURL(res.data)
 
-      for (let item in res.data) {
-        payURL += '&' + item + '=' + res.data[item]
-      }
-
-      const params = {
+      const payParams = {
         url: payURL,
         orderSn: res.data.orderSn,
         payType: res.data.payType
       }
 
-      console.log('创建订单路由参数', params)
+      console.log('创建订单路由参数', payParams)
 
-      navigation.push('PayWebView', params)
+      navigation.push('PayWebView', payParams)
     }).catch((err: any) => {
       console.log('提交订单', err)
       Portal.remove(loading)
-      setNetWorkErr(true)
+      // setNetWorkErr(true)
     })
   }
 
   /**
    * 网络异常 重新加载
    */
-  const reload = () => {
-    getAddressList()
-    getOrderDiscountDetail()
-  }
+  // const reload = () => {
+  //   getAddressList()
+  //   getOrderDiscountDetail()
+  // }
 
-  if (netWorkErr) return <NetWorkErr reload={reload} />
+  // if (netWorkErr) return <NetWorkErr reload={reload} />
 
   return (
     <View>

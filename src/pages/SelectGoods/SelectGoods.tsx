@@ -11,6 +11,7 @@ import checkIsBottom from '../../utils/checkIsBottom'
 import GoodsCard from './GoodsCard/GoodsCard'
 import LoadMore from '../../components/LoadMore/LoadMore'
 import NetWorkErr from '../../components/NetWorkErr/NetWorkErr'
+// import NavBar from '../../components/NavBar'
 
 const pageSize = 20
 
@@ -21,7 +22,7 @@ export default function SelectGoods() {
   const pageNoRef: any = useRef(1)
   const hasMoreRef: any = useRef(true)
   const goodsListRef: any = useRef([])
-  
+
   const [tags, setTags]: Array<any> = useState([])
   const [netWorkErr, setNetWorkErr] = useState(false)
   const [goodsList, setGoodsList]: Array<any> = useState([])
@@ -47,9 +48,11 @@ export default function SelectGoods() {
   const initData = () => {
     apiSelectGoodsTags().then((res: any) => {
       console.log('精选好物标签', res)
-      setNetWorkErr(false)
-      setTags(res.category)
-      getGoodsList(res.category[0].cat_id)
+      if (res.category.length) {
+        setNetWorkErr(false)
+        setTags(res.category)
+        getGoodsList(res.category[0].cat_id)
+      }
     }).catch((err: any) => {
       console.log('精选好物标签', err)
       setNetWorkErr(true)
@@ -117,39 +120,47 @@ export default function SelectGoods() {
   if (netWorkErr) return <NetWorkErr reload={initData} />
 
   return (
-    <ScrollableTabView
-      initialPage={0}
-      tabBarUnderlineStyle={{ backgroundColor: Colors.basicColor }}
-      tabBarActiveTextColor={Colors.darkBlack}
-      tabBarInactiveTextColor={Colors.darkBlack}
-      tabBarBackgroundColor={Colors.whiteColor}
-      renderTabBar={() => <ScrollableTabBar />}
-      onChangeTab={(e) => changeTab(e)}
-    >
-      {
-        tags && tags.map((item: any, index: number) => {
-          return (
-            <ScrollView
-              tabLabel={item.name}
-              key={`tag-${index}`}
-              onMomentumScrollEnd={(e) => onReachBottom(e)}
-            >
-              {
-                goodsList && goodsList.map((item: any, index: number) => {
-                  return (
-                    <GoodsCard
-                      key={`goods-${index}`}
-                      goodsInfo={item}
-                      updateGoodsList={(id: number) => updateGoodsList(id)}
-                    />
-                  )
-                })
-              }
-              {!!goodsList.length && <LoadMore hasMore={hasMoreRef.current} />}
-            </ScrollView>
-          )
-        })
-      }
-    </ScrollableTabView>
+    <>
+      {/* <NavBar
+        title="精选好物"
+      /> */}
+
+      <ScrollableTabView
+        initialPage={0}
+        tabBarUnderlineStyle={{ backgroundColor: Colors.basicColor }}
+        tabBarActiveTextColor={Colors.darkBlack}
+        tabBarInactiveTextColor={Colors.darkBlack}
+        tabBarBackgroundColor={Colors.whiteColor}
+        renderTabBar={() => <ScrollableTabBar
+          style={{ borderBottomWidth: 0 }}
+        />}
+        onChangeTab={(e) => changeTab(e)}
+      >
+        {
+          tags && tags.map((item: any, index: number) => {
+            return (
+              <ScrollView
+                tabLabel={item.name}
+                key={`tag-${index}`}
+                onMomentumScrollEnd={(e) => onReachBottom(e)}
+              >
+                {
+                  goodsList && goodsList.map((item: any, index: number) => {
+                    return (
+                      <GoodsCard
+                        key={`goods-${index}`}
+                        goodsInfo={item}
+                        updateGoodsList={(id: number) => updateGoodsList(id)}
+                      />
+                    )
+                  })
+                }
+                {!!goodsList.length && <LoadMore hasMore={hasMoreRef.current} />}
+              </ScrollView>
+            )
+          })
+        }
+      </ScrollableTabView>
+    </>
   )
 }

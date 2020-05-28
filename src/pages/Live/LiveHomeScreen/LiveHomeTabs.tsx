@@ -25,6 +25,7 @@ import pxToDp from '../../../utils/px2dp';
 import { EMPTY_ARR, EMPTY_OBJ } from '../../../constants/freeze';
 import { isSucceed } from '../../../utils/fetchTools';
 import {useIsFocused} from '@react-navigation/native';
+import { Toast } from '@ant-design/react-native';
 
 interface LiveBannerProps {
   style?: StyleProp<any>,
@@ -68,28 +69,24 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
    */
   React.useEffect(() => {
     if (isFocused) {
-      onRefresh('1')
-      onRefresh('2')
+      onRefresh('1', true)
+      onRefresh('2', true)
     }
   }, [isFocused])
 
   /**
    * 切换tab
    */
-  const changeTab = (e) => {
+  const changeTab = (e: any) => {
     console.log(e.i);
-    // if (e.i === 0) { // 关注
-    //   getDataList('2')
-    // } else {
-    //   getDataList('1')
-    // }
   }
 
   /**
    * 刷新
    * @param type 类型 1-精选 2-关注
+   * @param backFresh 返回时是否刷新
    */
-  const onRefresh = async (type: string) => {
+  const onRefresh = async (type: string, backFresh: boolean) => {
     const result = await apiGetLiveStreamList({
       liveType: type,
       page: 1,
@@ -99,14 +96,15 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
     .catch((r: any) => {console.log(r, 'LiveStreamList')});
 
     if (isSucceed(result)) {
-      if (type == '1') {
-        setSelectlist(result?.data?.records || EMPTY_ARR)
-      } else {
-        setFollowList(result?.data?.records || EMPTY_ARR)
+      if (backFresh) {
+        type === '1' ? setSelectlist(result?.data?.records || EMPTY_ARR) : setFollowList(result?.data?.records || EMPTY_ARR)
       }
       return Promise.resolve({result: result?.data?.records || EMPTY_ARR});
     }
 
+    if (backFresh) {
+      type === '1' ? setSelectlist(result?.data?.records || EMPTY_ARR) : setFollowList(result?.data?.records || EMPTY_ARR)
+    }
     return Promise.resolve({result: EMPTY_ARR});
   };
 
@@ -124,8 +122,10 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
 
     if (isSucceed(result)) {
       return Promise.resolve({result: result?.data?.records || EMPTY_ARR});
+      // type === '1' ? setSelectlist(result?.data?.records || EMPTY_ARR) : setFollowList(result?.data?.records || EMPTY_ARR)
     }
     return Promise.resolve({result: EMPTY_ARR});
+    // type === '1' ? setSelectlist(EMPTY_ARR) : setFollowList(EMPTY_ARR)
   };
 
   return (
@@ -136,7 +136,7 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
         isLogin 
         &&
         <ScrollableTabView
-          initialPage={0}
+          initialPage={1}
           tabBarTextStyle={{
           }}
           tabBarUnderlineStyle={{
@@ -151,7 +151,8 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
           <PagingList
             tabLabel={"关注"}
             size={14}
-            initListData={followList}
+            data={followList}
+            setData={setFollowList}
             //item显示的布局
             renderItem={(renderItem)}
             //下拉刷新相关
@@ -169,7 +170,8 @@ const LiveBanner = (props: LiveBannerProps) : any =>  {
           <PagingList
             tabLabel={"精选"}
             size={14}
-            initListData={selectList}
+            data={selectList}
+            setData={setSelectlist}
             //item显示的布局
             renderItem={renderItem}
             //下拉刷新相关

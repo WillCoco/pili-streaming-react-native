@@ -4,6 +4,7 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
+  BackHandler
 } from 'react-native';
 import {T1, SmallText} from 'react-native-normalization-text';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
@@ -29,7 +30,7 @@ const PublishScreen = (props: any) =>  {
   const anchorInfo = useSelector((state: any) => state?.anchorData?.anchorInfo) || {}
   const userId = useSelector((state: any) => state?.userData?.userInfo?.userId)
 
-  /**
+/**
  * 获取主播详情
  */
   React.useEffect(() => {
@@ -41,7 +42,7 @@ const PublishScreen = (props: any) =>  {
   }, []);
 
   /**
-   * tab的返回到 我的 
+   * tab的返回到 我的
    */
   const onBackPress = () => {
     reset({
@@ -53,18 +54,21 @@ const PublishScreen = (props: any) =>  {
   }
 
   /**
-   * 检测下有没有直播 
+   * 检测下有没有直播
    * 可选关闭或者继续直播
    */
+  const [allowBack, setAllowBack] = React.useState(true);
   const checkIsLiveNow = async () => {
     const r: any = await dispatch(isWorkLiveNow());
     if (!r) {
+      setAllowBack(true);
       return
     }
 
     const {liveId, groupId} = r;
 
     if (!!liveId) {
+      setAllowBack(false);
       maskDispatch({
         type: Mask.Actions.PUSH,
         payload: {
@@ -73,11 +77,12 @@ const PublishScreen = (props: any) =>  {
             title: '您有直播未正常关闭',
             text: '是否恢复上次直播',
             rightBtnText: '恢复直播',
+            leftBtnText: '关闭',
             onPressLeft: async () => {
               // 关闭直播件
               const type = 1; // 1 保存回放, 2 不保存
               const r1: any = await dispatch(closeLive({liveId, type}));
-              navigate('AnchorLivingEnd', r1?.data);
+              // navigate('AnchorLivingEnd', r1?.data);
               return true;
             },
             onPressRight: () => {
@@ -98,8 +103,27 @@ const PublishScreen = (props: any) =>  {
   );
 
   React.useEffect(() => {
-    
+
   }, [])
+
+  /**
+   * 处理android返回
+   */
+  useFocusEffect(
+      React.useCallback(() => {
+          const onBackPressAndroid = () => {
+              if(allowBack) {
+                  onBackPress()
+              }
+              return true
+          }
+
+          BackHandler.addEventListener('hardwareBackPress', onBackPressAndroid);
+
+          return () =>
+            BackHandler.removeEventListener('hardwareBackPress', onBackPressAndroid);
+      }, [])
+  );
 
   return (
     <View style={styles.style}>
