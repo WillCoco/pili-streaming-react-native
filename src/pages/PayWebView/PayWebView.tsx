@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { AppState, Alert } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { AppState } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { WebView } from 'react-native-webview'
 import { Colors } from '../../constants/Theme'
@@ -7,8 +7,7 @@ import { Colors } from '../../constants/Theme'
 export default function PayWebview() {
   const route: any = useRoute()
   const navigation: any = useNavigation()
-
-  const [hasLeave, setHasLeave] = useState(false)
+  const hasLeaveRef: any = useRef(false)
 
   const { orderSn, payType, nextBtnText, nextRoute } = route.params
 
@@ -35,14 +34,14 @@ export default function PayWebview() {
 
   const handleAppStateChange = (nextAppState: any) => {
     console.log('appCurrentState', appState)
-    console.log('nextAppState', nextAppState, route.name, hasLeave)
+    console.log('nextAppState', nextAppState, route.name, hasLeaveRef.current)
 
     if (nextAppState === 'background') {
-      setHasLeave(true)
+      hasLeaveRef.current = true
       console.log('后台')
     } else if (nextAppState === 'active' && route.name === 'PayWebView') {
       console.log('前台')
-      if (hasLeave) {
+      if (hasLeaveRef.current) {
         const params = {
           orderSn,
           payType,
@@ -59,6 +58,7 @@ export default function PayWebview() {
     <WebView
       style={{ opacity: 0.99 }}
       source={{ uri: route?.params?.url }}
+      // source={{ uri: 'https://baidu.com' }}
     />
   )
 }
