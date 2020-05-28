@@ -62,6 +62,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
     private boolean mIsFocus = false;
     private boolean mIsStarted = true;// default start attach on parent view
     private boolean mIsReady;
+    private boolean mIsInitStreaming = false;
 
     private int mCurrentZoom = 0;
     private int mMaxZoom = 0;
@@ -150,6 +151,9 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         if (mProfile != null) {
             return;
         }
+
+        mIsInitStreaming = true;
+
         ReadableMap cameraSetting = profile.getMap("cameraStreamingSetting");
         int previewSize = cameraSetting.getInt("resolution");
         int focusMode = cameraSetting.getInt("focusMode");
@@ -241,10 +245,14 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         mMediaStreamingManager.prepare(mCameraStreamingSetting, microphoneStreamingSetting, mWatermarkSetting,
                 mProfile);
         mMediaStreamingManager.setAutoRefreshOverlay(true);
+//        mMediaStreamingManager.resume();
 
         mMediaStreamingManager.setStreamingSessionListener(this);
         mMediaStreamingManager.setStreamingStateListener(this);
         mMediaStreamingManager.setStreamStatusCallback(this);
+
+
+
     }
 
     @ReactProp(name = "rtmpURL")
@@ -265,6 +273,10 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
     @ReactProp(name = "camera")
     public void setCameraId(CameraPreviewFrameView view, String cameraId) {
         Log.i(TAG, "setCameraId : " + cameraId);
+
+        //初始化 streaming 的时候不设置 camera 防止多次调用
+        if (mIsInitStreaming) return;
+
         if ("front".equals(cameraId)) {
             mCameraId = CameraStreamingSetting.CAMERA_FACING_ID.CAMERA_FACING_FRONT;
         } else if ("back".equals(cameraId)) {
@@ -622,6 +634,10 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
                 if (mIsTorchEnable) {
                     mMediaStreamingManager.turnLightOn();
                 }
+                if (mIsInitStreaming) {
+                    mIsInitStreaming = false;
+                    mMediaStreamingManager.switchCamera(mCameraId);
+                }
                 break;
             case CONNECTING:
                 event.putInt(STATE, Events.CONNECTING.ordinal());
@@ -654,7 +670,6 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mMediaStreamingManager.resume();
                 mMediaStreamingManager.startStreaming();
             }
         }).start();
