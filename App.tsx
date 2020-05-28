@@ -18,31 +18,6 @@ import { getStatusBarHeight } from './src/actions/public'
 import { login } from './src/actions/im'
 
 import Root from './src/navigation/BottomTabNavigator'
-import HomeSearch from './src/pages/HomeSearch/HomeSearch'
-import FoundSearch from './src/pages/FoundSearch/FoundSearch'
-import Brand from './src/pages/Brand/Brand'
-import BrandShop from './src/pages/BrandShop/BrandShop'
-import GoodsInfo from './src/pages/GoodsInfo/GoodsInfo'
-import Classify from './src/pages/Classify/Classify'
-import Belt from './src/pages/Belt/Belt'
-import Sale from './src/pages/Sale/Sale'
-import Login from './src/pages/Login/Login'
-import SelectGoods from './src/pages/SelectGoods/SelectGoods'
-import SelectGoodsInfo from './src/pages/SelectGoodsInfo/SelectGoodsInfo'
-import ActivityWebView from './src/pages/ActivityWebView/ActivityWebView'
-import CreateOrder from './src/pages/CreateOrder/CreateOrder'
-import CreateOrEditAddr from './src/pages/CreateOrEditAddr/CreateOrEditAddr'
-import AddressList from './src/pages/AddressList/AddressList'
-import OrderList from './src/pages/OrderList/OrderList'
-import CollectGoods from './src/pages/CollectGoods/CollectGoods'
-import LikeContent from './src/pages/LikeContent/LikeContent'
-import Coupon from './src/pages/Coupon/Coupon'
-import PublishedWork from './src/pages/PublishedWork/PublishedWork'
-import FocusedAnchor from './src/pages/FocusedAnchor/FocusedAnchor'
-import OrderDetail from './src/pages/OrderDetail/OrderDetail'
-import ExpressInfo from './src/pages/ExpressInfo/ExpressInfo'
-import ApplyForAfterSales from './src/pages/ApplyForAfterSales/ApplyForAfterSales'
-import AfterSaleDetail from './src/pages/AfterSaleDetail/AfterSaleDetail'
 import Setting from './src/pages/Setting/Setting'
 import AboutUs from './src/pages/AboutUs/AboutUs'
 import Tenants from './src/pages/Tenants/Tenants'
@@ -56,7 +31,6 @@ import Result from './src/pages/Result/Result'
 
 import NavBar from './src/components/NavBar'
 import AnchorTabs from './src/navigation/AnchorTabs'
-import BeAnchor from './src/pages/AnchorTabs/BeAnchor'
 import LiveSearch from './src/pages/Live/LiveSearchScreen'
 import AnchorDetail from './src/pages/Live/AnchorDetailScreen'
 import LivingRoom from './src/pages/Live/LivingRoomScreen'
@@ -175,31 +149,7 @@ export default function App(props: { skipLoadingScreen: any; }) {
                   <Stack.Navigator>
                     {/* <Stack.Screen name='AnchorTabs' component={AnchorTabs} options={{headerShown: false}} /> */}
                     <Stack.Screen name='Root' component={Root} />
-                    <Stack.Screen name='HomeSearch' component={HomeSearch} />
-                    <Stack.Screen name='FoundSearch' component={FoundSearch} />
-                    <Stack.Screen name='Brand' component={Brand} />
-                    <Stack.Screen name='BrandShop' component={BrandShop} />
-                    <Stack.Screen name='GoodsInfo' component={GoodsInfo} />
-                    <Stack.Screen name='Classify' component={Classify} />
-                    <Stack.Screen name='Belt' component={Belt} />
-                    <Stack.Screen name='Sale' component={Sale} />
-                    <Stack.Screen name='Login' component={Login} />
-                    <Stack.Screen name='SelectGoods' component={SelectGoods} />
-                    <Stack.Screen name='SelectGoodsInfo' component={SelectGoodsInfo} />
-                    <Stack.Screen name='OrderList' component={OrderList} />
-                    <Stack.Screen name='CollectGoods' component={CollectGoods} />
-                    <Stack.Screen name='LikeContent' component={LikeContent} />
-                    <Stack.Screen name='Coupon' component={Coupon} />
-                    <Stack.Screen name='PublishedWork' component={PublishedWork} />
-                    <Stack.Screen name='FocusedAnchor' component={FocusedAnchor} />
-                    <Stack.Screen name='OrderDetail' component={OrderDetail} />
-                    <Stack.Screen name='ExpressInfo' component={ExpressInfo} />
-                    <Stack.Screen name='ApplyForAfterSales' component={ApplyForAfterSales} />
-                    <Stack.Screen name='AfterSaleDetail' component={AfterSaleDetail} />
-                    <Stack.Screen name='CreateOrder' component={CreateOrder} />
-                    <Stack.Screen name='CreateOrEditAddr' component={CreateOrEditAddr} />
 
-                    <Stack.Screen name='BeAnchor' component={BeAnchor} options={{ headerShown: false }} />
                     <Stack.Screen name='AnchorDetail' component={AnchorDetail} options={{ headerShown: false }} />
                     <Stack.Screen name='LivingRoomScreen' component={LivingRoom} options={{ headerShown: false, gestureEnabled: false }} />
                     <Stack.Screen name='LiveSearchScreen' component={LiveSearch} />
@@ -221,10 +171,6 @@ export default function App(props: { skipLoadingScreen: any; }) {
                     <Stack.Screen name='ShopAddressManage' component={ShopAddressManage} options={{ headerShown: false }} />
                     <Stack.Screen name='GoodsManage' component={GoodsManage} options={{ headerShown: false }} />
                     <Stack.Screen name='GoodEdit' component={GoodEdit} options={{ headerShown: false }} />
-                    <Stack.Screen name='AssetManage' component={AssetManage} options={{ headerShown: false }} />
-                    <Stack.Screen name='AnchroBill' component={AnchroBill} options={{ headerShown: false }} />
-                    <Stack.Screen name='ActivityWebView' component={ActivityWebView} />
-                    <Stack.Screen name='AddressList' component={AddressList} />
                     <Stack.Screen name='AnchorDetailScreen' component={AnchorDetail} options={{ headerShown: false }} />
                     <Stack.Screen name='Setting' component={Setting} />
                     <Stack.Screen name='AboutUs' component={AboutUs} />
