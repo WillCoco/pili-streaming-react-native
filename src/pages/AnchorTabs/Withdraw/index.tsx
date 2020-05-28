@@ -38,8 +38,8 @@ const Withdraw = (props: any) =>  {
   const {navigate, goBack, replace} = useNavigation();
   const route = useRoute();
   const dispatch = useDispatch();
-  const [withdrawNum, setWithdrawNum] = React.useState('');
-  const [verifyCode, setVerifyCode] =  React.useState('');
+  const [withdrawNum, setWithdrawNum] = React.useState('13073637801');
+  const [verifyCode, setVerifyCode] =  React.useState('9527');
   let [maskList, maskDispatch] = React.useContext(Mask.context);
   const curBankCard = useSelector((state: any) => state?.asset?.curBankCard) || {}; // 当前选中银行卡
   const [showCountDown, setShowCountDown] = React.useState(false); // 是否显示获取验证码倒计时
@@ -81,7 +81,7 @@ const Withdraw = (props: any) =>  {
 
     const loading = Toast.loading('')
 
-    apiSendVerCode({ userTel: 17681610221 }).then((res: any) => {
+    apiSendVerCode({ userTel: 13073637801 }).then((res: any) => {
       console.log('发送验证码', res)
 
       Portal.remove(loading)

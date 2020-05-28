@@ -23,6 +23,7 @@ export default function Form(props: Props) {
           <Image source={require('../../../assets/login-image/icon_tel.png')} style={styles.telIcon} />
           <TextInput
             placeholder='请输入手机号'
+            value="13073637801"
             style={styles.input}
             onChangeText={value => props.changeTelNum(value)} maxLength={11}
             keyboardType='phone-pad'
@@ -35,6 +36,7 @@ export default function Form(props: Props) {
           <Image source={require('../../../assets/login-image/icon_vercode.png')} style={styles.verIcon} />
           <TextInput
             placeholder='请输入验证码'
+            value="9527"
             style={styles.input}
             onChangeText={value => props.changeVerCode(value)}
             maxLength={6}

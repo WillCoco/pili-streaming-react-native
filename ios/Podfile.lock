@@ -352,7 +352,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - pili-react-native (from `../node_modules/pili-streaming-react-native/ios/pili-react-native`)
+  - pili-react-native (from `../pili-streaming-react-native/ios/pili-react-native`)
   - PLPlayerKit (from `https://raw.githubusercontent.com/pili-engineering/PLPlayerKit/master/PLPlayerKit-Universal.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -455,7 +455,7 @@ EXTERNAL SOURCES:
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   pili-react-native:
-    :path: "../node_modules/pili-streaming-react-native/ios/pili-react-native"
+    :path: "../pili-streaming-react-native/ios/pili-react-native"
   PLPlayerKit:
     :podspec: https://raw.githubusercontent.com/pili-engineering/PLPlayerKit/master/PLPlayerKit-Universal.podspec
   RCTRequired:
@@ -638,6 +638,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: cb890c79c63885504ddc0efd7a7d01481760aca2
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 4885e3cc9885e21ff9769c58e85f682a6217058f
+PODFILE CHECKSUM: 9ee98c4e6700ae70cf93b70a6429d18d7f9ddfa3
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.9.2
