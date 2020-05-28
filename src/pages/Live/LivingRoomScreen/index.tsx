@@ -41,7 +41,6 @@ const LivingRoomScreen = (props: any) : any =>  {
     mediaType,
   } : LiveWindowParams = (route.params || EMPTY_OBJ) as LiveWindowParams;
 
-
   // 直播
   if (mediaType === MediaType.living) {
     return (
