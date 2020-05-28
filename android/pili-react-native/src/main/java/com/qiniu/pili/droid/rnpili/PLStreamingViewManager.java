@@ -654,6 +654,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         new Thread(new Runnable() {
             @Override
             public void run() {
+                mMediaStreamingManager.resume();
                 mMediaStreamingManager.startStreaming();
             }
         }).start();
