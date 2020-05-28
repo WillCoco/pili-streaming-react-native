@@ -28,6 +28,8 @@ const LivingRoomScreen = (props: any) : any =>  {
     activateKeepAwake();
     // 清空消息
     dispatch(updateRoomMessage([]));
+
+    dispatch(clearLiveRoom('AUDIENCE'));
     return () => {
       deactivateKeepAwake();
     }

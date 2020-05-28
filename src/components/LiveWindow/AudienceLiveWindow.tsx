@@ -193,10 +193,12 @@ const LiveWindow = (props: LiveWindowProps): any => {
     const keyboardListener = Keyboard.addListener('keyboardDidHide', () => {
       // set
     });
+    console.log('c-1')
 
     return () => {
       console.log(player.current, 'player.current.stop')
       player.current && player.current.stop();
+      console.log('c-2')
 
       // 请求观看人数
       poller.current.stop();
