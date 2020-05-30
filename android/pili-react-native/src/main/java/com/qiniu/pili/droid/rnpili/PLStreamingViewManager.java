@@ -152,11 +152,16 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
             return;
         }
 
-        mIsInitStreaming = true;
-
         ReadableMap cameraSetting = profile.getMap("cameraStreamingSetting");
         int previewSize = cameraSetting.getInt("resolution");
         int focusMode = cameraSetting.getInt("focusMode");
+
+        String camera = cameraSetting.getString("camera");
+        if (camera != null) {
+            mCameraId =  "front".equals(camera)
+                    ? CameraStreamingSetting.CAMERA_FACING_ID.CAMERA_FACING_FRONT
+                    : CameraStreamingSetting.CAMERA_FACING_ID.CAMERA_FACING_BACK;
+        }
 
         // 设置初始化摄像头位置
         ReadableMap microphoneSetting = profile.getMap("microphoneSteamingSetting");
@@ -182,8 +187,10 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
 
         StreamingProfile.AudioProfile aProfile = new StreamingProfile.AudioProfile(audio.getInt("rate"),
                 audio.getInt("bitrate")); // audio sample rate, audio bitrate
+//        StreamingProfile.VideoProfile vProfile = new StreamingProfile.VideoProfile(video.getInt("fps"),
+//                video.getInt("bps"), video.getInt("maxFrameInterval"), getH264Profile(h264Profile));// fps bps
         StreamingProfile.VideoProfile vProfile = new StreamingProfile.VideoProfile(video.getInt("fps"),
-                video.getInt("bps"), video.getInt("maxFrameInterval"), getH264Profile(h264Profile));// fps bps
+                video.getInt("bps"), video.getInt("maxFrameInterval"), false);// fps bps
         // maxFrameInterval
         StreamingProfile.AVProfile avProfile = new StreamingProfile.AVProfile(vProfile, aProfile);
 
@@ -235,24 +242,18 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         }
 
         MicrophoneStreamingSetting microphoneStreamingSetting = new MicrophoneStreamingSetting();
-        microphoneStreamingSetting.setSampleRate(sampleRate)
-                .setAECEnabled(isAecEnable);
+        microphoneStreamingSetting.setSampleRate(sampleRate).setAECEnabled(isAecEnable);
         if (channel == 1) {
             microphoneStreamingSetting.setChannelConfig(AudioFormat.CHANNEL_IN_STEREO);
         }
 
         mMediaStreamingManager = new MediaStreamingManager(mReactContext, mCameraPreviewFrameView, avCodecType);
-        mMediaStreamingManager.prepare(mCameraStreamingSetting, microphoneStreamingSetting, mWatermarkSetting,
-                mProfile);
+        mMediaStreamingManager.prepare(mCameraStreamingSetting, microphoneStreamingSetting, mWatermarkSetting, mProfile);
         mMediaStreamingManager.setAutoRefreshOverlay(true);
-//        mMediaStreamingManager.resume();
 
         mMediaStreamingManager.setStreamingSessionListener(this);
         mMediaStreamingManager.setStreamingStateListener(this);
         mMediaStreamingManager.setStreamStatusCallback(this);
-
-
-
     }
 
     @ReactProp(name = "rtmpURL")
@@ -275,8 +276,6 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         Log.i(TAG, "setCameraId : " + cameraId);
 
         //初始化 streaming 的时候不设置 camera 防止多次调用
-        if (mIsInitStreaming) return;
-
         if ("front".equals(cameraId)) {
             mCameraId = CameraStreamingSetting.CAMERA_FACING_ID.CAMERA_FACING_FRONT;
         } else if ("back".equals(cameraId)) {
@@ -284,6 +283,10 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         } else {
             mCameraId = CameraStreamingSetting.CAMERA_FACING_ID.CAMERA_FACING_3RD;
         }
+
+        // 处于 ready = false 的状态不能切换摄像头
+        if (!mIsReady) return;
+
         if (mMediaStreamingManager != null) {
             mMediaStreamingManager.switchCamera(mCameraId);
         }
@@ -322,6 +325,9 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         if (mMediaStreamingManager == null) {
             return;
         }
+
+        if (!mIsReady) return;
+
         if (mIsStarted) {
             startStreaming();
         } else {
@@ -541,6 +547,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         mMediaStreamingManager.stopStreaming();
         mMediaStreamingManager.destroy();
         mMediaStreamingManager = null;
+        mIsReady = false;
         mProfile = null;
     }
 
@@ -600,6 +607,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
             case PREPARING:
                 break;
             case READY:
+
                 mIsReady = true;
                 event.putInt(STATE, Events.READY.ordinal());
                 mEventEmitter.receiveEvent(getTargetId(), Events.READY.toString(), event);
@@ -634,10 +642,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
                 if (mIsTorchEnable) {
                     mMediaStreamingManager.turnLightOn();
                 }
-                if (mIsInitStreaming) {
-                    mIsInitStreaming = false;
-                    mMediaStreamingManager.switchCamera(mCameraId);
-                }
+
                 break;
             case CONNECTING:
                 event.putInt(STATE, Events.CONNECTING.ordinal());
