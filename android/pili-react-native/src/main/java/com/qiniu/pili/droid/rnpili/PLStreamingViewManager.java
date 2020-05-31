@@ -89,7 +89,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
     private CameraStreamingSetting.VIDEO_FILTER_TYPE mCurrentVideoFilterType = CameraStreamingSetting.VIDEO_FILTER_TYPE.VIDEO_FILTER_BEAUTY;
 
     public enum Events {
-        READY, CONNECTING, STREAMING, SHUTDOWN, IOERROR, DISCONNECTED, STREAM_INFO_CHANGE, AUDIO_MIX_INFO, CAMERA_SWITCH_FAIL
+        READY, CONNECTING, STREAMING, SHUTDOWN, IOERROR, DISCONNECTED, STREAM_INFO_CHANGE, AUDIO_MIX_INFO, CAMERA_SWITCH_RESULT
     }
 
     @NonNull
@@ -139,12 +139,12 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
                         MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", "onStateChange")))
                 .put(Events.DISCONNECTED.toString(),
                         MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", "onStateChange")))
+                .put(Events.CAMERA_SWITCH_RESULT.toString(),
+                        MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", "onSwitchCameraResult")))
                 .put(Events.STREAM_INFO_CHANGE.toString(),
                         MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", "onStreamInfoChange")))
                 .put(Events.AUDIO_MIX_INFO.toString(),
                         MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", "onAudioMixProgress")))
-                .put(Events.CAMERA_SWITCH_FAIL.toString(),
-                        MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", "onStateChange")))
                 .build();
     }
 
@@ -294,13 +294,10 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
             switchResult = mMediaStreamingManager.switchCamera(mCameraId);
         }
 
-        // 摄像头切换失败则发送失败状态
-        if (!switchResult) {
-            WritableMap event = Arguments.createMap();
-            event.putInt(STATE, Events.CAMERA_SWITCH_FAIL.ordinal());
-            mEventEmitter.receiveEvent(getTargetId(), Events.CAMERA_SWITCH_FAIL.toString(), event);
-        }
-
+        // 抛出摄像头切换结果事件
+        WritableMap event = Arguments.createMap();
+        event.putBoolean("result", switchResult);
+        mReactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getTargetId(), Events.CAMERA_SWITCH_RESULT.toString(), event);
     }
 
     @ReactProp(name = "muted", defaultBoolean = false)

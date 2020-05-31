@@ -29,6 +29,12 @@ export default class Streaming extends Component {
     }
   };
 
+  handleSwitchCameraResult = (event) => {
+    if (this.props.onSwitchCameraResult) {
+      this.props.onSwitchCameraResult(event.nativeEvent.result);
+    }
+  };
+
   render() {
     return (
       <PLRNMediaStreaming
@@ -36,6 +42,7 @@ export default class Streaming extends Component {
         onStateChange={this.handleStateChange}
         onStreamInfoChange={this.handleStreamInfoChange}
         onAudioMixProgress={this.handleAudioMixProgress}
+        onSwitchCameraResult={this.handleSwitchCameraResult}
       />
     );
   }
@@ -135,6 +142,7 @@ Streaming.propTypes = {
   onStateChange: P.func,
   onStreamInfoChange: P.func,
   onAudioMixProgress: P.func,
+  onSwitchCameraResult: P.func,
 
   ...View.propTypes,
 };
