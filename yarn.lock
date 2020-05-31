@@ -5620,7 +5620,7 @@ pify@^4.0.1:
 "pili-streaming-react-native@file:./pili-streaming-react-native":
   version "2.0.0"
   dependencies:
-    pili-streaming-react-native "file:../../../Library/Caches/Yarn/v6/npm-pili-streaming-react-native-2.0.0-cb9fb0ba-f49a-48b2-b091-a06bfc7903ea-1590539739744/node_modules/pili-streaming-react-native"
+    pili-streaming-react-native "file:../../../Library/Caches/Yarn/v6/npm-pili-streaming-react-native-2.0.0-b6432438-cf45-455d-9494-66bc2725854e-1590945323863/node_modules/pili-streaming-react-native"
 
 pinkie-promise@^2.0.0:
   version "2.0.1"
