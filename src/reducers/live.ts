@@ -93,16 +93,16 @@ const INIT_STREAMING_CONFIG: any = {
     zoom: 1,
     focus: false,
     watermarkSetting: {
-        src: null, // or `''`？
-        alpha: 122,
-        position: {
-            x: 0,
-            y: 0,
-        },
-        size: {
-            width: 50,
-            height: 50,
-        },
+      src: null, // or `''`？
+      alpha: 122,
+      position: {
+        x: 0,
+        y: 0,
+      },
+      size: {
+        width: 50,
+        height: 50,
+      },
     },
     pictureStreamingFile: null,
     pictureStreamingEnable: false,
@@ -110,65 +110,66 @@ const INIT_STREAMING_CONFIG: any = {
     previewMirrorEnable: false,
     encodingMirrorEnable: false,
     audioMixFile: {
-        filePath: null, // or `''`？
-        loop: true,
+      filePath: null, // or `''`？
+      loop: true,
     },
     playMixAudio: false,
     audioMixVolume: {
-        micVolume: 0.5,
-        musicVolume: 0.5,
+      micVolume: 0.5,
+      musicVolume: 0.5,
     },
     playbackEnable: false,
     profile: {
-        videoStreamingSetting: {
-            fps: 24,
-            bps: 1000 * 1024,
-            maxFrameInterval: 60,
-            encodeOrientation: consts.videoEncodeOrientations.portrait,
-            h264Profile: isAndroid
-                ? consts.videoH264Profiles_android.baseline
-                : consts.videoH264Profiles_iOS.baseline31,
-            // customVideoEncodeSize: {// 根据窗口设置镜头远近
-            //     width: window.window.width,
-            //     height: window.window.height,
-            // },
-        },
-        audioStreamingSetting: {
-            rate: 44100,
-            bitrate: 96 * 1024,
-        },
-        encodingSize: consts.videoEncodings.e480,
-        avCodecType: isAndroid
-            ? consts.avCodecTypes_android.SW_VIDEO_WITH_SW_AUDIO_CODEC
-            : consts.avCodecTypes_iOS.PLH264EncoderType_AVFoundation,
-        cameraStreamingSetting: {
-            resolution: isAndroid
-                // ? consts.cameraResolutions_android.MEDIUM_RATIO_16_9
-                ? consts.cameraResolutions_android.MEDIUM_RATIO_16_9
-                : consts.cameraResolutions_iOS.AVCaptureSessionPresetMedium,
-            focusMode: consts.cameraFocusModes.continuousVideo,
-            videoOrientation: consts.cameraVideoOrientations.portrait,
-        },
-        microphoneSteamingSetting: {
-            sampleRate: consts.microphoneSampleRates.r44100,
-            channel: consts.microphoneChannels.mono,
-            isAecEnable: false,
-        },
-        quicEnable: false,
-        bitrateAdjustMode: consts.bitrateAdjustModes.auto,
-        adaptiveBitrateRange: {
-            minBitrate: 1024,
-            maxBitrate: 1024 * 1024,
-        },
-        encoderRCMode: consts.encoderRCModes.bitratePriority,
-        streamInfoUpdateInterval: 5,
+      videoStreamingSetting: {
+        fps: 24,
+        bps: 1000 * 1024,
+        maxFrameInterval: 60,
+        encodeOrientation: consts.videoEncodeOrientations.portrait,
+        h264Profile: isAndroid
+          ? consts.videoH264Profiles_android.baseline
+          : consts.videoH264Profiles_iOS.baseline31,
+        // customVideoEncodeSize: {// 根据窗口设置镜头远近
+        //     width: window.window.width,
+        //     height: window.window.height,
+        // },
+      },
+      audioStreamingSetting: {
+        rate: 44100,
+        bitrate: 96 * 1024,
+      },
+      encodingSize: consts.videoEncodings.e480,
+      avCodecType: isAndroid
+        ? consts.avCodecTypes_android.SW_VIDEO_WITH_SW_AUDIO_CODEC
+        : consts.avCodecTypes_iOS.PLH264EncoderType_AVFoundation,
+      cameraStreamingSetting: {
+        resolution: isAndroid
+          ? // ? consts.cameraResolutions_android.MEDIUM_RATIO_16_9
+            consts.cameraResolutions_android.MEDIUM_RATIO_16_9
+          : consts.cameraResolutions_iOS.AVCaptureSessionPresetMedium,
+        focusMode: consts.cameraFocusModes.continuousVideo,
+        videoOrientation: consts.cameraVideoOrientations.portrait,
+        camera: CameraType.front,
+      },
+      microphoneSteamingSetting: {
+        sampleRate: consts.microphoneSampleRates.r44100,
+        channel: consts.microphoneChannels.mono,
+        isAecEnable: false,
+      },
+      quicEnable: false,
+      bitrateAdjustMode: consts.bitrateAdjustModes.auto,
+      adaptiveBitrateRange: {
+        minBitrate: 1024,
+        maxBitrate: 1024 * 1024,
+      },
+      encoderRCMode: consts.encoderRCModes.bitratePriority,
+      streamInfoUpdateInterval: 5,
     },
     style: {
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'transparent',
-        // borderBottomColor: '#333',
-        // borderBottomWidth: 1,
+      width: '100%',
+      height: '100%',
+      backgroundColor: 'transparent',
+      // borderBottomColor: '#333',
+      // borderBottomWidth: 1,
     },
     microphoneSteamingSetting: {
       sampleRate: consts.microphoneSampleRates.r44100,
@@ -204,6 +205,7 @@ const DEFAULT_OPTIONS: any = {
   ...INIT_STREAMING_CONFIG,
   profile: {
     ...INIT_STREAMING_CONFIG.profile,
+    ...INIT_STREAMING_CONFIG.profile.profile,
     video: INIT_STREAMING_CONFIG.profile.videoStreamingSetting,
     audio: INIT_STREAMING_CONFIG.profile.audioStreamingSetting,
   },
@@ -242,7 +244,10 @@ export default function live(state = INITIAL_STATE, action: any) {
       if (!action.payload.livingInfo) {
         return {...state, livingInfo: undefined};
       }
-      return {...state, livingInfo: {...state.livingInfo, ...action.payload.livingInfo}};
+      return {
+        ...state,
+        livingInfo: {...state.livingInfo, ...action.payload.livingInfo},
+      };
     case liveActionTypes.UPDATE_LIVING_STATUS:
       return {...state, isLiveOver: action.payload.isLiveOver};
     case liveActionTypes.UPDATE_ANCHOR_LIVING_STATUS:
