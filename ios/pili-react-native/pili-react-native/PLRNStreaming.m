@@ -281,13 +281,13 @@ const char *networkStatus[] = {
     [self.session setTouchToFocusEnable:focus];
 }
 
--(void)setZoom:(NSNumber*) zoom {
+- (void)setZoom:(NSNumber*) zoom {
     self.session.videoZoomFactor = [zoom integerValue];
 }
 
--(void)setCamera:(NSString*)camera{
-    if([camera isEqualToString:@"front"] || [camera isEqualToString:@"back"]){
-        if(![camera isEqualToString:_camera]){
+- (void)setCamera:(NSString*)camera {
+    if ([camera isEqualToString:@"front"] || [camera isEqualToString:@"back"]) {
+        if (![camera isEqualToString:_camera]) {
             _camera = camera;
             [self.session toggleCamera];
         }

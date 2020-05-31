@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.LifecycleEventListener;
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
@@ -88,7 +89,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
     private CameraStreamingSetting.VIDEO_FILTER_TYPE mCurrentVideoFilterType = CameraStreamingSetting.VIDEO_FILTER_TYPE.VIDEO_FILTER_BEAUTY;
 
     public enum Events {
-        READY, CONNECTING, STREAMING, SHUTDOWN, IOERROR, DISCONNECTED, STREAM_INFO_CHANGE, AUDIO_MIX_INFO
+        READY, CONNECTING, STREAMING, SHUTDOWN, IOERROR, DISCONNECTED, STREAM_INFO_CHANGE, AUDIO_MIX_INFO, CAMERA_SWITCH_FAIL
     }
 
     @NonNull
@@ -142,6 +143,8 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
                         MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", "onStreamInfoChange")))
                 .put(Events.AUDIO_MIX_INFO.toString(),
                         MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", "onAudioMixProgress")))
+                .put(Events.CAMERA_SWITCH_FAIL.toString(),
+                        MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", "onStateChange")))
                 .build();
     }
 
@@ -284,12 +287,20 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
             mCameraId = CameraStreamingSetting.CAMERA_FACING_ID.CAMERA_FACING_3RD;
         }
 
-        // 处于 ready = false 的状态不能切换摄像头
-        if (!mIsReady) return;
+        boolean switchResult = false;
 
-        if (mMediaStreamingManager != null) {
-            mMediaStreamingManager.switchCamera(mCameraId);
+        // 处于 ready = false 的状态不能切换摄像头
+        if (mIsReady && mMediaStreamingManager != null)  {
+            switchResult = mMediaStreamingManager.switchCamera(mCameraId);
         }
+
+        // 摄像头切换失败则发送失败状态
+        if (!switchResult) {
+            WritableMap event = Arguments.createMap();
+            event.putInt(STATE, Events.CAMERA_SWITCH_FAIL.ordinal());
+            mEventEmitter.receiveEvent(getTargetId(), Events.CAMERA_SWITCH_FAIL.toString(), event);
+        }
+
     }
 
     @ReactProp(name = "muted", defaultBoolean = false)
