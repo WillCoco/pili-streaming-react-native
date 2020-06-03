@@ -3,12 +3,12 @@
  * @author nighca <nighca@live.cn>
  */
 
-import React, {Component} from 'react';
-import P from 'prop-types';
-import {View, requireNativeComponent} from 'react-native';
-import * as consts from './const';
+import React, { Component } from "react";
+import P from "prop-types";
+import { View, requireNativeComponent } from "react-native";
+import * as consts from "./const";
 
-const PLRNMediaStreaming = requireNativeComponent('PLRNMediaStreaming');
+const PLRNMediaStreaming = requireNativeComponent("PLRNMediaStreaming");
 
 export default class Streaming extends Component {
   handleStateChange = (event) => {
@@ -50,7 +50,7 @@ export default class Streaming extends Component {
 
 Streaming.propTypes = {
   rtmpURL: P.string.isRequired,
-  camera: P.oneOf(['front', 'back']),
+  camera: P.oneOf(["front", "back"]),
   muted: P.bool,
   zoom: P.number,
   focus: P.bool,
@@ -118,7 +118,7 @@ Streaming.propTypes = {
       resolution: oneOf(consts.cameraResolutions),
       focusMode: oneOf(consts.cameraFocusModes), // iOS 不支持
       videoOrientation: oneOf(consts.cameraVideoOrientations), // Android 不支持
-      cameraId: oneof(consts.cameraPosition),
+      cameraId: oneOf(consts.cameraPosition),
     }),
 
     microphoneSteamingSetting: P.shape({
