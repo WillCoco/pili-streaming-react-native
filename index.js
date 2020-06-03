@@ -270,6 +270,11 @@ var bitrateAdjustModes = {
 var encoderRCModes = {
   qualityPriority: 0,
   bitratePriority: 1
+}; // encoder rc mode
+
+var cameraPosition = {
+  front: 0,
+  back: 1
 };
 
 var _const = /*#__PURE__*/Object.freeze({
@@ -291,7 +296,8 @@ var _const = /*#__PURE__*/Object.freeze({
   videoH264Profiles_iOS: videoH264Profiles_iOS,
   videoH264Profiles: videoH264Profiles,
   bitrateAdjustModes: bitrateAdjustModes,
-  encoderRCModes: encoderRCModes
+  encoderRCModes: encoderRCModes,
+  cameraPosition: cameraPosition
 });
 
 var PLRNMediaStreaming = reactNative.requireNativeComponent('PLRNMediaStreaming');
@@ -332,6 +338,12 @@ function (_Component) {
       }
     });
 
+    _defineProperty(_assertThisInitialized(_this), "handleSwitchCameraResult", function (event) {
+      if (_this.props.onSwitchCameraResult) {
+        _this.props.onSwitchCameraResult(event.nativeEvent.result);
+      }
+    });
+
     return _this;
   }
 
@@ -341,7 +353,8 @@ function (_Component) {
       return React__default.createElement(PLRNMediaStreaming, _extends({}, this.props, {
         onStateChange: this.handleStateChange,
         onStreamInfoChange: this.handleStreamInfoChange,
-        onAudioMixProgress: this.handleAudioMixProgress
+        onAudioMixProgress: this.handleAudioMixProgress,
+        onSwitchCameraResult: this.handleSwitchCameraResult
       }));
     }
   }]);
@@ -431,8 +444,9 @@ Streaming.propTypes = _objectSpread2({
       resolution: oneOf(cameraResolutions),
       focusMode: oneOf(cameraFocusModes),
       // iOS 不支持
-      videoOrientation: oneOf(cameraVideoOrientations) // Android 不支持
-
+      videoOrientation: oneOf(cameraVideoOrientations),
+      // Android 不支持
+      cameraId: oneof(cameraPosition)
     }),
     microphoneSteamingSetting: P.shape({
       sampleRate: oneOf(microphoneSampleRates),
@@ -455,7 +469,8 @@ Streaming.propTypes = _objectSpread2({
   }).isRequired,
   onStateChange: P.func,
   onStreamInfoChange: P.func,
-  onAudioMixProgress: P.func
+  onAudioMixProgress: P.func,
+  onSwitchCameraResult: P.func
 }, reactNative.View.propTypes);
 
 function oneOf(kvs) {
