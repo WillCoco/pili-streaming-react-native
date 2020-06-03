@@ -15,13 +15,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PLRNStreaming : UIView<PLMediaStreamingSessionDelegate,PLStreamingSendingBufferDelegate>
+@interface PLRNStreaming : UIView<PLMediaStreamingSessionDelegate, PLStreamingSendingBufferDelegate>
 
 @property (nonatomic, strong) PLMediaStreamingSession  *session;
 @property (nonatomic, strong) NSDictionary  *profile;
 @property (nonatomic, strong) NSString *rtmpURL;
 
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
+
+- (void)restartSession;
 
 @end
 

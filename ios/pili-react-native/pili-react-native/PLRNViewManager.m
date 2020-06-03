@@ -9,17 +9,18 @@
 #import "PLRNViewManager.h"
 #import "PLRNStreaming.h"
 
+#import <React/RCTUIManager.h>
+
 @implementation PLRNViewManager
 RCT_EXPORT_MODULE(PLRNMediaStreaming)
 
 @synthesize bridge = _bridge;
 
 - (UIView *)view {
-  return [[PLRNStreaming alloc] init];
+    return [[PLRNStreaming alloc] init];
 }
 
-- (NSArray *)customDirectEventTypes
-{
+- (NSArray *)customDirectEventTypes {
     return @[
              @"onReady",
              @"onConnecting",
@@ -30,9 +31,12 @@ RCT_EXPORT_MODULE(PLRNMediaStreaming)
              ];
 }
 
-- (dispatch_queue_t)methodQueue
-{
+- (dispatch_queue_t)methodQueue {
     return dispatch_get_main_queue();
+}
+
+- (void)dealloc {
+    NSLog(@"PLRNViewManager dealloc");
 }
 
 RCT_EXPORT_VIEW_PROPERTY(onStateChange, RCTDirectEventBlock);
@@ -58,6 +62,19 @@ RCT_EXPORT_VIEW_PROPERTY(audioMixFile, NSDictionary);
 RCT_EXPORT_VIEW_PROPERTY(playMixAudio, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(audioMixVolume, NSDictionary);
 RCT_EXPORT_VIEW_PROPERTY(playbackEnable, BOOL);
+
+
+RCT_EXPORT_METHOD(resume:(nonnull NSNumber *)reactTag result:(RCTResponseSenderBlock)callback) {
+    UIView *view = [self.bridge.uiManager viewForReactTag:reactTag];
+    if (![view isKindOfClass:PLRNStreaming.class]) {
+        callback(@[[NSNull null], @(NO)]);
+        return;
+    }
+    PLRNStreaming* streamingView = (PLRNStreaming*)view;
+    [streamingView restartSession];
+    callback(@[[NSNull null], @(YES)]);
+}
+
 
 
 @end

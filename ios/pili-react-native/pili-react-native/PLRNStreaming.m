@@ -311,7 +311,7 @@ const char *networkStatus[] = {
     if (watermarkSetting && (watermarkSetting[@"src"] != [NSNull null]) &&![watermarkSetting[@"src"] isEqual:@""] && [watermarkSetting[@"src"] containsString:@"/"]) {
         UIImage *waterMark = [UIImage imageWithContentsOfFile:watermarkSetting[@"src"]];
         [self.session setWaterMarkWithImage:waterMark position:CGPointMake([watermarkSetting[@"position"][@"x"] floatValue], [watermarkSetting[@"position"][@"y"] floatValue])];
-    }else {
+    } else {
         [self.session clearWaterMark];
     }
 }
@@ -394,8 +394,6 @@ const char *networkStatus[] = {
     NSLog(@"%@", log);
 }
 
-
-
 - (void)stopSession {
     [self.session stopStreaming];
 }
@@ -404,7 +402,15 @@ const char *networkStatus[] = {
     NSURL *streamURL = [NSURL URLWithString:self.rtmpURL];
     [self.session startStreamingWithPushURL:streamURL feedback:^(PLStreamStartStateFeedback feedback) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"success ");
+            NSLog(@"%s success", __FUNCTION__);
+        });
+    }];
+}
+
+- (void)restartSession {
+    [self.session restartStreamingWithFeedback:^(PLStreamStartStateFeedback feedback) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"%s success", __FUNCTION__);
         });
     }];
 }

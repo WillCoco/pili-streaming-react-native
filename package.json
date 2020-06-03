@@ -35,8 +35,5 @@
     "rollup": "^1.27.8",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-node-resolve": "^5.2.0"
-  },
-  "dependencies": {
-    "pili-streaming-react-native": "file:."
   }
 }
