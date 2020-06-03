@@ -273,8 +273,8 @@ var encoderRCModes = {
 }; // encoder rc mode
 
 var cameraPosition = {
-  front: 0,
-  back: 1
+  front: "front",
+  back: "back"
 };
 
 var _const = /*#__PURE__*/Object.freeze({

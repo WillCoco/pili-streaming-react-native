@@ -143,6 +143,6 @@ export const encoderRCModes = {
 
 // encoder rc mode
 export const cameraPosition = {
-  front: 0,
-  back: 1,
+  front: "front",
+  back: "back",
 };
