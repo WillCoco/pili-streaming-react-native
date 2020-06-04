@@ -229,6 +229,7 @@ export default class Steam extends Component {
       // TODO: 后续不再需要
       profile: {
         ...streamingConfig.profile,
+        ...streamingConfig.profile.profile,
         video: streamingConfig.profile.videoStreamingSetting,
         audio: streamingConfig.profile.audioStreamingSetting,
       },
@@ -253,7 +254,7 @@ export default class Steam extends Component {
       <>
         <StatusBar barStyle="dark-content" />
         <SafeAreaView style={{display: 'flex', flex: 1}}>
-          <Streaming {...props} />
+          <Streaming ref="streaming" {...props} />
           <ScrollView style={{flex: 1, backgroundColor: 'white', padding: 10}}>
             <View style={{display: 'none'}}>
               <TextInput
@@ -279,6 +280,16 @@ export default class Steam extends Component {
               label="开始推流"
               {...this.bindStateOfPath('streamingConfig.started')}
             />
+
+            <Button
+              title="resume"
+              onPress={() => {
+                console.log('title="resume"');
+                console.log(this.refs.streaming);
+                this.refs.streaming.handleStateChange('xxxxx');
+              }}
+            />
+
             <SwitchInput
               label="静音"
               {...this.bindStateOfPath('streamingConfig.muted')}

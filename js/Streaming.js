@@ -5,12 +5,30 @@
 
 import React, { Component } from "react";
 import P from "prop-types";
-import { View, requireNativeComponent } from "react-native";
+import {
+  View,
+  requireNativeComponent,
+  UIManager,
+  findNodeHandle,
+} from "react-native";
 import * as consts from "./const";
 
 const PLRNMediaStreaming = requireNativeComponent("PLRNMediaStreaming");
 
 export default class Streaming extends Component {
+  resume = (result) => {
+    UIManager.dispatchViewManagerCommand(
+      findNodeHandle(this),
+      UIManager.getViewManagerConfig("PLRNMediaStreaming").Commands.resume,
+      [
+        (success) => {
+          console.log("streaming resume" + success);
+          if (result) result(success);
+        },
+      ]
+    );
+  };
+
   handleStateChange = (event) => {
     if (this.props.onStateChange) {
       this.props.onStateChange(event.nativeEvent.state);
@@ -143,6 +161,7 @@ Streaming.propTypes = {
   onStreamInfoChange: P.func,
   onAudioMixProgress: P.func,
   onSwitchCameraResult: P.func,
+  resume: P.func,
 
   ...View.propTypes,
 };

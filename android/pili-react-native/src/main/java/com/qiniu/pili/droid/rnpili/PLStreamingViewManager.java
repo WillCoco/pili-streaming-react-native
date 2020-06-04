@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
@@ -532,6 +533,17 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
                 mAudioMixer.pause();
             }
         }
+    }
+
+    @ReactMethod
+    public void resume(String tag, Callback callback) {
+        Log.i(TAG, "resume");
+        if (mMediaStreamingManager == null) {
+            callback.invoke(false);
+            return;
+        }
+
+        callback.invoke(mMediaStreamingManager.resume());
     }
 
     @Override

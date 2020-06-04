@@ -300,7 +300,7 @@ var _const = /*#__PURE__*/Object.freeze({
   cameraPosition: cameraPosition
 });
 
-var PLRNMediaStreaming = reactNative.requireNativeComponent('PLRNMediaStreaming');
+var PLRNMediaStreaming = reactNative.requireNativeComponent("PLRNMediaStreaming");
 
 var Streaming =
 /*#__PURE__*/
@@ -319,6 +319,13 @@ function (_Component) {
     }
 
     _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Streaming)).call.apply(_getPrototypeOf2, [this].concat(args)));
+
+    _defineProperty(_assertThisInitialized(_this), "resume", function (result) {
+      reactNative.UIManager.dispatchViewManagerCommand(reactNative.findNodeHandle(_assertThisInitialized(_this)), reactNative.UIManager.getViewManagerConfig("PLRNMediaStreaming").Commands.resume, [function (success) {
+        console.log("streaming resume" + success);
+        if (result) result(success);
+      }]);
+    });
 
     _defineProperty(_assertThisInitialized(_this), "handleStateChange", function (event) {
       if (_this.props.onStateChange) {
@@ -363,7 +370,7 @@ function (_Component) {
 }(React.Component);
 Streaming.propTypes = _objectSpread2({
   rtmpURL: P.string.isRequired,
-  camera: P.oneOf(['front', 'back']),
+  camera: P.oneOf(["front", "back"]),
   muted: P.bool,
   zoom: P.number,
   focus: P.bool,
@@ -446,7 +453,7 @@ Streaming.propTypes = _objectSpread2({
       // iOS 不支持
       videoOrientation: oneOf(cameraVideoOrientations),
       // Android 不支持
-      cameraId: oneof(cameraPosition)
+      cameraId: oneOf(cameraPosition)
     }),
     microphoneSteamingSetting: P.shape({
       sampleRate: oneOf(microphoneSampleRates),
@@ -470,7 +477,8 @@ Streaming.propTypes = _objectSpread2({
   onStateChange: P.func,
   onStreamInfoChange: P.func,
   onAudioMixProgress: P.func,
-  onSwitchCameraResult: P.func
+  onSwitchCameraResult: P.func,
+  resume: P.func
 }, reactNative.View.propTypes);
 
 function oneOf(kvs) {
