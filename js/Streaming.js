@@ -5,11 +5,10 @@
 
 import React, { Component } from "react";
 import P from "prop-types";
-import {
+import ReactNative, {
   View,
   requireNativeComponent,
   UIManager,
-  findNodeHandle,
 } from "react-native";
 import * as consts from "./const";
 
@@ -18,14 +17,15 @@ const PLRNMediaStreaming = requireNativeComponent("PLRNMediaStreaming");
 export default class Streaming extends Component {
   resume = (result) => {
     UIManager.dispatchViewManagerCommand(
-      findNodeHandle(this),
+      ReactNative.findNodeHandle(this),
       UIManager.getViewManagerConfig("PLRNMediaStreaming").Commands.resume,
-      [
-        (success) => {
-          console.log("streaming resume" + success);
-          if (result) result(success);
-        },
-      ]
+      []
+      // [
+      //   (success) => {
+      //     console.log("streaming resume" + success);
+      //     if (result) result(success);
+      //   },
+      // ]
     );
   };
 
@@ -57,6 +57,7 @@ export default class Streaming extends Component {
     return (
       <PLRNMediaStreaming
         {...this.props}
+        // ref={ReactNative.NATIVE_COMPONENT_REF}
         onStateChange={this.handleStateChange}
         onStreamInfoChange={this.handleStreamInfoChange}
         onAudioMixProgress={this.handleAudioMixProgress}

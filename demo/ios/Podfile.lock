@@ -224,14 +224,14 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
-  - ReactNativeNavigation (6.6.0):
+  - ReactNativeNavigation (6.7.1):
     - React
     - React-RCTImage
     - React-RCTText
   - RNFileSelector (1.0.0):
     - FileBrowser
     - React
-  - RNFS (2.16.2):
+  - RNFS (2.16.6):
     - React
   - Yoga (1.14.0)
 
@@ -372,9 +372,9 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
-  ReactNativeNavigation: e0d1a123d25212f0b2a10a5248e30bb3c94692d4
-  RNFileSelector: 898821102ce11fdd59ed87a1cc3200edb7192fd6
-  RNFS: 0d4191b1052bef9ce70deff00a5b4169c62bbd9b
+  ReactNativeNavigation: dd4a4a76d2deb5130d809ec4a6f7f2b182fa1a11
+  RNFileSelector: f744165516fa2046c3193c000b361d4fcbccc0b6
+  RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
 PODFILE CHECKSUM: 780a813df362e5faa05f1ad43addab0764e62640

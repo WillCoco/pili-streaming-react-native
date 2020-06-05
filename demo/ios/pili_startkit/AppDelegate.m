@@ -12,7 +12,7 @@
 #import <React/RCTRootView.h>
 
 #import <ReactNativeNavigation/ReactNativeNavigation.h>
-#import <ReactNativeNavigation/RNNCustomViewController.h>
+//#import <ReactNativeNavigation/RNNCustomViewController.h>
 
 @implementation AppDelegate
 

@@ -33,6 +33,7 @@ typedef NS_ENUM(NSUInteger, PLRNStreamState) {
 @property (nonatomic, copy) RCTDirectEventBlock onStateChange;
 @property (nonatomic, copy) RCTDirectEventBlock onStreamInfoChange;
 @property (nonatomic, copy) RCTDirectEventBlock onAudioMixProgress;
+@property (nonatomic, copy) RCTDirectEventBlock resume;
 @property (nonatomic, strong) PLAudioPlayer *audioPlayer;
 
 @end

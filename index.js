@@ -7,7 +7,8 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var React = require('react');
 var React__default = _interopDefault(React);
 var P = _interopDefault(require('prop-types'));
-var reactNative = require('react-native');
+var ReactNative = require('react-native');
+var ReactNative__default = _interopDefault(ReactNative);
 
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -129,6 +130,19 @@ function _setPrototypeOf(o, p) {
   return _setPrototypeOf(o, p);
 }
 
+function _isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 function _assertThisInitialized(self) {
   if (self === void 0) {
     throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -143,6 +157,25 @@ function _possibleConstructorReturn(self, call) {
   }
 
   return _assertThisInitialized(self);
+}
+
+function _createSuper(Derived) {
+  var hasNativeReflectConstruct = _isNativeReflectConstruct();
+
+  return function _createSuperInternal() {
+    var Super = _getPrototypeOf(Derived),
+        result;
+
+    if (hasNativeReflectConstruct) {
+      var NewTarget = _getPrototypeOf(this).constructor;
+
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
+    }
+
+    return _possibleConstructorReturn(this, result);
+  };
 }
 
 /**
@@ -178,7 +211,7 @@ var avCodecTypes_android = {
   SW_AUDIO_CODEC: 10 // 纯音频推流
 
 };
-var avCodecTypes = _objectSpread2({}, avCodecTypes_iOS, {}, avCodecTypes_android); // camera resolution 相机分辨率
+var avCodecTypes = _objectSpread2(_objectSpread2({}, avCodecTypes_iOS), avCodecTypes_android); // camera resolution 相机分辨率
 
 var cameraResolutions_android = {
   SMALL_RATIO_4_3: 0,
@@ -201,7 +234,7 @@ var cameraResolutions_iOS = {
   AVCaptureSessionPresetiFrame960x540: 9,
   AVCaptureSessionPresetiFrame1280x720: 10
 };
-var cameraResolutions = _objectSpread2({}, cameraResolutions_iOS, {}, cameraResolutions_android); // camera focusMode (仅 Android)
+var cameraResolutions = _objectSpread2(_objectSpread2({}, cameraResolutions_iOS), cameraResolutions_android); // camera focusMode (仅 Android)
 
 var cameraFocusModes = {
   auto: 0,
@@ -258,7 +291,7 @@ var videoH264Profiles_iOS = {
   mainAutoLevel: 10,
   highAutoLevel: 11
 };
-var videoH264Profiles = _objectSpread2({}, videoH264Profiles_iOS, {}, videoH264Profiles_android); // bitrate adjust mode
+var videoH264Profiles = _objectSpread2(_objectSpread2({}, videoH264Profiles_iOS), videoH264Profiles_android); // bitrate adjust mode
 
 var bitrateAdjustModes = {
   auto: 0,
@@ -300,16 +333,14 @@ var _const = /*#__PURE__*/Object.freeze({
   cameraPosition: cameraPosition
 });
 
-var PLRNMediaStreaming = reactNative.requireNativeComponent("PLRNMediaStreaming");
+var PLRNMediaStreaming = ReactNative.requireNativeComponent("PLRNMediaStreaming");
 
-var Streaming =
-/*#__PURE__*/
-function (_Component) {
+var Streaming = /*#__PURE__*/function (_Component) {
   _inherits(Streaming, _Component);
 
-  function Streaming() {
-    var _getPrototypeOf2;
+  var _super = _createSuper(Streaming);
 
+  function Streaming() {
     var _this;
 
     _classCallCheck(this, Streaming);
@@ -318,13 +349,16 @@ function (_Component) {
       args[_key] = arguments[_key];
     }
 
-    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Streaming)).call.apply(_getPrototypeOf2, [this].concat(args)));
+    _this = _super.call.apply(_super, [this].concat(args));
 
     _defineProperty(_assertThisInitialized(_this), "resume", function (result) {
-      reactNative.UIManager.dispatchViewManagerCommand(reactNative.findNodeHandle(_assertThisInitialized(_this)), reactNative.UIManager.getViewManagerConfig("PLRNMediaStreaming").Commands.resume, [function (success) {
-        console.log("streaming resume" + success);
-        if (result) result(success);
-      }]);
+      ReactNative.UIManager.dispatchViewManagerCommand(ReactNative__default.findNodeHandle(_assertThisInitialized(_this)), ReactNative.UIManager.getViewManagerConfig("PLRNMediaStreaming").Commands.resume, [] // [
+      //   (success) => {
+      //     console.log("streaming resume" + success);
+      //     if (result) result(success);
+      //   },
+      // ]
+      );
     });
 
     _defineProperty(_assertThisInitialized(_this), "handleStateChange", function (event) {
@@ -357,7 +391,8 @@ function (_Component) {
   _createClass(Streaming, [{
     key: "render",
     value: function render() {
-      return React__default.createElement(PLRNMediaStreaming, _extends({}, this.props, {
+      return /*#__PURE__*/React__default.createElement(PLRNMediaStreaming, _extends({}, this.props, {
+        // ref={ReactNative.NATIVE_COMPONENT_REF}
         onStateChange: this.handleStateChange,
         onStreamInfoChange: this.handleStreamInfoChange,
         onAudioMixProgress: this.handleAudioMixProgress,
@@ -479,7 +514,7 @@ Streaming.propTypes = _objectSpread2({
   onAudioMixProgress: P.func,
   onSwitchCameraResult: P.func,
   resume: P.func
-}, reactNative.View.propTypes);
+}, ReactNative.View.propTypes);
 
 function oneOf(kvs) {
   return P.oneOf(Object.keys(kvs).map(function (k) {

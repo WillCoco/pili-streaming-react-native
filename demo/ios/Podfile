@@ -34,16 +34,13 @@ target 'pili_startkit' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
   pod 'PLMediaStreamingKit'
-  pod 'pili-react-native', :path => '../../ios/pili-react-native'
 
   # react-native-file-selector begin
   use_native_modules!
-  pod 'RNFileSelector', :path => '../node_modules/react-native-file-selector/ios'
   use_frameworks!
   pod 'FileBrowser', :git => 'https://github.com/prscX/FileBrowser'
   # react-native-file-selector end
 
-  pod 'RNFS', :path => '../node_modules/react-native-fs'
 
   target 'pili_startkitTests' do
     inherit! :search_paths

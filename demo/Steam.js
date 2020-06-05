@@ -254,7 +254,7 @@ export default class Steam extends Component {
       <>
         <StatusBar barStyle="dark-content" />
         <SafeAreaView style={{display: 'flex', flex: 1}}>
-          <Streaming ref="streaming" {...props} />
+          <Streaming ref={(e) => (this._streaming = e)} {...props} />
           <ScrollView style={{flex: 1, backgroundColor: 'white', padding: 10}}>
             <View style={{display: 'none'}}>
               <TextInput
@@ -285,10 +285,7 @@ export default class Steam extends Component {
               title="resume"
               onPress={() => {
                 console.log('title="resume"');
-                console.log(this.refs.streaming);
-                this.refs.streaming.resume((result) => {
-                  console.log('streaming resume');
-                });
+                this._streaming.resume();
               }}
             />
 

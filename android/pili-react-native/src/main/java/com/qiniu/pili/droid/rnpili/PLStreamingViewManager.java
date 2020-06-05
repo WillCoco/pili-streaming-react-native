@@ -1,5 +1,6 @@
 package com.qiniu.pili.droid.rnpili;
 
+import android.content.ReceiverCallNotAllowedException;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.media.AudioFormat;
@@ -12,6 +13,7 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
@@ -150,6 +152,27 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
                 .build();
     }
 
+    @javax.annotation.Nullable
+    @Override
+    public Map<String, Integer> getCommandsMap() {
+        return MapBuilder.of("resume", 0);
+    }
+
+    @Override
+    public void receiveCommand(CameraPreviewFrameView root, int commandId,
+                               @javax.annotation.Nullable ReadableArray args) {
+        switch (commandId) {
+            case 0: {
+                onHostResume();
+                return;
+            }
+            default:
+                throw new IllegalArgumentException(
+                        String.format("Unsupported command %d received by %s.", commandId, getClass().getSimpleName()));
+        }
+
+    }
+
     @ReactProp(name = "profile")
     public void setStreamingProfile(CameraPreviewFrameView view, @Nullable ReadableMap profile) {
         Log.i(TAG, "setStreamingProfile");
@@ -161,9 +184,9 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         int previewSize = cameraSetting.getInt("resolution");
         int focusMode = cameraSetting.getInt("focusMode");
 
-        String camera = cameraSetting.getString("camera");
-        if (camera != null) {
-            mCameraId = "front".equals(camera) ? CameraStreamingSetting.CAMERA_FACING_ID.CAMERA_FACING_FRONT
+        String cameraId = cameraSetting.getString("cameraId");
+        if (cameraId != null) {
+            mCameraId = "front".equals(cameraId) ? CameraStreamingSetting.CAMERA_FACING_ID.CAMERA_FACING_FRONT
                     : CameraStreamingSetting.CAMERA_FACING_ID.CAMERA_FACING_BACK;
         }
 
@@ -228,10 +251,10 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
                     .setVideoFilter(mCurrentVideoFilterType)
                     .setFocusMode(focusMode == 0 ? CameraStreamingSetting.FOCUS_MODE_AUTO
                             : (focusMode == 1 ? CameraStreamingSetting.FOCUS_MODE_CONTINUOUS_PICTURE
-                                    : CameraStreamingSetting.FOCUS_MODE_CONTINUOUS_VIDEO))
+                            : CameraStreamingSetting.FOCUS_MODE_CONTINUOUS_VIDEO))
                     .setCameraPrvSizeLevel(previewSize <= 1 ? CameraStreamingSetting.PREVIEW_SIZE_LEVEL.SMALL
                             : (previewSize <= 3 ? CameraStreamingSetting.PREVIEW_SIZE_LEVEL.MEDIUM
-                                    : CameraStreamingSetting.PREVIEW_SIZE_LEVEL.LARGE))
+                            : CameraStreamingSetting.PREVIEW_SIZE_LEVEL.LARGE))
                     .setCameraPrvSizeRatio((previewSize == 0 || previewSize == 2 || previewSize == 4)
                             ? CameraStreamingSetting.PREVIEW_SIZE_RATIO.RATIO_4_3
                             : CameraStreamingSetting.PREVIEW_SIZE_RATIO.RATIO_16_9);
@@ -530,17 +553,6 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
                 mAudioMixer.pause();
             }
         }
-    }
-
-    @ReactMethod
-    public void resume(String tag, Callback callback) {
-        Log.i(TAG, "resume");
-        if (mMediaStreamingManager == null) {
-            callback.invoke(false);
-            return;
-        }
-
-        callback.invoke(mMediaStreamingManager.resume());
     }
 
     @Override

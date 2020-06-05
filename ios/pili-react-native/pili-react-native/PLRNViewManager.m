@@ -64,15 +64,15 @@ RCT_EXPORT_VIEW_PROPERTY(audioMixVolume, NSDictionary);
 RCT_EXPORT_VIEW_PROPERTY(playbackEnable, BOOL);
 
 
-RCT_EXPORT_METHOD(resume:(nonnull NSNumber *)reactTag result:(RCTResponseSenderBlock)callback) {
-    UIView *view = [self.bridge.uiManager viewForReactTag:reactTag];
-    if (![view isKindOfClass:PLRNStreaming.class]) {
-        callback(@[[NSNull null], @(NO)]);
-        return;
-    }
-    PLRNStreaming* streamingView = (PLRNStreaming*)view;
-    [streamingView restartSession];
-    callback(@[[NSNull null], @(YES)]);
+RCT_EXPORT_METHOD(resume:(nonnull NSNumber *)reactTag) {
+    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+       PLRNStreaming *view = (PLRNStreaming *)viewRegistry[reactTag];
+       if (!view || ![view isKindOfClass:[PLRNStreaming class]]) {
+           RCTLogError(@"Cannot find NativeView with tag #%@", reactTag);
+           return;
+       }
+       [view restartSession];
+    }];
 }
 
 

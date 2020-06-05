@@ -4,11 +4,11 @@ import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
-import com.qiniu.pili.droid.rnpili.PiliPackage;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import com.qiniu.pili.droid.rnpili.PiliPackage;
 import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.react.NavigationReactNativeHost;
 public class MainApplication extends NavigationApplication {
