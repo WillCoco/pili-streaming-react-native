@@ -286,7 +286,9 @@ export default class Steam extends Component {
               onPress={() => {
                 console.log('title="resume"');
                 console.log(this.refs.streaming);
-                this.refs.streaming.handleStateChange('xxxxx');
+                this.refs.streaming.resume((result) => {
+                  console.log('streaming resume');
+                });
               }}
             />
 
