@@ -90,8 +90,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
     private CameraStreamingSetting.VIDEO_FILTER_TYPE mCurrentVideoFilterType = CameraStreamingSetting.VIDEO_FILTER_TYPE.VIDEO_FILTER_BEAUTY;
 
     public enum Events {
-        READY, CONNECTING, STREAMING, SHUTDOWN, IOERROR, DISCONNECTED, STREAM_INFO_CHANGE, AUDIO_MIX_INFO,
-        CAMERA_SWITCH_RESULT
+        READY, CONNECTING, STREAMING, SHUTDOWN, IOERROR, DISCONNECTED, STREAM_INFO_CHANGE, AUDIO_MIX_INFO, CAMERA_SWITCH_RESULT
     }
 
     @NonNull
@@ -163,7 +162,8 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
 
         String camera = cameraSetting.getString("camera");
         if (camera != null) {
-            mCameraId = "front".equals(camera) ? CameraStreamingSetting.CAMERA_FACING_ID.CAMERA_FACING_FRONT
+            mCameraId =  "front".equals(camera)
+                    ? CameraStreamingSetting.CAMERA_FACING_ID.CAMERA_FACING_FRONT
                     : CameraStreamingSetting.CAMERA_FACING_ID.CAMERA_FACING_BACK;
         }
 
@@ -185,20 +185,22 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         AVCodecType avCodecType = getAvCodecType(profile.getInt("avCodecType"));
         Point customVideoEncodeSize = null;
         if (video.hasKey("customVideoEncodeSize")) {
-            customVideoEncodeSize = new Point(video.getMap("customVideoEncodeSize").getInt("width"),
-                    video.getMap("customVideoEncodeSize").getInt("height"));
+            customVideoEncodeSize = new Point(video.getMap("customVideoEncodeSize").getInt("width")
+                    , video.getMap("customVideoEncodeSize").getInt("height"));
         }
 
         StreamingProfile.AudioProfile aProfile = new StreamingProfile.AudioProfile(audio.getInt("rate"),
                 audio.getInt("bitrate")); // audio sample rate, audio bitrate
+//        StreamingProfile.VideoProfile vProfile = new StreamingProfile.VideoProfile(video.getInt("fps"),
+//                video.getInt("bps"), video.getInt("maxFrameInterval"), getH264Profile(h264Profile));// fps bps
         StreamingProfile.VideoProfile vProfile = new StreamingProfile.VideoProfile(video.getInt("fps"),
-                video.getInt("bps"), video.getInt("maxFrameInterval"), getH264Profile(h264Profile));// fps bps
-
+                video.getInt("bps"), video.getInt("maxFrameInterval"), false);// fps bps
         // maxFrameInterval
         StreamingProfile.AVProfile avProfile = new StreamingProfile.AVProfile(vProfile, aProfile);
 
         mProfile = new StreamingProfile();
-        mProfile.setEncodingSizeLevel(encodingSize).setAVProfile(avProfile).setQuicEnable(isQuicEnable)
+        mProfile.setEncodingSizeLevel(encodingSize).setAVProfile(avProfile)
+                .setQuicEnable(isQuicEnable)
                 .setEncoderRCMode(encoderRCMode == 0 ? StreamingProfile.EncoderRCModes.QUALITY_PRIORITY
                         : StreamingProfile.EncoderRCModes.BITRATE_PRIORITY)
                 .setDnsManager(Utils.getMyDnsManager())
@@ -223,15 +225,18 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
 
         if (!isAudioStreamingOnly(avCodecType)) {
             mCameraStreamingSetting = new CameraStreamingSetting();
-            mCameraStreamingSetting.setCameraId(mCameraId.ordinal()).setContinuousFocusModeEnabled(true)
-                    .setRecordingHint(false).setResetTouchFocusDelayInMs(3000).setBuiltInFaceBeautyEnabled(true)
+            mCameraStreamingSetting.setCameraId(mCameraId.ordinal())
+                    .setContinuousFocusModeEnabled(true)
+                    .setRecordingHint(false)
+                    .setResetTouchFocusDelayInMs(3000)
+                    .setBuiltInFaceBeautyEnabled(true)
                     .setVideoFilter(mCurrentVideoFilterType)
                     .setFocusMode(focusMode == 0 ? CameraStreamingSetting.FOCUS_MODE_AUTO
                             : (focusMode == 1 ? CameraStreamingSetting.FOCUS_MODE_CONTINUOUS_PICTURE
-                                    : CameraStreamingSetting.FOCUS_MODE_CONTINUOUS_VIDEO))
+                            : CameraStreamingSetting.FOCUS_MODE_CONTINUOUS_VIDEO))
                     .setCameraPrvSizeLevel(previewSize <= 1 ? CameraStreamingSetting.PREVIEW_SIZE_LEVEL.SMALL
                             : (previewSize <= 3 ? CameraStreamingSetting.PREVIEW_SIZE_LEVEL.MEDIUM
-                                    : CameraStreamingSetting.PREVIEW_SIZE_LEVEL.LARGE))
+                            : CameraStreamingSetting.PREVIEW_SIZE_LEVEL.LARGE))
                     .setCameraPrvSizeRatio((previewSize == 0 || previewSize == 2 || previewSize == 4)
                             ? CameraStreamingSetting.PREVIEW_SIZE_RATIO.RATIO_4_3
                             : CameraStreamingSetting.PREVIEW_SIZE_RATIO.RATIO_16_9);
@@ -247,8 +252,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         }
 
         mMediaStreamingManager = new MediaStreamingManager(mReactContext, mCameraPreviewFrameView, avCodecType);
-        mMediaStreamingManager.prepare(mCameraStreamingSetting, microphoneStreamingSetting, mWatermarkSetting,
-                mProfile);
+        mMediaStreamingManager.prepare(mCameraStreamingSetting, microphoneStreamingSetting, mWatermarkSetting, mProfile);
         mMediaStreamingManager.setAutoRefreshOverlay(true);
 
         mMediaStreamingManager.setStreamingSessionListener(this);
@@ -275,7 +279,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
     public void setCameraId(CameraPreviewFrameView view, String cameraId) {
         Log.i(TAG, "setCameraId : " + cameraId);
 
-        // 初始化 streaming 的时候不设置 camera 防止多次调用
+        //初始化 streaming 的时候不设置 camera 防止多次调用
         if ("front".equals(cameraId)) {
             mCameraId = CameraStreamingSetting.CAMERA_FACING_ID.CAMERA_FACING_FRONT;
         } else if ("back".equals(cameraId)) {
@@ -287,15 +291,14 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         boolean switchResult = false;
 
         // 处于 ready = false 的状态不能切换摄像头
-        if (mIsReady && mMediaStreamingManager != null) {
+        if (mIsReady && mMediaStreamingManager != null)  {
             switchResult = mMediaStreamingManager.switchCamera(mCameraId);
         }
 
         // 抛出摄像头切换结果事件
         WritableMap event = Arguments.createMap();
         event.putBoolean("result", switchResult);
-        mReactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getTargetId(),
-                Events.CAMERA_SWITCH_RESULT.toString(), event);
+        mReactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getTargetId(), Events.CAMERA_SWITCH_RESULT.toString(), event);
     }
 
     @ReactProp(name = "muted", defaultBoolean = false)
@@ -332,8 +335,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
             return;
         }
 
-        if (!mIsReady)
-            return;
+        if (!mIsReady) return;
 
         if (mIsStarted) {
             startStreaming();
@@ -404,7 +406,8 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
             if (mWatermarkSetting == null) {
                 mWatermarkSetting = new WatermarkSetting(mReactContext);
             }
-            mWatermarkSetting.setResourcePath(filePath).setAlpha(alpha).setCustomPosition(customX, customY);
+            mWatermarkSetting.setResourcePath(filePath).setAlpha(alpha)
+                    .setCustomPosition(customX, customY);
 
             int customWidth = customSize.getInt("width");
             int customHeight = customSize.getInt("height");
@@ -533,14 +536,13 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
     }
 
     @ReactMethod
-    public void resume(String tag, Callback callback) {
+    public void resume(String reactTag, Callback successCallback) {
         Log.i(TAG, "resume");
         if (mMediaStreamingManager == null) {
-            callback.invoke(false);
+            successCallback.invoke(true);
             return;
         }
-
-        callback.invoke(mMediaStreamingManager.resume());
+        successCallback.invoke(mMediaStreamingManager.resume());
     }
 
     @Override
